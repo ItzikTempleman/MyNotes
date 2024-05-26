@@ -212,7 +212,7 @@ fun HomeScreen(
                 null, tint = Color.White
             )
         }
-
+val x=0
         if (isLoadingLocation) {
             CircularProgressIndicator(
                 modifier = Modifier.constrainAs(progressBar) {
