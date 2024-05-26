@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">MyNotes</string>
+
+    <string name="log_in" translatable="false">Log in</string>
+    <string name="email" translatable="false">Enter username</string>
+    <string name="password" translatable="false">Enter password</string>
+    <string name="register" translatable="false">Sign up</string>
+    <string name="registration" translatable="false">Registration</string>
+    <string name="create_name" translatable="false">Name</string>
+    <string name="create_email" translatable="false">Email</string>
+    <string name="create_password" translatable="false">Password</string>
+    <string name="enter_phone_number" translatable="false">Phone Number</string>
+    <string name="create_user" translatable="false">Create user</string>
+    <string name="full_name" translatable="false">Name</string>
+    <string name="user_email" translatable="false">Email</string>
+    <string name="log_out" translatable="false">Log out</string>
+    <string name="user_id" translatable="false">id</string>
+
+    <string name="user_info" translatable="false">Profile</string>
+    <string name="home" translatable="false">Home</string>
+    <string name="liked" translatable="false">Liked</string>
+    <string name="settings" translatable="false">Settings</string>
+</resources>
