@@ -37,7 +37,20 @@ class NoteViewModel @Inject constructor(
         repo.insertSingleNoteIntoRecycleBin(note)
     }
 
-    suspend fun fetchTrashedNotes() = repo.fetchTrashedNotes()
-    suspend fun emptyTrashBin() = repo.emptyTrashBin()
+    suspend fun fetchTrashedNotes(): Flow<MutableList<Note>> {
+        val noteList = flow {
+            val notes = repo.fetchTrashedNotes()
+            if (notes.isNotEmpty()) {
+                emit(notes)
+            } else return@flow
+        }
+        return noteList
+    }
+
+    suspend fun setSystemColor(darkModeSelected: Boolean) {
+
+    }
+
+    suspend fun emptyTrashBin() =repo.emptyTrashBin()
 }
 

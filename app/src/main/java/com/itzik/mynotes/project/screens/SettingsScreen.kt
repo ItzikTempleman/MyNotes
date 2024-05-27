@@ -3,9 +3,11 @@ package com.itzik.mynotes.project.screens
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -13,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
+import com.itzik.mynotes.project.screens.SettingsRows.DeletedNotes.SettingItem
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +28,13 @@ fun SettingsScreen(
     coroutineScope: CoroutineScope,
     navController: NavHostController
 ) {
+
+    val settingsItems = listOf(
+        SettingsRows.DeletedNotes,
+        SettingsRows.SystemColor
+    )
+
+
     ConstraintLayout(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -42,5 +52,15 @@ fun SettingsScreen(
                 }
                 .size(26.dp)
         )
+
+        LazyColumn(
+            modifier = modifier.fillMaxSize()
+        ) {
+            items(settingsItems) {
+                SettingItem(
+                    settingsRow = it,
+                    modifier=modifier)
+            }
+        }
     }
 }

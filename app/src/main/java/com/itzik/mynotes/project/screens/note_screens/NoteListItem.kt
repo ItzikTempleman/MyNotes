@@ -18,16 +18,15 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
-import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun NoteListItem(
+    isTrashed:Boolean,
     modifier: Modifier,
     note: Note,
     noteViewModel: NoteViewModel,
-    userViewModel: UserViewModel,
     coroutineScope: CoroutineScope,
     updatedList: (MutableList<Note>) -> Unit
 ) {
@@ -60,35 +59,43 @@ fun NoteListItem(
             text = note.content
         )
 
-        IconButton(modifier = Modifier
-            .constrainAs(
-                deleteNote
-            ) {
-                end.linkTo(parent.end)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            }
-            .padding(4.dp),
-            onClick = {
-                coroutineScope.launch {
-                    noteViewModel.updateIsInTrashBin(note)
-                    noteViewModel.fetchNotes().collect {
-                        updatedList(it)
+        if(!isTrashed) {
+            IconButton(
+                modifier = Modifier
+                    .constrainAs(
+                        deleteNote
+                    ) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .padding(4.dp),
+                onClick = {
+                    coroutineScope.launch {
+                        noteViewModel.updateIsInTrashBin(note)
+                        noteViewModel.fetchNotes().collect {
+                            updatedList(it)
+                        }
                     }
                 }
-            }
-        ) {
-            Icon(
-                imageVector = Icons.Default.Delete, contentDescription = null, tint = colorResource(
-                    id = R.color.blue_green
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = null,
+                    tint = colorResource(
+                        id = R.color.blue_green
+                    )
                 )
+            }
+
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(2.dp)
+                    .constrainAs(dividerLine) { top.linkTo(content.bottom) },
+                thickness = 0.7.dp,
+                color = Color.Gray
             )
         }
-
-        HorizontalDivider(modifier = Modifier
-            .fillMaxWidth()
-            .padding(2.dp)
-            .constrainAs(dividerLine) { top.linkTo(content.bottom) }, thickness = 0.7.dp, color = Color.Gray
-        )
     }
 }

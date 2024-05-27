@@ -181,8 +181,8 @@ fun HomeScreen(
             items(noteList) { noteItem ->
 
                 NoteListItem(
+                    isTrashed = false,
                     noteViewModel=noteViewModel,
-                    userViewModel = userViewModel,
                     coroutineScope = coroutineScope,
                     note = noteItem,
                     modifier = Modifier.clickable {
@@ -212,7 +212,7 @@ fun HomeScreen(
                 null, tint = Color.White
             )
         }
-val x=0
+
         if (isLoadingLocation) {
             CircularProgressIndicator(
                 modifier = Modifier.constrainAs(progressBar) {

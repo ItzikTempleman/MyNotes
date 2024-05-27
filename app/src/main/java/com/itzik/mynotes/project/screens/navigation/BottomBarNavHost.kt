@@ -21,12 +21,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.Note
-import com.itzik.mynotes.project.screens.navigation.Graph.HOME
-import com.itzik.mynotes.project.screens.ProfileScreen
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.screens.HomeScreen
 import com.itzik.mynotes.project.screens.PinnedNotesScreen
+import com.itzik.mynotes.project.screens.ProfileScreen
 import com.itzik.mynotes.project.screens.SettingsScreen
+import com.itzik.mynotes.project.screens.navigation.Graph.HOME
+import com.itzik.mynotes.project.screens.note_screens.DeletedNotesScreen
 import com.itzik.mynotes.project.screens.note_screens.NoteScreen
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
@@ -132,6 +133,15 @@ fun BottomBarNavHost(
                         noteViewModel=noteViewModel,
                         coroutineScope = coroutineScope,
                         user = user
+                    )
+                }
+                composable(route = Screen.DeletedNotesScreen.route) {
+                    isNoteScreenVisible=false
+                    DeletedNotesScreen(
+                        noteViewModel=noteViewModel,
+                        coroutineScope=coroutineScope,
+                        navController=paramNavController,
+                        modifier=Modifier
                     )
                 }
             }

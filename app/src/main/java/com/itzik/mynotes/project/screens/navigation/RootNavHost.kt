@@ -1,6 +1,7 @@
 package com.itzik.mynotes.project.screens.navigation
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 
 import android.os.Build
@@ -32,6 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
+@SuppressLint("MutableCollectionMutableState")
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 
 @Composable
@@ -47,7 +49,7 @@ fun RootNavHost(
     updateIsLocationRequired: (Boolean)->Unit
 ) {
     var userList by remember {
-        mutableStateOf(listOf<User>())
+        mutableStateOf(mutableListOf<User>())
     }
 
     var user = User(userName = "", email = "", password = "", phoneNumber = 0)
