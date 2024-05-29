@@ -59,7 +59,11 @@ fun SettingsScreen(
             items(settingsItems) {
                 SettingItem(
                     settingsRow = it,
-                    modifier=modifier)
+                    modifier = modifier,
+                    coroutineScope = coroutineScope,
+                    navController = navController,
+                    noteViewModel = noteViewModel
+                )
             }
         }
     }

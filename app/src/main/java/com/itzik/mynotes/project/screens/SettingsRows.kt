@@ -61,6 +61,9 @@ sealed class SettingsRows(
 
     @Composable
     fun SettingItem(
+        noteViewModel: NoteViewModel,
+        coroutineScope: CoroutineScope,
+        navController: NavHostController,
         settingsRow: SettingsRows,
         modifier: Modifier
     ) {
@@ -71,7 +74,7 @@ sealed class SettingsRows(
                     border = BorderStroke(0.5.dp, Color.Black)
                 )
                 .clickable {
-                    settingsRow.onClick
+                    settingsRow.onClick(noteViewModel, coroutineScope, navController)
                 }
                 .fillMaxWidth()
                 .height(50.dp),
