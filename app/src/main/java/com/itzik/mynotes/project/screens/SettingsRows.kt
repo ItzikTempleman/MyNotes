@@ -55,7 +55,6 @@ sealed class SettingsRows(
         modifier: Modifier
     ) {
         var isToggled by remember { mutableStateOf(false) }
-
         ConstraintLayout(
             modifier = modifier
                 .clickable {
@@ -67,15 +66,15 @@ sealed class SettingsRows(
             val (darkModeToggle, icon, text, divider) = createRefs()
 
             if (settingsRow.title == "Dark Mode" || settingsRow.title == "Light Mode") {
-                ToggleSwitch(modifier = Modifier
+                Switch(modifier = Modifier
                     .constrainAs(darkModeToggle) {
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
                     }
                     .padding(4.dp),
-                    isToggled = isToggled,
-                    onToggleChange = {
+                    checked = isToggled,
+                    onCheckedChange = {
                         isToggled = it
                         coroutineScope.launch {
                             noteViewModel.setSystemColor(isToggled)
@@ -107,16 +106,8 @@ sealed class SettingsRows(
             )
             HorizontalDivider(modifier = Modifier.constrainAs(divider) {
                 bottom.linkTo(parent.bottom)
-            })
+            }
+            )
         }
-    }
-
-    @Composable
-    fun ToggleSwitch(
-        modifier: Modifier, isToggled: Boolean, onToggleChange: (Boolean) -> Unit
-    ) {
-        Switch(
-            modifier = modifier, checked = isToggled, onCheckedChange = onToggleChange
-        )
     }
 }
