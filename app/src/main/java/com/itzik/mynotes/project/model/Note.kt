@@ -14,7 +14,7 @@ data class Note(
     @PrimaryKey(autoGenerate = true)
     var id: Int=0,
     var content: String,
-    val date: String = getCurrentTime(),
+    val time: String = getCurrentTime(),
     var isInTrash: Boolean=false
 ) : Parcelable {
     companion object {

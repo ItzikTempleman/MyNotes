@@ -47,10 +47,6 @@ class NoteViewModel @Inject constructor(
         return noteList
     }
 
-    suspend fun setSystemColor(darkModeSelected: Boolean) {
-
-    }
-
     suspend fun emptyTrashBin() = repo.emptyTrashBin()
 }
 

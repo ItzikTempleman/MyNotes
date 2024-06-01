@@ -47,7 +47,8 @@ fun BottomBarNavHost(
     locationRequired: Boolean,
     startLocationUpdates: () -> Unit,
     updateIsLocationRequired: (Boolean) -> Unit,
-    user: User
+    user: User,
+    updatedLocationName: (String)-> Unit
 ) {
     var isNoteScreenVisible by remember {
         mutableStateOf(false)
@@ -84,7 +85,8 @@ fun BottomBarNavHost(
                         currentLocation = currentLocation,
                         coroutineScope = coroutineScope,
                         navController = newNavController,
-                        user = user
+                        user = user,
+                        updatedLocationName = updatedLocationName
                     )
                 }
 
@@ -102,6 +104,7 @@ fun BottomBarNavHost(
                 composable(route = Screen.Settings.route) {
                     isNoteScreenVisible=true
                     SettingsScreen(
+                        updatedLocationName=updatedLocationName,
                         userViewModel=userViewModel,
                         noteViewModel=noteViewModel,
                         modifier = Modifier.background(Color.White),

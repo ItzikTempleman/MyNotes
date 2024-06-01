@@ -1,11 +1,13 @@
 package com.itzik.mynotes.project.screens.note_screens
 
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -14,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
@@ -23,79 +26,75 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun NoteListItem(
-    isTrashed:Boolean,
+    isTrashed: Boolean,
     modifier: Modifier,
     note: Note,
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
     updatedList: (MutableList<Note>) -> Unit
 ) {
-    ConstraintLayout(
+    Card(
+        colors=CardDefaults.cardColors(Color.White),
+        elevation = CardDefaults.elevatedCardElevation(8.dp),
         modifier = modifier
-            .padding(2.dp)
-            .fillMaxWidth()
-            .wrapContentHeight()
+            .padding(8.dp)
+            .wrapContentSize()
     ) {
-        val (timeStamp, content, deleteNote, dividerLine) = createRefs()
+        ConstraintLayout(
+            modifier = Modifier.fillMaxSize().background(Color.White)
+        ) {
+            val ( timeStamp, deleteNote, content) = createRefs()
 
-        Text(
-            modifier = Modifier
-                .constrainAs(timeStamp) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                }
-                .padding(4.dp),
-            text = note.date
-        )
-
-        Text(
-            modifier = Modifier
-                .constrainAs(content) {
-                    start.linkTo(parent.start)
-                    top.linkTo(timeStamp.bottom)
-                }
-                .padding(4.dp),
-            text = note.content
-        )
-
-        if(!isTrashed) {
-            IconButton(
+            Text(
                 modifier = Modifier
-                    .constrainAs(
-                        deleteNote
-                    ) {
+                    .constrainAs(timeStamp) {
                         end.linkTo(parent.end)
                         top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
                     }
-                    .padding(4.dp),
-                onClick = {
-                    coroutineScope.launch {
-                        noteViewModel.updateIsInTrashBin(note)
-                        noteViewModel.fetchNotes().collect {
-                            updatedList(it)
+                    .padding(vertical = 18.dp, horizontal = 50.dp),
+                text = note.time,
+                fontSize = 12.sp
+            )
+
+            if (!isTrashed) {
+                IconButton(
+                    modifier = Modifier
+                        .constrainAs(
+                            deleteNote
+                        ) {
+                            end.linkTo(parent.end)
+                            top.linkTo(parent.top)
+                        }
+                        .padding(4.dp),
+                    onClick = {
+                        coroutineScope.launch {
+                            noteViewModel.updateIsInTrashBin(note)
+                            noteViewModel.fetchNotes().collect {
+                                updatedList(it)
+                            }
                         }
                     }
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = null,
-                    tint = colorResource(
-                        id = R.color.blue_green
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = null,
+                        tint = colorResource(
+                            id = R.color.blue_green
+                        )
                     )
-                )
+                }
             }
-        }
-            HorizontalDivider(
+            Text(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(2.dp)
-                    .constrainAs(dividerLine) { top.linkTo(content.bottom) },
-                thickness = 0.7.dp,
-                color = Color.Gray
+                    .constrainAs(content) {
+                        start.linkTo(parent.start)
+                        top.linkTo(timeStamp.bottom)
+                    }
+                    .padding(4.dp),
+                text = note.content,
+                fontSize = 20.sp
             )
-        }
 
+        }
+    }
 }

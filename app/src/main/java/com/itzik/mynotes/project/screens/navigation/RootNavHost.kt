@@ -3,7 +3,6 @@ package com.itzik.mynotes.project.screens.navigation
 
 import android.annotation.SuppressLint
 import android.content.Context
-
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -16,7 +15,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.screens.auth.LoginScreen
@@ -27,8 +25,6 @@ import com.itzik.mynotes.project.screens.navigation.Graph.HOME
 import com.itzik.mynotes.project.screens.navigation.Graph.ROOT
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
-
-
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -39,15 +35,20 @@ import kotlinx.coroutines.launch
 @Composable
 fun RootNavHost(
     noteViewModel: NoteViewModel,
-    context:Context,
+    context: Context,
     navController: NavHostController,
     userViewModel: UserViewModel,
     coroutineScope: CoroutineScope,
     currentLocation: LatLng,
     startLocationUpdates: () -> Unit,
     locationRequired: Boolean,
-    updateIsLocationRequired: (Boolean)->Unit
+    updateIsLocationRequired: (Boolean) -> Unit,
 ) {
+
+    var locationName by remember {
+        mutableStateOf("")
+    }
+
     var userList by remember {
         mutableStateOf(mutableListOf<User>())
     }
@@ -93,7 +94,7 @@ fun RootNavHost(
                     userViewModel = userViewModel,
                     coroutineScope = coroutineScope,
 
-                )
+                    )
             }
 
             composable(route = Screen.Registration.route) {
@@ -102,7 +103,7 @@ fun RootNavHost(
                     userViewModel = userViewModel,
                     coroutineScope = coroutineScope,
 
-                )
+                    )
             }
         }
 
@@ -112,15 +113,18 @@ fun RootNavHost(
         ) {
             composable(route = Screen.Home.route) {
                 BottomBarNavHost(
-                    noteViewModel=noteViewModel,
-                    context=context,
-                    locationRequired=locationRequired,
-                    startLocationUpdates= { startLocationUpdates() },
-                    currentLocation=currentLocation,
+                    updatedLocationName = {
+                        locationName=it
+                    },
+                    noteViewModel = noteViewModel,
+                    context = context,
+                    locationRequired = locationRequired,
+                    startLocationUpdates = { startLocationUpdates() },
+                    currentLocation = currentLocation,
                     paramNavController = navController,
                     userViewModel = userViewModel,
                     coroutineScope = coroutineScope,
-                    updateIsLocationRequired=updateIsLocationRequired,
+                    updateIsLocationRequired = updateIsLocationRequired,
                     user = user
                 )
             }

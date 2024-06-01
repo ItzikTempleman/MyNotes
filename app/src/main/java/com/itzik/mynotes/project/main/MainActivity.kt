@@ -37,8 +37,6 @@ class MainActivity : ComponentActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     private var locationRequired: Boolean = false
-    @RequiresApi(Build.VERSION_CODES.Q)
-
 
     override fun onResume() {
         super.onResume()
@@ -97,10 +95,13 @@ class MainActivity : ComponentActivity() {
             noteViewModel= viewModel()
             userViewModel = viewModel()
 
+
             val coroutineScope: CoroutineScope = rememberCoroutineScope()
             val navController: NavHostController = rememberNavController()
             MyNotesTheme {
+
                 RootNavHost(
+
                     noteViewModel=noteViewModel,
                     context = this,
                     locationRequired = locationRequired,
@@ -116,6 +117,5 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
 }
 

@@ -16,13 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
-
+import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.screens.navigation.Graph.AUTHENTICATION
 import com.itzik.mynotes.project.screens.navigation.Graph.HOME
-
-import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.viewmodels.UserViewModel
-
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -65,5 +62,4 @@ fun SplashScreen(
             color = Color.Gray
         )
     }
-
 }

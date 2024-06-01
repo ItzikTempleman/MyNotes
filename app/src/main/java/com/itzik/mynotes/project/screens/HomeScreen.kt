@@ -1,5 +1,6 @@
 package com.itzik.mynotes.project.screens
 
+
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
@@ -12,8 +13,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -22,7 +24,6 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,8 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-
-
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,8 +47,6 @@ import com.itzik.mynotes.project.screens.note_screens.NoteListItem
 import com.itzik.mynotes.project.utils.convertLatLangToLocation
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
-
-
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -72,7 +69,8 @@ fun HomeScreen(
     currentLocation: LatLng,
     locationRequired: Boolean,
     startLocationUpdates: () -> Unit,
-    updateIsLocationRequired: (Boolean) -> Unit
+    updateIsLocationRequired: (Boolean) -> Unit,
+    updatedLocationName: (String)-> Unit
 ) {
 
     var isLoadingLocation by remember {
@@ -128,11 +126,16 @@ fun HomeScreen(
                 }
                 .size(26.dp), tint = colorResource(id = R.color.blue_green))
 
-        IconButton(
+
+        FloatingActionButton(
+            shape = CircleShape,
+            containerColor = colorResource(
+                id = R.color.lighter_blue
+            ),
             modifier = Modifier
                 .constrainAs(locationButton) {
                     end.linkTo(parent.end)
-                    top.linkTo(parent.top)
+                    bottom.linkTo(newNoteBtn.top)
                 }
                 .padding(8.dp),
             onClick = {
@@ -145,7 +148,10 @@ fun HomeScreen(
                     }) {
                     startLocationUpdates()
                     locationName = convertLatLangToLocation(currentLocation, context)
-                    if (locationName.isNotBlank()) isLoadingLocation = false
+                    updatedLocationName(convertLatLangToLocation(currentLocation, context))
+
+                    if (locationName.isNotBlank())
+                        isLoadingLocation = false
                 } else {
                     launchMultiplePermissions.launch(permissions)
                 }
@@ -154,9 +160,7 @@ fun HomeScreen(
             Icon(
                 imageVector = Icons.Default.LocationOn,
                 contentDescription = null,
-                tint = colorResource(
-                    id = R.color.lighter_blue
-                )
+                tint = Color.White
             )
         }
 
@@ -171,7 +175,8 @@ fun HomeScreen(
             fontSize = 12.sp
         )
 
-        LazyColumn(
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
             modifier = Modifier
                 .constrainAs(noteLazyColumn) {
                     top.linkTo(homeIcon.bottom)
@@ -182,14 +187,14 @@ fun HomeScreen(
 
                 NoteListItem(
                     isTrashed = false,
-                    noteViewModel=noteViewModel,
+                    noteViewModel = noteViewModel,
                     coroutineScope = coroutineScope,
                     note = noteItem,
                     modifier = Modifier.clickable {
                         navController.navigate(Screen.NoteScreen.route)
                     },
                     updatedList = {
-                        noteList=it
+                        noteList = it
                     }
                 )
             }
@@ -225,9 +230,3 @@ fun HomeScreen(
         }
     }
 }
-
-
-
-
-
-
