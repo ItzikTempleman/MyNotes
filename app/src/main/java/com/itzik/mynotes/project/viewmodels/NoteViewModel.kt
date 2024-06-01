@@ -22,7 +22,7 @@ class NoteViewModel @Inject constructor(
     }
 
     suspend fun fetchNotes(): Flow<MutableList<Note>> {
-         val noteList = flow {
+        val noteList = flow {
             val notes = repo.fetchNotes()
             if (notes.isNotEmpty()) {
                 emit(notes)
@@ -51,6 +51,6 @@ class NoteViewModel @Inject constructor(
 
     }
 
-    suspend fun emptyTrashBin() =repo.emptyTrashBin()
+    suspend fun emptyTrashBin() = repo.emptyTrashBin()
 }
 

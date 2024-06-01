@@ -87,7 +87,7 @@ fun NoteListItem(
                     )
                 )
             }
-
+        }
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -97,5 +97,5 @@ fun NoteListItem(
                 color = Color.Gray
             )
         }
-    }
+
 }
