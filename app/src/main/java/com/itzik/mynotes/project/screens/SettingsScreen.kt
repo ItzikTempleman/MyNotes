@@ -56,8 +56,7 @@ fun SettingsScreen(
                 .constrainAs(icon) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
-                }
-                .size(26.dp)
+                }.size(26.dp)
         )
 
         Text(
@@ -82,7 +81,6 @@ fun SettingsScreen(
         ) {
             items(settingsItems) {
                 SettingItem(
-
                     settingsRow = it,
                     modifier = modifier,
                     coroutineScope = coroutineScope,

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.LatLng
@@ -109,7 +111,9 @@ fun HomeScreen(
         }
 
     ConstraintLayout(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.deep_purple)),
     ) {
         val (homeIcon,title, locationButton, noteLazyColumn, newNoteBtn, progressBar) = createRefs()
 
@@ -121,7 +125,7 @@ fun HomeScreen(
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 }
-                .size(26.dp), tint = colorResource(id = R.color.blue_green))
+                .size(26.dp), tint = Color.White)
 
         Text(
             modifier = Modifier
@@ -129,18 +133,42 @@ fun HomeScreen(
                     start.linkTo(homeIcon.end)
                     top.linkTo(parent.top)
                 }
-                .padding(start = 4.dp,  top = 18.dp),
+                .padding(start = 4.dp, top = 18.dp),
             text = "Notes",
             fontSize = 20.sp,
-            color = colorResource(id = R.color.blue_green),
+            color = Color.White,
             fontWeight = FontWeight.Bold
         )
 
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier
+                .constrainAs(noteLazyColumn) {
+                    top.linkTo(homeIcon.bottom, margin = 16.dp)
+                    bottom.linkTo(parent.bottom)
+                    height = Dimension.fillToConstraints
+                }
+                .fillMaxWidth().background(Color.White)
+        ) {
+            items(noteList) { noteItem ->
+                NoteListItem(
+                    isTrashed = false,
+                    noteViewModel = noteViewModel,
+                    coroutineScope = coroutineScope,
+                    note = noteItem,
+                    modifier = Modifier.clickable {
+                        navController.navigate(Screen.NoteScreen.route)
+                    },
+                    updatedList = {
+                        noteList = it
+                    }
+                )
+            }
+        }
+
         FloatingActionButton(
             shape = CircleShape,
-            containerColor = colorResource(
-                id = R.color.blue_green
-            ),
+            containerColor = Color.White,
             modifier = Modifier
                 .constrainAs(locationButton) {
                     end.linkTo(parent.end)
@@ -167,33 +195,12 @@ fun HomeScreen(
             Icon(
                 imageVector = Icons.Default.LocationOn,
                 contentDescription = null,
-                tint = Color.White
+                tint = colorResource(
+                    id = R.color.deep_purple
+                )
             )
         }
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier
-                .constrainAs(noteLazyColumn) {
-                    top.linkTo(homeIcon.bottom)
-                }
-                .fillMaxWidth()
-        ) {
-            items(noteList) { noteItem ->
-                NoteListItem(
-                    isTrashed = false,
-                    noteViewModel = noteViewModel,
-                    coroutineScope = coroutineScope,
-                    note = noteItem,
-                    modifier = Modifier.clickable {
-                        navController.navigate(Screen.NoteScreen.route)
-                    },
-                    updatedList = {
-                        noteList = it
-                    }
-                )
-            }
-        }
 
         FloatingActionButton(
             shape = CircleShape,
