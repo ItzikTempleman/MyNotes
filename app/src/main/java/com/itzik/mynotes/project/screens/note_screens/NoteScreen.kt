@@ -1,5 +1,6 @@
 package com.itzik.mynotes.project.screens.note_screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -66,8 +67,10 @@ fun NoteScreen(
             .fillMaxSize()
             .background(color = colorResource(id = R.color.blue_green))
     ) {
-        val (returnIcon, icon, doneBtn, contentTF) = createRefs()
+        val (returnIcon, icon, doneBtn, @SuppressLint("SuspiciousIndentation") contentTF) = createRefs()
 
+
+        if(isLayoutText) {
             IconButton(
                 modifier = Modifier
                     .constrainAs(returnIcon) {
@@ -103,6 +106,10 @@ fun NoteScreen(
                     .padding(start = 4.dp, top = 16.dp)
                     .size(26.dp)
             )
+        }
+
+
+
 
             TextButton(
                 modifier = Modifier
@@ -139,12 +146,12 @@ fun NoteScreen(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(topEnd = 0.dp, topStart = 0.dp))
                     .constrainAs(contentTF) {
-                        top.linkTo(icon.bottom, margin = 16.dp)
+                        top.linkTo(parent.top)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)
                         height = Dimension.fillToConstraints
-                    },
+                    }.padding(top=56.dp),
                 placeholder = {
                     Text(
                         text = if (note.content.isBlank()) "New note" else note.content

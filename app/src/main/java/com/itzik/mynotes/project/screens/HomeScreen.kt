@@ -90,7 +90,6 @@ fun HomeScreen(
         }
     }
 
-
     val launchMultiplePermissions =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) {
             val areGranted = it.values.reduce { acc, next -> acc && next }
@@ -105,8 +104,6 @@ fun HomeScreen(
             ).show()
             updateIsLocationRequired(mutableLocationRequired)
         }
-
-
 
     ConstraintLayout(
         modifier = modifier.fillMaxSize(),
@@ -164,11 +161,9 @@ fun HomeScreen(
             modifier = Modifier
                 .constrainAs(noteLazyColumn) {
                     top.linkTo(homeIcon.bottom)
-                }
-                .fillMaxWidth()
+                }.fillMaxWidth()
         ) {
             items(noteList) { noteItem ->
-
                 NoteListItem(
                     isTrashed = false,
                     noteViewModel = noteViewModel,
