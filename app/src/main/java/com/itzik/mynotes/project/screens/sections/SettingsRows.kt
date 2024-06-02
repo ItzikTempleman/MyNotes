@@ -21,12 +21,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
+import com.itzik.mynotes.R
 import com.itzik.mynotes.project.screens.navigation.Screen
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +37,6 @@ import kotlinx.coroutines.launch
 sealed class SettingsRows(
     var title: String,
     var icon: ImageVector,
-    var tint: Color,
     var onClick: ((noteViewModel: NoteViewModel, coroutineScope: CoroutineScope, navController: NavHostController) -> Unit)? = null
 ) {
     data object DeletedNotes : SettingsRows(
@@ -46,19 +46,16 @@ sealed class SettingsRows(
             coroutineScope.launch {
                 navController.navigate(Screen.DeletedNotesScreen.route)
             }
-        },
-        tint = Color.DarkGray
-        )
+        }
+    )
 
     data object MyLocation :SettingsRows(
         title = "Location: ",
         icon = Icons.Default.ShareLocation,
-        tint = Color.DarkGray,
     )
 
     data object SystemColor : SettingsRows(
         title = "Dark Mode", icon = Icons.Default.DarkMode,
-        tint = Color.DarkGray
     )
 
     @SuppressLint("CoroutineCreationDuringComposition")
@@ -108,7 +105,7 @@ sealed class SettingsRows(
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
-                    }, imageVector = settingsRow.icon, contentDescription = null, tint = settingsRow.tint
+                    }, imageVector = settingsRow.icon, contentDescription = null, tint = colorResource(id = R.color.light_yellow),
             )
             Text(
                 modifier = Modifier
