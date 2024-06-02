@@ -24,13 +24,14 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun SettingsScreen(
-    updatedLocationName: (String) -> Unit,
     noteViewModel: NoteViewModel,
     userViewModel: UserViewModel,
     modifier: Modifier,
     coroutineScope: CoroutineScope,
-    navController: NavHostController
+    navController: NavHostController,
+
 ) {
+
 
     val settingsItems = listOf(
         SettingsRows.DeletedNotes,
@@ -38,11 +39,10 @@ fun SettingsScreen(
         SettingsRows.SystemColor
     )
 
-
     ConstraintLayout(
         modifier = modifier.fillMaxSize(),
     ) {
-        val (icon,settingItems) = createRefs()
+        val (icon, settingItems) = createRefs()
 
         Icon(
             imageVector = Icons.Default.Settings,
@@ -58,18 +58,20 @@ fun SettingsScreen(
         )
 
         LazyColumn(
-            modifier = modifier.constrainAs(settingItems){
-                top.linkTo(icon.bottom)
-            }.fillMaxWidth()
+            modifier = modifier
+                .constrainAs(settingItems) {
+                    top.linkTo(icon.bottom)
+                }
+                .fillMaxWidth()
         ) {
             items(settingsItems) {
                 SettingItem(
-                    updatedLocationName= { updatedLocationName(it) },
+
                     settingsRow = it,
                     modifier = modifier,
                     coroutineScope = coroutineScope,
                     navController = navController,
-                    noteViewModel = noteViewModel
+                    noteViewModel = noteViewModel,
                 )
             }
         }

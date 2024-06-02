@@ -5,6 +5,8 @@ import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.repositories.IRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -12,6 +14,13 @@ import javax.inject.Inject
 class NoteViewModel @Inject constructor(
     private val repo: IRepo
 ) : ViewModel() {
+
+    private val _locationName = MutableStateFlow("")
+    val locationName: StateFlow<String> get() = _locationName
+
+    fun setLocationName(name: String) {
+        _locationName.value = name
+    }
 
 
     private suspend fun saveNote(note: Note) = repo.saveNote(note)
@@ -48,5 +57,6 @@ class NoteViewModel @Inject constructor(
     }
 
     suspend fun emptyTrashBin() = repo.emptyTrashBin()
+
 }
 

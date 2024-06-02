@@ -48,7 +48,6 @@ fun BottomBarNavHost(
     startLocationUpdates: () -> Unit,
     updateIsLocationRequired: (Boolean) -> Unit,
     user: User,
-    updatedLocationName: (String)-> Unit
 ) {
     var isNoteScreenVisible by remember {
         mutableStateOf(false)
@@ -73,25 +72,24 @@ fun BottomBarNavHost(
                 startDestination = Screen.Home.route
             ) {
                 composable(route = Screen.Home.route) {
-                    isNoteScreenVisible=true
+                    isNoteScreenVisible = true
                     HomeScreen(
-                        noteViewModel=noteViewModel,
+                        noteViewModel = noteViewModel,
                         modifier = Modifier.background(Color.White),
                         userViewModel = userViewModel,
+                        coroutineScope = coroutineScope,
+                        navController = newNavController,
+                        user = user,
                         context = context,
                         updateIsLocationRequired = updateIsLocationRequired,
                         locationRequired = locationRequired,
                         startLocationUpdates = { startLocationUpdates() },
                         currentLocation = currentLocation,
-                        coroutineScope = coroutineScope,
-                        navController = newNavController,
-                        user = user,
-                        updatedLocationName = updatedLocationName
                     )
                 }
 
                 composable(route = Screen.PinnedNotes.route) {
-                    isNoteScreenVisible=true
+                    isNoteScreenVisible = true
                     PinnedNotesScreen(
                         modifier = Modifier.background(Color.White),
                         userViewModel = userViewModel,
@@ -102,11 +100,10 @@ fun BottomBarNavHost(
                 }
 
                 composable(route = Screen.Settings.route) {
-                    isNoteScreenVisible=true
+                    isNoteScreenVisible = true
                     SettingsScreen(
-                        updatedLocationName=updatedLocationName,
-                        userViewModel=userViewModel,
-                        noteViewModel=noteViewModel,
+                        userViewModel = userViewModel,
+                        noteViewModel = noteViewModel,
                         modifier = Modifier.background(Color.White),
                         navController = newNavController,
                         coroutineScope = coroutineScope,
@@ -114,7 +111,7 @@ fun BottomBarNavHost(
                 }
 
                 composable(route = Screen.Profile.route) {
-                    isNoteScreenVisible=true
+                    isNoteScreenVisible = true
                     ProfileScreen(
                         modifier = Modifier.background(Color.White),
                         navController = paramNavController,
@@ -125,26 +122,26 @@ fun BottomBarNavHost(
                 }
 
                 composable(route = Screen.NoteScreen.route) {
-                    isNoteScreenVisible=false
+                    isNoteScreenVisible = false
                     NoteScreen(
                         note = it.savedStateHandle.get<Note>(
                             "note"
                         ) ?: Note(content = ""),
-                        modifier=Modifier.background(Color.White),
+                        modifier = Modifier.background(Color.White),
                         paramNavController = paramNavController,
                         userViewModel = userViewModel,
-                        noteViewModel=noteViewModel,
+                        noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
                         user = user
                     )
                 }
                 composable(route = Screen.DeletedNotesScreen.route) {
-                    isNoteScreenVisible=false
+                    isNoteScreenVisible = false
                     DeletedNotesScreen(
-                        noteViewModel=noteViewModel,
-                        coroutineScope=coroutineScope,
-                        navController=paramNavController,
-                        modifier=Modifier
+                        noteViewModel = noteViewModel,
+                        coroutineScope = coroutineScope,
+                        navController = paramNavController,
+                        modifier = Modifier
                     )
                 }
             }

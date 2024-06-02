@@ -15,7 +15,7 @@ fun convertLatLangToLocation(currentLocation: LatLng, context: Context): String 
     val addresses = geoCoder.getFromLocation(latLangPair.first, latLangPair.second, 0)
     if (!addresses.isNullOrEmpty()) {
         val address = addresses[0]
-        locationName = address.getAddressLine(0)
+        locationName = address.locality+", "+address.adminArea
         countryName = address.countryName ?: "country name not available"
     }
     return "$locationName, $countryName"

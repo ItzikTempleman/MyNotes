@@ -113,9 +113,7 @@ fun RootNavHost(
         ) {
             composable(route = Screen.Home.route) {
                 BottomBarNavHost(
-                    updatedLocationName = {
-                        locationName=it
-                    },
+
                     noteViewModel = noteViewModel,
                     context = context,
                     locationRequired = locationRequired,

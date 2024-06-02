@@ -15,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,12 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.project.screens.navigation.Screen
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
 
 sealed class SettingsRows(
     var title: String,
@@ -44,36 +47,33 @@ sealed class SettingsRows(
                 navController.navigate(Screen.DeletedNotesScreen.route)
             }
         },
-        tint = Color.Gray
+        tint = Color.DarkGray
         )
 
-
     data object MyLocation :SettingsRows(
-        title = "Current location: ",
+        title = "Location: ",
         icon = Icons.Default.ShareLocation,
-        tint = Color.Gray
+        tint = Color.DarkGray,
     )
-
 
     data object SystemColor : SettingsRows(
         title = "Dark Mode", icon = Icons.Default.DarkMode,
-        tint = Color.Gray
+        tint = Color.DarkGray
     )
-
-
 
     @SuppressLint("CoroutineCreationDuringComposition")
     @Composable
     fun SettingItem(
-        updatedLocationName: (String) -> Unit,
         noteViewModel: NoteViewModel,
         coroutineScope: CoroutineScope,
         navController: NavHostController,
         settingsRow: SettingsRows,
-        modifier: Modifier
+        modifier: Modifier,
     ) {
+        val locationName by noteViewModel.locationName.collectAsState()
 
         var isToggled by remember { mutableStateOf(false) }
+
         ConstraintLayout(
             modifier = modifier
                 .clickable {
@@ -101,8 +101,6 @@ sealed class SettingsRows(
                     }
                 )
             }
-
-
             Icon(
                 modifier = Modifier
                     .padding(4.dp)
@@ -110,7 +108,7 @@ sealed class SettingsRows(
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
-                    }, imageVector = settingsRow.icon, contentDescription = null
+                    }, imageVector = settingsRow.icon, contentDescription = null, tint = settingsRow.tint
             )
             Text(
                 modifier = Modifier
@@ -119,11 +117,11 @@ sealed class SettingsRows(
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                         start.linkTo(icon.end)
-                    }, text = if(settingsRow.title=="Current location: ")settingsRow.title +"$updatedLocationName" else settingsRow.title
+                    }, text = if(settingsRow.title=="Location: ") settingsRow.title + locationName else settingsRow.title, fontSize = 16.sp
             )
             HorizontalDivider(modifier = Modifier.constrainAs(divider) {
                 bottom.linkTo(parent.bottom)
-            }
+               }
             )
         }
     }

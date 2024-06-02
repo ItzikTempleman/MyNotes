@@ -24,7 +24,6 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
@@ -70,7 +68,6 @@ fun HomeScreen(
     locationRequired: Boolean,
     startLocationUpdates: () -> Unit,
     updateIsLocationRequired: (Boolean) -> Unit,
-    updatedLocationName: (String)-> Unit
 ) {
 
     var isLoadingLocation by remember {
@@ -114,7 +111,7 @@ fun HomeScreen(
     ConstraintLayout(
         modifier = modifier.fillMaxSize(),
     ) {
-        val (homeIcon, locationText, locationButton, noteLazyColumn, newNoteBtn, progressBar) = createRefs()
+        val (homeIcon, locationButton, noteLazyColumn, newNoteBtn, progressBar) = createRefs()
 
         Icon(imageVector = Icons.Default.Home,
             contentDescription = null,
@@ -130,7 +127,7 @@ fun HomeScreen(
         FloatingActionButton(
             shape = CircleShape,
             containerColor = colorResource(
-                id = R.color.lighter_blue
+                id = R.color.blue_green
             ),
             modifier = Modifier
                 .constrainAs(locationButton) {
@@ -142,14 +139,12 @@ fun HomeScreen(
                 isLoadingLocation = true
                 if (permissions.all {
                         ContextCompat.checkSelfPermission(
-                            context,
-                            it
+                            context, it
                         ) == PackageManager.PERMISSION_GRANTED
                     }) {
                     startLocationUpdates()
                     locationName = convertLatLangToLocation(currentLocation, context)
-                    updatedLocationName(convertLatLangToLocation(currentLocation, context))
-
+                    noteViewModel.setLocationName(convertLatLangToLocation(currentLocation, context))
                     if (locationName.isNotBlank())
                         isLoadingLocation = false
                 } else {
@@ -163,17 +158,6 @@ fun HomeScreen(
                 tint = Color.White
             )
         }
-
-        Text(
-            modifier = Modifier
-                .constrainAs(locationText) {
-                    end.linkTo(locationButton.start)
-                    top.linkTo(parent.top)
-                }
-                .padding(top = 20.dp, end = 8.dp),
-            text = locationName,
-            fontSize = 12.sp
-        )
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
