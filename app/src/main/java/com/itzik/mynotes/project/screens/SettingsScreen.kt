@@ -6,13 +6,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
@@ -42,7 +45,7 @@ fun SettingsScreen(
     ConstraintLayout(
         modifier = modifier.fillMaxSize(),
     ) {
-        val (icon, settingItems) = createRefs()
+        val (icon, title, settingItems) = createRefs()
 
         Icon(
             imageVector = Icons.Default.Settings,
@@ -55,6 +58,19 @@ fun SettingsScreen(
                     start.linkTo(parent.start)
                 }
                 .size(26.dp)
+        )
+
+        Text(
+            modifier = Modifier
+                .constrainAs(title) {
+                    start.linkTo(icon.end)
+                    top.linkTo(parent.top)
+                }
+                .padding(start = 4.dp,  top = 18.dp),
+            text = "Settings",
+            fontSize = 20.sp,
+            color = colorResource(id = R.color.blue_green),
+            fontWeight = FontWeight.Bold
         )
 
         LazyColumn(

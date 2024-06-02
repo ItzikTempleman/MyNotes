@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
@@ -32,7 +33,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
@@ -108,7 +111,7 @@ fun HomeScreen(
     ConstraintLayout(
         modifier = modifier.fillMaxSize(),
     ) {
-        val (homeIcon, locationButton, noteLazyColumn, newNoteBtn, progressBar) = createRefs()
+        val (homeIcon,title, locationButton, noteLazyColumn, newNoteBtn, progressBar) = createRefs()
 
         Icon(imageVector = Icons.Default.Home,
             contentDescription = null,
@@ -120,6 +123,18 @@ fun HomeScreen(
                 }
                 .size(26.dp), tint = colorResource(id = R.color.blue_green))
 
+        Text(
+            modifier = Modifier
+                .constrainAs(title) {
+                    start.linkTo(homeIcon.end)
+                    top.linkTo(parent.top)
+                }
+                .padding(start = 4.dp,  top = 18.dp),
+            text = "Notes",
+            fontSize = 20.sp,
+            color = colorResource(id = R.color.blue_green),
+            fontWeight = FontWeight.Bold
+        )
 
         FloatingActionButton(
             shape = CircleShape,
@@ -161,7 +176,8 @@ fun HomeScreen(
             modifier = Modifier
                 .constrainAs(noteLazyColumn) {
                     top.linkTo(homeIcon.bottom)
-                }.fillMaxWidth()
+                }
+                .fillMaxWidth()
         ) {
             items(noteList) { noteItem ->
                 NoteListItem(
