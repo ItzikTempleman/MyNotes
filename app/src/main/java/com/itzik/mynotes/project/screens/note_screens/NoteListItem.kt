@@ -2,6 +2,8 @@ package com.itzik.mynotes.project.screens.note_screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
@@ -31,7 +33,7 @@ fun NoteListItem(
     note: Note,
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
-    updatedList: (MutableList<Note>) -> Unit
+    updatedList: (MutableList<Note>) -> Unit,
 ) {
     Card(
         colors=CardDefaults.cardColors(Color.White),
@@ -41,10 +43,11 @@ fun NoteListItem(
             .wrapContentSize()
     ) {
         ConstraintLayout(
-            modifier = Modifier.fillMaxSize().background(Color.White)
+            modifier = if(!isTrashed) Modifier.fillMaxSize().background(Color.White) else Modifier.height(70.dp).fillMaxWidth().background(Color.White)
         ) {
             val ( timeStamp, deleteNote, content) = createRefs()
 
+            if (!isTrashed) {
             Text(
                 modifier = Modifier
                     .constrainAs(timeStamp) {
@@ -56,7 +59,6 @@ fun NoteListItem(
                 fontSize = 12.sp
             )
 
-            if (!isTrashed) {
                 IconButton(
                     modifier = Modifier
                         .constrainAs(

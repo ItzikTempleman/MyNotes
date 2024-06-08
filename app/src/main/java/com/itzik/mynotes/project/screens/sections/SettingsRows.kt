@@ -118,7 +118,7 @@ sealed class SettingsRows(
             )
             HorizontalDivider(modifier = Modifier.constrainAs(divider) {
                 bottom.linkTo(parent.bottom)
-               }
+               }.padding(horizontal = 8.dp)
             )
         }
     }
