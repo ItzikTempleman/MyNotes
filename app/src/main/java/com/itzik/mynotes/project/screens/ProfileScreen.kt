@@ -124,7 +124,7 @@ fun ProfileScreen(
 
         Card(
             elevation = CardDefaults.cardElevation(16.dp),
-            colors = CardDefaults.cardColors(Color.White),
+            colors = CardDefaults.cardColors(colorResource(id = R.color.semi_transparent_blue_green)),
             modifier = Modifier
                 .constrainAs(dataContainer) {
                     top.linkTo(parent.top)
