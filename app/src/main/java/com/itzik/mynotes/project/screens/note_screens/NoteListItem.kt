@@ -79,7 +79,7 @@ fun NoteListItem(
                         imageVector = Icons.Default.Delete,
                         contentDescription = null,
                         tint = colorResource(
-                            id = R.color.blue_green
+                            id = R.color.deep_purple
                         )
                     )
                 }

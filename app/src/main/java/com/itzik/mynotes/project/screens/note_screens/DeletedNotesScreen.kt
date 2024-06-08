@@ -61,7 +61,7 @@ fun DeletedNotesScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = colorResource(id = R.color.blue_green))
+            .background(color = colorResource(id = R.color.deep_purple))
     ) {
         val (returnIcon, title, icon, lazyColumn) = createRefs()
 

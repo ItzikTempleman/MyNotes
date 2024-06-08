@@ -105,7 +105,7 @@ sealed class SettingsRows(
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
-                    }, imageVector = settingsRow.icon, contentDescription = null, tint = colorResource(id = R.color.light_yellow),
+                    }, imageVector = settingsRow.icon, contentDescription = null, tint = colorResource(id = R.color.deep_purple),
             )
             Text(
                 modifier = Modifier

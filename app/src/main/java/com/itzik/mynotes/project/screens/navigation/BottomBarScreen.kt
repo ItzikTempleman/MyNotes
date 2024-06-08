@@ -62,7 +62,7 @@ fun AddItem(
         it.route == screen.route
     } == true
 
-    val contentColor = if (selected) colorResource(id = R.color.light_yellow) else colorResource(id = R.color.blue_green)
+    val contentColor = if (selected) colorResource(id = R.color.deep_purple) else colorResource(id = R.color.light_deep_purple)
 
     Box(
         modifier = Modifier

@@ -15,7 +15,11 @@
     <color name="gray">#b0acac</color>
     <color name="transparent">#00B0ACAC</color>
 
-    <color name="deep_purple">#483D8B</color>
+
+    <color name="deep_purple">#4A0056</color>
+    <color name="light_deep_purple">#774A0056</color>
+    <color name="very_light_deep_purple">#BE88C7</color>
+    <color name="very_light_deep_purple2">#E2C0E8</color>
     <color name="steel_blue">#5d7595</color>
     <color name="navy_blue">#2c3e50</color>
     <color name="light_pink_purple">#dce2f9</color>

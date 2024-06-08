@@ -65,7 +65,7 @@ fun NoteScreen(
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
-            .background(color = colorResource(id = R.color.blue_green))
+            .background(color = colorResource(id = R.color.deep_purple))
     ) {
         val (returnIcon, icon, doneBtn, @SuppressLint("SuspiciousIndentation") contentTF) = createRefs()
 
