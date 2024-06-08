@@ -200,6 +200,23 @@ fun HomeScreen(
                 )
             }
         }
+        FloatingActionButton(
+            shape = CircleShape,
+            containerColor = colorResource(id = R.color.deep_purple),
+            modifier = Modifier
+                .padding(8.dp)
+                .constrainAs(newNoteBtn) {
+                    end.linkTo(parent.end)
+                    bottom.linkTo(locationButton.top)
+                }, onClick = {
+                navController.navigate(Screen.NoteScreen.route)
+            }
+        ) {
+            Icon(
+                Icons.Filled.Add,
+                null, tint = Color.White
+            )
+        }
 
         FloatingActionButton(
             shape = CircleShape,
@@ -207,7 +224,7 @@ fun HomeScreen(
             modifier = Modifier
                 .constrainAs(locationButton) {
                     end.linkTo(parent.end)
-                    bottom.linkTo(newNoteBtn.top)
+                    bottom.linkTo(parent.bottom)
                 }
                 .padding(8.dp),
             onClick = {
@@ -236,24 +253,6 @@ fun HomeScreen(
             )
         }
 
-
-        FloatingActionButton(
-            shape = CircleShape,
-            containerColor = colorResource(id = R.color.deep_purple),
-            modifier = Modifier
-                .padding(8.dp)
-                .constrainAs(newNoteBtn) {
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }, onClick = {
-                navController.navigate(Screen.NoteScreen.route)
-            }
-        ) {
-            Icon(
-                Icons.Filled.Add,
-                null, tint = Color.White
-            )
-        }
 
         if (isLoadingLocation) {
             CircularProgressIndicator(

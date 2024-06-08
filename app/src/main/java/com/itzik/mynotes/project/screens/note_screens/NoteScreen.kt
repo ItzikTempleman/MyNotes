@@ -1,6 +1,5 @@
 package com.itzik.mynotes.project.screens.note_screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -65,9 +64,9 @@ fun NoteScreen(
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
-            .background(color = colorResource(id = R.color.deep_purple))
+
     ) {
-        val (returnIcon, icon, doneBtn, @SuppressLint("SuspiciousIndentation") contentTF) = createRefs()
+        val (returnIcon, icon, doneBtn, contentTF) = createRefs()
 
 
         if(isLayoutText) {
@@ -88,14 +87,14 @@ fun NoteScreen(
                     paramNavController.navigate(Screen.Home.route)
                 }) {
                 Icon(
-                    tint = Color.White,
+                    tint = colorResource(id = R.color.deep_purple),
                     imageVector = Icons.Default.ArrowBackIosNew,
                     contentDescription = null
                 )
             }
 
             Icon(
-                tint = Color.White,
+                tint = colorResource(id = R.color.deep_purple),
                 imageVector = Icons.Default.EditNote,
                 contentDescription = null,
                 modifier = Modifier
@@ -107,8 +106,6 @@ fun NoteScreen(
                     .size(26.dp)
             )
         }
-
-
 
 
             TextButton(
@@ -125,9 +122,10 @@ fun NoteScreen(
                 Text(
                     text = if (!isLayoutText) "Done" else "Edit",
                     fontSize = 18.sp,
-                    color = Color.White
+                    color = colorResource(id = R.color.deep_purple)
                 )
             }
+
 
         if (!isLayoutText) {
             TextField(
@@ -151,7 +149,8 @@ fun NoteScreen(
                         end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)
                         height = Dimension.fillToConstraints
-                    }.padding(top=56.dp),
+                    }
+                    .padding(top = 56.dp),
                 placeholder = {
                     Text(
                         text = if (note.content.isBlank()) "New note" else note.content
@@ -160,7 +159,8 @@ fun NoteScreen(
             )
         } else {
             Text(
-                modifier = Modifier.background(Color.White)
+                modifier = Modifier
+                    .background(Color.White)
                     .fillMaxWidth()
                     .constrainAs(contentTF) {
                         top.linkTo(icon.bottom, margin = 16.dp)
@@ -168,7 +168,8 @@ fun NoteScreen(
                         end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)
                         height = Dimension.fillToConstraints
-                    }.padding(8.dp),
+                    }
+                    .padding(8.dp),
                 text = note.content
             )
         }
