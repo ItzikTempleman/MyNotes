@@ -69,8 +69,8 @@ fun NoteScreen(
         val (returnIcon, icon, doneBtn, contentTF) = createRefs()
 
 
-        if(isLayoutText) {
             IconButton(
+                enabled = isLayoutText,
                 modifier = Modifier
                     .constrainAs(returnIcon) {
                         start.linkTo(parent.start)
@@ -87,14 +87,14 @@ fun NoteScreen(
                     paramNavController.navigate(Screen.Home.route)
                 }) {
                 Icon(
-                    tint = colorResource(id = R.color.deep_purple),
+                    tint = if(isLayoutText) colorResource(id = R.color.deep_purple) else colorResource(id = R.color.very_light_deep_purple2),
                     imageVector = Icons.Default.ArrowBackIosNew,
                     contentDescription = null
                 )
             }
 
             Icon(
-                tint = colorResource(id = R.color.deep_purple),
+                tint = if(isLayoutText) colorResource(id = R.color.deep_purple) else colorResource(id = R.color.very_light_deep_purple2),
                 imageVector = Icons.Default.EditNote,
                 contentDescription = null,
                 modifier = Modifier
@@ -105,7 +105,7 @@ fun NoteScreen(
                     .padding(start = 4.dp, top = 16.dp)
                     .size(26.dp)
             )
-        }
+
 
 
             TextButton(
