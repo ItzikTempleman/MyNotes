@@ -2,6 +2,7 @@ package com.itzik.mynotes.project.screens.auth
 
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,8 +15,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavHostController
+import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.screens.navigation.Graph.AUTHENTICATION
 import com.itzik.mynotes.project.screens.navigation.Graph.HOME
@@ -54,7 +58,14 @@ fun SplashScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    colorResource(id = R.color.blue_green),
+                    Color.White
+                )
+            )
+        ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

@@ -200,6 +200,7 @@ fun HomeScreen(
                 )
             }
         }
+
         FloatingActionButton(
             shape = CircleShape,
             containerColor = colorResource(id = R.color.deep_purple),

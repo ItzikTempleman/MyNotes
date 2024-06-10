@@ -1,22 +1,34 @@
 package com.itzik.mynotes.project.screens.auth
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Login
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -25,14 +37,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-
+import com.itzik.mynotes.R
 import com.itzik.mynotes.project.screens.navigation.Screen
-
 import com.itzik.mynotes.project.screens.sections.CustomButton
 import com.itzik.mynotes.project.screens.sections.CustomOutlinedTextField
 import com.itzik.mynotes.project.viewmodels.UserViewModel
-import com.itzik.mynotes.R
-
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -62,19 +71,54 @@ fun LoginScreen(
     }
 
     ConstraintLayout(
-        modifier = Modifier.fillMaxSize().background(Color.White),
+        modifier = Modifier.fillMaxSize()            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        colorResource(id = R.color.blue_green),
+                        Color.White
+                    )
+                )
+                ),
     ) {
         val (title, emailTF, passwordTF, loginBtn, signUpBtn) = createRefs()
 
-        Text(
-            text = stringResource(id = R.string.log_in),
+        Card(
+            colors = CardDefaults.cardColors(colorResource(id = R.color.very_light_green)),
+            elevation = CardDefaults.cardElevation(24.dp),
             modifier = Modifier
-                .padding(8.dp)
                 .constrainAs(title) {
-                    start.linkTo(parent.start)
                     top.linkTo(parent.top)
-                },
-        )
+                    start.linkTo(parent.start)
+                }
+                .width(340.dp)
+                .height(80.dp)
+                .padding(16.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(colorResource(id = R.color.very_light_green))
+                    .padding(end = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Login,
+                    contentDescription = null,
+                    tint = Color.Black,
+                    modifier = Modifier.size(30.dp),
+                )
+
+                Text(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    color = Color.Black,
+                    text = stringResource(id = R.string.log_in),
+                    modifier = Modifier
+                        .padding(8.dp)
+                )
+            }
+        }
 
             CustomOutlinedTextField(
                 value = email,

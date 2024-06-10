@@ -1,5 +1,6 @@
 package com.itzik.mynotes.project.screens.sections
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -16,6 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.itzik.mynotes.R
 
@@ -46,7 +48,7 @@ fun CustomOutlinedTextField(
     }
 
         OutlinedTextField(
-
+            shape = RoundedCornerShape(12.dp),
             value = value,
             onValueChange = {
                 thisValueChange(it)
@@ -105,7 +107,8 @@ fun CustomOutlinedTextField(
             visualTransformation = visualTransformation,
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = colorResource(id = R.color.darker_blue),
-                cursorColor = colorResource(id = R.color.darker_blue)
+                cursorColor = colorResource(id = R.color.darker_blue),
+                backgroundColor = colorResource(id =R.color.very_light_green)
             ),
             isError = isError,
             keyboardOptions = if (isKeyboardPasswordType) {
