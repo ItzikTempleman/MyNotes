@@ -21,7 +21,6 @@ interface NoteDao {
     @Update
     suspend fun updateIsInTrashBin(note: Note)
 
-
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)
     @Query("SELECT *FROM $NOTE_TABLE WHERE isInTrash=1")

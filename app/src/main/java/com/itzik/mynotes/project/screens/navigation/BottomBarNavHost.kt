@@ -29,6 +29,7 @@ import com.itzik.mynotes.project.screens.SettingsScreen
 import com.itzik.mynotes.project.screens.navigation.Graph.HOME
 import com.itzik.mynotes.project.screens.note_screens.DeletedNotesScreen
 import com.itzik.mynotes.project.screens.note_screens.NoteScreen
+import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -37,6 +38,7 @@ import kotlinx.coroutines.CoroutineScope
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun BottomBarNavHost(
+    locationViewModel:LocationViewModel,
     context: Context,
     noteViewModel: NoteViewModel,
     newNavController: NavHostController = rememberNavController(),
@@ -74,12 +76,11 @@ fun BottomBarNavHost(
                 composable(route = Screen.Home.route) {
                     isNoteScreenVisible = true
                     HomeScreen(
+                        locationViewModel=locationViewModel,
                         noteViewModel = noteViewModel,
                         modifier = Modifier.background(Color.White),
-                        userViewModel = userViewModel,
                         coroutineScope = coroutineScope,
                         navController = newNavController,
-                        user = user,
                         context = context,
                         updateIsLocationRequired = updateIsLocationRequired,
                         locationRequired = locationRequired,
@@ -102,7 +103,7 @@ fun BottomBarNavHost(
                 composable(route = Screen.Settings.route) {
                     isNoteScreenVisible = true
                     SettingsScreen(
-                        userViewModel = userViewModel,
+                        locationViewModel=locationViewModel,
                         noteViewModel = noteViewModel,
                         modifier = Modifier.background(Color.White),
                         navController = newNavController,
@@ -129,10 +130,8 @@ fun BottomBarNavHost(
                         ) ?: Note(content = ""),
                         modifier = Modifier.background(Color.White),
                         paramNavController = paramNavController,
-                        userViewModel = userViewModel,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
-                        user = user
                     )
                 }
                 composable(route = Screen.DeletedNotesScreen.route) {

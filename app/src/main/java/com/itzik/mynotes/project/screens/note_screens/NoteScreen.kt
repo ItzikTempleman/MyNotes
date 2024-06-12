@@ -32,10 +32,8 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
-import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.screens.navigation.Screen
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
-import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -46,8 +44,6 @@ fun NoteScreen(
     modifier: Modifier,
     note: Note,
     coroutineScope: CoroutineScope,
-    userViewModel: UserViewModel,
-    user: User,
     paramNavController: NavHostController,
 ) {
 
@@ -83,7 +79,7 @@ fun NoteScreen(
                 onClick = {
                     coroutineScope.launch {
                         if (text.isNotBlank()) {
-                            noteViewModel.updateNote(text)
+                            noteViewModel.updateNoteContent(note, text)
                         }
                     }
                     paramNavController.navigate(Screen.Home.route)

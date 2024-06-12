@@ -29,6 +29,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.screens.navigation.Screen
+import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -61,13 +62,14 @@ sealed class SettingsRows(
     @SuppressLint("CoroutineCreationDuringComposition")
     @Composable
     fun SettingItem(
+        locationViewmodel: LocationViewModel,
         noteViewModel: NoteViewModel,
         coroutineScope: CoroutineScope,
         navController: NavHostController,
         settingsRow: SettingsRows,
         modifier: Modifier,
     ) {
-        val locationName by noteViewModel.locationName.collectAsState()
+        val locationName by locationViewmodel.locationName.collectAsState()
 
         var isToggled by remember { mutableStateOf(false) }
 

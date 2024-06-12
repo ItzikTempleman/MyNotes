@@ -142,9 +142,6 @@ fun DeletedNotesScreen(
             onClick = {
                 coroutineScope.launch {
                     noteViewModel.emptyTrashBin()
-//                    noteViewModel.fetchTrashedNotes().collect {
-//                        noteList = it
-//                    }
                 }
                 noteList = emptyList<Note>().toMutableList()
             }

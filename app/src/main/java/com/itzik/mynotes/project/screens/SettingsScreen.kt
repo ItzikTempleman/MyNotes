@@ -31,14 +31,14 @@ import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.screens.sections.SettingsRows
 import com.itzik.mynotes.project.screens.sections.SettingsRows.DeletedNotes.SettingItem
+import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
-import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun SettingsScreen(
+    locationViewModel: LocationViewModel,
     noteViewModel: NoteViewModel,
-    userViewModel: UserViewModel,
     modifier: Modifier,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
@@ -55,7 +55,7 @@ fun SettingsScreen(
     ConstraintLayout(
         modifier = modifier.fillMaxSize(),
     ) {
-        val (icon,horizontalDivider, settingItems) = createRefs()
+        val (icon, settingItems) = createRefs()
 
         Row(
             modifier = Modifier
@@ -122,6 +122,7 @@ fun SettingsScreen(
                     coroutineScope = coroutineScope,
                     navController = navController,
                     noteViewModel = noteViewModel,
+                    locationViewmodel = locationViewModel
                 )
             }
         }

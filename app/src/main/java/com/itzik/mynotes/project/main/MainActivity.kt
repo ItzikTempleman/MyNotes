@@ -23,6 +23,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.screens.navigation.RootNavHost
+import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import com.itzik.mynotes.ui.theme.MyNotesTheme
@@ -32,6 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private lateinit var locationViewModel: LocationViewModel
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -91,8 +93,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-
-            noteViewModel= viewModel()
+            locationViewModel = viewModel()
+            noteViewModel = viewModel()
             userViewModel = viewModel()
 
 
@@ -101,8 +103,8 @@ class MainActivity : ComponentActivity() {
             MyNotesTheme {
 
                 RootNavHost(
-
-                    noteViewModel=noteViewModel,
+                    locationViewModel=locationViewModel,
+                    noteViewModel = noteViewModel,
                     context = this,
                     locationRequired = locationRequired,
                     startLocationUpdates = { startLocationUpdates() },

@@ -33,6 +33,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,15 +52,12 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.R
-import com.itzik.mynotes.project.model.Note
-import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.screens.navigation.Screen
 import com.itzik.mynotes.project.screens.note_screens.NoteListItem
 import com.itzik.mynotes.project.utils.convertLatLangToLocation
+import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
-import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 
 private val permissions = arrayOf(
@@ -70,12 +68,11 @@ private val permissions = arrayOf(
 @SuppressLint("CoroutineCreationDuringComposition", "MutableCollectionMutableState")
 @Composable
 fun HomeScreen(
+    locationViewModel: LocationViewModel,
     context: Context,
     modifier: Modifier,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
-    userViewModel: UserViewModel,
-    user: User,
     noteViewModel: NoteViewModel,
     currentLocation: LatLng,
     locationRequired: Boolean,
@@ -94,14 +91,7 @@ fun HomeScreen(
         mutableStateOf("")
     }
 
-
-    var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
-
-    coroutineScope.launch {
-        noteViewModel.fetchNotes().collect {
-            noteList = it
-        }
-    }
+    val noteList by noteViewModel.noteList.collectAsState()
 
     val launchMultiplePermissions =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) {
@@ -173,8 +163,8 @@ fun HomeScreen(
                     )
                 }
             }
-
         }
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier
@@ -194,8 +184,8 @@ fun HomeScreen(
                     modifier = Modifier.clickable {
                         navController.navigate(Screen.NoteScreen.route)
                     },
-                    updatedList = {
-                        noteList = it
+                    updatedList = { updatedNotes ->
+                        noteViewModel.setNoteList(updatedNotes)
                     }
                 )
             }
@@ -237,7 +227,7 @@ fun HomeScreen(
                     }) {
                     startLocationUpdates()
                     locationName = convertLatLangToLocation(currentLocation, context)
-                    noteViewModel.setLocationName(convertLatLangToLocation(currentLocation, context))
+                    locationViewModel.setLocationName(convertLatLangToLocation(currentLocation, context))
                     if (locationName.isNotBlank())
                         isLoadingLocation = false
                 } else {
