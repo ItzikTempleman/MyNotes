@@ -47,9 +47,6 @@ fun RootNavHost(
     updateIsLocationRequired: (Boolean) -> Unit,
 ) {
 
-    var locationName by remember {
-        mutableStateOf("")
-    }
 
     var userList by remember {
         mutableStateOf(mutableListOf<User>())

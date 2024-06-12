@@ -54,7 +54,6 @@ fun DeletedNotesScreen(
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
-    modifier: Modifier
 ) {
 
     var noteList by remember { mutableStateOf(mutableListOf<Note>()) }

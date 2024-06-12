@@ -91,7 +91,7 @@ fun HomeScreen(
         mutableStateOf("")
     }
 
-    val noteList by noteViewModel.noteList.collectAsState()
+    val noteList by noteViewModel.exposedNoteList.collectAsState()
 
     val launchMultiplePermissions =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) {

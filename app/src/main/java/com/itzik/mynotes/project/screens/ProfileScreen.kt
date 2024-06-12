@@ -60,7 +60,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
-@SuppressLint("CoroutineCreationDuringComposition")
+@SuppressLint("CoroutineCreationDuringComposition", "MutableCollectionMutableState")
 @Composable
 fun ProfileScreen(
     modifier: Modifier,
@@ -82,9 +82,20 @@ fun ProfileScreen(
         mutableStateOf(user.profileImage)
     }
 
+    var usersList by remember {
+        mutableStateOf(mutableListOf<User>())
+    }
+
     val emptySateDrawable = R.drawable.baseline_person_24
 
     LaunchedEffect(Unit) {
+        userViewModel.fetchAllUsers().collect{
+            usersList=it
+            Log.d("tags", "$usersList")
+        }
+
+
+
         if (selectedImageUri.isNotEmpty()) {
             userViewModel.fetchLoggedInUsers().collect {
                 if (it.isNotEmpty()) {
@@ -93,6 +104,7 @@ fun ProfileScreen(
             }
         }
     }
+
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -313,8 +325,10 @@ fun ProfileScreen(
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
             onClick = {
                 coroutineScope.launch {
-                    user.isLoggedIn = false
-                    userViewModel.updateIsLoggedIn(user)
+                    for (i in usersList ){
+                        i.isLoggedIn=false
+                        userViewModel.updateIsLoggedIn(i)
+                    }
                 }
                 navController.navigate(Screen.Login.route)
             },

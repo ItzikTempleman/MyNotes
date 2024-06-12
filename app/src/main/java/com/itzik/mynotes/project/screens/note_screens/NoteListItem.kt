@@ -71,7 +71,7 @@ fun NoteListItem(
                     onClick = {
                         coroutineScope.launch {
                             noteViewModel.updateIsInTrashBin(note)
-                            noteViewModel.noteList.collect{
+                            noteViewModel.exposedNoteList.collect{
                                 updatedList(it)
                             }
                         }

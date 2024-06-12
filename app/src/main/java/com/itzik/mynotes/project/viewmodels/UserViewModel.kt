@@ -13,6 +13,19 @@ class UserViewModel @Inject constructor(
     private val repo: IRepo
 ) : ViewModel() {
 
+//    private val privateLoggedInUsersList = MutableStateFlow<List<User>>(emptyList())
+//    val exposedLoggedInUsersList: StateFlow<List<User>> = privateLoggedInUsersList
+//
+//    init {
+//        viewModelScope.launch {
+//            repo.fetchLoggedInUsers().collect{
+//
+//            }
+//
+//        }
+//
+//    }
+//    suspend fun fetchLoggedInUsers() = repo.fetchLoggedInUsers()
 
     fun createUser(
         name: String,
@@ -32,9 +45,21 @@ class UserViewModel @Inject constructor(
     }
 
     suspend fun insertUser(user: User) = repo.insertUser(user)
+
+
     suspend fun fetchLoggedInUsers(): Flow<MutableList<User>> {
         val userList = flow {
             val updatedUserList = repo.fetchLoggedInUsers()
+            if (updatedUserList.isNotEmpty()) {
+                emit(updatedUserList)
+            } else return@flow
+        }
+        return userList
+    }
+
+    fun fetchAllUsers():  Flow<MutableList<User>> {
+        val userList = flow {
+            val updatedUserList = repo.fetchAllUsers()
             if (updatedUserList.isNotEmpty()) {
                 emit(updatedUserList)
             } else return@flow
@@ -64,8 +89,8 @@ class UserViewModel @Inject constructor(
     }
 
     fun validatePhoneNumber(phoneNumber: String): Boolean {
-        val regex = Regex("^\\+(?:[0-9] ?){6,14}[0-9]$")
-        return phoneNumber.matches(regex)
+        val regex = Regex("^\\d{9,11}$")
+        return regex.matches(phoneNumber)
     }
 
     suspend fun updateProfileImage(profileImageString: String) {
@@ -75,8 +100,5 @@ class UserViewModel @Inject constructor(
             repo.updateProfileImage(updatedUser)
         }
     }
-
-
-
 }
 

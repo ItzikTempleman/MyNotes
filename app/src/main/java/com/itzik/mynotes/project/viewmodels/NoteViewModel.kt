@@ -17,8 +17,8 @@ class NoteViewModel @Inject constructor(
     private val repo: IRepo
 ) : ViewModel() {
 
-    private val _noteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
-    val noteList: StateFlow<MutableList<Note>> get() = _noteList
+    private val privateNotList = MutableStateFlow<MutableList<Note>>(mutableListOf())
+    val exposedNoteList: StateFlow<MutableList<Note>> get() = privateNotList
 
     init {
         viewModelScope.launch {
@@ -27,7 +27,7 @@ class NoteViewModel @Inject constructor(
     }
 
     fun setNoteList(notes: MutableList<Note>) {
-        _noteList.value = notes
+        privateNotList.value = notes
     }
 
 
@@ -43,7 +43,7 @@ class NoteViewModel @Inject constructor(
 
 
     private suspend fun fetchNotes() {
-        _noteList.value = repo.fetchNotes()
+        privateNotList.value = repo.fetchNotes()
     }
 
     suspend fun updateIsInTrashBin(note: Note) {

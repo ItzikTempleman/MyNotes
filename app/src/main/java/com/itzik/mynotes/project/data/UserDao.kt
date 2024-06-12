@@ -16,12 +16,19 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: User)
+
     @Query("SELECT*FROM ${Constants.USER_TABLE} WHERE isLoggedIn=1")
     suspend fun fetchLoggedInUsers(): MutableList<User>
+
+    @Query("SELECT*FROM ${Constants.USER_TABLE}")
+    suspend fun fetchAllUsers(): MutableList<User>
+
     @Query("SELECT*FROM ${Constants.USER_TABLE} WHERE email = :email AND password = :password")
-    suspend fun getUserFromEmailAndPassword(email:String, password:String): User
+    suspend fun getUserFromEmailAndPassword(email: String, password: String): User
+
     @Update
     suspend fun updateIsLoggedIn(user: User)
+
     @Update
     suspend fun updateProfileImage(user: User)
 }

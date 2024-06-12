@@ -140,7 +140,6 @@ fun BottomBarNavHost(
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
                         navController = paramNavController,
-                        modifier = Modifier
                     )
                 }
             }

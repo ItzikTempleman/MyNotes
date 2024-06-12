@@ -18,6 +18,7 @@ class RepoImp @Inject constructor(
 ) : IRepo {
     override suspend fun insertUser(user: User) = userDao.insertUser(user)
     override suspend fun fetchLoggedInUsers() = userDao.fetchLoggedInUsers()
+    override suspend fun fetchAllUsers(): MutableList<User> =userDao.fetchAllUsers()
     override suspend fun getUserFromEmailAndPassword(email: String, password: String) = userDao.getUserFromEmailAndPassword(email, password)
     override suspend fun updateIsLoggedIn(user: User) = userDao.updateIsLoggedIn(user)
     override suspend fun updateProfileImage(user: User) = userDao.updateProfileImage(user)
