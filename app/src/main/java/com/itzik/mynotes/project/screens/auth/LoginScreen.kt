@@ -1,5 +1,6 @@
 package com.itzik.mynotes.project.screens.auth
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -71,7 +72,7 @@ fun LoginScreen(
     }
 
     ConstraintLayout(
-        modifier = Modifier.fillMaxSize()            .background(
+        modifier = Modifier.fillMaxSize().background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         colorResource(id = R.color.blue_green),
@@ -113,7 +114,7 @@ fun LoginScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     color = Color.Black,
-                    text = stringResource(id = R.string.log_in),
+                    text = stringResource(id = R.string.log_in_screen),
                     modifier = Modifier
                         .padding(8.dp)
                 )
@@ -189,17 +190,23 @@ fun LoginScreen(
                     passwordLabelMessage = passwordText
                 }
                 if (userViewModel.validateEmail(email) && userViewModel.validatePassword(password)) {
-
                     coroutineScope.launch {
-                        userViewModel.getUserFromUserNameAndPassword(email, password).collect {
-                            if (it != null) {
-                                it.isLoggedIn = true
-                                userViewModel.updateIsLoggedIn(it)
-                                navController.popBackStack()
-                                navController.navigate(Screen.Home.route)
+                        userViewModel.getUserFromUserNameAndPassword(email, password)
+                            .collect { user ->
+                                if (user != null) {
+                                    user.isLoggedIn = true
+                                    userViewModel.updateIsLoggedIn(user)
+                                    navController.popBackStack()
+                                    navController.navigate(Screen.Home.route)
+                                } else {
+                                    // Handle incorrect credentials or user not found
+                                    Log.e("LoginScreen", "Invalid credentials or user not found")
+                                }
                             }
-                        }
                     }
+                } else {
+                    // Handle validation errors
+                    Log.e("LoginScreen", "Invalid email or password format")
                 }
             },
             isEnabled = isButtonEnabled,

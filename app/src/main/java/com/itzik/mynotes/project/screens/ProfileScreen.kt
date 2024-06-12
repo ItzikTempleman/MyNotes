@@ -84,17 +84,11 @@ fun ProfileScreen(
         mutableStateOf(user.profileImage)
     }
 
-    var usersList by remember {
-        mutableStateOf(mutableListOf<User>())
-    }
 
     val emptySateDrawable = R.drawable.baseline_person_24
     val loggedInUsers by userViewModel.exposedLoggedInUsersList.collectAsState(initial = emptyList())
 
     LaunchedEffect(loggedInUsers) {
-        userViewModel.fetchAllUsers().collect{
-            usersList=it
-        }
         if (loggedInUsers.isNotEmpty()) {
             val loggedInUser = loggedInUsers.firstOrNull()
             selectedImageUri = loggedInUser?.profileImage ?:""
@@ -109,7 +103,7 @@ fun ProfileScreen(
             coroutineScope.launch {
                 selectedImageUri = uri.toString()
                 userViewModel.updateProfileImage(selectedImageUri)
-                val loggedInUser = usersList.firstOrNull()
+                val loggedInUser = loggedInUsers.firstOrNull()
                 selectedImageUri = loggedInUser?.profileImage ?: ""
             }
             isDoneButtonVisible = true
@@ -321,10 +315,8 @@ fun ProfileScreen(
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
             onClick = {
                 coroutineScope.launch {
-                    for (i in usersList ){
-                        i.isLoggedIn=false
-                        userViewModel.updateIsLoggedIn(i)
-                    }
+                    user.isLoggedIn=false
+                    userViewModel.updateIsLoggedIn(user)
                 }
                 navController.navigate(Screen.Login.route)
             },

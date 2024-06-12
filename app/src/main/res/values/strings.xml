@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">MyNotes</string>
 
-    <string name="log_in" translatable="false">Log in screen</string>
+    <string name="log_in_screen" translatable="false">Log in screen</string>
+    <string name="log_in" translatable="false">Log in</string>
     <string name="email" translatable="false">Enter username</string>
     <string name="password" translatable="false">Enter password</string>
     <string name="register" translatable="false">Sign up</string>

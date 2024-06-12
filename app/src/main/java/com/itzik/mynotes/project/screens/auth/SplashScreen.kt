@@ -34,7 +34,7 @@ fun SplashScreen(
     val loggedInUsers by userViewModel.exposedLoggedInUsersList.collectAsState(initial = emptyList())
 
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(loggedInUsers) {
         delay(1500)
         if (loggedInUsers.isNotEmpty() && loggedInUsers.first().isLoggedIn) {
             navController.popBackStack()

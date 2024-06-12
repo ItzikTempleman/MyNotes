@@ -7,7 +7,6 @@ import com.itzik.mynotes.project.model.User
 interface IRepo {
     suspend fun insertUser(user: User)
     suspend fun fetchLoggedInUsers(): MutableList<User>
-    suspend fun fetchAllUsers(): MutableList<User>
     suspend fun getUserFromEmailAndPassword(email: String, password: String): User
     suspend fun updateIsLoggedIn(user: User)
     suspend fun updateProfileImage(user: User)

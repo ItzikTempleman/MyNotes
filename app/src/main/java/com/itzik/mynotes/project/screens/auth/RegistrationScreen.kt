@@ -83,7 +83,12 @@ fun RegistrationScreen(
                     userViewModel.validateEmail(email) &&
                     userViewModel.validatePassword(password) &&
                     userViewModel.validatePhoneNumber(phoneNumber)
-        Log.d("TAG","name: ${userViewModel.validateName(name)},email: ${userViewModel.validateEmail(email)},password: ${userViewModel.validatePassword(password)},phone: ${userViewModel.validatePhoneNumber(phoneNumber)} ")
+        Log.d(
+            "TAG",
+            "name: ${userViewModel.validateName(name)},email: ${userViewModel.validateEmail(email)},password: ${
+                userViewModel.validatePassword(password)
+            },phone: ${userViewModel.validatePhoneNumber(phoneNumber)} "
+        )
     }
 
     ConstraintLayout(
@@ -96,8 +101,7 @@ fun RegistrationScreen(
                     )
                 )
             )
-            .fillMaxSize()
-           ,
+            .fillMaxSize(),
     ) {
         val (title, nameTF, emailTF, passwordTF, phoneNumberTF, signUpBtn) = createRefs()
         Card(
@@ -264,9 +268,13 @@ fun RegistrationScreen(
                         profileImage = ""
                     )
                     coroutineScope.launch {
-                        userViewModel.registerUser(user)
+                        try {
+                            userViewModel.registerUser(user)
+                            navController.navigate(Screen.Home.route)
+                        } catch (e: Exception) {
+                            Log.e("RegistrationScreen", "Error registering user: ${e.message}")
+                        }
                     }
-                    navController.navigate(Screen.Home.route)
                 }
             },
             isEnabled = isButtonEnabled,

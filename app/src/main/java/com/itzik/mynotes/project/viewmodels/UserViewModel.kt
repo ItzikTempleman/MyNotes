@@ -1,5 +1,6 @@
 package com.itzik.mynotes.project.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itzik.mynotes.project.model.User
@@ -20,27 +21,45 @@ class UserViewModel @Inject constructor(
     private val privateLoggedInUsersList = MutableStateFlow<List<User>>(emptyList())
     val exposedLoggedInUsersList: StateFlow<List<User>> = privateLoggedInUsersList
 
+
     init {
         viewModelScope.launch {
             privateLoggedInUsersList.value = repo.fetchLoggedInUsers()
         }
     }
 
-    suspend fun fetchLoggedInUsers() {
+
+    private suspend fun fetchLoggedInUsers() {
         viewModelScope.launch {
-            val users=repo.fetchLoggedInUsers()
-            privateLoggedInUsersList.value=users
+            val users = repo.fetchLoggedInUsers()
+            privateLoggedInUsersList.value = users
         }
     }
 
-
-    suspend fun registerUser(newUser:User){
+    fun registerUser(newUser: User) {
         viewModelScope.launch {
-            repo.insertUser(newUser)
-            fetchLoggedInUsers()
+            try {
+                Log.d("UserViewModel", "Attempting to insert user: $newUser")
+                repo.insertUser(newUser)
+                fetchLoggedInUsers()
+                Log.d("UserViewModel", "User inserted successfully")
+            } catch (e: Exception) {
+                Log.e("UserViewModel", "Error inserting user: ${e.message}")
+            }
         }
     }
 
+    suspend fun getUserFromUserNameAndPassword(userName: String, password: String): Flow<User?> {
+        val user = flow {
+            val updatedUser = repo.getUserFromEmailAndPassword(userName, password)
+            emit(updatedUser)
+        }
+        return user
+    }
+
+
+
+    suspend fun updateIsLoggedIn(user: User) = repo.updateIsLoggedIn(user)
 
     fun createUser(
         name: String,
@@ -58,42 +77,6 @@ class UserViewModel @Inject constructor(
             profileImage = profileImage
         )
     }
-
-    //suspend fun insertUser(user: User) = repo.insertUser(user)
-
-    fun fetchAllUsers(): Flow<MutableList<User>> {
-        val userList = flow {
-            val updatedUserList = repo.fetchAllUsers()
-            if (updatedUserList.isNotEmpty()) {
-                emit(updatedUserList)
-            } else return@flow
-        }
-        return userList
-    }
-
-    suspend fun getUserFromUserNameAndPassword(userName: String, password: String): Flow<User?> {
-        val user = flow {
-            val updatedUser = repo.getUserFromEmailAndPassword(userName, password)
-            emit(updatedUser)
-        }
-        return user
-    }
-
-    suspend fun updateIsLoggedIn(user: User) = repo.updateIsLoggedIn(user)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     fun validateName(name: String) = name.length > 4
 
