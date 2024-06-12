@@ -6,11 +6,8 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,7 +24,6 @@ import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 
 @SuppressLint("MutableCollectionMutableState")
@@ -48,23 +44,9 @@ fun RootNavHost(
 ) {
 
 
-    var userList by remember {
-        mutableStateOf(mutableListOf<User>())
-    }
+    val userList by userViewModel.exposedLoggedInUsersList.collectAsState(initial = emptyList())
+    val user = userList.firstOrNull() ?: User(userName = "", email = "", password = "", phoneNumber = 0)
 
-    var user = User(userName = "", email = "", password = "", phoneNumber = 0)
-
-    LaunchedEffect(key1 = true) {
-        coroutineScope.launch {
-            userViewModel.fetchLoggedInUsers().collect {
-                userList = it
-            }
-        }
-    }
-
-    if (userList.isNotEmpty()) {
-        user = userList.first()
-    }
 
     NavHost(
         startDestination = ROOT,

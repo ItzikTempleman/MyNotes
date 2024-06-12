@@ -264,7 +264,7 @@ fun RegistrationScreen(
                         profileImage = ""
                     )
                     coroutineScope.launch {
-                        userViewModel.insertUser(user)
+                        userViewModel.registerUser(user)
                     }
                     navController.navigate(Screen.Home.route)
                 }

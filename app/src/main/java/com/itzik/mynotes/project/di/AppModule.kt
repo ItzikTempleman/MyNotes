@@ -10,7 +10,7 @@ import com.itzik.mynotes.project.data.UserDao
 import com.itzik.mynotes.project.data.UserDatabase
 import com.itzik.mynotes.project.utils.Constants.USER_DATABASE
 import com.itzik.mynotes.project.repositories.IRepo
-import com.itzik.mynotes.project.repositories.RepoImp
+import com.itzik.mynotes.project.repositories.UserRepository
 import com.itzik.mynotes.project.utils.Constants.NOTE_DATABASE
 import com.itzik.mynotes.project.utils.Converters
 import dagger.Module
@@ -31,7 +31,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRepo(repoImpl: RepoImp): IRepo = repoImpl
+    fun provideRepo(repoImpl: UserRepository): IRepo = repoImpl
 
     @Singleton
     @Provides

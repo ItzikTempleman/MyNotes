@@ -8,7 +8,7 @@ import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
-class RepoImp @Inject constructor(
+class UserRepository @Inject constructor(
     @Named("user_dao")
     @Singleton
     private val userDao: UserDao,

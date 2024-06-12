@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -70,6 +71,7 @@ fun ProfileScreen(
     user: User,
 ) {
 
+
     Log.d("TAG", "user: $user")
     var isEditClick by remember {
         mutableStateOf(false)
@@ -87,22 +89,17 @@ fun ProfileScreen(
     }
 
     val emptySateDrawable = R.drawable.baseline_person_24
+    val loggedInUsers by userViewModel.exposedLoggedInUsersList.collectAsState(initial = emptyList())
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(loggedInUsers) {
         userViewModel.fetchAllUsers().collect{
             usersList=it
-            Log.d("tags", "$usersList")
+        }
+        if (loggedInUsers.isNotEmpty()) {
+            val loggedInUser = loggedInUsers.firstOrNull()
+            selectedImageUri = loggedInUser?.profileImage ?:""
         }
 
-
-
-        if (selectedImageUri.isNotEmpty()) {
-            userViewModel.fetchLoggedInUsers().collect {
-                if (it.isNotEmpty()) {
-                    selectedImageUri = it.first().profileImage
-                }
-            }
-        }
     }
 
 
@@ -112,9 +109,8 @@ fun ProfileScreen(
             coroutineScope.launch {
                 selectedImageUri = uri.toString()
                 userViewModel.updateProfileImage(selectedImageUri)
-                userViewModel.fetchLoggedInUsers().collect {
-                    selectedImageUri = it.first().profileImage
-                }
+                val loggedInUser = usersList.firstOrNull()
+                selectedImageUri = loggedInUser?.profileImage ?: ""
             }
             isDoneButtonVisible = true
         }
