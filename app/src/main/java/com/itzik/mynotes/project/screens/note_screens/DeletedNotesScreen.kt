@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -21,7 +20,6 @@ import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -86,23 +84,10 @@ fun DeletedNotesScreen(
                         )
                     )
                 ),
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            IconButton(
-                modifier = Modifier
-                    .padding(vertical = 8.dp),
-                onClick = {
-                    navController.navigate(Screen.Home.route)
-                }) {
-                Icon(
-                    modifier = Modifier.size(26.dp),
-                    tint = colorResource(id = R.color.darker_blue),
-                    imageVector = Icons.Default.ArrowBackIosNew,
-                    contentDescription = null
-                )
-            }
 
             Card(
                 colors = CardDefaults.cardColors(Color.White),
@@ -116,35 +101,45 @@ fun DeletedNotesScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    IconButton(
+                        modifier = Modifier
+                            .padding(vertical = 8.dp),
+                        onClick = {
+                            navController.navigate(Screen.Home.route)
+                        }) {
+                        Icon(
+                            modifier = Modifier.size(26.dp),
+                            tint = colorResource(id = R.color.darker_blue),
+                            imageVector = Icons.Default.ArrowBackIosNew,
+                            contentDescription = null
+                        )
+                    }
                     Text(
                         text = "Deleted notes",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = colorResource(id = R.color.darker_blue),
                     )
-                }
-            }
 
-            FloatingActionButton(
-                shape = CircleShape,
-                containerColor = Color.White,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .size(50.dp),
-                onClick = {
-                    coroutineScope.launch {
-                        noteViewModel.emptyTrashBin()
+                    IconButton(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(50.dp),
+                        onClick = {
+                            coroutineScope.launch {
+                                noteViewModel.emptyTrashBin()
+                            }
+                            noteList = emptyList<Note>().toMutableList()
+                        }
+                    ) {
+                        Icon(
+                            tint = colorResource(id = R.color.darker_blue),
+                            imageVector = Icons.Default.DeleteForever,
+                            contentDescription = null
+                        )
                     }
-                    noteList = emptyList<Note>().toMutableList()
                 }
-            ) {
-                Icon(
-                    tint = colorResource(id = R.color.darker_blue),
-                    imageVector = Icons.Default.DeleteForever,
-                    contentDescription = null
-                )
             }
-
         }
 
         Column(
