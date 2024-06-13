@@ -5,10 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,8 +16,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.DeleteForever
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,9 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -70,77 +65,72 @@ fun DeletedNotesScreen(
     ) {
         val (titleLayout, lazyColumn) = createRefs()
 
-        Row(
+        ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .constrainAs(titleLayout) {
                     top.linkTo(parent.top)
                 }
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            colorResource(id = R.color.blue_green),
-                            Color.White
-                        )
-                    )
-                ),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
+                .background(Color.White)
         ) {
+            val (returnBtn, titleText, trashBtn) = createRefs()
 
-
-            Card(
-                colors = CardDefaults.cardColors(Color.White),
-                elevation = CardDefaults.cardElevation(12.dp),
+            IconButton(
                 modifier = Modifier
-                    .height(70.dp)
-                    .padding(12.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(
-                        modifier = Modifier
-                            .padding(vertical = 8.dp),
-                        onClick = {
-                            navController.navigate(Screen.Home.route)
-                        }) {
-                        Icon(
-                            modifier = Modifier.size(26.dp),
-                            tint = colorResource(id = R.color.darker_blue),
-                            imageVector = Icons.Default.ArrowBackIosNew,
-                            contentDescription = null
-                        )
+                    .constrainAs(returnBtn) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
                     }
-                    Text(
-                        text = "Deleted notes",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = colorResource(id = R.color.darker_blue),
-                    )
-
-                    IconButton(
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(50.dp),
-                        onClick = {
-                            coroutineScope.launch {
-                                noteViewModel.emptyTrashBin()
-                            }
-                            noteList = emptyList<Note>().toMutableList()
-                        }
-                    ) {
-                        Icon(
-                            tint = colorResource(id = R.color.darker_blue),
-                            imageVector = Icons.Default.DeleteForever,
-                            contentDescription = null
-                        )
-                    }
+                    .padding(vertical = 8.dp),
+                onClick = {
+                    navController.navigate(Screen.Home.route)
                 }
+            ) {
+                Icon(
+                    modifier = Modifier.size(26.dp),
+                    tint = Color.Black,
+                    imageVector = Icons.Default.ArrowBackIosNew,
+                    contentDescription = null
+                )
+            }
+            Text(
+                modifier = Modifier.constrainAs(titleText) {
+                    start.linkTo(returnBtn.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                },
+                text = stringResource(id = R.string.deleted_notes),
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+            )
+
+            IconButton(
+                modifier = Modifier
+                    .constrainAs(trashBtn) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .padding(8.dp),
+                onClick = {
+                    coroutineScope.launch {
+                        noteViewModel.emptyTrashBin()
+                    }
+                    noteList = emptyList<Note>().toMutableList()
+                }
+            ) {
+                Icon(
+                    modifier = Modifier.size(26.dp),
+                    tint = Color.Black,
+                    imageVector = Icons.Default.DeleteForever,
+                    contentDescription = null
+                )
             }
         }
+
+
 
         Column(
             modifier = Modifier
