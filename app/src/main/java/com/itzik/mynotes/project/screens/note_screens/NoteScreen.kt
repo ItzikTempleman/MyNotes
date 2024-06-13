@@ -85,14 +85,14 @@ fun NoteScreen(
                     paramNavController.navigate(Screen.Home.route)
                 }) {
                 Icon(
-                    tint = if(isLayoutText) colorResource(id = R.color.deep_purple) else colorResource(id = R.color.very_light_deep_purple2),
+                    tint = if(isLayoutText) colorResource(id = R.color.blue_green) else colorResource(id = R.color.darker_blue),
                     imageVector = Icons.Default.ArrowBackIosNew,
                     contentDescription = null
                 )
             }
 
             Icon(
-                tint = if(isLayoutText) colorResource(id = R.color.deep_purple) else colorResource(id = R.color.very_light_deep_purple2),
+                tint = if(isLayoutText) colorResource(id = R.color.blue_green) else colorResource(id = R.color.darker_blue),
                 imageVector = Icons.Default.EditNote,
                 contentDescription = null,
                 modifier = Modifier
@@ -120,7 +120,7 @@ fun NoteScreen(
                 Text(
                     text = if (!isLayoutText) "Done" else "Edit",
                     fontSize = 18.sp,
-                    color = colorResource(id = R.color.deep_purple)
+                    color = colorResource(id = R.color.darker_blue)
                 )
             }
 

@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -124,7 +123,7 @@ fun HomeScreen(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            colorResource(id = R.color.very_light_deep_purple2),
+                            colorResource(id = R.color.blue_green),
                             Color.White
                         )
                     )
@@ -135,7 +134,7 @@ fun HomeScreen(
                 colors = CardDefaults.cardColors(Color.White),
                 elevation = CardDefaults.cardElevation(12.dp),
                 modifier = Modifier
-                    .width(200.dp)
+                    .fillMaxWidth()
                     .height(70.dp)
                     .padding(12.dp)
             ) {
@@ -143,14 +142,14 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color.White)
-                        .padding(end = 8.dp),
+                        .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Start
                 ) {
                     Icon(
                         imageVector = Icons.Default.Home,
                         contentDescription = null,
-                        tint = colorResource(id = R.color.deep_purple),
+                        tint = colorResource(id = R.color.darker_blue),
                         modifier = Modifier.size(30.dp),
                     )
 
@@ -158,7 +157,7 @@ fun HomeScreen(
                         modifier = Modifier.padding(start = 8.dp),
                         text = "Home",
                         fontSize = 20.sp,
-                        color = colorResource(id = R.color.deep_purple),
+                        color = colorResource(id = R.color.darker_blue),
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -193,7 +192,7 @@ fun HomeScreen(
 
         FloatingActionButton(
             shape = CircleShape,
-            containerColor = colorResource(id = R.color.deep_purple),
+            containerColor = colorResource(id = R.color.darker_blue),
             modifier = Modifier
                 .padding(8.dp)
                 .constrainAs(newNoteBtn) {
@@ -239,7 +238,7 @@ fun HomeScreen(
                 imageVector = Icons.Default.LocationOn,
                 contentDescription = null,
                 tint = colorResource(
-                    id = R.color.deep_purple
+                    id = R.color.darker_blue
                 )
             )
         }

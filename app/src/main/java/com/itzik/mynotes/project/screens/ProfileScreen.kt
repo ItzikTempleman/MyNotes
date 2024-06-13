@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -132,7 +131,7 @@ fun ProfileScreen(
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 }
-                .width(360.dp)
+                .fillMaxWidth()
                 .height(360.dp)
                 .padding(12.dp)
         ) {

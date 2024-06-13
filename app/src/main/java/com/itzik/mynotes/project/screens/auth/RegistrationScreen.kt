@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AppRegistration
 import androidx.compose.material.icons.filled.Email
@@ -112,7 +111,7 @@ fun RegistrationScreen(
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 }
-                .width(340.dp)
+                .fillMaxWidth()
                 .height(80.dp)
                 .padding(16.dp)
         ) {
@@ -122,7 +121,7 @@ fun RegistrationScreen(
                     .background(colorResource(id = R.color.very_light_green))
                     .padding(end = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
                     imageVector = Icons.Default.AppRegistration,

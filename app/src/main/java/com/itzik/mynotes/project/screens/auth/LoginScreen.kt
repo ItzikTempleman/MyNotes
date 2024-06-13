@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Login
@@ -91,7 +90,7 @@ fun LoginScreen(
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 }
-                .width(340.dp)
+                .fillMaxWidth()
                 .height(80.dp)
                 .padding(16.dp)
         ) {
@@ -101,7 +100,7 @@ fun LoginScreen(
                     .background(colorResource(id = R.color.very_light_green))
                     .padding(end = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
                     imageVector = Icons.Default.Login,
@@ -199,13 +198,11 @@ fun LoginScreen(
                                     navController.popBackStack()
                                     navController.navigate(Screen.Home.route)
                                 } else {
-                                    // Handle incorrect credentials or user not found
                                     Log.e("LoginScreen", "Invalid credentials or user not found")
                                 }
                             }
                     }
                 } else {
-                    // Handle validation errors
                     Log.e("LoginScreen", "Invalid email or password format")
                 }
             },

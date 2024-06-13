@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -71,7 +70,7 @@ fun DeletedNotesScreen(
             .background(Color.White)
 
     ) {
-        val (titleLayout, deleteAllIcon, lazyColumn) = createRefs()
+        val (titleLayout, lazyColumn) = createRefs()
 
         Row(
             modifier = Modifier
@@ -82,12 +81,12 @@ fun DeletedNotesScreen(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            colorResource(id = R.color.very_light_deep_purple2),
+                            colorResource(id = R.color.blue_green),
                             Color.White
                         )
                     )
                 ),
-            horizontalArrangement = Arrangement.Start,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -99,7 +98,7 @@ fun DeletedNotesScreen(
                 }) {
                 Icon(
                     modifier = Modifier.size(26.dp),
-                    tint = colorResource(id = R.color.deep_purple),
+                    tint = colorResource(id = R.color.darker_blue),
                     imageVector = Icons.Default.ArrowBackIosNew,
                     contentDescription = null
                 )
@@ -109,50 +108,44 @@ fun DeletedNotesScreen(
                 colors = CardDefaults.cardColors(Color.White),
                 elevation = CardDefaults.cardElevation(12.dp),
                 modifier = Modifier
-                    .width(200.dp)
                     .height(70.dp)
                     .padding(12.dp)
             ) {
-                Row (
+                Row(
                     modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
-                ){
+                ) {
                     Text(
                         text = "Deleted notes",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = colorResource(id = R.color.deep_purple),
+                        color = colorResource(id = R.color.darker_blue),
                     )
                 }
             }
-        }
 
-        FloatingActionButton(
-            shape = CircleShape,
-            containerColor = Color.White,
-            modifier = Modifier
-                .constrainAs(deleteAllIcon) {
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
+            FloatingActionButton(
+                shape = CircleShape,
+                containerColor = Color.White,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(50.dp),
+                onClick = {
+                    coroutineScope.launch {
+                        noteViewModel.emptyTrashBin()
+                    }
+                    noteList = emptyList<Note>().toMutableList()
                 }
-                .padding(8.dp)
-                .size(50.dp),
-            onClick = {
-                coroutineScope.launch {
-                    noteViewModel.emptyTrashBin()
-                }
-                noteList = emptyList<Note>().toMutableList()
+            ) {
+                Icon(
+                    tint = colorResource(id = R.color.darker_blue),
+                    imageVector = Icons.Default.DeleteForever,
+                    contentDescription = null
+                )
             }
-        ) {
-            Icon(
-                tint = colorResource(id = R.color.deep_purple),
-                imageVector = Icons.Default.DeleteForever,
-                contentDescription = null
-            )
+
         }
-
-
 
         Column(
             modifier = Modifier

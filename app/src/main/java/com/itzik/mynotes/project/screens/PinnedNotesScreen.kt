@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
@@ -54,7 +53,7 @@ fun PinnedNotesScreen(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            colorResource(id = R.color.very_light_deep_purple2),
+                            colorResource(id = R.color.blue_green),
                             Color.White
                         )
                     )
@@ -65,7 +64,7 @@ fun PinnedNotesScreen(
                 colors = CardDefaults.cardColors(Color.White),
                 elevation = CardDefaults.cardElevation(12.dp),
                 modifier = Modifier
-                    .width(200.dp)
+                    .fillMaxWidth()
                     .height(70.dp)
                     .padding(12.dp)
             ) {
@@ -75,12 +74,12 @@ fun PinnedNotesScreen(
                         .background(Color.White)
                         .padding(end = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Start
                 ) {
                     Icon(
                         imageVector = Icons.Default.AttachFile,
                         contentDescription = null,
-                        tint = colorResource(id = R.color.deep_purple),
+                        tint = colorResource(id = R.color.darker_blue),
                         modifier = Modifier.size(30.dp),
                     )
 
@@ -88,7 +87,7 @@ fun PinnedNotesScreen(
                         modifier = Modifier.padding(start = 8.dp),
                         text = "Pinned notes",
                         fontSize = 20.sp,
-                        color = colorResource(id = R.color.deep_purple),
+                        color = colorResource(id = R.color.darker_blue),
                         fontWeight = FontWeight.Bold
                     )
                 }
