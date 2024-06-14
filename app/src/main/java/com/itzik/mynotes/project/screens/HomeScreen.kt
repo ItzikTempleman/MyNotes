@@ -5,6 +5,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -50,6 +51,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.screens.navigation.Screen
 import com.itzik.mynotes.project.screens.note_screens.NoteListItem
@@ -181,7 +183,8 @@ fun HomeScreen(
                     coroutineScope = coroutineScope,
                     note = noteItem,
                     modifier = Modifier.clickable {
-                        navController.navigate(Screen.NoteScreen.route)
+                        val noteJson = Uri.encode(Gson().toJson(noteItem))
+                        navController.navigate("${Screen.NoteScreen.route}/$noteJson")
                     },
                     updatedList = { updatedNotes ->
                         noteViewModel.setNoteList(updatedNotes)

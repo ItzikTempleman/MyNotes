@@ -30,7 +30,6 @@ class NoteViewModel @Inject constructor(
         privateNotList.value = notes
     }
 
-
     private suspend fun saveNote(note: Note) {
         repo.saveNote(note)
         fetchNotes()
@@ -40,7 +39,6 @@ class NoteViewModel @Inject constructor(
         note.content = newContent
         saveNote(note)
     }
-
 
     private suspend fun fetchNotes() {
         privateNotList.value = repo.fetchNotes()
@@ -67,6 +65,5 @@ class NoteViewModel @Inject constructor(
         repo.emptyTrashBin()
         fetchNotes()
     }
-
 }
 

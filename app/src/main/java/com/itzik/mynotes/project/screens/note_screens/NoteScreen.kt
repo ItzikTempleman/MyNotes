@@ -52,13 +52,10 @@ fun NoteScreen(
     }
 
     var text by remember {
-        mutableStateOf("")
+        mutableStateOf(note.content)
     }
 
-    paramNavController.currentBackStackEntry?.savedStateHandle?.set(
-        key = "note",
-        value = note
-    )
+
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()

@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.screens.HomeScreen
@@ -63,7 +64,7 @@ fun BottomBarNavHost(
                 )
             }
         }
-    ) {
+    ) { it ->
         NavHost(
             modifier = Modifier.padding(it),
             navController = newNavController,
@@ -122,12 +123,12 @@ fun BottomBarNavHost(
                     )
                 }
 
-                composable(route = Screen.NoteScreen.route) {
+                composable(route = "${Screen.NoteScreen.route}/{noteJson}") { navBackStackEntry ->
                     isNoteScreenVisible = false
+                    val noteJson = navBackStackEntry.arguments?.getString("noteJson")
+                    val note = Gson().fromJson(noteJson, Note::class.java) ?: Note(content = "")
                     NoteScreen(
-                        note = it.savedStateHandle.get<Note>(
-                            "note"
-                        ) ?: Note(content = ""),
+                        note=note,
                         modifier = Modifier.background(Color.White),
                         paramNavController = paramNavController,
                         noteViewModel = noteViewModel,
