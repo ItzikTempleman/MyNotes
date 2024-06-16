@@ -24,6 +24,7 @@ sealed class Screen(
     data object Splash : Screen(route = "splash")
     data object Login : Screen(route = "login")
     data object Registration : Screen(route = "registration")
+
     data object Home : Screen(route = "home", title = "Home", icon = Icons.Default.Home)
     data object PinnedNotes : Screen(route = "pinned_notes", title = "Pinned notes", icon = Icons.Default.AttachFile)
     data object Profile : Screen(route = "profile", title = "Profile", icon = Icons.Default.Person)

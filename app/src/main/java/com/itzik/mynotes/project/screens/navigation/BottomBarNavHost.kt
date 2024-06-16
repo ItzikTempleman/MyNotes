@@ -121,17 +121,18 @@ fun BottomBarNavHost(
                         user = user
                     )
                 }
-
+                val noteItem =
+                    paramNavController.previousBackStackEntry?.savedStateHandle?.get<Note>(
+                        "note"
+                    ) ?: Note(content = "")
                 composable(route = Screen.NoteScreen.route) {
-                        NoteScreen(
-                            paramNavController = paramNavController,
-                            noteViewModel = noteViewModel,
-                            coroutineScope = coroutineScope,
-                            note = paramNavController.previousBackStackEntry?.savedStateHandle?.get<Note>(
-                                "note"
-                            ) ?: Note(content = ""),
-                            modifier = Modifier.background(Color.White),
-                        )
+                    NoteScreen(
+                        paramNavController = paramNavController,
+                        noteViewModel = noteViewModel,
+                        coroutineScope = coroutineScope,
+                        note = noteItem,
+                        modifier = Modifier.background(Color.White),
+                    )
                 }
 
                 composable(route = Screen.DeletedNotesScreen.route) {

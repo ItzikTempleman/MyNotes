@@ -52,7 +52,7 @@ fun NoteScreen(
     }
 
     var text by remember {
-        mutableStateOf("")
+        mutableStateOf(note.content)
     }
     paramNavController.currentBackStackEntry?.savedStateHandle?.set(
         key = "note",
@@ -77,9 +77,11 @@ fun NoteScreen(
                 .padding(start = 4.dp, top = 16.dp)
                 .size(26.dp),
             onClick = {
-                coroutineScope.launch {
-                        noteViewModel.updateNoteContent(note, text)
+                if(text.isNotEmpty()) {
+                    coroutineScope.launch {
+                        noteViewModel.saveNote(note)
                     }
+                }
                 paramNavController.navigate(Screen.Home.route)
             }) {
             Icon(
@@ -131,7 +133,6 @@ fun NoteScreen(
                 onValueChange = {
                     text = it
                     note.content = text
-
                 },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -174,7 +175,6 @@ fun NoteScreen(
                         .padding(8.dp),
                     text = note.content
                 )
-
         }
     }
 }

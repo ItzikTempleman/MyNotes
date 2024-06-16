@@ -51,6 +51,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.R
+import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.screens.navigation.Screen
 import com.itzik.mynotes.project.screens.note_screens.NoteListItem
 import com.itzik.mynotes.project.utils.convertLatLangToLocation
@@ -200,6 +201,7 @@ fun HomeScreen(
                     bottom.linkTo(locationButton.top)
                 },
             onClick = {
+                navController.currentBackStackEntry?.savedStateHandle?.set("note", Note(content = ""))
                 navController.navigate(Screen.NoteScreen.route)
             }
         ) {

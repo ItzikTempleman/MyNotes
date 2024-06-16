@@ -30,15 +30,11 @@ class NoteViewModel @Inject constructor(
         privateNotList.value = notes
     }
 
-    private suspend fun saveNote(note: Note) {
+     suspend fun saveNote(note: Note) {
         repo.saveNote(note)
         fetchNotes()
     }
 
-    suspend fun updateNoteContent(note: Note, newContent: String) {
-        note.content = newContent
-        saveNote(note)
-    }
 
     private suspend fun fetchNotes() {
         privateNotList.value = repo.fetchNotes()
@@ -50,6 +46,9 @@ class NoteViewModel @Inject constructor(
         repo.insertSingleNoteIntoRecycleBin(note)
         fetchNotes()
     }
+
+
+
 
     suspend fun fetchTrashedNotes(): Flow<MutableList<Note>> {
         val noteList = flow {
