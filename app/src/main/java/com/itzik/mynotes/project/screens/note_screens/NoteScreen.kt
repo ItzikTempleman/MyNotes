@@ -52,9 +52,12 @@ fun NoteScreen(
     }
 
     var text by remember {
-        mutableStateOf(note.content)
+        mutableStateOf("")
     }
-
+    paramNavController.currentBackStackEntry?.savedStateHandle?.set(
+        key = "note",
+        value = note
+    )
 
     ConstraintLayout(
         modifier = modifier
@@ -64,62 +67,62 @@ fun NoteScreen(
         val (returnIcon, icon, doneBtn, contentTF) = createRefs()
 
 
-            IconButton(
-                enabled = isLayoutText,
-                modifier = Modifier
-                    .constrainAs(returnIcon) {
-                        start.linkTo(parent.start)
-                        top.linkTo(parent.top)
-                    }
-                    .padding(start = 4.dp, top = 16.dp)
-                    .size(26.dp),
-                onClick = {
-                    coroutineScope.launch {
-                        if (text.isNotBlank()) {
-                            noteViewModel.updateNoteContent(note, text)
-                        }
-                    }
-                    paramNavController.navigate(Screen.Home.route)
-                }) {
-                Icon(
-                    tint = if(isLayoutText) colorResource(id = R.color.blue_green) else colorResource(id = R.color.darker_blue),
-                    imageVector = Icons.Default.ArrowBackIosNew,
-                    contentDescription = null
-                )
-            }
-
-            Icon(
-                tint = if(isLayoutText) colorResource(id = R.color.blue_green) else colorResource(id = R.color.darker_blue),
-                imageVector = Icons.Default.EditNote,
-                contentDescription = null,
-                modifier = Modifier
-                    .constrainAs(icon) {
-                        start.linkTo(returnIcon.end)
-                        top.linkTo(parent.top)
-                    }
-                    .padding(start = 4.dp, top = 16.dp)
-                    .size(26.dp)
-            )
-
-
-
-            TextButton(
-                modifier = Modifier
-                    .constrainAs(doneBtn) {
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                    }
-                    .padding(4.dp),
-                onClick = {
-                    isLayoutText = !isLayoutText
+        IconButton(
+            enabled = isLayoutText,
+            modifier = Modifier
+                .constrainAs(returnIcon) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
                 }
-            ) {
-                Text(
-                    text = if (!isLayoutText) "Done" else "Edit",
-                    fontSize = 18.sp,
-                    color = colorResource(id = R.color.darker_blue)
-                )
+                .padding(start = 4.dp, top = 16.dp)
+                .size(26.dp),
+            onClick = {
+                coroutineScope.launch {
+                        noteViewModel.updateNoteContent(note, text)
+                    }
+                paramNavController.navigate(Screen.Home.route)
+            }) {
+            Icon(
+                tint = if (isLayoutText) colorResource(id = R.color.blue_green) else colorResource(
+                    id = R.color.darker_blue
+                ),
+                imageVector = Icons.Default.ArrowBackIosNew,
+                contentDescription = null
+            )
+        }
+
+        Icon(
+            tint = if (isLayoutText) colorResource(id = R.color.blue_green) else colorResource(id = R.color.darker_blue),
+            imageVector = Icons.Default.EditNote,
+            contentDescription = null,
+            modifier = Modifier
+                .constrainAs(icon) {
+                    start.linkTo(returnIcon.end)
+                    top.linkTo(parent.top)
+                }
+                .padding(start = 4.dp, top = 16.dp)
+                .size(26.dp)
+        )
+
+
+
+        TextButton(
+            modifier = Modifier
+                .constrainAs(doneBtn) {
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                }
+                .padding(4.dp),
+            onClick = {
+                isLayoutText = !isLayoutText
             }
+        ) {
+            Text(
+                text = if (!isLayoutText) "Done" else "Edit",
+                fontSize = 18.sp,
+                color = colorResource(id = R.color.darker_blue)
+            )
+        }
 
 
         if (!isLayoutText) {
@@ -128,6 +131,7 @@ fun NoteScreen(
                 onValueChange = {
                     text = it
                     note.content = text
+
                 },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -147,26 +151,30 @@ fun NoteScreen(
                     }
                     .padding(top = 56.dp),
                 placeholder = {
-                    Text(
-                        text = if (note.content.isBlank()) "New note" else note.content
-                    )
+
+                    note.content.ifBlank { "New note" }.let {
+                        Text(
+                            text = it
+                        )
+                    }
                 }
             )
         } else {
-            Text(
-                modifier = Modifier
-                    .background(Color.White)
-                    .fillMaxWidth()
-                    .constrainAs(contentTF) {
-                        top.linkTo(icon.bottom, margin = 16.dp)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                        height = Dimension.fillToConstraints
-                    }
-                    .padding(8.dp),
-                text = note.content
-            )
+                Text(
+                    modifier = Modifier
+                        .background(Color.White)
+                        .fillMaxWidth()
+                        .constrainAs(contentTF) {
+                            top.linkTo(icon.bottom, margin = 16.dp)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            bottom.linkTo(parent.bottom)
+                            height = Dimension.fillToConstraints
+                        }
+                        .padding(8.dp),
+                    text = note.content
+                )
+
         }
     }
 }

@@ -20,7 +20,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.google.android.gms.maps.model.LatLng
-import com.google.gson.Gson
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.screens.HomeScreen
@@ -39,7 +38,7 @@ import kotlinx.coroutines.CoroutineScope
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun BottomBarNavHost(
-    locationViewModel:LocationViewModel,
+    locationViewModel: LocationViewModel,
     context: Context,
     noteViewModel: NoteViewModel,
     newNavController: NavHostController = rememberNavController(),
@@ -64,7 +63,7 @@ fun BottomBarNavHost(
                 )
             }
         }
-    ) { it ->
+    ) {
         NavHost(
             modifier = Modifier.padding(it),
             navController = newNavController,
@@ -77,7 +76,7 @@ fun BottomBarNavHost(
                 composable(route = Screen.Home.route) {
                     isNoteScreenVisible = true
                     HomeScreen(
-                        locationViewModel=locationViewModel,
+                        locationViewModel = locationViewModel,
                         noteViewModel = noteViewModel,
                         modifier = Modifier.background(Color.White),
                         coroutineScope = coroutineScope,
@@ -104,7 +103,7 @@ fun BottomBarNavHost(
                 composable(route = Screen.Settings.route) {
                     isNoteScreenVisible = true
                     SettingsScreen(
-                        locationViewModel=locationViewModel,
+                        locationViewModel = locationViewModel,
                         noteViewModel = noteViewModel,
                         modifier = Modifier.background(Color.White),
                         navController = newNavController,
@@ -123,18 +122,18 @@ fun BottomBarNavHost(
                     )
                 }
 
-                composable(route = "${Screen.NoteScreen.route}/{noteJson}") { navBackStackEntry ->
-                    isNoteScreenVisible = false
-                    val noteJson = navBackStackEntry.arguments?.getString("noteJson")
-                    val note = Gson().fromJson(noteJson, Note::class.java) ?: Note(content = "")
-                    NoteScreen(
-                        note=note,
-                        modifier = Modifier.background(Color.White),
-                        paramNavController = paramNavController,
-                        noteViewModel = noteViewModel,
-                        coroutineScope = coroutineScope,
-                    )
+                composable(route = Screen.NoteScreen.route) {
+                        NoteScreen(
+                            paramNavController = paramNavController,
+                            noteViewModel = noteViewModel,
+                            coroutineScope = coroutineScope,
+                            note = paramNavController.previousBackStackEntry?.savedStateHandle?.get<Note>(
+                                "note"
+                            ) ?: Note(content = ""),
+                            modifier = Modifier.background(Color.White),
+                        )
                 }
+
                 composable(route = Screen.DeletedNotesScreen.route) {
                     isNoteScreenVisible = false
                     DeletedNotesScreen(

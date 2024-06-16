@@ -33,6 +33,7 @@ fun NoteListItem(
     coroutineScope: CoroutineScope,
     updatedList: (MutableList<Note>) -> Unit,
 ) {
+
     Card(
         colors = CardDefaults.cardColors(Color.White),
         elevation = CardDefaults.elevatedCardElevation(8.dp),
