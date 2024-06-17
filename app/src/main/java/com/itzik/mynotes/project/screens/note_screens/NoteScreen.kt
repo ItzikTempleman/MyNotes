@@ -37,6 +37,8 @@ import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+//TODO THE ISSUE IS THAT NOTE_SCREEN IS A DIFFERENT NAV_CONTROLLER!!!!!
+
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun NoteScreen(
