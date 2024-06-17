@@ -42,10 +42,12 @@ import kotlinx.coroutines.launch
 fun NoteScreen(
     noteViewModel: NoteViewModel,
     modifier: Modifier,
-    note: Note,
     coroutineScope: CoroutineScope,
     paramNavController: NavHostController,
 ) {
+
+    val savedStateHandle = paramNavController.currentBackStackEntry?.savedStateHandle
+    val note = savedStateHandle?.get<Note>("note") ?: Note(content = "")
 
     var isLayoutText by remember {
         mutableStateOf(false)
@@ -54,10 +56,6 @@ fun NoteScreen(
     var text by remember {
         mutableStateOf(note.content)
     }
-    paramNavController.currentBackStackEntry?.savedStateHandle?.set(
-        key = "note",
-        value = note
-    )
 
     ConstraintLayout(
         modifier = modifier
@@ -65,7 +63,6 @@ fun NoteScreen(
 
     ) {
         val (returnIcon, icon, doneBtn, contentTF) = createRefs()
-
 
         IconButton(
             enabled = isLayoutText,
@@ -77,13 +74,17 @@ fun NoteScreen(
                 .padding(start = 4.dp, top = 16.dp)
                 .size(26.dp),
             onClick = {
-                if(text.isNotEmpty()) {
+                if (text.isNotEmpty()) {
                     coroutineScope.launch {
+                        note.content = text
                         noteViewModel.saveNote(note)
                     }
                 }
-                paramNavController.navigate(Screen.Home.route)
-            }) {
+               paramNavController.navigate(Screen.Home.route)
+
+            }
+        ) {
+
             Icon(
                 tint = if (isLayoutText) colorResource(id = R.color.blue_green) else colorResource(
                     id = R.color.darker_blue

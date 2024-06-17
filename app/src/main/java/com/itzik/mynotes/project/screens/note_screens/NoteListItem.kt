@@ -31,7 +31,7 @@ fun NoteListItem(
     note: Note,
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
-    updatedList: (MutableList<Note>) -> Unit,
+    updatedList: (MutableList<Note>) -> Unit
 ) {
 
     Card(

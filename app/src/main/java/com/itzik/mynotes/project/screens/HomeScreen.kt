@@ -182,6 +182,7 @@ fun HomeScreen(
                     coroutineScope = coroutineScope,
                     note = noteItem,
                     modifier = Modifier.clickable {
+                        navController.currentBackStackEntry?.savedStateHandle?.set("note", noteItem)
                         navController.navigate(Screen.NoteScreen.route)
                     },
                     updatedList = { updatedNotes ->

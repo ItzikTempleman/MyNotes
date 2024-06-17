@@ -20,7 +20,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.google.android.gms.maps.model.LatLng
-import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.screens.HomeScreen
 import com.itzik.mynotes.project.screens.PinnedNotesScreen
@@ -121,16 +120,12 @@ fun BottomBarNavHost(
                         user = user
                     )
                 }
-                val noteItem =
-                    paramNavController.previousBackStackEntry?.savedStateHandle?.get<Note>(
-                        "note"
-                    ) ?: Note(content = "")
+
                 composable(route = Screen.NoteScreen.route) {
                     NoteScreen(
                         paramNavController = paramNavController,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
-                        note = noteItem,
                         modifier = Modifier.background(Color.White),
                     )
                 }
