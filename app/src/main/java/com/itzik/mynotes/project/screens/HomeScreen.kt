@@ -78,6 +78,7 @@ fun HomeScreen(
     locationRequired: Boolean,
     startLocationUpdates: () -> Unit,
     updateIsLocationRequired: (Boolean) -> Unit,
+
 ) {
 
     var isLoadingLocation by remember {
@@ -182,6 +183,7 @@ fun HomeScreen(
                     coroutineScope = coroutineScope,
                     note = noteItem,
                     modifier = Modifier.clickable {
+                        noteViewModel.selectNote(noteItem)
                         navController.currentBackStackEntry?.savedStateHandle?.set("note", noteItem)
                         navController.navigate(Screen.NoteScreen.route)
                     },
@@ -202,6 +204,7 @@ fun HomeScreen(
                     bottom.linkTo(locationButton.top)
                 },
             onClick = {
+
                 navController.currentBackStackEntry?.savedStateHandle?.set("note", Note(content = ""))
                 navController.navigate(Screen.NoteScreen.route)
             }

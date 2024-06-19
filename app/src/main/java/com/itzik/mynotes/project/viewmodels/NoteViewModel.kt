@@ -19,11 +19,17 @@ class NoteViewModel @Inject constructor(
 
     private val privateNotList = MutableStateFlow<MutableList<Note>>(mutableListOf())
     val exposedNoteList: StateFlow<MutableList<Note>> get() = privateNotList
+    private val _selectedNote = MutableStateFlow<Note?>(null)
+    val selectedNote: StateFlow<Note?> = _selectedNote
 
     init {
         viewModelScope.launch {
             fetchNotes()
         }
+    }
+
+    fun selectNote(note: Note) {
+        _selectedNote.value = note
     }
 
     fun setNoteList(notes: MutableList<Note>) {

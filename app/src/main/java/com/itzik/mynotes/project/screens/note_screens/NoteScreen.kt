@@ -17,6 +17,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,7 +38,6 @@ import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-//TODO THE ISSUE IS THAT NOTE_SCREEN IS A DIFFERENT NAV_CONTROLLER!!!!!
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -51,13 +51,20 @@ fun NoteScreen(
     val savedStateHandle = paramNavController.currentBackStackEntry?.savedStateHandle
     val note = savedStateHandle?.get<Note>("note") ?: Note(content = "")
 
+    val noteStateValue by noteViewModel.selectedNote.collectAsState()
+
+
     var isLayoutText by remember {
         mutableStateOf(false)
     }
 
-    var text by remember {
-        mutableStateOf(note.content)
-    }
+        var text by remember {
+            mutableStateOf(noteStateValue?.content ?: "")
+        }
+
+
+
+
 
     ConstraintLayout(
         modifier = modifier
@@ -79,10 +86,10 @@ fun NoteScreen(
                 if (text.isNotEmpty()) {
                     coroutineScope.launch {
                         note.content = text
-                        noteViewModel.saveNote(note)
+                        note.let { noteViewModel.saveNote(it) }
                     }
                 }
-               paramNavController.navigate(Screen.Home.route)
+                paramNavController.navigate(Screen.Home.route)
 
             }
         ) {
@@ -135,7 +142,7 @@ fun NoteScreen(
                 value = text,
                 onValueChange = {
                     text = it
-                    note.content = text
+                    note.content = text as String
                 },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -164,20 +171,20 @@ fun NoteScreen(
                 }
             )
         } else {
-                Text(
-                    modifier = Modifier
-                        .background(Color.White)
-                        .fillMaxWidth()
-                        .constrainAs(contentTF) {
-                            top.linkTo(icon.bottom, margin = 16.dp)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                            bottom.linkTo(parent.bottom)
-                            height = Dimension.fillToConstraints
-                        }
-                        .padding(8.dp),
-                    text = note.content
-                )
+            Text(
+                modifier = Modifier
+                    .background(Color.White)
+                    .fillMaxWidth()
+                    .constrainAs(contentTF) {
+                        top.linkTo(icon.bottom, margin = 16.dp)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                        height = Dimension.fillToConstraints
+                    }
+                    .padding(8.dp),
+                text = note.content
+            )
         }
     }
 }
