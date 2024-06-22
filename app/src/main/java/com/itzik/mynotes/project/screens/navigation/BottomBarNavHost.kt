@@ -125,7 +125,6 @@ fun BottomBarNavHost(
                 composable(route = Screen.NoteScreen.route) {
                     isNoteScreenVisible = false
                     NoteScreen(
-                        newNavController=newNavController,
                         paramNavController = paramNavController,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,

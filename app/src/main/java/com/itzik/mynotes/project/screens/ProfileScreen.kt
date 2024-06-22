@@ -304,7 +304,7 @@ fun ProfileScreen(
             modifier = Modifier
                 .border(
                     border =
-                    BorderStroke(width = 0.1.dp, color = Color.LightGray)
+                    BorderStroke(width = 0.5.dp, color = Color.Gray)
                 )
                 .constrainAs(signOut) {
                     bottom.linkTo(parent.bottom)

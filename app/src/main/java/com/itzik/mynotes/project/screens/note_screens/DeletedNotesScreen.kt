@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -89,7 +90,7 @@ fun DeletedNotesScreen(
             ) {
                 Icon(
                     modifier = Modifier.size(26.dp),
-                    tint = Color.Black,
+                    tint = colorResource(id = R.color.darker_blue),
                     imageVector = Icons.Default.ArrowBackIosNew,
                     contentDescription = null
                 )
@@ -101,9 +102,9 @@ fun DeletedNotesScreen(
                     bottom.linkTo(parent.bottom)
                 },
                 text = stringResource(id = R.string.deleted_notes),
-                fontSize = 26.sp,
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
+                color = colorResource(id = R.color.darker_blue),
             )
 
             IconButton(
@@ -122,8 +123,8 @@ fun DeletedNotesScreen(
                 }
             ) {
                 Icon(
-                    modifier = Modifier.size(26.dp),
-                    tint = Color.Black,
+                    modifier = Modifier.size(36.dp),
+                    tint = colorResource(id = R.color.darker_blue),
                     imageVector = Icons.Default.DeleteForever,
                     contentDescription = null
                 )

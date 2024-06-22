@@ -22,4 +22,5 @@
     <string name="liked" translatable="false">Liked</string>
     <string name="settings" translatable="false">Settings</string>
     <string name="deleted_notes">Recently Deleted</string>
+    <string name="pinned_notes">Pinned notes\n</string>
 </resources>
