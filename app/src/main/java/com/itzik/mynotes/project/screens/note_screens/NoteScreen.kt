@@ -142,7 +142,7 @@ fun NoteScreen(
                 value = text,
                 onValueChange = {
                     text = it
-                    note.content = text as String
+                    note.content = text
                 },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
