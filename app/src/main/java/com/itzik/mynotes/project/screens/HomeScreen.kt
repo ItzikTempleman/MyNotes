@@ -79,7 +79,7 @@ fun HomeScreen(
     startLocationUpdates: () -> Unit,
     updateIsLocationRequired: (Boolean) -> Unit,
 
-) {
+    ) {
 
     var isLoadingLocation by remember {
         mutableStateOf(false)
@@ -114,7 +114,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color.White),
     ) {
-        val (icon,locationButton, noteLazyColumn, newNoteBtn, progressBar) = createRefs()
+        val (icon, locationButton, noteLazyColumn, newNoteBtn, progressBar) = createRefs()
 
         Row(
             modifier = Modifier
@@ -174,7 +174,8 @@ fun HomeScreen(
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 }
-                .fillMaxWidth().background(Color.White)
+                .fillMaxWidth()
+                .background(Color.White)
         ) {
             items(noteList) { noteItem ->
                 NoteListItem(
@@ -184,7 +185,6 @@ fun HomeScreen(
                     note = noteItem,
                     modifier = Modifier.clickable {
                         noteViewModel.selectNote(noteItem)
-                        navController.currentBackStackEntry?.savedStateHandle?.set("note", noteItem)
                         navController.navigate(Screen.NoteScreen.route)
                     },
                     updatedList = { updatedNotes ->
@@ -204,8 +204,10 @@ fun HomeScreen(
                     bottom.linkTo(locationButton.top)
                 },
             onClick = {
-
-                navController.currentBackStackEntry?.savedStateHandle?.set("note", Note(content = ""))
+                navController.currentBackStackEntry?.savedStateHandle?.set(
+                    "note",
+                    Note(content = "")
+                )
                 navController.navigate(Screen.NoteScreen.route)
             }
         ) {
@@ -232,7 +234,12 @@ fun HomeScreen(
                     }) {
                     startLocationUpdates()
                     locationName = convertLatLangToLocation(currentLocation, context)
-                    locationViewModel.setLocationName(convertLatLangToLocation(currentLocation, context))
+                    locationViewModel.setLocationName(
+                        convertLatLangToLocation(
+                            currentLocation,
+                            context
+                        )
+                    )
                     if (locationName.isNotBlank())
                         isLoadingLocation = false
                 } else {

@@ -46,24 +46,21 @@ fun NoteScreen(
     modifier: Modifier,
     coroutineScope: CoroutineScope,
     paramNavController: NavHostController,
+    newNavController: NavHostController,
 ) {
 
-    val savedStateHandle = paramNavController.currentBackStackEntry?.savedStateHandle
-    val note = savedStateHandle?.get<Note>("note") ?: Note(content = "")
-
-    val noteStateValue by noteViewModel.selectedNote.collectAsState()
-
+    var noteList = noteViewModel.exposedNoteList.collectAsState()
+    val savedStateHandle = newNavController.currentBackStackEntry?.savedStateHandle
+    val noteParam by noteViewModel.selectedNote.collectAsState()
+    val note = savedStateHandle?.get<Note>("note") ?: noteParam
 
     var isLayoutText by remember {
         mutableStateOf(false)
     }
 
-        var text by remember {
-            mutableStateOf(noteStateValue?.content ?: "")
-        }
-
-
-
+    var text by remember {
+        mutableStateOf(note.content)
+    }
 
 
     ConstraintLayout(
@@ -74,7 +71,6 @@ fun NoteScreen(
         val (returnIcon, icon, doneBtn, contentTF) = createRefs()
 
         IconButton(
-            enabled = isLayoutText,
             modifier = Modifier
                 .constrainAs(returnIcon) {
                     start.linkTo(parent.start)
@@ -86,11 +82,14 @@ fun NoteScreen(
                 if (text.isNotEmpty()) {
                     coroutineScope.launch {
                         note.content = text
-                        note.let { noteViewModel.saveNote(it) }
+                        for (checkedNote in noteList.value) {
+                            if (note.id != checkedNote.id){
+                                noteViewModel.saveNote(note)
+                            }else return@launch
+                        }
                     }
                 }
                 paramNavController.navigate(Screen.Home.route)
-
             }
         ) {
 
@@ -162,12 +161,9 @@ fun NoteScreen(
                     }
                     .padding(top = 56.dp),
                 placeholder = {
-
-                    note.content.ifBlank { "New note" }.let {
-                        Text(
-                            text = it
-                        )
-                    }
+                    Text(
+                        text = note.content.ifEmpty { "New note" }
+                    )
                 }
             )
         } else {
@@ -188,3 +184,5 @@ fun NoteScreen(
         }
     }
 }
+
+

@@ -17,10 +17,11 @@ class NoteViewModel @Inject constructor(
     private val repo: IRepo
 ) : ViewModel() {
 
-    private val privateNotList = MutableStateFlow<MutableList<Note>>(mutableListOf())
-    val exposedNoteList: StateFlow<MutableList<Note>> get() = privateNotList
-    private val _selectedNote = MutableStateFlow<Note?>(null)
-    val selectedNote: StateFlow<Note?> = _selectedNote
+    private val privateNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
+    val exposedNoteList: StateFlow<MutableList<Note>> get() = privateNoteList
+
+    private val _selectedNote = MutableStateFlow(Note(content = ""))
+    val selectedNote: StateFlow<Note> = _selectedNote
 
     init {
         viewModelScope.launch {
@@ -33,7 +34,7 @@ class NoteViewModel @Inject constructor(
     }
 
     fun setNoteList(notes: MutableList<Note>) {
-        privateNotList.value = notes
+        privateNoteList.value = notes
     }
 
      suspend fun saveNote(note: Note) {
@@ -43,7 +44,7 @@ class NoteViewModel @Inject constructor(
 
 
     private suspend fun fetchNotes() {
-        privateNotList.value = repo.fetchNotes()
+        privateNoteList.value = repo.fetchNotes()
     }
 
     suspend fun updateIsInTrashBin(note: Note) {
@@ -52,9 +53,6 @@ class NoteViewModel @Inject constructor(
         repo.insertSingleNoteIntoRecycleBin(note)
         fetchNotes()
     }
-
-
-
 
     suspend fun fetchTrashedNotes(): Flow<MutableList<Note>> {
         val noteList = flow {
