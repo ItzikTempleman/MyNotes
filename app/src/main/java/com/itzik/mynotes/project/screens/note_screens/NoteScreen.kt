@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -40,16 +41,18 @@ fun NoteScreen(
     coroutineScope: CoroutineScope,
     paramNavController: NavHostController,
 ) {
-    val note by noteViewModel.exposedSelectedNote.collectAsState()
-
+    val note by noteViewModel.publicNote.collectAsState()
+val noteList by noteViewModel.publicNoteList.collectAsState()
     var text by remember {
         mutableStateOf(note.content)
     }
+var updatedText by remember {
+    mutableStateOf("")
+}
 
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
-
     ) {
         val (returnIcon, contentTF) = createRefs()
 
@@ -64,14 +67,12 @@ fun NoteScreen(
             onClick = {
                 if (text.isNotEmpty()) {
                     coroutineScope.launch {
-                        note.content = text
-                        noteViewModel.saveNote(note)
+                                noteViewModel.saveNote(note.copy(content = updatedText))
                     }
                 }
                 paramNavController.navigate(Screen.Home.route)
             }
         ) {
-
             Icon(
                 tint = colorResource(id = R.color.darker_blue),
                 imageVector = Icons.Default.ArrowBackIosNew,
@@ -83,7 +84,8 @@ fun NoteScreen(
             value = text,
             onValueChange = {
                 text = it
-                note.content = text
+                updatedText=text
+                noteViewModel.updatedSelectedNote(note.copy(content = updatedText))
             },
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.White,
@@ -104,7 +106,7 @@ fun NoteScreen(
                 .padding(top = 56.dp),
             placeholder = {
                 Text(
-                    text = note.content.ifEmpty { "New note" }
+                    text = note.content.ifEmpty { stringResource(id = R.string.new_note) }
                 )
             }
         )

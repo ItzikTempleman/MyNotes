@@ -2,7 +2,6 @@ package com.itzik.mynotes.project.screens
 
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.widget.Toast
@@ -56,7 +55,7 @@ private val permissions = arrayOf(
     Manifest.permission.ACCESS_FINE_LOCATION,
 )
 
-@SuppressLint("CoroutineCreationDuringComposition", "MutableCollectionMutableState")
+
 @Composable
 fun HomeScreen(
     locationViewModel: LocationViewModel,

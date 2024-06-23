@@ -4,18 +4,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.HorizontalRule
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -70,9 +69,9 @@ fun NoteListItem(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Delete,
+                        imageVector = Icons.Default.HorizontalRule,
                         contentDescription = null,
-                        tint = colorResource(id = R.color.darker_blue)
+                        tint = Color.Red
                     )
                 }
             }
