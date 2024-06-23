@@ -29,7 +29,7 @@ class NoteViewModel @Inject constructor(
         }
     }
 
-    fun updatedSelectedNote(note: Note) {
+    fun updateSelectedNote(note: Note) {
         privateNote.value = note
     }
 

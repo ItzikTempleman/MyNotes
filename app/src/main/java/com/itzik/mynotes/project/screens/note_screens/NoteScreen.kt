@@ -85,7 +85,7 @@ var updatedText by remember {
             onValueChange = {
                 text = it
                 updatedText=text
-                noteViewModel.updatedSelectedNote(note.copy(content = updatedText))
+                noteViewModel.updateSelectedNote(note.copy(content = updatedText))
             },
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.White,
@@ -97,13 +97,12 @@ var updatedText by remember {
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(topEnd = 0.dp, topStart = 0.dp))
                 .constrainAs(contentTF) {
-                    top.linkTo(parent.top)
+                    top.linkTo(returnIcon.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
-                }
-                .padding(top = 56.dp),
+                },
             placeholder = {
                 Text(
                     text = note.content.ifEmpty { stringResource(id = R.string.new_note) }

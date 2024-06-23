@@ -82,9 +82,9 @@ fun NoteListItem(
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                     }
-                    .padding(4.dp),
+                    .padding(horizontal = 16.dp),
                 text = note.content,
-                fontSize = 20.sp
+                fontSize = 16.sp
             )
 
             HorizontalDivider(

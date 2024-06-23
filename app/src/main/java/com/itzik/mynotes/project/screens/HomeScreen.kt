@@ -110,7 +110,7 @@ fun HomeScreen(
                 modifier = Modifier.constrainAs(title){
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
-                }.padding(12.dp),
+                }.padding(top=12.dp, start = 16.dp),
                 text = stringResource(id = R.string.home),
                 fontSize = 24.sp,
                 color = colorResource(id = R.color.darker_blue),
@@ -135,7 +135,7 @@ fun HomeScreen(
                     coroutineScope = coroutineScope,
                     note = noteItem,
                     modifier = Modifier.clickable {
-                        noteViewModel.updatedSelectedNote(noteItem)
+                        noteViewModel.updateSelectedNote(noteItem)
                         navController.navigate(Screen.NoteScreen.route)
                     },
                     updatedList = { updatedNotes ->
@@ -155,7 +155,7 @@ fun HomeScreen(
                     bottom.linkTo(locationButton.top)
                 },
             onClick = {
-                noteViewModel.updatedSelectedNote(Note(content = ""))
+                noteViewModel.updateSelectedNote(Note(content = ""))
                 navController.navigate(Screen.NoteScreen.route)
             }
         ) {
