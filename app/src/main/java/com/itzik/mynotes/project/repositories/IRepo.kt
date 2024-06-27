@@ -12,17 +12,14 @@ interface IRepo {
     suspend fun updateProfileImage(user: User)
 
 
-
-
-
     suspend fun saveNote(note: Note)
     suspend fun fetchNotes(): MutableList<Note>
     suspend fun insertSingleNoteIntoRecycleBin(note: Note)
     suspend fun updateIsInTrashBin(note: Note)
-
+    suspend fun updateNote(note: Note)
 
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)
-    suspend fun fetchTrashedNotes():MutableList<Note>
+    suspend fun fetchTrashedNotes(): MutableList<Note>
     suspend fun emptyTrashBin()
 
 }

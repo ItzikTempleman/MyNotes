@@ -42,13 +42,10 @@ fun NoteScreen(
     paramNavController: NavHostController,
 ) {
     val note by noteViewModel.publicNote.collectAsState()
-val noteList by noteViewModel.publicNoteList.collectAsState()
+
     var text by remember {
         mutableStateOf(note.content)
     }
-var updatedText by remember {
-    mutableStateOf("")
-}
 
     ConstraintLayout(
         modifier = modifier
@@ -67,10 +64,12 @@ var updatedText by remember {
             onClick = {
                 if (text.isNotEmpty()) {
                     coroutineScope.launch {
-                                noteViewModel.saveNote(note.copy(content = updatedText))
+                        noteViewModel.saveNote(note.copy(content = text))
+                    }
+                    paramNavController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Home.route) { inclusive = true }
                     }
                 }
-                paramNavController.navigate(Screen.Home.route)
             }
         ) {
             Icon(
@@ -84,8 +83,7 @@ var updatedText by remember {
             value = text,
             onValueChange = {
                 text = it
-                updatedText=text
-                noteViewModel.updateSelectedNote(note.copy(content = updatedText))
+                noteViewModel.updateSelectedNote(it)
             },
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.White,

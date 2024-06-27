@@ -27,5 +27,7 @@ interface NoteDao {
     suspend fun fetchTrashedNotes(): MutableList<Note>
     @Query("DELETE FROM $NOTE_TABLE WHERE isInTrash=1")
     suspend fun emptyTrashBin()
+    @Update
+    suspend fun updateNote(note: Note)
 }
 

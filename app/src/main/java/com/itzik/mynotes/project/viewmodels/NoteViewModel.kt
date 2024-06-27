@@ -29,7 +29,8 @@ class NoteViewModel @Inject constructor(
         }
     }
 
-    fun updateSelectedNote(note: Note) {
+    fun updateSelectedNote(newChar: String) {
+        val note = privateNote.value.copy(content = newChar, time  = Note.getCurrentTime())
         privateNote.value = note
     }
 
@@ -37,8 +38,16 @@ class NoteViewModel @Inject constructor(
         privateNoteList.value = notes
     }
 
-     suspend fun saveNote(note: Note) {
-        repo.saveNote(note)
+    suspend fun saveNote(note: Note) {
+        val existingNotes = repo.fetchNotes()
+        val existingNote = existingNotes.find { it.id == note.id }
+
+        if (existingNote == null) {
+            repo.saveNote(note)
+        } else {
+            val updatedNote = note.copy(time = Note.getCurrentTime())
+            updateSelectedNote(note.copy(content = "", time = Note.getCurrentTime()))
+        }
         fetchNotes()
     }
 

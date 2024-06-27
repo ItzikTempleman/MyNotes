@@ -2,6 +2,7 @@ package com.itzik.mynotes.project.screens
 
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.widget.Toast
@@ -41,7 +42,6 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.R
-import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.screens.navigation.Screen
 import com.itzik.mynotes.project.screens.note_screens.NoteListItem
 import com.itzik.mynotes.project.utils.convertLatLangToLocation
@@ -56,6 +56,7 @@ private val permissions = arrayOf(
 )
 
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun HomeScreen(
     locationViewModel: LocationViewModel,
@@ -135,7 +136,7 @@ fun HomeScreen(
                     coroutineScope = coroutineScope,
                     note = noteItem,
                     modifier = Modifier.clickable {
-                        noteViewModel.updateSelectedNote(noteItem)
+                        noteViewModel.updateSelectedNote(noteItem.content)
                         navController.navigate(Screen.NoteScreen.route)
                     },
                     updatedList = { updatedNotes ->
@@ -155,7 +156,7 @@ fun HomeScreen(
                     bottom.linkTo(locationButton.top)
                 },
             onClick = {
-                noteViewModel.updateSelectedNote(Note(content = ""))
+                noteViewModel.updateSelectedNote("")
                 navController.navigate(Screen.NoteScreen.route)
             }
         ) {
