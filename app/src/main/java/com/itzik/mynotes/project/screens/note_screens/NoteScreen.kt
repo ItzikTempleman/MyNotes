@@ -64,7 +64,8 @@ fun NoteScreen(
             onClick = {
                 if (text.isNotEmpty()) {
                     coroutineScope.launch {
-                        noteViewModel.saveNote(note.copy(content = text))
+                        note.content=text
+                        noteViewModel.saveNote(note)
                     }
                     paramNavController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Home.route) { inclusive = true }
@@ -83,7 +84,8 @@ fun NoteScreen(
             value = text,
             onValueChange = {
                 text = it
-                noteViewModel.updateSelectedNote(it)
+                coroutineScope.launch {    noteViewModel.updateSelectedNoteContent(it) }
+
             },
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.White,

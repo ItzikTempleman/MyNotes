@@ -48,6 +48,7 @@ import com.itzik.mynotes.project.utils.convertLatLangToLocation
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 private val permissions = arrayOf(
@@ -136,7 +137,7 @@ fun HomeScreen(
                     coroutineScope = coroutineScope,
                     note = noteItem,
                     modifier = Modifier.clickable {
-                        noteViewModel.updateSelectedNote(noteItem.content)
+                        coroutineScope.launch {  noteViewModel.updateSelectedNoteContent(noteItem.content) }
                         navController.navigate(Screen.NoteScreen.route)
                     },
                     updatedList = { updatedNotes ->
@@ -156,7 +157,7 @@ fun HomeScreen(
                     bottom.linkTo(locationButton.top)
                 },
             onClick = {
-                noteViewModel.updateSelectedNote("")
+                coroutineScope.launch {   noteViewModel.updateSelectedNoteContent("") }
                 navController.navigate(Screen.NoteScreen.route)
             }
         ) {
