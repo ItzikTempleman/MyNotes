@@ -29,11 +29,11 @@ class NoteViewModel @Inject constructor(
         }
     }
 
-    suspend fun updateSelectedNoteContent(newChar: String) {
+    fun updateSelectedNoteContent(newChar: String) {
         privateNote.value.content = newChar
         privateNote.value.time=Note.getCurrentTime()
-        repo.updateNote(privateNote.value)
     }
+
 
     suspend fun saveNote(note: Note) {
         val existingNotes = repo.fetchNotes()
@@ -43,6 +43,7 @@ class NoteViewModel @Inject constructor(
             repo.saveNote(note)
         } else {
             updateSelectedNoteContent(note.content)
+            repo.updateNote(note)
         }
         fetchNotes()
     }
