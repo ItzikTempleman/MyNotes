@@ -85,7 +85,9 @@ fun NoteScreen(
             value = text,
             onValueChange = {
                 text = it
-                noteViewModel.updateSelectedNoteContent(it)
+                coroutineScope.launch {
+                    noteViewModel.updateSelectedNoteContent(it)
+                }
             },
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.White,

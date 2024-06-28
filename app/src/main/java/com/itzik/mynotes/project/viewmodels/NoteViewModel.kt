@@ -3,6 +3,7 @@ package com.itzik.mynotes.project.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itzik.mynotes.project.model.Note
+import com.itzik.mynotes.project.model.Note.Companion.getCurrentTime
 import com.itzik.mynotes.project.repositories.IRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -29,9 +30,11 @@ class NoteViewModel @Inject constructor(
         }
     }
 
-    fun updateSelectedNoteContent(newChar: String) {
-        privateNote.value.content = newChar
-        privateNote.value.time=Note.getCurrentTime()
+    suspend fun updateSelectedNoteContent(newChar: String) {
+        val note = privateNote.value
+        note.content = newChar
+        note.time=getCurrentTime()
+        repo.updateNote(note)
     }
 
 
@@ -43,7 +46,6 @@ class NoteViewModel @Inject constructor(
             repo.saveNote(note)
         } else {
             updateSelectedNoteContent(note.content)
-            repo.updateNote(note)
         }
         fetchNotes()
     }

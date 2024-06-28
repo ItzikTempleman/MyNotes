@@ -157,7 +157,9 @@ fun HomeScreen(
                     bottom.linkTo(locationButton.top)
                 },
             onClick = {
-                coroutineScope.launch {   noteViewModel.updateSelectedNoteContent("") }
+                coroutineScope.launch {
+                    noteViewModel.updateSelectedNoteContent("")
+                }
                 navController.navigate(Screen.NoteScreen.route)
             }
         ) {
