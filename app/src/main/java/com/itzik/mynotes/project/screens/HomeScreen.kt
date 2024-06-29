@@ -108,16 +108,18 @@ fun HomeScreen(
     ) {
         val (title, locationButton, noteLazyColumn, newNoteBtn, progressBar) = createRefs()
 
-            Text(
-                modifier = Modifier.constrainAs(title){
+        Text(
+            modifier = Modifier
+                .constrainAs(title) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
-                }.padding(top=12.dp, start = 16.dp),
-                text = stringResource(id = R.string.home),
-                fontSize = 24.sp,
-                color = colorResource(id = R.color.darker_blue),
-                fontWeight = FontWeight.Bold
-            )
+                }
+                .padding(top = 12.dp, start = 16.dp),
+            text = stringResource(id = R.string.home),
+            fontSize = 24.sp,
+            color = colorResource(id = R.color.darker_blue),
+            fontWeight = FontWeight.Bold
+        )
 
 
         LazyColumn(
@@ -137,7 +139,10 @@ fun HomeScreen(
                     coroutineScope = coroutineScope,
                     note = noteItem,
                     modifier = Modifier.clickable {
-                        coroutineScope.launch {  noteViewModel.updateSelectedNoteContent(noteItem.content) }
+                        coroutineScope.launch {
+
+                            noteViewModel.updateSelectedNoteContent(noteItem.content)
+                        }
                         navController.navigate(Screen.NoteScreen.route)
                     },
                     updatedList = { updatedNotes ->

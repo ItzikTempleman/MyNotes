@@ -24,24 +24,26 @@ class NoteViewModel @Inject constructor(
     private val privateNote = MutableStateFlow(Note(content = ""))
     val publicNote: StateFlow<Note> get() = privateNote
 
+
+
     init {
         viewModelScope.launch {
             fetchNotes()
         }
     }
 
+
+
     suspend fun updateSelectedNoteContent(newChar: String) {
-        val note = privateNote.value
-        note.content = newChar
-        note.time=getCurrentTime()
-        repo.updateNote(note)
+        privateNote.value.content = newChar
+        privateNote.value.time=getCurrentTime()
+        repo.updateNote(privateNote.value)
     }
 
     suspend fun saveNote(note: Note) {
-        val existingNotes = repo.fetchNotes()
-        val existingNote = existingNotes.find { it.content == note.content }
-
-        if (existingNote == null) {
+        val noteList = repo.fetchNotes()
+        val matchingNoteToPreviousVersion = noteList.find { it.content==note.content }
+        if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(note)
         } else {
             updateSelectedNoteContent(note.content)

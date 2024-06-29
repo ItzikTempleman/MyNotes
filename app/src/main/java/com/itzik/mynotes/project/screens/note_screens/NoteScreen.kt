@@ -86,6 +86,7 @@ fun NoteScreen(
             onValueChange = {
                 text = it
                 coroutineScope.launch {
+
                     noteViewModel.updateSelectedNoteContent(it)
                 }
             },
