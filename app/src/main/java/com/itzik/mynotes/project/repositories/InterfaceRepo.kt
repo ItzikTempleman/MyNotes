@@ -4,7 +4,7 @@ import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
 
 
-interface IRepo {
+interface InterfaceRepo {
     suspend fun insertUser(user: User)
     suspend fun fetchLoggedInUsers(): MutableList<User>
     suspend fun getUserFromEmailAndPassword(email: String, password: String): User

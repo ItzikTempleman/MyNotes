@@ -29,5 +29,6 @@ interface NoteDao {
     suspend fun emptyTrashBin()
     @Update
     suspend fun updateNote(note: Note)
+
 }
 

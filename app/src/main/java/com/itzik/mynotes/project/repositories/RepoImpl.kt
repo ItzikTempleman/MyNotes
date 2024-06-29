@@ -8,33 +8,43 @@ import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
-class UserRepository @Inject constructor(
+class RepoImpl @Inject constructor(
     @Named("user_dao")
     @Singleton
     private val userDao: UserDao,
     @Named("note_dao")
     @Singleton
     private val noteDao: NoteDao,
-) : IRepo {
+) : InterfaceRepo {
     override suspend fun insertUser(user: User) = userDao.insertUser(user)
     override suspend fun fetchLoggedInUsers() = userDao.fetchLoggedInUsers()
-    override suspend fun getUserFromEmailAndPassword(email: String, password: String): User = userDao.getUserFromEmailAndPassword(email, password)
+    override suspend fun getUserFromEmailAndPassword(email: String, password: String): User =
+        userDao.getUserFromEmailAndPassword(email, password)
+
     override suspend fun updateIsLoggedIn(user: User) = userDao.updateIsLoggedIn(user)
     override suspend fun updateProfileImage(user: User) = userDao.updateProfileImage(user)
 
 
 
+    override suspend fun saveNote(note: Note) {
+
+        noteDao.saveNote(note)
+    }
 
 
-    override suspend fun saveNote(note: Note) = noteDao.saveNote(note)
     override suspend fun fetchNotes() = noteDao.fetchNotes()
     override suspend fun updateIsInTrashBin(note: Note) = noteDao.updateIsInTrashBin(note)
-    override suspend fun updateNote(note: Note) =noteDao.updateNote(note)
+    override suspend fun updateNote(note: Note) = noteDao.updateNote(note)
 
-    override suspend fun insertSingleNoteIntoRecycleBin(note: Note) = noteDao.insertSingleNoteIntoRecycleBin(note)
+    override suspend fun insertSingleNoteIntoRecycleBin(note: Note) =
+        noteDao.insertSingleNoteIntoRecycleBin(note)
 
 
-    override suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>) = noteDao.insertNoteListIntoRecycleBin(notes)
+    override suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>) =
+        noteDao.insertNoteListIntoRecycleBin(notes)
+
     override suspend fun fetchTrashedNotes() = noteDao.fetchTrashedNotes()
-    override suspend fun emptyTrashBin() = noteDao.emptyTrashBin()
+    override suspend fun emptyTrashBin() {
+        noteDao.emptyTrashBin()
+    }
 }

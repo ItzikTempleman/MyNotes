@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.Note.Companion.getCurrentTime
-import com.itzik.mynotes.project.repositories.IRepo
+import com.itzik.mynotes.project.repositories.InterfaceRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(
-    private val repo: IRepo
+    private val repo: InterfaceRepo
 ) : ViewModel() {
 
     private val privateNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
@@ -36,7 +36,6 @@ class NoteViewModel @Inject constructor(
         note.time=getCurrentTime()
         repo.updateNote(note)
     }
-
 
     suspend fun saveNote(note: Note) {
         val existingNotes = repo.fetchNotes()
