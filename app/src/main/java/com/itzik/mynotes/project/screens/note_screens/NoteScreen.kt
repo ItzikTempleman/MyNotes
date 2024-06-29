@@ -39,13 +39,14 @@ fun NoteScreen(
     noteViewModel: NoteViewModel,
     modifier: Modifier,
     coroutineScope: CoroutineScope,
-    paramNavController: NavHostController,
+    paramNavController: NavHostController
 ) {
     val note by noteViewModel.publicNote.collectAsState()
 
     var text by remember {
         mutableStateOf(note.content)
     }
+
 
     ConstraintLayout(
         modifier = modifier
@@ -86,8 +87,8 @@ fun NoteScreen(
             onValueChange = {
                 text = it
                 coroutineScope.launch {
-
                     noteViewModel.updateSelectedNoteContent(it)
+
                 }
             },
             colors = TextFieldDefaults.colors(

@@ -140,7 +140,6 @@ fun HomeScreen(
                     note = noteItem,
                     modifier = Modifier.clickable {
                         coroutineScope.launch {
-
                             noteViewModel.updateSelectedNoteContent(noteItem.content)
                         }
                         navController.navigate(Screen.NoteScreen.route)

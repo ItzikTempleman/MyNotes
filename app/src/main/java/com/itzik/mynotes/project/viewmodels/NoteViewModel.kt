@@ -24,7 +24,7 @@ class NoteViewModel @Inject constructor(
     private val privateNote = MutableStateFlow(Note(content = ""))
     val publicNote: StateFlow<Note> get() = privateNote
 
-
+    private var originalNote: Note? = null
 
     init {
         viewModelScope.launch {
@@ -42,7 +42,10 @@ class NoteViewModel @Inject constructor(
 
     suspend fun saveNote(note: Note) {
         val noteList = repo.fetchNotes()
-        val matchingNoteToPreviousVersion = noteList.find { it.content==note.content }
+        val matchingNoteToPreviousVersion = noteList.find {
+            it.content== note.content
+        }
+
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(note)
         } else {
