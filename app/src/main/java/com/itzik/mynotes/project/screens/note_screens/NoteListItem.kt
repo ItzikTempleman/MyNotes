@@ -1,10 +1,13 @@
 package com.itzik.mynotes.project.screens.note_screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.HorizontalRule
+import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -13,6 +16,7 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,92 +37,117 @@ fun NoteListItem(
     updatedList: (MutableList<Note>) -> Unit
 ) {
 
-        ConstraintLayout(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(50.dp)) {
-            val (timeStamp, deleteNote, content, id, verticalDiv, bottomLine) = createRefs()
+    ConstraintLayout(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(50.dp)
+    ) {
+        val (timeStamp, deleteNote, pinNote, content, id, verticalDiv, bottomLine) = createRefs()
 
-            if (!isTrashed) {
-                Text(
-                    modifier = Modifier
-                        .constrainAs(timeStamp) {
-                            end.linkTo(parent.end)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        }
-                        .padding(horizontal = 50.dp),
-                    text = note.time,
-                    fontSize = 12.sp
-                )
-
-                IconButton(
-                    modifier = Modifier
-                        .constrainAs(
-                            deleteNote
-                        ) {
-                            end.linkTo(parent.end)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        }
-                        .padding(4.dp),
-                    onClick = {
-                        coroutineScope.launch {
-                            noteViewModel.updateIsInTrashBin(note)
-                            noteViewModel.publicNoteList.collect {
-                                updatedList(it)
-                            }
-                        }
+        if (!isTrashed) {
+            Text(
+                modifier = Modifier
+                    .constrainAs(timeStamp) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
                     }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.HorizontalRule,
-                        contentDescription = null,
-                        tint = Color.Red
-                    )
+                    .padding(horizontal = 100.dp),
+                text = note.time,
+                fontSize = 12.sp
+            )
+            IconButton(
+                modifier = Modifier.graphicsLayer(rotationZ = 40f)
+                    .constrainAs(
+                        pinNote
+                    ) {
+                        end.linkTo(deleteNote.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    },
+                onClick = {
+                        note.isPinned=!note.isPinned
+                    Log.d("TAG", "note.isPinned: ${note.isPinned}")
                 }
+            ) {
+                Icon(
+                    modifier=Modifier.size(
+                        20.dp
+                    ),
+                    imageVector = Icons.Default.PushPin,
+                    contentDescription = null,
+                    tint = if(note.isPinned) colorResource(id = R.color.steel_blue) else colorResource(id = R.color.light_steel_blue)
+                )
             }
-            Text(
+
+            IconButton(
                 modifier = Modifier
-                    .constrainAs(id) {
-                        start.linkTo(parent.start)
+                    .constrainAs(
+                        deleteNote
+                    ) {
+                        end.linkTo(parent.end)
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                     }
-                    .padding(horizontal = 16.dp),
-                text = "#${note.id}",
-                fontSize = 16.sp,
-                color = colorResource(id = R.color.darker_blue)
-            )
-
-            VerticalDivider(
-                modifier = Modifier
-                    .constrainAs(verticalDiv) {
-                        start.linkTo(id.end)
+                    .padding(4.dp),
+                onClick = {
+                    coroutineScope.launch {
+                        noteViewModel.updateIsInTrashBin(note)
+                        noteViewModel.publicNoteList.collect {
+                            updatedList(it)
+                        }
                     }
-                    .padding(vertical = 8.dp)
-            )
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.HorizontalRule,
+                    contentDescription = null,
+                    tint = Color.Red
+                )
+            }
 
-            Text(
-                modifier = Modifier
-                    .constrainAs(content) {
-                        start.linkTo(id.end)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    }
-                    .padding(horizontal = 16.dp),
-                text = note.content,
-                fontSize = 16.sp
-            )
-
-
-
-            HorizontalDivider(
-                modifier = Modifier
-                    .constrainAs(bottomLine) {
-                        bottom.linkTo(parent.bottom)
-                    }
-                    .padding(horizontal = 8.dp)
-            )
         }
+        Text(
+            modifier = Modifier
+                .constrainAs(id) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                }
+                .padding(horizontal = 16.dp),
+            text = "#${note.id}",
+            fontSize = 16.sp,
+            color = colorResource(id = R.color.darker_blue)
+        )
+
+        VerticalDivider(
+            modifier = Modifier
+                .constrainAs(verticalDiv) {
+                    start.linkTo(id.end)
+                }
+                .padding(vertical = 8.dp)
+        )
+
+        Text(
+            modifier = Modifier
+                .constrainAs(content) {
+                    start.linkTo(id.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                }
+                .padding(horizontal = 16.dp),
+            text = note.content,
+            fontSize = 16.sp
+        )
+
+
+
+        HorizontalDivider(
+            modifier = Modifier
+                .constrainAs(bottomLine) {
+                    bottom.linkTo(parent.bottom)
+                }
+                .padding(horizontal = 8.dp)
+        )
     }
+}
