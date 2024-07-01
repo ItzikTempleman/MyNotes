@@ -140,7 +140,13 @@ fun HomeScreen(
                     note = noteItem,
                     modifier = Modifier.clickable {
                         coroutineScope.launch {
-                            noteViewModel.updateSelectedNoteContent(noteItem.content)
+                            val noteId =noteItem.id
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                key = "noteId",
+                                value = noteId
+                            )
+                            noteViewModel.updateSelectedNoteContent(noteItem.content, noteId)
+
                         }
                         navController.navigate(Screen.NoteScreen.route)
                     },

@@ -122,9 +122,11 @@ fun BottomBarNavHost(
                 }
 
 
-                composable(route = Screen.NoteScreen.route) {
+                composable(route = Screen.NoteScreen.route){
                     isNoteScreenVisible = false
+                    val noteId = newNavController.previousBackStackEntry?.savedStateHandle?.get<Int>("noteId")
                     NoteScreen(
+                        noteId = noteId,
                         paramNavController = paramNavController,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
@@ -144,13 +146,3 @@ fun BottomBarNavHost(
         }
     }
 }
-
-
-
-
-
-
-
-
-
-

@@ -1,6 +1,5 @@
 package com.itzik.mynotes.project.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itzik.mynotes.project.model.Note
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(
-    private val repo: InterfaceRepo
+    private val repo: InterfaceRepo,
 ) : ViewModel() {
 
     private val privateNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
@@ -26,7 +25,6 @@ class NoteViewModel @Inject constructor(
     val publicNote: StateFlow<Note> get() = privateNote
 
 
-
     init {
         viewModelScope.launch {
             fetchNotes()
@@ -34,9 +32,11 @@ class NoteViewModel @Inject constructor(
     }
 
 
-
-    suspend fun updateSelectedNoteContent(newChar: String) {
+    suspend fun updateSelectedNoteContent(newChar: String, noteId: Int?=0) {
         privateNote.value.content = newChar
+        if (noteId != null) {
+            privateNote.value.id=noteId
+        }
         privateNote.value.time=getCurrentTime()
         repo.updateNote(privateNote.value)
     }
@@ -44,8 +44,7 @@ class NoteViewModel @Inject constructor(
     suspend fun saveNote(note: Note) {
         val noteList = repo.fetchNotes()
         val matchingNoteToPreviousVersion = noteList.find {
-            Log.d("tag", "viewmodel: it id: ${it.id} and note param id: ${note.id}")
-            it.content== note.content
+            it.id== note.id
         }
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(note)

@@ -1,6 +1,5 @@
 package com.itzik.mynotes.project.screens.note_screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -37,6 +36,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun NoteScreen(
+    noteId:Int?,
     noteViewModel: NoteViewModel,
     modifier: Modifier,
     coroutineScope: CoroutineScope,
@@ -44,10 +44,10 @@ fun NoteScreen(
 ) {
     val note by noteViewModel.publicNote.collectAsState()
 
+
     var text by remember {
         mutableStateOf(note.content)
     }
-    Log.d("tag", "top note screen: note id: ${note.id}")
 
     ConstraintLayout(
         modifier = modifier
@@ -67,7 +67,6 @@ fun NoteScreen(
                 if (text.isNotEmpty()) {
                     coroutineScope.launch {
                         note.content = text
-                        Log.d("tag", "note screen: note content: ${note.content} and note id: ${note.id}")
                         noteViewModel.saveNote(note)
                     }
                 }
@@ -89,7 +88,7 @@ fun NoteScreen(
             onValueChange = {
                 text = it
                 coroutineScope.launch {
-                    noteViewModel.updateSelectedNoteContent(it)
+                    noteViewModel.updateSelectedNoteContent(it, noteId)
 
                 }
             },
