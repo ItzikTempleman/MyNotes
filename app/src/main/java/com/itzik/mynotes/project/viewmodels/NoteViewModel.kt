@@ -32,7 +32,8 @@ class NoteViewModel @Inject constructor(
     }
 
 
-    suspend fun updateSelectedNoteContent(newChar: String, noteId: Int?=0) {
+    suspend fun updateSelectedNoteContent(newChar: String, noteId: Int?=0, isPinned: Boolean) {
+        privateNote.value.isPinned=isPinned
         privateNote.value.content = newChar
         if (noteId != null) {
             privateNote.value.id=noteId
@@ -49,7 +50,7 @@ class NoteViewModel @Inject constructor(
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(note)
         } else {
-            updateSelectedNoteContent(note.content)
+            updateSelectedNoteContent(note.content, isPinned = note.isPinned)
         }
         fetchNotes()
     }
