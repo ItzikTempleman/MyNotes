@@ -74,7 +74,7 @@ fun NoteListItem(
                     ),
                     imageVector = Icons.Default.PushPin,
                     contentDescription = null,
-                    tint = if(note.isPinned) colorResource(id = R.color.steel_blue) else colorResource(id = R.color.light_steel_blue)
+                    tint = if(note.isPinned) colorResource(id = R.color.navy_blue) else colorResource(id = R.color.light_steel_blue)
                 )
             }
 

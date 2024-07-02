@@ -32,7 +32,6 @@ fun PinnedNotesScreen(
         val (icon) = createRefs()
 
 
-
         Text(
             modifier = Modifier
                 .constrainAs(icon) {
