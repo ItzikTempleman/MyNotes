@@ -1,6 +1,5 @@
 package com.itzik.mynotes.project.screens.note_screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -66,8 +65,7 @@ fun NoteListItem(
                         bottom.linkTo(parent.bottom)
                     },
                 onClick = {
-                        note.isPinned=!note.isPinned
-                    Log.d("TAG", "note.isPinned: ${note.isPinned}")
+                    noteViewModel.togglePinned(note)
                 }
             ) {
                 Icon(
