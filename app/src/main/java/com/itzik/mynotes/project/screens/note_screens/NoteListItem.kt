@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.HorizontalRule
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -41,22 +41,13 @@ fun NoteListItem(
             .fillMaxWidth()
             .height(50.dp)
     ) {
-        val (timeStamp, deleteNote, pinNote, content, id, verticalDiv, bottomLine) = createRefs()
+        val (deleteNote, pinNote, content, timeStamp, verticalDiv, bottomLine) = createRefs()
 
         if (!isTrashed) {
-            Text(
-                modifier = Modifier
-                    .constrainAs(timeStamp) {
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    }
-                    .padding(horizontal = 100.dp),
-                text = note.time,
-                fontSize = 12.sp
-            )
+
             IconButton(
-                modifier = Modifier.graphicsLayer(rotationZ = 40f)
+                modifier = Modifier
+                    .graphicsLayer(rotationZ = 40f)
                     .constrainAs(
                         pinNote
                     ) {
@@ -69,12 +60,14 @@ fun NoteListItem(
                 }
             ) {
                 Icon(
-                    modifier=Modifier.size(
+                    modifier = Modifier.size(
                         20.dp
                     ),
                     imageVector = Icons.Default.PushPin,
                     contentDescription = null,
-                    tint = if(note.isPinned) colorResource(id = R.color.navy_blue) else colorResource(id = R.color.light_steel_blue)
+                    tint = if (note.isPinned) colorResource(id = R.color.navy_blue) else colorResource(
+                        id = R.color.light_steel_blue
+                    )
                 )
             }
 
@@ -98,38 +91,44 @@ fun NoteListItem(
                 }
             ) {
                 Icon(
-                    imageVector = Icons.Default.HorizontalRule,
+                    imageVector = Icons.Default.Cancel,
                     contentDescription = null,
-                    tint = Color.Red
+                    tint = Color.LightGray
                 )
             }
 
+            Text(
+                modifier = Modifier
+                    .constrainAs(timeStamp) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }.padding(8.dp),
+                text = note.time,
+                fontSize = 12.sp
+            )
+
+            VerticalDivider(
+                modifier = Modifier
+                    .constrainAs(verticalDiv) {
+                        start.linkTo(timeStamp.end)
+                    }
+                    .padding(vertical = 8.dp)
+            )
         }
+
+
+
         Text(
-            modifier = Modifier
-                .constrainAs(id) {
-                    start.linkTo(parent.start)
+            modifier = if(!isTrashed) Modifier
+                .constrainAs(content) {
+                    start.linkTo(timeStamp.end)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                 }
-                .padding(horizontal = 16.dp),
-            text = "#${note.id}",
-            fontSize = 16.sp,
-            color = colorResource(id = R.color.darker_blue)
-        )
-
-        VerticalDivider(
-            modifier = Modifier
-                .constrainAs(verticalDiv) {
-                    start.linkTo(id.end)
-                }
-                .padding(vertical = 8.dp)
-        )
-
-        Text(
-            modifier = Modifier
+                .padding(horizontal = 16.dp) else Modifier
                 .constrainAs(content) {
-                    start.linkTo(id.end)
+                    start.linkTo(parent.start)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                 }

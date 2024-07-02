@@ -63,8 +63,6 @@ class NoteViewModel @Inject constructor(
         privateNoteList.value = notes
     }
 
-
-
     suspend fun updateIsInTrashBin(note: Note) {
         note.isInTrash = true
         repo.updateIsInTrashBin(note)
