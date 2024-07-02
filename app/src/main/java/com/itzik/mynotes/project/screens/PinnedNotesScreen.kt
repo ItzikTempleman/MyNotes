@@ -1,12 +1,14 @@
 package com.itzik.mynotes.project.screens
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.colorResource
@@ -28,7 +30,14 @@ fun PinnedNotesScreen(
     user: User
 ) {
     ConstraintLayout(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().background(
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    colorResource(id = R.color.light_deep_purple),
+                    Color.White
+                )
+            )
+        ),
     ) {
         val (icon) = createRefs()
         CircleWithIcon(
