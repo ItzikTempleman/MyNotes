@@ -1,7 +1,7 @@
 package com.itzik.mynotes.project.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.itzik.mynotes.project.repositories.InterfaceRepo
+import com.itzik.mynotes.project.repositories.INoteRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LocationViewModel @Inject constructor(
-    private val repo: InterfaceRepo
+    private val repo: INoteRepo
 ) : ViewModel() {
 
     private val _locationName = MutableStateFlow("")

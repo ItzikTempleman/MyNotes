@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.Note.Companion.getCurrentTime
-import com.itzik.mynotes.project.repositories.InterfaceRepo
+import com.itzik.mynotes.project.repositories.INoteRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,11 +15,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(
-    private val repo: InterfaceRepo,
+    private val repo: INoteRepo,
 ) : ViewModel() {
 
     private val privateNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
     val publicNoteList: StateFlow<MutableList<Note>> get() = privateNoteList
+
+
+    private val privatePinnedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
+    val publicPinnedNoteList: StateFlow<MutableList<Note>> get() = privatePinnedNoteList
+
 
     private val privateNote = MutableStateFlow(Note(content = ""))
     val publicNote: StateFlow<Note> get() = privateNote
@@ -31,21 +36,24 @@ class NoteViewModel @Inject constructor(
         }
     }
 
+    fun sayHello(): String {
+        return repo.sayHello().uppercase()
+    }
 
-    suspend fun updateSelectedNoteContent(newChar: String, noteId: Int?=0, isPinned: Boolean) {
-        privateNote.value.isPinned=isPinned
+    suspend fun updateSelectedNoteContent(newChar: String, noteId: Int? = 0, isPinned: Boolean) {
+        privateNote.value.isPinned = isPinned
         privateNote.value.content = newChar
         if (noteId != null) {
-            privateNote.value.id=noteId
+            privateNote.value.id = noteId
         }
-        privateNote.value.time=getCurrentTime()
+        privateNote.value.time = getCurrentTime()
         repo.updateNote(privateNote.value)
     }
 
     suspend fun saveNote(note: Note) {
         val noteList = repo.fetchNotes()
         val matchingNoteToPreviousVersion = noteList.find {
-            it.id== note.id
+            it.id == note.id
         }
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(note)
@@ -84,6 +92,19 @@ class NoteViewModel @Inject constructor(
         repo.emptyTrashBin()
         fetchNotes()
     }
+
+
+    fun updatePinnedNoteState(note: Note) {
+        if (note.isPinned) {
+            privatePinnedNoteList.value.add(note)
+        } else privatePinnedNoteList.value.remove(note)
+    }
+
+
+    fun fetchPinnedNotesList(notes: MutableList<Note>) {
+        privatePinnedNoteList.value = notes
+    }
+
 
     fun togglePinned(note: Note) = viewModelScope.launch {
         val updatedNote = note.copy(isPinned = !note.isPinned)

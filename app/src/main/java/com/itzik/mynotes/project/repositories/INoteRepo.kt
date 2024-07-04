@@ -4,7 +4,7 @@ import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
 
 
-interface InterfaceRepo {
+interface INoteRepo {
     suspend fun insertUser(user: User)
     suspend fun fetchLoggedInUsers(): MutableList<User>
     suspend fun getUserFromEmailAndPassword(email: String, password: String): User
@@ -21,5 +21,6 @@ interface InterfaceRepo {
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)
     suspend fun fetchTrashedNotes(): MutableList<Note>
     suspend fun emptyTrashBin()
+    fun sayHello(): String
 
 }

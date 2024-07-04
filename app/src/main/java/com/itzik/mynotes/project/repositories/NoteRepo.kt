@@ -8,14 +8,14 @@ import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
-class RepoImpl @Inject constructor(
+class NoteRepo @Inject constructor(
     @Named("user_dao")
     @Singleton
     private val userDao: UserDao,
     @Named("note_dao")
     @Singleton
     private val noteDao: NoteDao,
-) : InterfaceRepo {
+) : INoteRepo {
 
     override suspend fun insertUser(user: User) = userDao.insertUser(user)
     override suspend fun fetchLoggedInUsers() = userDao.fetchLoggedInUsers()
@@ -31,5 +31,6 @@ class RepoImpl @Inject constructor(
     override suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>) = noteDao.insertNoteListIntoRecycleBin(notes)
     override suspend fun fetchTrashedNotes() = noteDao.fetchTrashedNotes()
     override suspend fun emptyTrashBin() =noteDao.emptyTrashBin()
+    override fun sayHello ()  = "Hello"
 
 }

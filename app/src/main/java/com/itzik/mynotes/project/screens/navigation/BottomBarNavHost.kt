@@ -91,6 +91,7 @@ fun BottomBarNavHost(
                 composable(route = Screen.PinnedNotes.route) {
                     isNoteScreenVisible = true
                     PinnedNotesScreen(
+                        noteViewModel=noteViewModel,
                         modifier = Modifier.background(Color.White),
                         userViewModel = userViewModel,
                         coroutineScope = coroutineScope,

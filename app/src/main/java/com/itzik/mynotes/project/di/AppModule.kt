@@ -8,8 +8,8 @@ import com.itzik.mynotes.project.data.NoteDao
 import com.itzik.mynotes.project.data.NoteDatabase
 import com.itzik.mynotes.project.data.UserDao
 import com.itzik.mynotes.project.data.UserDatabase
-import com.itzik.mynotes.project.repositories.InterfaceRepo
-import com.itzik.mynotes.project.repositories.RepoImpl
+import com.itzik.mynotes.project.repositories.INoteRepo
+import com.itzik.mynotes.project.repositories.NoteRepo
 import com.itzik.mynotes.project.utils.Constants.NOTE_DATABASE
 import com.itzik.mynotes.project.utils.Constants.USER_DATABASE
 import com.itzik.mynotes.project.utils.Converters
@@ -31,7 +31,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRepo(repoImpl: RepoImpl): InterfaceRepo = repoImpl
+    fun provideRepo(repoImpl: NoteRepo): INoteRepo = repoImpl
 
     @Singleton
     @Provides
