@@ -5,8 +5,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.ui.graphics.vector.ImageVector
 
 
@@ -26,7 +26,7 @@ sealed class Screen(
     data object Registration : Screen(route = "registration")
 
     data object Home : Screen(route = "home", title = "Home", icon = Icons.Default.Home)
-    data object PinnedNotes : Screen(route = "pinned_notes", title = "Pinned notes", icon = Icons.Default.PushPin)
+    data object LikedNotes : Screen(route = "liked_notes", title = "liked notes", icon = Icons.Default.StarBorder)
     data object Profile : Screen(route = "profile", title = "Profile", icon = Icons.Default.Person)
     data object Settings : Screen(route = "settings", title = "Settings", icon = Icons.Default.Settings)
     data object NoteScreen : Screen(route = "note_screen", title = "Note Screen")

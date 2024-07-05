@@ -19,7 +19,7 @@ fun CircleWithIcon(
     circleSize: Dp,
     iconSize: Dp,
     imageVector:ImageVector,
-    modifier: Modifier,
+    modifier: Modifier=Modifier,
     tint:Color,
     borderColor:Color,
     borderThickness: Dp

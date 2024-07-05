@@ -19,7 +19,7 @@ interface NoteDao {
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSingleNoteIntoRecycleBin(note: Note)
     @Update
-    suspend fun updateIsInTrashBin(note: Note)
+    suspend fun setTrash(note: Note)
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)

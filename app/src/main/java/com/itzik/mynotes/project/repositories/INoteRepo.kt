@@ -15,7 +15,7 @@ interface INoteRepo {
     suspend fun saveNote(note: Note)
     suspend fun fetchNotes(): MutableList<Note>
     suspend fun insertSingleNoteIntoRecycleBin(note: Note)
-    suspend fun updateIsInTrashBin(note: Note)
+    suspend fun setTrash(note: Note)
     suspend fun updateNote(note: Note)
 
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)

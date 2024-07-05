@@ -24,4 +24,5 @@
     <string name="deleted_notes">Recently Deleted</string>
     <string name="pinned_notes">Pinned notes\n</string>
     <string name="new_note">New note</string>
+    <string name="liked_notes">Liked notes</string>
 </resources>

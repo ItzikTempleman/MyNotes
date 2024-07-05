@@ -14,8 +14,8 @@ import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun PinnedNoteListItem(
-    modifier: Modifier,
+fun LikedNoteListItem(
+    modifier: Modifier=Modifier,
     note: Note,
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope

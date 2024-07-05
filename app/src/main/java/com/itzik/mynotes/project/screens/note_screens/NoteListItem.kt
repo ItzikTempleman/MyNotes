@@ -84,7 +84,7 @@ fun NoteListItem(
                     .padding(4.dp),
                 onClick = {
                     coroutineScope.launch {
-                        noteViewModel.updateIsInTrashBin(note)
+                        noteViewModel.setTrash(note)
                         noteViewModel.publicNoteList.collect {
                             updatedList(it)
                         }

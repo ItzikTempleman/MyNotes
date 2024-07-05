@@ -25,7 +25,7 @@ class NoteRepo @Inject constructor(
 
     override suspend fun saveNote(note: Note) =noteDao.saveNote(note)
     override suspend fun fetchNotes() = noteDao.fetchNotes()
-    override suspend fun updateIsInTrashBin(note: Note) = noteDao.updateIsInTrashBin(note)
+    override suspend fun setTrash(note: Note) = noteDao.setTrash(note)
     override suspend fun updateNote(note: Note) = noteDao.updateNote(note)
     override suspend fun insertSingleNoteIntoRecycleBin(note: Note) = noteDao.insertSingleNoteIntoRecycleBin(note)
     override suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>) = noteDao.insertNoteListIntoRecycleBin(notes)

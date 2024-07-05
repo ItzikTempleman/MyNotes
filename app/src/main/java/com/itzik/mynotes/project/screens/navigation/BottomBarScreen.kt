@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
@@ -32,10 +31,11 @@ fun BottomBarScreen(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    val screens = listOf(Screen.Home, Screen.PinnedNotes, Screen.Settings, Screen.Profile)
+    val screens = listOf(Screen.Home, Screen.LikedNotes, Screen.Settings, Screen.Profile)
 
     Row(
-        modifier = Modifier.background(Color.White)
+        modifier = Modifier
+            .background(Color.White)
             .height(40.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -83,10 +83,9 @@ fun AddItem(
         ) {
             screen.icon?.let {
                 Icon(
-                    modifier=if(index==1) Modifier.graphicsLayer(rotationZ = 40f) else Modifier,
                     imageVector = it,
                     contentDescription = null,
-                    tint = contentColor
+                    tint =  contentColor
                 )
             }
         }

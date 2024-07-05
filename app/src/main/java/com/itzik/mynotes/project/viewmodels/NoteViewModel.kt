@@ -22,8 +22,8 @@ class NoteViewModel @Inject constructor(
     val publicNoteList: StateFlow<MutableList<Note>> get() = privateNoteList
 
 
-    private val privatePinnedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
-    val publicPinnedNoteList: StateFlow<MutableList<Note>> get() = privatePinnedNoteList
+    private val privateLikedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
+    val publicLikedNoteList: StateFlow<MutableList<Note>> get() = privateLikedNoteList
 
 
     private val privateNote = MutableStateFlow(Note(content = ""))
@@ -71,9 +71,9 @@ class NoteViewModel @Inject constructor(
         privateNoteList.value = notes
     }
 
-    suspend fun updateIsInTrashBin(note: Note) {
+    suspend fun setTrash(note: Note) {
         note.isInTrash = true
-        repo.updateIsInTrashBin(note)
+        repo.setTrash(note)
         repo.insertSingleNoteIntoRecycleBin(note)
         fetchNotes()
     }
@@ -96,13 +96,13 @@ class NoteViewModel @Inject constructor(
 
     fun updatePinnedNoteState(note: Note) {
         if (note.isPinned) {
-            privatePinnedNoteList.value.add(note)
-        } else privatePinnedNoteList.value.remove(note)
+            privateLikedNoteList.value.add(note)
+        } else privateLikedNoteList.value.remove(note)
     }
 
 
-    fun fetchPinnedNotesList(notes: MutableList<Note>) {
-        privatePinnedNoteList.value = notes
+    fun fetchLikedNotesList(notes: MutableList<Note>) {
+        privateLikedNoteList.value = notes
     }
 
 
