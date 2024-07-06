@@ -18,16 +18,14 @@ class NoteViewModel @Inject constructor(
     private val repo: INoteRepo,
 ) : ViewModel() {
 
+    private val privateNote = MutableStateFlow(Note(content = ""))
+    val publicNote: StateFlow<Note> get() = privateNote
+
     private val privateNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
     val publicNoteList: StateFlow<MutableList<Note>> get() = privateNoteList
 
-
-    private val privateLikedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
-    val publicLikedNoteList: StateFlow<MutableList<Note>> get() = privateLikedNoteList
-
-
-    private val privateNote = MutableStateFlow(Note(content = ""))
-    val publicNote: StateFlow<Note> get() = privateNote
+    private val privatePinnedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
+    val publicLikedNoteList: StateFlow<MutableList<Note>> get() = privatePinnedNoteList
 
 
     init {
@@ -36,9 +34,10 @@ class NoteViewModel @Inject constructor(
         }
     }
 
-    fun sayHello(): String {
-        return repo.sayHello().uppercase()
-    }
+
+//    fun sayHello(): String {
+//        return repo.sayHello().uppercase()
+//    }
 
     suspend fun updateSelectedNoteContent(newChar: String, noteId: Int? = 0, isPinned: Boolean) {
         privateNote.value.isPinned = isPinned
@@ -96,13 +95,23 @@ class NoteViewModel @Inject constructor(
 
     fun updatePinnedNoteState(note: Note) {
         if (note.isPinned) {
-            privateLikedNoteList.value.add(note)
-        } else privateLikedNoteList.value.remove(note)
+            privatePinnedNoteList.value.add(note)
+            addLikedNote(note)
+        } else privatePinnedNoteList.value.remove(note)
     }
 
+    private fun addLikedNote(note: Note) {
+        val currentList = privatePinnedNoteList.value
+        currentList.remove(note)
+        currentList.add(0, note)
+        if (currentList.size > 4) {
+            currentList.subList(4, currentList.size).clear()
+        }
+        privateNoteList.value = currentList
+    }
 
-    fun fetchLikedNotesList(notes: MutableList<Note>) {
-        privateLikedNoteList.value = notes
+    fun fetchPinnedNotesList(notes: MutableList<Note>) {
+        privatePinnedNoteList.value = notes
     }
 
 
