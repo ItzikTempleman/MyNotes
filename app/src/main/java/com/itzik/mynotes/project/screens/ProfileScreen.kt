@@ -1,7 +1,6 @@
 package com.itzik.mynotes.project.screens
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -71,7 +71,6 @@ fun ProfileScreen(
 ) {
 
 
-    Log.d("TAG", "user: $user")
     var isEditClick by remember {
         mutableStateOf(false)
     }
@@ -115,20 +114,71 @@ fun ProfileScreen(
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        colorResource(id = R.color.blue_green),
+                        colorResource(id = R.color.white),
                         Color.White
                     )
                 )
             ),
     ) {
-        val (dataContainer, signOut) = createRefs()
+        val (title, dataContainer, signOut) = createRefs()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(title) {
+                    top.linkTo(parent.top)
+                }
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            colorResource(id = R.color.blue_green),
+                            Color.White
+                        )
+                    )
+                )
+        ) {
+
+            Card(
+                colors = CardDefaults.cardColors(Color.White),
+                elevation = CardDefaults.cardElevation(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .padding(12.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.White)
+                        .padding(end = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.PersonOutline,
+                        contentDescription = null,
+                        tint = colorResource(id = R.color.darker_blue),
+                        modifier = Modifier.size(30.dp),
+                    )
+
+                    Text(
+                        modifier = Modifier.padding(start = 8.dp),
+                        text = "Profile",
+                        fontSize = 20.sp,
+                        color = colorResource(id = R.color.darker_blue),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+        }
+
 
         Card(
             elevation = CardDefaults.cardElevation(16.dp),
             colors = CardDefaults.cardColors(colorResource(id = R.color.semi_transparent_blue_green)),
             modifier = Modifier
                 .constrainAs(dataContainer) {
-                    top.linkTo(parent.top)
+                    top.linkTo(title.bottom)
                     start.linkTo(parent.start)
                 }
                 .fillMaxWidth()

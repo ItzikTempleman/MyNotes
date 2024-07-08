@@ -57,7 +57,7 @@ fun NoteListItem(
                     },
                 onClick = {
                     noteViewModel.togglePinned(note)
-                    noteViewModel.updatePinnedNoteState(note)
+                    //noteViewModel.updatePinnedNoteState(note)
                 }
             ) {
                 Icon(

@@ -35,9 +35,9 @@ class NoteViewModel @Inject constructor(
     }
 
 
-//    fun sayHello(): String {
-//        return repo.sayHello().uppercase()
-//    }
+    fun sayHello(): String {
+        return repo.sayHello().uppercase()
+    }
 
     suspend fun updateSelectedNoteContent(newChar: String, noteId: Int? = 0, isPinned: Boolean) {
         privateNote.value.isPinned = isPinned

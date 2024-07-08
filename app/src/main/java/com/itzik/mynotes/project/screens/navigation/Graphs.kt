@@ -2,11 +2,11 @@ package com.itzik.mynotes.project.screens.navigation
 
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DeleteForever
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.StarBorder
+import androidx.compose.material.icons.outlined.DeleteForever
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.ui.graphics.vector.ImageVector
 
 
@@ -25,11 +25,11 @@ sealed class Screen(
     data object Login : Screen(route = "login")
     data object Registration : Screen(route = "registration")
 
-    data object Home : Screen(route = "home", title = "Home", icon = Icons.Default.Home)
-    data object LikedNotes : Screen(route = "liked_notes", title = "liked notes", icon = Icons.Default.StarBorder)
-    data object Profile : Screen(route = "profile", title = "Profile", icon = Icons.Default.Person)
-    data object Settings : Screen(route = "settings", title = "Settings", icon = Icons.Default.Settings)
+    data object Home : Screen(route = "home", title = "Home", icon = Icons.Outlined.Home)
+    data object LikedNotes : Screen(route = "liked_notes", title = "liked notes", icon = Icons.Outlined.StarBorder)
+    data object Profile : Screen(route = "profile", title = "Profile", icon = Icons.Outlined.Person)
+    data object Settings : Screen(route = "settings", title = "Settings", icon = Icons.Outlined.Settings)
     data object NoteScreen : Screen(route = "note_screen", title = "Note Screen")
-    data object DeletedNotesScreen : Screen(route = "deleted_notes", title = "Deleted notes", icon = Icons.Default.DeleteForever)
+    data object DeletedNotesScreen : Screen(route = "deleted_notes", title = "Deleted notes", icon = Icons.Outlined.DeleteForever)
 }
 
