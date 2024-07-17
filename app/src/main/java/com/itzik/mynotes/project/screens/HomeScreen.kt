@@ -81,9 +81,9 @@ fun HomeScreen(
 
     ) {
 
-//    fun getSayHelloText (): String {
-//        return noteViewModel.sayHello()
-//    }
+    fun getSayHelloText (): String {
+        return noteViewModel.sayHello()
+    }
 
     var isLoadingLocation by remember {
         mutableStateOf(false)
