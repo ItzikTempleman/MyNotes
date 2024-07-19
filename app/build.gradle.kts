@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.itzik.mynotes"
-        minSdk = 29
+        minSdk = 30
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -62,68 +62,59 @@ android {
 dependencies {
 
 
-
     implementation(libs.play.services.maps)
-
-
-    //noinspection KaptUsageInsteadOfKsp
     kapt("androidx.room:room-compiler:2.6.1")
     kapt("com.google.dagger:hilt-compiler:2.50")
-    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    annotationProcessor(libs.room.compiler)
 
 
-    implementation(platform("androidx.compose:compose-bom:2024.04.01"))
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.compose.material:material:1.6.6")
-    implementation("androidx.compose.material:material-icons-core:1.6.6")
-    implementation("androidx.compose.material:material-icons-extended:1.6.6")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.navigation:navigation-compose:2.7.7")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.1")
-    implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.2.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-common-java8:*version*")
-    implementation("androidx.compose.runtime:runtime-livedata:1.6.6")
-    implementation("io.coil-kt:coil-compose:2.5.0")
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    implementation("com.google.dagger:hilt-android:2.50")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation("androidx.compose.ui:ui:1.6.6")
-    implementation("me.onebone:toolbar-compose:2.3.5")
-    implementation("androidx.activity:activity-compose:1.9.0")
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.core:core-ktx:1.13.0")
-    implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation(platform(libs.androidx.compose.bom.v20240401))
+    implementation(libs.material)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.material.icons.core)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.material3)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.gson)
+    implementation(libs.converter.gson)
+    implementation(libs.retrofit)
+    implementation(libs.logging.interceptor)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx.v270)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.savedstate)
+    implementation(libs.androidx.lifecycle.common.java8)
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.coil.compose)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.datetime)
+    implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.ui)
+    implementation(libs.toolbar.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.ui.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.ktx.v1130)
+    implementation(libs.play.services.location)
 
 
-
-
-    testImplementation("junit:junit:4.13.2")
-    // Optional -- Mockito framework
-    testImplementation("org.mockito:mockito-core:1.0.0")
-    // Optional -- mockito-kotlin
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0-RC")
-
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:2.0")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.core.v100)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.androidx.junit.v121)
+    androidTestImplementation(libs.androidx.espresso.core.v361)
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
 }
