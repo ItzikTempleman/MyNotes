@@ -5,15 +5,19 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.User
+import com.itzik.mynotes.project.screens.SettingsScreen
 import com.itzik.mynotes.project.screens.auth.LoginScreen
 import com.itzik.mynotes.project.screens.auth.RegistrationScreen
 import com.itzik.mynotes.project.screens.auth.SplashScreen
@@ -105,6 +109,16 @@ fun RootNavHost(
                     coroutineScope = coroutineScope,
                     updateIsLocationRequired = updateIsLocationRequired,
                     user = user
+                )
+            }
+            composable(route = Screen.Settings.route) {
+
+                SettingsScreen(
+                    locationViewModel = locationViewModel,
+                    noteViewModel = noteViewModel,
+                    modifier = Modifier.background(Color.White),
+                    navController = navController,
+                    coroutineScope = coroutineScope,
                 )
             }
         }

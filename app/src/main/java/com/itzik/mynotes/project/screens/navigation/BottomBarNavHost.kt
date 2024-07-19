@@ -23,10 +23,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.screens.HomeScreen
 import com.itzik.mynotes.project.screens.LikedNotesScreen
-
 import com.itzik.mynotes.project.screens.ProfileScreen
-import com.itzik.mynotes.project.screens.SettingsScreen
-
 import com.itzik.mynotes.project.screens.navigation.Graph.HOME
 import com.itzik.mynotes.project.screens.note_screens.DeletedNotesScreen
 import com.itzik.mynotes.project.screens.note_screens.NoteScreen
@@ -101,17 +98,6 @@ fun BottomBarNavHost(
                     )
                 }
 
-                composable(route = Screen.Settings.route) {
-                    isNoteScreenVisible = true
-                    SettingsScreen(
-                        locationViewModel = locationViewModel,
-                        noteViewModel = noteViewModel,
-                        modifier = Modifier.background(Color.White),
-                        navController = newNavController,
-                        coroutineScope = coroutineScope,
-                    )
-                }
-
                 composable(route = Screen.Profile.route) {
                     isNoteScreenVisible = true
                     ProfileScreen(
@@ -135,6 +121,7 @@ fun BottomBarNavHost(
                         modifier = Modifier.background(Color.White),
                     )
                 }
+
 
                 composable(route = Screen.DeletedNotesScreen.route) {
                     isNoteScreenVisible = false

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,12 +19,14 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PowerSettingsNew
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -89,7 +90,7 @@ fun ProfileScreen(
     LaunchedEffect(loggedInUsers) {
         if (loggedInUsers.isNotEmpty()) {
             val loggedInUser = loggedInUsers.firstOrNull()
-            selectedImageUri = loggedInUser?.profileImage ?:""
+            selectedImageUri = loggedInUser?.profileImage ?: ""
         }
 
     }
@@ -120,7 +121,7 @@ fun ProfileScreen(
                 )
             ),
     ) {
-        val (title, dataContainer, signOut) = createRefs()
+        val (title, dataContainer, settings,bottomDivider, signOut, bottomFixedDivider) = createRefs()
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -352,19 +353,55 @@ fun ProfileScreen(
 
         Button(
             modifier = Modifier
-                .border(
-                    border =
-                    BorderStroke(width = 0.5.dp, color = Color.Gray)
+
+                .constrainAs(settings) {
+                    bottom.linkTo(bottomDivider.top)
+                }
+                .fillMaxWidth()
+                .height(50.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+            onClick = {
+                navController.navigate(Screen.Settings.route)
+            },
+            elevation = ButtonDefaults.elevation(
+                defaultElevation = 12.dp
+            )
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    tint = Color.Black,
+                    contentDescription = null
                 )
+                Text(
+                    modifier = Modifier.padding(start = 4.dp),
+                    text = stringResource(id = R.string.settings),
+                    color = Color.Black
+                )
+            }
+        }
+        HorizontalDivider(
+            modifier = Modifier.constrainAs(bottomDivider){
+                bottom.linkTo(signOut.top)
+            }
+        )
+
+        Button(
+            modifier = Modifier
                 .constrainAs(signOut) {
-                    bottom.linkTo(parent.bottom)
+                    bottom.linkTo(bottomFixedDivider.top)
                 }
                 .fillMaxWidth()
                 .height(50.dp),
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
             onClick = {
                 coroutineScope.launch {
-                    user.isLoggedIn=false
+                    user.isLoggedIn = false
                     userViewModel.updateIsLoggedIn(user)
                 }
                 navController.navigate(Screen.Login.route)
@@ -391,5 +428,12 @@ fun ProfileScreen(
                 )
             }
         }
+
+        HorizontalDivider(
+            modifier = Modifier.constrainAs(bottomFixedDivider){
+                bottom.linkTo(parent.bottom)
+            }
+        )
+
     }
 }

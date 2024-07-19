@@ -31,7 +31,7 @@ fun BottomBarScreen(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    val screens = listOf(Screen.Home, Screen.LikedNotes, Screen.Settings, Screen.Profile)
+    val screens = listOf(Screen.Home, Screen.LikedNotes, Screen.Profile)
 
     Row(
         modifier = Modifier

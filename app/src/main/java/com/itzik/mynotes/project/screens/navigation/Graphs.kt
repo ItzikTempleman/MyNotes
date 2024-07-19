@@ -28,8 +28,9 @@ sealed class Screen(
     data object Home : Screen(route = "home", title = "Home", icon = Icons.Outlined.Home)
     data object LikedNotes : Screen(route = "liked_notes", title = "liked notes", icon = Icons.Outlined.StarBorder)
     data object Profile : Screen(route = "profile", title = "Profile", icon = Icons.Outlined.Person)
-    data object Settings : Screen(route = "settings", title = "Settings", icon = Icons.Outlined.Settings)
     data object NoteScreen : Screen(route = "note_screen", title = "Note Screen")
     data object DeletedNotesScreen : Screen(route = "deleted_notes", title = "Deleted notes", icon = Icons.Outlined.DeleteForever)
+
+    data object Settings : Screen(route = "settings", title = "Settings", icon = Icons.Outlined.Settings)
 }
 
