@@ -25,7 +25,6 @@ import com.itzik.mynotes.project.screens.HomeScreen
 import com.itzik.mynotes.project.screens.LikedNotesScreen
 import com.itzik.mynotes.project.screens.ProfileScreen
 import com.itzik.mynotes.project.screens.navigation.Graph.HOME
-import com.itzik.mynotes.project.screens.note_screens.DeletedNotesScreen
 import com.itzik.mynotes.project.screens.note_screens.NoteScreen
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
@@ -119,16 +118,6 @@ fun BottomBarNavHost(
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
                         modifier = Modifier.background(Color.White),
-                    )
-                }
-
-
-                composable(route = Screen.DeletedNotesScreen.route) {
-                    isNoteScreenVisible = false
-                    DeletedNotesScreen(
-                        noteViewModel = noteViewModel,
-                        coroutineScope = coroutineScope,
-                        navController = paramNavController,
                     )
                 }
             }

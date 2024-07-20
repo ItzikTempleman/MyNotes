@@ -29,7 +29,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.screens.sections.SettingsRows
-import com.itzik.mynotes.project.screens.sections.SettingsRows.DeletedNotes.SettingItem
+import com.itzik.mynotes.project.screens.sections.SettingsRows.MyLocation.SettingItem
+
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -46,7 +47,6 @@ fun SettingsScreen(
 
 
     val settingsItems = listOf(
-        SettingsRows.DeletedNotes,
         SettingsRows.MyLocation,
         SettingsRows.SystemColor
     )

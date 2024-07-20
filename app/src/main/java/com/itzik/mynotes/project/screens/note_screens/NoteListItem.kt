@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -41,36 +43,9 @@ fun NoteListItem(
             .fillMaxWidth()
             .height(50.dp)
     ) {
-        val (deleteNote, pinNote, content, timeStamp, verticalDiv, bottomLine) = createRefs()
+        val (deleteNote, likedNoteBtn, pinNote, content, verticalDiv, timeStamp, bottomLine) = createRefs()
 
         if (!isTrashed) {
-
-            IconButton(
-                modifier = Modifier
-                    .graphicsLayer(rotationZ = 40f)
-                    .constrainAs(
-                        pinNote
-                    ) {
-                        end.linkTo(deleteNote.start)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    },
-                onClick = {
-                    noteViewModel.togglePinned(note)
-                    //noteViewModel.updatePinnedNoteState(note)
-                }
-            ) {
-                Icon(
-                    modifier = Modifier.size(
-                        20.dp
-                    ),
-                    imageVector = Icons.Default.PushPin,
-                    contentDescription = null,
-                    tint = if (note.isPinned) colorResource(id = R.color.navy_blue) else colorResource(
-                        id = R.color.light_steel_blue
-                    )
-                )
-            }
 
             IconButton(
                 modifier = Modifier
@@ -98,6 +73,55 @@ fun NoteListItem(
                 )
             }
 
+
+            IconButton(
+                modifier = Modifier
+                    .constrainAs(likedNoteBtn) {
+                        end.linkTo(deleteNote.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    },
+                onClick = {
+                    noteViewModel.toggleLikedButton(note)
+
+                }
+            ) {
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    imageVector = if (note.isLiked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = null,
+                    tint = Color.Red
+                )
+            }
+
+
+            IconButton(
+                modifier = Modifier
+                    .graphicsLayer(rotationZ = 40f)
+                    .constrainAs(
+                        pinNote
+                    ) {
+                        end.linkTo(likedNoteBtn.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    },
+                onClick = {
+                    noteViewModel.togglePinned(note)
+                    //noteViewModel.updatePinnedNoteState(note)
+                }
+            ) {
+                Icon(
+                    modifier = Modifier.size(
+                        20.dp
+                    ),
+                    imageVector = Icons.Default.PushPin,
+                    contentDescription = null,
+                    tint = if (note.isPinned) colorResource(id = R.color.navy_blue) else colorResource(
+                        id = R.color.light_steel_blue
+                    )
+                )
+            }
+
             Text(
                 modifier = Modifier
                     .constrainAs(timeStamp) {
@@ -108,6 +132,7 @@ fun NoteListItem(
                 text = note.time,
                 fontSize = 12.sp
             )
+
 
             VerticalDivider(
                 modifier = Modifier

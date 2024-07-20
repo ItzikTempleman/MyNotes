@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Call
@@ -121,7 +122,7 @@ fun ProfileScreen(
                 )
             ),
     ) {
-        val (title, dataContainer, settings,bottomDivider, signOut, bottomFixedDivider) = createRefs()
+        val (title, dataContainer,deletedNotes, topDivider, settings,bottomDivider, signOut, bottomFixedDivider) = createRefs()
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -350,6 +351,45 @@ fun ProfileScreen(
                 }
             }
         }
+        Button(
+            modifier = Modifier
+
+                .constrainAs(deletedNotes) {
+                    bottom.linkTo(topDivider.top)
+                }
+                .fillMaxWidth()
+                .height(50.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+            onClick = {
+                navController.navigate(Screen.DeletedNotesScreen.route)
+            },
+            elevation = ButtonDefaults.elevation(defaultElevation = 12.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.DeleteOutline,
+                    tint = Color.Black,
+                    contentDescription = null
+                )
+                Text(
+                    modifier = Modifier.padding(start = 4.dp),
+                    text = stringResource(id = R.string.deleted_notes),
+                    color = Color.Black
+                )
+            }
+        }
+
+        HorizontalDivider(
+            modifier = Modifier.constrainAs(topDivider){
+                bottom.linkTo(settings.top)
+            }
+        )
+
 
         Button(
             modifier = Modifier
@@ -434,6 +474,5 @@ fun ProfileScreen(
                 bottom.linkTo(parent.bottom)
             }
         )
-
     }
 }

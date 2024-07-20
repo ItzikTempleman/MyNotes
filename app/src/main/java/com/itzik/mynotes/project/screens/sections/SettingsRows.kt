@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.FolderDelete
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.ShareLocation
 import androidx.compose.material3.HorizontalDivider
@@ -28,11 +27,9 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
-import com.itzik.mynotes.project.screens.navigation.Screen
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 
 sealed class SettingsRows(
@@ -40,15 +37,15 @@ sealed class SettingsRows(
     var icon: ImageVector,
     var onClick: ((noteViewModel: NoteViewModel, coroutineScope: CoroutineScope, navController: NavHostController) -> Unit)? = null
 ) {
-    data object DeletedNotes : SettingsRows(
-        title = "Deleted notes",
-        icon = Icons.Default.FolderDelete,
-        onClick = { noteViewModel, coroutineScope, navController ->
-            coroutineScope.launch {
-                navController.navigate(Screen.DeletedNotesScreen.route)
-            }
-        }
-    )
+//    data object DeletedNotes : SettingsRows(
+//        title = "Deleted notes",
+//        icon = Icons.Default.FolderDelete,
+//        onClick = { noteViewModel, coroutineScope, navController ->
+//            coroutineScope.launch {
+//                navController.navigate(Screen.DeletedNotesScreen.route)
+//            }
+//        }
+//    )
 
     data object MyLocation :SettingsRows(
         title = "Location: ",

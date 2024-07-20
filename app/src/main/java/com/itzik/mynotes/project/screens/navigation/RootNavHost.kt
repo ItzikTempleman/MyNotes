@@ -24,6 +24,7 @@ import com.itzik.mynotes.project.screens.auth.SplashScreen
 import com.itzik.mynotes.project.screens.navigation.Graph.AUTHENTICATION
 import com.itzik.mynotes.project.screens.navigation.Graph.HOME
 import com.itzik.mynotes.project.screens.navigation.Graph.ROOT
+import com.itzik.mynotes.project.screens.note_screens.DeletedNotesScreen
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
@@ -119,6 +120,15 @@ fun RootNavHost(
                     modifier = Modifier.background(Color.White),
                     navController = navController,
                     coroutineScope = coroutineScope,
+                )
+            }
+
+            composable(route = Screen.DeletedNotesScreen.route) {
+
+                DeletedNotesScreen(
+                    noteViewModel = noteViewModel,
+                    coroutineScope = coroutineScope,
+                    navController = navController,
                 )
             }
         }

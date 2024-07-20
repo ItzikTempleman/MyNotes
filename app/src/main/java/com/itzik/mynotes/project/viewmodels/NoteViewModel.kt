@@ -25,14 +25,17 @@ class NoteViewModel @Inject constructor(
     val publicNoteList: StateFlow<MutableList<Note>> get() = privateNoteList
 
     private val privatePinnedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
-    val publicLikedNoteList: StateFlow<MutableList<Note>> get() = privatePinnedNoteList
+    val publicPinnedNoteList: StateFlow<MutableList<Note>> get() = privatePinnedNoteList
+
+    private val privateLikedNoteList = MutableStateFlow<MutableList<Note>> (mutableListOf())
+    val publicLikedNoteList:StateFlow<MutableList<Note>> get() = privateLikedNoteList
 
 
-    init {
-        viewModelScope.launch {
-            fetchNotes()
+        init {
+            viewModelScope.launch {
+                fetchNotes()
+            }
         }
-    }
 
 
     fun sayHello(): String {
@@ -93,11 +96,11 @@ class NoteViewModel @Inject constructor(
     }
 
 
-    fun updatePinnedNoteState(note: Note) {
-        if (note.isPinned) {
-            privatePinnedNoteList.value.add(note)
-            addLikedNote(note)
-        } else privatePinnedNoteList.value.remove(note)
+    fun updateLikedNoteState(note: Note) {
+        if (note.isLiked) {
+            privateLikedNoteList.value.add(note)
+            //addLikedNote(note)
+        } else privateLikedNoteList.value.remove(note)
     }
 
     private fun addLikedNote(note: Note) {
@@ -120,5 +123,10 @@ class NoteViewModel @Inject constructor(
         repo.updateNote(updatedNote)
         fetchNotes()
     }
-}
 
+    fun toggleLikedButton(note: Note) = viewModelScope.launch {
+        val updatedNote = note.copy(isLiked = !note.isLiked)
+        repo.updateNote(updatedNote)
+        fetchNotes()
+    }
+}
