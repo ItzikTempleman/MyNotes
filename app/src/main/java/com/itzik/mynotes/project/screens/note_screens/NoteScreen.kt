@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.outlined.NoteAlt
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -53,7 +54,7 @@ fun NoteScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        val (returnIcon, contentTF) = createRefs()
+        val (returnIcon,title,  contentTF) = createRefs()
 
         IconButton(
             modifier = Modifier
@@ -83,6 +84,17 @@ fun NoteScreen(
             )
         }
 
+        Icon(
+            imageVector = Icons.Outlined.NoteAlt,
+            contentDescription = null,
+            tint = colorResource(id = R.color.light_deep_purple),
+            modifier = Modifier.padding( top = 20.dp).size(60.dp).constrainAs(title) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            },
+        )
+
         TextField(
             value = text,
             onValueChange = {
@@ -102,7 +114,7 @@ fun NoteScreen(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(topEnd = 0.dp, topStart = 0.dp))
                 .constrainAs(contentTF) {
-                    top.linkTo(returnIcon.bottom)
+                    top.linkTo(title.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)

@@ -16,14 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.itzik.mynotes.R
 
 @Composable
 fun BottomBarScreen(
@@ -63,7 +61,7 @@ fun AddItem(
         it.route == screen.route
     } == true
 
-    val contentColor = if (selected) colorResource(id = R.color.darker_blue) else colorResource(id = R.color.blue_green)
+    val contentColor = if (selected) Color.DarkGray else Color.LightGray
 
     Box(
         modifier = Modifier
