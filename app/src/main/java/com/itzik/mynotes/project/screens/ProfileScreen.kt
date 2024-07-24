@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,8 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -112,183 +109,164 @@ fun ProfileScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        val (dataContainer, bottomItems) = createRefs()
+        val (imageContainer, name, editIcon, uploadImageButton, removePhotoText, done, email, phone, bottomItems) = createRefs()
 
-        Card(
-            elevation = CardDefaults.cardElevation(16.dp),
-            colors = CardDefaults.cardColors(Color.White),
+        Image(
+            painter = if (selectedImageUri != "") rememberAsyncImagePainter(model = selectedImageUri) else painterResource(
+                id = emptySateDrawable
+            ),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
-                .constrainAs(dataContainer) {
+                .constrainAs(imageContainer) {
                     top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                }.padding(20.dp)
+                .size(80.dp)
+                .clip(CircleShape)
+                .border(1.dp, Color.Gray, CircleShape)
+        )
+
+        Text(
+            text = user.userName,
+            modifier = Modifier
+                .constrainAs(name) {
+                    top.linkTo(imageContainer.top)
+                    bottom.linkTo(imageContainer.bottom)
+                    start.linkTo(imageContainer.end)
                 }
-                .fillMaxWidth()
-                .height(360.dp)
-                .padding(12.dp)
+                .padding(start = 16.dp),
+            color = Color.Black,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        IconButton(
+            modifier = Modifier.constrainAs(editIcon) {
+                top.linkTo(name.bottom)
+                start.linkTo(name.start)
+            },
+
+            onClick = {
+                isEditClick = true
+            }
         ) {
-            ConstraintLayout(
+            Icon(
+                imageVector = Icons.Rounded.Edit,
+                contentDescription = null,
+                tint = Color.Gray,
+            )
+        }
+
+        if (isEditClick) {
+            TextButton(
+                onClick = {
+                    singlePhotoPickerLauncher.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    )
+                },
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
+                    .constrainAs(uploadImageButton) {
+                        top.linkTo(name.bottom)
+                        start.linkTo(editIcon.end)
+                    }
+                    .padding(start = 16.dp),
             ) {
-                val (imageContainer, name, editIcon, uploadImageButton, removePhotoText, done, email, phone) = createRefs()
-
-                Image(
-                    painter = if (selectedImageUri != "") rememberAsyncImagePainter(model = selectedImageUri) else painterResource(
-                        id = emptySateDrawable
-                    ),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .constrainAs(imageContainer) {
-                            top.linkTo(parent.top)
-                            start.linkTo(parent.start)
-                        }
-                        .size(80.dp)
-                        .clip(CircleShape)
-                        .border(1.dp, Color.Gray, CircleShape)
-                )
-
                 Text(
-                    text = user.userName,
-                    modifier = Modifier
-                        .constrainAs(name) {
-                            top.linkTo(imageContainer.top)
-                            bottom.linkTo(imageContainer.bottom)
-                            start.linkTo(imageContainer.end)
-                        }
-                        .padding(start = 16.dp),
-                    color = Color.Black,
-                    fontSize = 24.sp,
+                    text = "Select photo",
+                    color = Color.DarkGray,
                     fontWeight = FontWeight.Bold
                 )
+            }
 
-                IconButton(
-                    modifier = Modifier.constrainAs(editIcon) {
-                        top.linkTo(name.bottom)
-                        start.linkTo(name.start)
-                    },
-
-                    onClick = {
-                        isEditClick = true
+            TextButton(
+                onClick = {
+                    selectedImageUri = ""
+                    isDoneButtonVisible = true
+                },
+                modifier = Modifier
+                    .constrainAs(removePhotoText) {
+                        top.linkTo(uploadImageButton.bottom)
+                        start.linkTo(uploadImageButton.start)
                     }
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Edit,
-                        contentDescription = null,
-                        tint = Color.Gray,
-                    )
-                }
-
-                if (isEditClick) {
-                    TextButton(
-                        onClick = {
-                            singlePhotoPickerLauncher.launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                            )
-                        },
-                        modifier = Modifier
-                            .constrainAs(uploadImageButton) {
-                                top.linkTo(name.bottom)
-                                start.linkTo(editIcon.end)
-                            }
-                            .padding(start = 16.dp),
-                    ) {
-                        Text(
-                            text = "Select photo",
-                            color = Color.DarkGray,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-
-                    TextButton(
-                        onClick = {
-                            selectedImageUri = ""
-                            isDoneButtonVisible = true
-                        },
-                        modifier = Modifier
-                            .constrainAs(removePhotoText) {
-                                top.linkTo(uploadImageButton.bottom)
-                                start.linkTo(uploadImageButton.start)
-                            }
-                            .padding(start = 16.dp),
-                    ) {
-                        Text(
-                            text = "Remove photo",
-                            color = Color.DarkGray,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
-                if (isDoneButtonVisible) {
-                    TextButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                userViewModel.updateProfileImage(selectedImageUri)
-                            }
-                            isDoneButtonVisible = false
-                            isEditClick = false
-                        },
-                        modifier = Modifier
-                            .constrainAs(done) {
-                                top.linkTo(name.bottom)
-                                start.linkTo(uploadImageButton.end)
-                            }
-                            .padding(start = 8.dp),
-                    ) {
-                        Text(
-                            text = "Done",
-                            color = Color.Red,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
-                Row(
-                    modifier = Modifier
-                        .constrainAs(email) {
-                            top.linkTo(imageContainer.bottom)
-                        }
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Email,
-                        contentDescription = null,
-                        tint = Color.DarkGray
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 8.dp),
-                        color = Color.DarkGray,
-                        text = user.email
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .constrainAs(phone) {
-                            top.linkTo(email.bottom)
-                        }
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Call,
-                        contentDescription = null,
-                        tint = Color.DarkGray
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 8.dp),
-                        color = Color.DarkGray,
-                        text = user.phoneNumber.toString()
-                    )
-                }
+                    .padding(start = 16.dp),
+            ) {
+                Text(
+                    text = "Remove photo",
+                    color = Color.DarkGray,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
+
+        if (isDoneButtonVisible) {
+            TextButton(
+                onClick = {
+                    coroutineScope.launch {
+                        userViewModel.updateProfileImage(selectedImageUri)
+                    }
+                    isDoneButtonVisible = false
+                    isEditClick = false
+                },
+                modifier = Modifier
+                    .constrainAs(done) {
+                        top.linkTo(name.bottom)
+                        start.linkTo(uploadImageButton.end)
+                    }
+                    .padding(start = 8.dp),
+            ) {
+                Text(
+                    text = "Done",
+                    color = Color.Red,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .constrainAs(email) {
+                    top.linkTo(imageContainer.bottom)
+                }
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Email,
+                contentDescription = null,
+                tint = Color.DarkGray
+            )
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                color = Color.DarkGray,
+                text = user.email
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .constrainAs(phone) {
+                    top.linkTo(email.bottom)
+                }
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Call,
+                contentDescription = null,
+                tint = Color.DarkGray
+            )
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                color = Color.DarkGray,
+                text = user.phoneNumber.toString()
+            )
+        }
+
 
         LazyColumn(
             modifier = modifier
