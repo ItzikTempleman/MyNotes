@@ -31,6 +31,9 @@ class NoteRepo @Inject constructor(
     override suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>) = noteDao.insertNoteListIntoRecycleBin(notes)
     override suspend fun fetchTrashedNotes() = noteDao.fetchTrashedNotes()
     override suspend fun emptyTrashBin() =noteDao.emptyTrashBin()
+    override suspend fun fetchLikedNotes(): MutableList<Note> = noteDao.fetchLikedNotes()
+    override suspend fun fetchPinnedNotes(): MutableList<Note> =noteDao.fetchPinnedNotes()
+
     override fun sayHello ()  = "Hello"
 
 }

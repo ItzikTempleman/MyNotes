@@ -47,102 +47,101 @@ fun NoteListItem(
 
         if (!isTrashed) {
 
-            IconButton(
-                modifier = Modifier
-                    .constrainAs(
-                        deleteNote
-                    ) {
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    }
-                    .padding(4.dp),
-                onClick = {
-                    coroutineScope.launch {
-                        noteViewModel.setTrash(note)
-                        noteViewModel.publicNoteList.collect {
-                            updatedList(it)
+                IconButton(
+                    modifier = Modifier
+                        .constrainAs(
+                            deleteNote
+                        ) {
+                            end.linkTo(parent.end)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                        }
+                        .padding(4.dp),
+                    onClick = {
+                        coroutineScope.launch {
+                            noteViewModel.setTrash(note)
+                            noteViewModel.publicNoteList.collect {
+                                updatedList(it)
+                            }
                         }
                     }
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Cancel,
-                    contentDescription = null,
-                    tint = Color.LightGray
-                )
-            }
-
-
-            IconButton(
-                modifier = Modifier
-                    .constrainAs(likedNoteBtn) {
-                        end.linkTo(deleteNote.start)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    },
-                onClick = {
-                    noteViewModel.toggleLikedButton(note)
-
-                }
-            ) {
-                Icon(
-                    modifier = Modifier.size(20.dp),
-                    imageVector = if (note.isLiked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = null,
-                    tint = Color.Red
-                )
-            }
-
-
-            IconButton(
-                modifier = Modifier
-                    .graphicsLayer(rotationZ = 40f)
-                    .constrainAs(
-                        pinNote
-                    ) {
-                        end.linkTo(likedNoteBtn.start)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    },
-                onClick = {
-                    noteViewModel.togglePinned(note)
-                    //noteViewModel.updatePinnedNoteState(note)
-                }
-            ) {
-                Icon(
-                    modifier = Modifier.size(
-                        20.dp
-                    ),
-                    imageVector = Icons.Default.PushPin,
-                    contentDescription = null,
-                    tint = if (note.isPinned) colorResource(id = R.color.navy_blue) else colorResource(
-                        id = R.color.light_steel_blue
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Cancel,
+                        contentDescription = null,
+                        tint = Color.LightGray
                     )
+                }
+
+
+                IconButton(
+                    modifier = Modifier
+                        .constrainAs(likedNoteBtn) {
+                            end.linkTo(deleteNote.start)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                        },
+                    onClick = {
+                        noteViewModel.toggleLikedButton(note)
+
+                    }
+                ) {
+                    Icon(
+                        modifier = Modifier.size(20.dp),
+                        imageVector = if (note.isLiked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = null,
+                        tint = Color.Red
+                    )
+                }
+
+
+                IconButton(
+                    modifier = Modifier
+                        .graphicsLayer(rotationZ = 40f)
+                        .constrainAs(
+                            pinNote
+                        ) {
+                            end.linkTo(likedNoteBtn.start)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                        },
+                    onClick = {
+                        noteViewModel.togglePinned(note)
+                    }
+                ) {
+                    Icon(
+                        modifier = Modifier.size(
+                            20.dp
+                        ),
+                        imageVector = Icons.Default.PushPin,
+                        contentDescription = null,
+                        tint = if (note.isPinned) colorResource(id = R.color.navy_blue) else colorResource(
+                            id = R.color.light_steel_blue
+                        )
+                    )
+                }
+
+
+                Text(
+                    modifier = Modifier
+                        .constrainAs(timeStamp) {
+                            start.linkTo(parent.start)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                        }.padding(8.dp),
+                    text = note.time,
+                    fontSize = 12.sp
+                )
+
+
+                VerticalDivider(
+                    modifier = Modifier
+                        .constrainAs(verticalDiv) {
+                            start.linkTo(timeStamp.end)
+                        }
+                        .padding(vertical = 8.dp)
                 )
             }
-
-            Text(
-                modifier = Modifier
-                    .constrainAs(timeStamp) {
-                        start.linkTo(parent.start)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    }.padding(8.dp),
-                text = note.time,
-                fontSize = 12.sp
-            )
-
-
-            VerticalDivider(
-                modifier = Modifier
-                    .constrainAs(verticalDiv) {
-                        start.linkTo(timeStamp.end)
-                    }
-                    .padding(vertical = 8.dp)
-            )
-        }
-
 
 
         Text(

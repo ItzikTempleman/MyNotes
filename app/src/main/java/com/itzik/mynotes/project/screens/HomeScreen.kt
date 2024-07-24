@@ -194,7 +194,7 @@ fun HomeScreen(
                                 key = "noteId",
                                 value = noteId
                             )
-                            noteViewModel.updateSelectedNoteContent(noteItem.content, noteId, noteItem.isPinned)
+                            noteViewModel.updateSelectedNoteContent(noteItem.content, noteId, noteItem.isPinned, noteItem.isLiked)
 
                         }
                         navController.navigate(Screen.NoteScreen.route)
@@ -217,7 +217,7 @@ fun HomeScreen(
                 },
             onClick = {
                 coroutineScope.launch {
-                    noteViewModel.updateSelectedNoteContent("", isPinned = false)
+                    noteViewModel.updateSelectedNoteContent("", isPinned = false, isLiked =false )
                 }
                 navController.navigate(Screen.NoteScreen.route)
             }

@@ -18,8 +18,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -32,6 +35,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
+import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.screens.note_screens.LikedNoteListItem
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
@@ -46,7 +50,15 @@ fun LikedNotesScreen(
     user: User,
     noteViewModel: NoteViewModel
 ) {
-    val likedNoteList by noteViewModel.publicLikedNoteList.collectAsState()
+
+
+    var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
+
+    LaunchedEffect(Unit) {
+        noteViewModel.fetchLikedNotes().collect {
+            noteList = it
+        }
+    }
 
     ConstraintLayout(
         modifier = Modifier
@@ -115,7 +127,7 @@ fun LikedNotesScreen(
                 }
                 .fillMaxWidth()
         ) {
-            items(likedNoteList) {
+            items(noteList) {
                 LikedNoteListItem(
                     note = it,
                     noteViewModel = noteViewModel,

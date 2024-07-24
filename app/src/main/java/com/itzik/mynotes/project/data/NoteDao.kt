@@ -30,5 +30,10 @@ interface NoteDao {
     @Update
     suspend fun updateNote(note: Note)
 
+    @Query("SELECT *FROM $NOTE_TABLE WHERE isPinned=1")
+    suspend fun fetchPinnedNotes(): MutableList<Note>
+
+    @Query("SELECT *FROM $NOTE_TABLE WHERE isLiked=1")
+    suspend fun fetchLikedNotes(): MutableList<Note>
 }
 

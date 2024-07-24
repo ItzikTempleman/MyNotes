@@ -24,13 +24,6 @@ class NoteViewModel @Inject constructor(
     private val privateNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
     val publicNoteList: StateFlow<MutableList<Note>> get() = privateNoteList
 
-    private val privatePinnedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
-    val publicPinnedNoteList: StateFlow<MutableList<Note>> get() = privatePinnedNoteList
-
-    private val privateLikedNoteList = MutableStateFlow<MutableList<Note>> (mutableListOf())
-    val publicLikedNoteList:StateFlow<MutableList<Note>> get() = privateLikedNoteList
-
-
         init {
             viewModelScope.launch {
                 fetchNotes()
@@ -42,12 +35,13 @@ class NoteViewModel @Inject constructor(
         return repo.sayHello().uppercase()
     }
 
-    suspend fun updateSelectedNoteContent(newChar: String, noteId: Int? = 0, isPinned: Boolean) {
+    suspend fun updateSelectedNoteContent(newChar: String, noteId: Int? = 0, isPinned: Boolean, isLiked:Boolean) {
         privateNote.value.isPinned = isPinned
         privateNote.value.content = newChar
         if (noteId != null) {
             privateNote.value.id = noteId
         }
+        privateNote.value.isLiked=isLiked
         privateNote.value.time = getCurrentTime()
         repo.updateNote(privateNote.value)
     }
@@ -60,7 +54,7 @@ class NoteViewModel @Inject constructor(
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(note)
         } else {
-            updateSelectedNoteContent(note.content, isPinned = note.isPinned)
+            updateSelectedNoteContent(note.content, isPinned = note.isPinned, isLiked=note.isLiked)
         }
         fetchNotes()
     }
@@ -90,33 +84,20 @@ class NoteViewModel @Inject constructor(
         return noteList
     }
 
+    suspend fun fetchLikedNotes(): Flow<MutableList<Note>> {
+        val noteList = flow {
+            val notes = repo.fetchLikedNotes()
+            if (notes.isNotEmpty()) {
+                emit(notes)
+            } else return@flow
+        }
+        return noteList
+    }
+
     fun emptyTrashBin() = viewModelScope.launch {
         repo.emptyTrashBin()
         fetchNotes()
     }
-
-
-    fun updateLikedNoteState(note: Note) {
-        if (note.isLiked) {
-            privateLikedNoteList.value.add(note)
-            //addLikedNote(note)
-        } else privateLikedNoteList.value.remove(note)
-    }
-
-    private fun addLikedNote(note: Note) {
-        val currentList = privatePinnedNoteList.value
-        currentList.remove(note)
-        currentList.add(0, note)
-        if (currentList.size > 4) {
-            currentList.subList(4, currentList.size).clear()
-        }
-        privateNoteList.value = currentList
-    }
-
-    fun fetchPinnedNotesList(notes: MutableList<Note>) {
-        privatePinnedNoteList.value = notes
-    }
-
 
     fun togglePinned(note: Note) = viewModelScope.launch {
         val updatedNote = note.copy(isPinned = !note.isPinned)

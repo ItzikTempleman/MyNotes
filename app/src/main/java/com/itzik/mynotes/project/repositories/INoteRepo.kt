@@ -21,6 +21,11 @@ interface INoteRepo {
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)
     suspend fun fetchTrashedNotes(): MutableList<Note>
     suspend fun emptyTrashBin()
+    suspend fun fetchLikedNotes():MutableList<Note>
+    suspend fun fetchPinnedNotes():MutableList<Note>
+
+
+
     fun sayHello(): String
 
 }
