@@ -37,15 +37,7 @@ sealed class SettingsRows(
     var icon: ImageVector,
     var onClick: ((noteViewModel: NoteViewModel, coroutineScope: CoroutineScope, navController: NavHostController) -> Unit)? = null
 ) {
-//    data object DeletedNotes : SettingsRows(
-//        title = "Deleted notes",
-//        icon = Icons.Default.FolderDelete,
-//        onClick = { noteViewModel, coroutineScope, navController ->
-//            coroutineScope.launch {
-//                navController.navigate(Screen.DeletedNotesScreen.route)
-//            }
-//        }
-//    )
+
 
     data object MyLocation :SettingsRows(
         title = "Location: ",

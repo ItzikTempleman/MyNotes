@@ -108,7 +108,7 @@ fun CustomOutlinedTextField(
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = colorResource(id = R.color.darker_blue),
                 cursorColor = colorResource(id = R.color.darker_blue),
-                backgroundColor = colorResource(id =R.color.very_light_green)
+                backgroundColor = Color.White
             ),
             isError = isError,
             keyboardOptions = if (isKeyboardPasswordType) {

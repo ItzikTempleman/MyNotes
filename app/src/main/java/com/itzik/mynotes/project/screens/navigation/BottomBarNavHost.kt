@@ -104,7 +104,8 @@ fun BottomBarNavHost(
                         navController = paramNavController,
                         userViewModel = userViewModel,
                         coroutineScope = coroutineScope,
-                        user = user
+                        user = user,
+                        noteViewModel = noteViewModel
                     )
                 }
 
