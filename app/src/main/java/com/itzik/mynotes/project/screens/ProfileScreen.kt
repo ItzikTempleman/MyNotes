@@ -178,7 +178,7 @@ fun ProfileScreen(
                     fontWeight = FontWeight.Bold
                 )
             }
-
+            if (!isDoneButtonVisible) {
             TextButton(
                 onClick = {
                     selectedImageUri = ""
@@ -186,8 +186,8 @@ fun ProfileScreen(
                 },
                 modifier = Modifier
                     .constrainAs(removePhotoText) {
-                        top.linkTo(uploadImageButton.bottom)
-                        start.linkTo(uploadImageButton.start)
+                        top.linkTo(name.bottom)
+                        start.linkTo(uploadImageButton.end)
                     }
                     .padding(start = 16.dp),
             ) {
@@ -196,6 +196,7 @@ fun ProfileScreen(
                     color = Color.DarkGray,
                     fontWeight = FontWeight.Bold
                 )
+            }
             }
         }
 
@@ -213,7 +214,7 @@ fun ProfileScreen(
                         top.linkTo(name.bottom)
                         start.linkTo(uploadImageButton.end)
                     }
-                    .padding(start = 8.dp),
+                    .padding(start = 16.dp),
             ) {
                 Text(
                     text = "Done",
