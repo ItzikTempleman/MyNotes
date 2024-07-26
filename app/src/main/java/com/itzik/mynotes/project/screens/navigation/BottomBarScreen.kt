@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
@@ -16,12 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.itzik.mynotes.R
 
 @Composable
 fun BottomBarScreen(
@@ -34,13 +35,12 @@ fun BottomBarScreen(
     Row(
         modifier = Modifier
             .background(Color.White)
-            .height(40.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
         screens.forEach {
-            AddItem(
+            BottomBarItem(
                 index = screens.indexOf(it),
                 screen = it,
                 currentDestination = currentDestination,
@@ -51,7 +51,7 @@ fun BottomBarScreen(
 }
 
 @Composable
-fun AddItem(
+fun BottomBarItem(
     index: Int,
     screen: Screen,
     currentDestination: NavDestination?,
@@ -61,7 +61,14 @@ fun AddItem(
         it.route == screen.route
     } == true
 
-    val contentColor = if (selected) Color.DarkGray else Color.LightGray
+    val contentColor = if (selected) when (index) {
+        0 -> colorResource(id = R.color.darker_blue)
+        1 -> colorResource(id = R.color.yellow)
+        else -> colorResource(id = R.color.light_deep_purple)
+    } else Color.Gray
+
+
+
 
     Box(
         modifier = Modifier
@@ -75,7 +82,7 @@ fun AddItem(
             }
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 2.dp),
+            modifier = Modifier.padding(2.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
@@ -83,9 +90,11 @@ fun AddItem(
                 Icon(
                     imageVector = it,
                     contentDescription = null,
-                    tint =  contentColor
+                    tint = contentColor
                 )
             }
         }
     }
 }
+
+

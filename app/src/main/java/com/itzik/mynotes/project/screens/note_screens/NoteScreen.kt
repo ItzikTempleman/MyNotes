@@ -92,7 +92,7 @@ fun NoteScreen(
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-            },
+            }
         )
 
         TextField(
