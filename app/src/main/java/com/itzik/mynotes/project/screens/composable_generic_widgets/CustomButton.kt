@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.screens.sections
+package com.itzik.mynotes.project.screens.composable_generic_widgets
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border

@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.screens.note_screens
+package com.itzik.mynotes.project.screens
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth

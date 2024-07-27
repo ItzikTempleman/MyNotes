@@ -2,6 +2,7 @@ package com.itzik.mynotes.project.screens
 
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,10 +27,11 @@ import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
-import com.itzik.mynotes.project.screens.note_screens.LikedNoteListItem
+import com.itzik.mynotes.project.screens.navigation.Screen
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -58,17 +60,19 @@ fun LikedNotesScreen(
 
         val (title, likedNotesLazyColumn) = createRefs()
 
-                    Icon(
-                        modifier = Modifier
-                            .constrainAs(title) {
-                                top.linkTo(parent.top)
-                                start.linkTo(parent.start)
-                                end.linkTo(parent.end)
-                            }.padding( top = 20.dp).size(60.dp),
-                        imageVector = Icons.Outlined.StarBorder,
-                        contentDescription = null,
-                        tint = colorResource(id = R.color.light_yellow),
-                    )
+        Icon(
+            modifier = Modifier
+                .constrainAs(title) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .padding(top = 20.dp)
+                .size(60.dp),
+            imageVector = Icons.Outlined.StarBorder,
+            contentDescription = null,
+            tint = colorResource(id = R.color.light_yellow),
+        )
 
 
 
@@ -82,11 +86,31 @@ fun LikedNotesScreen(
                 }
                 .fillMaxWidth()
         ) {
-            items(noteList) {
-                LikedNoteListItem(
-                    note = it,
+            items(noteList) { noteItem ->
+                NoteListItem(
+                    isInHomeScreen = false,
                     noteViewModel = noteViewModel,
-                    coroutineScope = coroutineScope
+                    coroutineScope = coroutineScope,
+                    note = noteItem,
+                    modifier = Modifier.clickable {
+                        coroutineScope.launch {
+                            val noteId = noteItem.id
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                key = "noteId",
+                                value = noteId
+                            )
+                            noteViewModel.updateSelectedNoteContent(
+                                noteItem.content,
+                                noteId,
+                                noteItem.isPinned,
+                                noteItem.isLiked
+                            )
+                        }
+                        navController.navigate(Screen.NoteScreen.route)
+                    },
+                    updatedList = { updatedNotes ->
+                        noteViewModel.setNoteList(updatedNotes)
+                    }
                 )
             }
         }

@@ -1,6 +1,7 @@
-package com.itzik.mynotes.project.screens.note_screens
+package com.itzik.mynotes.project.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.CancelPresentation
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.outlined.DeleteForever
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -69,13 +70,11 @@ fun DeletedNotesScreen(
                 .padding(start = 4.dp, top = 16.dp)
                 .size(26.dp),
             onClick = {
-                navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.Home.route) { inclusive = true }
-                }
+                    navController.navigate(Screen.Home.route)
             }
 
         ) {
-            androidx.compose.material3.Icon(
+            Icon(
                 tint = colorResource(id = R.color.darker_blue),
                 imageVector = Icons.Default.ArrowBackIosNew,
                 contentDescription = null
@@ -111,7 +110,7 @@ fun DeletedNotesScreen(
                 Icon(
                     modifier = Modifier.size(36.dp),
                     tint = colorResource(id = R.color.darker_blue),
-                    imageVector = Icons.Default.CancelPresentation,
+                    imageVector = Icons.Default.Cancel,
                     contentDescription = null
                 )
             }
@@ -128,8 +127,9 @@ fun DeletedNotesScreen(
                     .background(Color.White),
             ) {
                 items(noteList) { noteItem ->
+                    Log.d("tag", "noteItem isLiked: ${noteItem.isLiked}")
                     NoteListItem(
-                        isTrashed = true,
+                        isInHomeScreen = false,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
                         note = noteItem,

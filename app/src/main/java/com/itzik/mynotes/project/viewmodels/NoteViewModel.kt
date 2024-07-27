@@ -69,6 +69,7 @@ class NoteViewModel @Inject constructor(
 
     suspend fun setTrash(note: Note) {
         note.isInTrash = true
+        note.isLiked=false
         repo.setTrash(note)
         repo.insertSingleNoteIntoRecycleBin(note)
         fetchNotes()
@@ -96,12 +97,6 @@ class NoteViewModel @Inject constructor(
 
     fun emptyTrashBin() = viewModelScope.launch {
         repo.emptyTrashBin()
-        fetchNotes()
-    }
-
-    fun togglePinned(note: Note) = viewModelScope.launch {
-        val updatedNote = note.copy(isPinned = !note.isPinned)
-        repo.updateNote(updatedNote)
         fetchNotes()
     }
 

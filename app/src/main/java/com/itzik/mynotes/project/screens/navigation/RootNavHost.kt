@@ -5,12 +5,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,7 +21,7 @@ import com.itzik.mynotes.project.screens.auth.SplashScreen
 import com.itzik.mynotes.project.screens.navigation.Graph.AUTHENTICATION
 import com.itzik.mynotes.project.screens.navigation.Graph.HOME
 import com.itzik.mynotes.project.screens.navigation.Graph.ROOT
-import com.itzik.mynotes.project.screens.note_screens.DeletedNotesScreen
+import com.itzik.mynotes.project.screens.DeletedNotesScreen
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
@@ -112,12 +109,12 @@ fun RootNavHost(
                     user = user
                 )
             }
+
             composable(route = Screen.Settings.route) {
 
                 SettingsScreen(
                     locationViewModel = locationViewModel,
                     noteViewModel = noteViewModel,
-                    modifier = Modifier.background(Color.White),
                     navController = navController,
                     coroutineScope = coroutineScope,
                 )

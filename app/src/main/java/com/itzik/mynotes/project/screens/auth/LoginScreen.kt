@@ -28,8 +28,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.screens.navigation.Screen
-import com.itzik.mynotes.project.screens.sections.CustomButton
-import com.itzik.mynotes.project.screens.sections.CustomOutlinedTextField
+import com.itzik.mynotes.project.screens.composable_generic_widgets.CustomButton
+import com.itzik.mynotes.project.screens.composable_generic_widgets.CustomOutlinedTextField
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

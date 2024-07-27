@@ -13,11 +13,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavHostController
-import com.itzik.mynotes.R
 import com.itzik.mynotes.project.screens.navigation.Graph.AUTHENTICATION
 import com.itzik.mynotes.project.screens.navigation.Graph.HOME
 import com.itzik.mynotes.project.viewmodels.UserViewModel
@@ -46,14 +43,11 @@ fun SplashScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(
-            brush = Brush.verticalGradient(
-                colors = listOf(
-                    colorResource(id = R.color.blue_green),
-                    Color.White
-                )
-            )
-        ),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Color.White
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

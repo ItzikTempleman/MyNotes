@@ -1,11 +1,11 @@
-package com.itzik.mynotes.project.screens.sections
+package com.itzik.mynotes.project.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DeleteOutline
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.HorizontalDivider
@@ -48,7 +48,7 @@ sealed class ProfileRows(
 
     data object DeletedItems : ProfileRows(
         itemTitle = "Deleted notes",
-        itemIcon = Icons.Default.DeleteOutline,
+        itemIcon = Icons.Default.DeleteForever,
         onClick = { noteViewModel, coroutineScope, navController, userViewModel, user ->
             navController.navigate(Screen.DeletedNotesScreen.route)
         }

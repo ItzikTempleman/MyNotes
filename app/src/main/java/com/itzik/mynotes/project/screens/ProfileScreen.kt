@@ -44,8 +44,6 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.User
-import com.itzik.mynotes.project.screens.sections.ProfileItem
-import com.itzik.mynotes.project.screens.sections.ProfileRows
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope

@@ -41,7 +41,6 @@ import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.screens.navigation.Screen
-import com.itzik.mynotes.project.screens.note_screens.NoteListItem
 import com.itzik.mynotes.project.utils.convertLatLangToLocation
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
@@ -134,7 +133,7 @@ fun HomeScreen(
         ) {
             items(noteList) { noteItem ->
                 NoteListItem(
-                    isTrashed = false,
+                    isInHomeScreen = true,
                     noteViewModel = noteViewModel,
                     coroutineScope = coroutineScope,
                     note = noteItem,

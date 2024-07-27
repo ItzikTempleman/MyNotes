@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.screens.sections
+package com.itzik.mynotes.project.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -39,7 +39,7 @@ sealed class SettingsRows(
 ) {
 
 
-    data object MyLocation :SettingsRows(
+    data object MyLocation : SettingsRows(
         title = "Location: ",
         icon = Icons.Default.ShareLocation,
     )
@@ -56,14 +56,13 @@ sealed class SettingsRows(
         coroutineScope: CoroutineScope,
         navController: NavHostController,
         settingsRow: SettingsRows,
-        modifier: Modifier,
     ) {
         val locationName by locationViewmodel.locationName.collectAsState()
 
         var isToggled by remember { mutableStateOf(false) }
 
         ConstraintLayout(
-            modifier = modifier
+            modifier = Modifier
                 .clickable {
                     settingsRow.onClick?.let { it(noteViewModel, coroutineScope, navController) }
                 }
@@ -109,7 +108,7 @@ sealed class SettingsRows(
             )
             HorizontalDivider(modifier = Modifier.constrainAs(divider) {
                 bottom.linkTo(parent.bottom)
-               }.padding(horizontal = 8.dp)
+            }.padding(horizontal = 8.dp)
             )
         }
     }

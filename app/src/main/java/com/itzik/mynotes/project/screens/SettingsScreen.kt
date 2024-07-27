@@ -1,5 +1,6 @@
 package com.itzik.mynotes.project.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,14 +14,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
+import com.itzik.mynotes.project.screens.SettingsRows.MyLocation.SettingItem
 import com.itzik.mynotes.project.screens.navigation.Screen
-import com.itzik.mynotes.project.screens.sections.SettingsRows
-import com.itzik.mynotes.project.screens.sections.SettingsRows.MyLocation.SettingItem
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +30,6 @@ import kotlinx.coroutines.CoroutineScope
 fun SettingsScreen(
     locationViewModel: LocationViewModel,
     noteViewModel: NoteViewModel,
-    modifier: Modifier,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
 
@@ -42,7 +42,7 @@ fun SettingsScreen(
     )
 
     ConstraintLayout(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(Color.White),
     ) {
         val (returnIcon,title, settingItems) = createRefs()
 
@@ -55,9 +55,7 @@ fun SettingsScreen(
                 .padding(start = 4.dp, top = 16.dp)
                 .size(26.dp),
             onClick = {
-                navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.Home.route) { inclusive = true }
-                }
+                navController.navigate(Screen.Home.route)
             }
 
         ) {
@@ -81,7 +79,7 @@ fun SettingsScreen(
 
 
         LazyColumn(
-            modifier = modifier
+            modifier = Modifier
                 .constrainAs(settingItems) {
                     top.linkTo(title.bottom)
                 }
@@ -90,7 +88,6 @@ fun SettingsScreen(
             items(settingsItems) {
                 SettingItem(
                     settingsRow = it,
-                    modifier = modifier,
                     coroutineScope = coroutineScope,
                     navController = navController,
                     noteViewModel = noteViewModel,
