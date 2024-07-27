@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.screens
+package com.itzik.mynotes.project.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable

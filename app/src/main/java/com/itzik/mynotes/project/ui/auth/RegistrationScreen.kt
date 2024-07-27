@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.screens.auth
+package com.itzik.mynotes.project.ui.auth
 
 
 import android.util.Log
@@ -29,9 +29,9 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
-import com.itzik.mynotes.project.screens.navigation.Screen
-import com.itzik.mynotes.project.screens.composable_generic_widgets.CustomButton
-import com.itzik.mynotes.project.screens.composable_generic_widgets.CustomOutlinedTextField
+import com.itzik.mynotes.project.ui.navigation.Screen
+import com.itzik.mynotes.project.ui.semantics.CustomButton
+import com.itzik.mynotes.project.ui.semantics.CustomOutlinedTextField
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

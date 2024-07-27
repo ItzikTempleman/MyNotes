@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.screens
+package com.itzik.mynotes.project.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,7 +24,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.itzik.mynotes.R
-import com.itzik.mynotes.project.screens.navigation.Screen
+import com.itzik.mynotes.project.ui.navigation.Screen
 
 @Composable
 fun BottomBarScreen(

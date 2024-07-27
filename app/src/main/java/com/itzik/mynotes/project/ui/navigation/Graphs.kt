@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.screens.navigation
+package com.itzik.mynotes.project.ui.navigation
 
 
 import androidx.compose.material.icons.Icons

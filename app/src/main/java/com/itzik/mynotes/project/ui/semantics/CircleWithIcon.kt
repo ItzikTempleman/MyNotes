@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.screens.composable_generic_widgets
+package com.itzik.mynotes.project.ui.semantics
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
