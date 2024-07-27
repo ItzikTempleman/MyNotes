@@ -19,7 +19,7 @@ object Graph {
 sealed class Screen(
     val route: String,
     val title: String? = null,
-    val icon: ImageVector? = null
+    val icon: ImageVector? = null,
 ) {
     data object Splash : Screen(route = "splash")
     data object Login : Screen(route = "login")

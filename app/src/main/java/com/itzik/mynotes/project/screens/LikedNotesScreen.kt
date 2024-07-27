@@ -71,7 +71,7 @@ fun LikedNotesScreen(
                 .size(60.dp),
             imageVector = Icons.Outlined.StarBorder,
             contentDescription = null,
-            tint = colorResource(id = R.color.light_yellow),
+            tint = colorResource(id = R.color.bb_orange),
         )
 
 

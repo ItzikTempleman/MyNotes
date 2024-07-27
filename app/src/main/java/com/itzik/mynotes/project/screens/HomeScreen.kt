@@ -112,14 +112,13 @@ fun HomeScreen(
                     Icon(
                         imageVector = Icons.Outlined.Home,
                         contentDescription = null,
-                        tint = colorResource(id = R.color.darker_blue),
+                        tint = colorResource(id = R.color.bb_green),
                         modifier = Modifier.padding( top = 20.dp).size(60.dp).constrainAs(title) {
                             top.linkTo(parent.top)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                         },
                     )
-
 
         LazyColumn(
             modifier = Modifier
@@ -158,7 +157,7 @@ fun HomeScreen(
 
         FloatingActionButton(
             shape = CircleShape,
-            containerColor = colorResource(id = R.color.darker_blue),
+            containerColor = colorResource(id = R.color.bb_purple),
             modifier = Modifier
                 .padding(8.dp)
                 .constrainAs(newNoteBtn) {
@@ -212,7 +211,7 @@ fun HomeScreen(
                 imageVector = Icons.Default.LocationOn,
                 contentDescription = null,
                 tint = colorResource(
-                    id = R.color.darker_blue
+                    id = R.color.bb_purple
                 )
             )
         }

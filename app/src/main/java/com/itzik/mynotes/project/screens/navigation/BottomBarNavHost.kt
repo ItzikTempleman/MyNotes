@@ -21,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.User
+import com.itzik.mynotes.project.screens.BottomBarScreen
 import com.itzik.mynotes.project.screens.HomeScreen
 import com.itzik.mynotes.project.screens.LikedNotesScreen
 import com.itzik.mynotes.project.screens.ProfileScreen

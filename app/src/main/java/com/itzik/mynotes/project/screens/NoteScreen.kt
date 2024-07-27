@@ -78,7 +78,6 @@ fun NoteScreen(
 
         ) {
             Icon(
-                tint = colorResource(id = R.color.darker_blue),
                 imageVector = Icons.Default.ArrowBackIosNew,
                 contentDescription = null
             )
@@ -87,7 +86,7 @@ fun NoteScreen(
         Icon(
             imageVector = Icons.Outlined.NoteAlt,
             contentDescription = null,
-            tint = colorResource(id = R.color.light_deep_purple),
+            tint = colorResource(id = R.color.bb_purple),
             modifier = Modifier.padding( top = 20.dp).size(60.dp).constrainAs(title) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)

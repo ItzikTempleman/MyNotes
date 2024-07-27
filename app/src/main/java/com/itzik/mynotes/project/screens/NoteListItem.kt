@@ -100,7 +100,7 @@ fun NoteListItem(
                     imageVector = if (note.isLiked) Icons.Default.Star else Icons.Outlined.StarOutline,
                     contentDescription = null,
                     tint = colorResource(
-                        id = R.color.light_yellow
+                        id = R.color.bb_orange
                     )
                 )
             }

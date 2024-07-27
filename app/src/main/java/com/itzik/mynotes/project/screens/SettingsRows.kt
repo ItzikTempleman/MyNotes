@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material.icons.filled.ShareLocation
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
@@ -40,13 +40,14 @@ sealed class SettingsRows(
 
 
     data object MyLocation : SettingsRows(
-        title = "Location: ",
-        icon = Icons.Default.ShareLocation,
+        title = "",
+        icon = Icons.Default.LocationOn,
     )
 
     data object SystemColor : SettingsRows(
         title = "Dark Mode", icon = Icons.Default.DarkMode,
     )
+}
 
     @SuppressLint("CoroutineCreationDuringComposition")
     @Composable
@@ -104,7 +105,7 @@ sealed class SettingsRows(
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                         start.linkTo(icon.end)
-                    }, text = if(settingsRow.title=="Location: ") settingsRow.title + locationName else settingsRow.title, fontSize = 16.sp
+                    }, text = if(settingsRow.title=="") settingsRow.title + locationName else settingsRow.title, fontSize = 16.sp
             )
             HorizontalDivider(modifier = Modifier.constrainAs(divider) {
                 bottom.linkTo(parent.bottom)
@@ -112,4 +113,3 @@ sealed class SettingsRows(
             )
         }
     }
-}
