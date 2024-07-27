@@ -41,7 +41,7 @@ sealed class ProfileRows(
     data object Settings : ProfileRows(
         itemTitle = "Settings",
         itemIcon = Icons.Default.Settings,
-        onClick = { noteViewModel, coroutineScope, navController, userViewModel, user ->
+        onClick = { _, _, navController, _, _ ->
             navController.navigate(Screen.Settings.route)
         }
     )
@@ -49,7 +49,7 @@ sealed class ProfileRows(
     data object DeletedItems : ProfileRows(
         itemTitle = "Deleted notes",
         itemIcon = Icons.Default.DeleteForever,
-        onClick = { noteViewModel, coroutineScope, navController, userViewModel, user ->
+        onClick = { _, _, navController, _, _ ->
             navController.navigate(Screen.DeletedNotesScreen.route)
         }
     )
@@ -57,7 +57,7 @@ sealed class ProfileRows(
     data object LogOut : ProfileRows(
         itemTitle = "Log out",
         itemIcon = Icons.Default.PowerSettingsNew,
-        onClick = { noteViewModel, coroutineScope, navController, userViewModel, user ->
+        onClick = { _, coroutineScope, navController, userViewModel, user ->
             coroutineScope.launch {
                 user.isLoggedIn = false
                 userViewModel.updateIsLoggedIn(user)
