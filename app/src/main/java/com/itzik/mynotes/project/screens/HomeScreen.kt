@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat
@@ -107,7 +109,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color.White),
     ) {
-        val (title, locationButton, noteLazyColumn, newNoteBtn, progressBar) = createRefs()
+        val (title, emptyStateMessage, noteLazyColumn, locationButton, newNoteBtn, progressBar) = createRefs()
 
                     Icon(
                         imageVector = Icons.Outlined.Home,
@@ -119,6 +121,21 @@ fun HomeScreen(
                             end.linkTo(parent.end)
                         },
                     )
+
+
+        if(noteList.isEmpty()) {
+            Text(
+                modifier = Modifier.constrainAs(emptyStateMessage) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    top.linkTo(parent.top)
+                },
+                fontSize = 40.sp,
+                color = Color.Gray,
+                text = "No notes"
+            )
+        }
 
         LazyColumn(
             modifier = Modifier
