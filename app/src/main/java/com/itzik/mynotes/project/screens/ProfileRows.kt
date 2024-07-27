@@ -123,12 +123,14 @@ fun ProfileItem(
             color = if(profileItem.itemTitle=="Log out") Color.Red else Color.Black
         )
 
-        HorizontalDivider(
-            modifier = Modifier
-                .constrainAs(divider) {
-                    bottom.linkTo(parent.bottom)
-                }
-                .padding(horizontal = 8.dp)
-        )
+        if(profileItem.itemTitle!="Log out") {
+            HorizontalDivider(
+                modifier = Modifier
+                    .constrainAs(divider) {
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .padding(horizontal = 8.dp)
+            )
+        }
     }
 }
