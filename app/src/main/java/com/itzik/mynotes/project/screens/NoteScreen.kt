@@ -1,5 +1,6 @@
 package com.itzik.mynotes.project.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,7 +25,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
@@ -37,7 +41,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun NoteScreen(
-    noteId:Int?,
+    noteId: Int?,
     noteViewModel: NoteViewModel,
     modifier: Modifier,
     coroutineScope: CoroutineScope,
@@ -53,8 +57,9 @@ fun NoteScreen(
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
+            .background(Color.White)
     ) {
-        val (returnIcon,title,  contentTF) = createRefs()
+        val (returnIcon, title, contentTF) = createRefs()
 
         IconButton(
             modifier = Modifier
@@ -71,10 +76,10 @@ fun NoteScreen(
                         noteViewModel.saveNote(note)
                     }
                 }
-                    paramNavController.navigate(Screen.Home.route) {
-                        popUpTo(Screen.Home.route) { inclusive = true }
-                    }
+                paramNavController.navigate(Screen.Home.route) {
+                    popUpTo(Screen.Home.route) { inclusive = true }
                 }
+            }
 
         ) {
             Icon(
@@ -86,12 +91,15 @@ fun NoteScreen(
         Icon(
             imageVector = Icons.Outlined.NoteAlt,
             contentDescription = null,
-            tint = colorResource(id = R.color.bb_purple),
-            modifier = Modifier.padding( top = 20.dp).size(60.dp).constrainAs(title) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            tint = colorResource(id = R.color.deep_blue),
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .size(60.dp)
+                .constrainAs(title) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
         )
 
         TextField(
@@ -119,8 +127,16 @@ fun NoteScreen(
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 },
+            textStyle = TextStyle.Default.copy(
+                fontSize = 20.sp,
+                color = Color.DarkGray,
+                fontWeight = FontWeight.Bold
+            ),
             placeholder = {
                 Text(
+                    fontSize = 20.sp,
+                    color = Color.DarkGray,
+                    fontWeight = FontWeight.Bold,
                     text = note.content.ifEmpty { stringResource(id = R.string.new_note) }
                 )
             }

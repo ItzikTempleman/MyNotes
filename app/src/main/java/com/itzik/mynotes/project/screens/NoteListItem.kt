@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -72,7 +73,9 @@ fun NoteListItem(
                 }
                 .padding(horizontal = 16.dp),
             text = note.content,
-            fontSize = 16.sp
+            fontSize = 20.sp,
+            color = Color.DarkGray,
+            fontWeight = FontWeight.Bold
         )
 
         HorizontalDivider(
@@ -96,11 +99,11 @@ fun NoteListItem(
                 }
             ) {
                 Icon(
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(36.dp),
                     imageVector = if (note.isLiked) Icons.Default.Star else Icons.Outlined.StarOutline,
                     contentDescription = null,
                     tint = colorResource(
-                        id = R.color.bb_orange
+                        id = R.color.light_yellow
                     )
                 )
             }

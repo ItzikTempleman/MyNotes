@@ -114,7 +114,7 @@ fun HomeScreen(
                     Icon(
                         imageVector = Icons.Outlined.Home,
                         contentDescription = null,
-                        tint = colorResource(id = R.color.bb_green),
+                        tint = colorResource(id = R.color.deep_blue),
                         modifier = Modifier.padding( top = 20.dp).size(60.dp).constrainAs(title) {
                             top.linkTo(parent.top)
                             start.linkTo(parent.start)
@@ -174,7 +174,7 @@ fun HomeScreen(
 
         FloatingActionButton(
             shape = CircleShape,
-            containerColor = colorResource(id = R.color.bb_purple),
+            containerColor = colorResource(id = R.color.deep_blue),
             modifier = Modifier
                 .padding(8.dp)
                 .constrainAs(newNoteBtn) {
@@ -228,7 +228,7 @@ fun HomeScreen(
                 imageVector = Icons.Default.LocationOn,
                 contentDescription = null,
                 tint = colorResource(
-                    id = R.color.bb_purple
+                    id = R.color.deep_blue
                 )
             )
         }

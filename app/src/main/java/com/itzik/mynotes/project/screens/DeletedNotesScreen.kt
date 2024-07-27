@@ -1,7 +1,6 @@
 package com.itzik.mynotes.project.screens
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
@@ -75,7 +74,6 @@ fun DeletedNotesScreen(
 
         ) {
             Icon(
-                tint = colorResource(id = R.color.darker_blue),
                 imageVector = Icons.Default.ArrowBackIosNew,
                 contentDescription = null
             )
@@ -84,7 +82,7 @@ fun DeletedNotesScreen(
     Icon(
             imageVector = Icons.Outlined.DeleteForever,
             contentDescription = null,
-            tint = colorResource(id = R.color.darker_blue),
+            tint = colorResource(id = R.color.navy_blue),
             modifier = Modifier.padding(top = 20.dp).size(60.dp).constrainAs(title) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
@@ -109,7 +107,7 @@ fun DeletedNotesScreen(
             ) {
                 Icon(
                     modifier = Modifier.size(36.dp),
-                    tint = colorResource(id = R.color.darker_blue),
+                    tint = colorResource(id = R.color.navy_blue),
                     imageVector = Icons.Default.Cancel,
                     contentDescription = null
                 )
@@ -127,7 +125,6 @@ fun DeletedNotesScreen(
                     .background(Color.White),
             ) {
                 items(noteList) { noteItem ->
-                    Log.d("tag", "noteItem isLiked: ${noteItem.isLiked}")
                     NoteListItem(
                         isInHomeScreen = false,
                         noteViewModel = noteViewModel,
