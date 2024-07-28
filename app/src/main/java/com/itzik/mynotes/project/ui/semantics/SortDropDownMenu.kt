@@ -18,7 +18,7 @@ fun SortDropDownMenu(
     modifier: Modifier,
     coroutineScope: CoroutineScope,
     noteViewModel: NoteViewModel,
-    isExpandedParam: Boolean,
+    isExpanded: Boolean,
     onDismissRequest: () -> Unit
 ) {
 
@@ -26,7 +26,7 @@ fun SortDropDownMenu(
 
     DropdownMenu(
         modifier = modifier,
-        expanded = isExpandedParam,
+        expanded = isExpanded,
         onDismissRequest = onDismissRequest
     ) {
         sortOptions.forEach {option->

@@ -10,6 +10,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -113,7 +114,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color.White),
     ) {
-        val (title, sortOptionIcon, sortDropDown, emptyStateMessage, noteLazyColumn, locationButton, newNoteBtn, progressBar) = createRefs()
+        val (title, sortOptionIcon, emptyStateMessage, noteLazyColumn, locationButton, newNoteBtn, progressBar) = createRefs()
 
         Icon(
             imageVector = Icons.Outlined.Home,
@@ -126,37 +127,33 @@ fun HomeScreen(
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                },
+                }
         )
-
-        IconButton(
+        Box(
             modifier = Modifier
                 .constrainAs(sortOptionIcon) {
                     top.linkTo(parent.top)
                     end.linkTo(parent.end)
                 }
-                .padding(8.dp),
-            onClick = {
-                isExpanded = !isExpanded
-            }
+                .padding(8.dp)
         ) {
-            Icon(imageVector = Icons.Default.Sort, contentDescription = null)
-        }
-
-        SortDropDownMenu(
-            isExpandedParam = isExpanded,
-            modifier = Modifier
-                .constrainAs(sortDropDown) {
-                    top.linkTo(sortOptionIcon.bottom)
-                    end.linkTo(parent.end)
+            IconButton(
+                onClick = {
+                    isExpanded = !isExpanded
                 }
-                .wrapContentSize(),
-            coroutineScope = coroutineScope,
-            noteViewModel = noteViewModel,
-            onDismissRequest = {
-                isExpanded = false
+            ) {
+                Icon(imageVector = Icons.Default.Sort, contentDescription = null)
             }
-        )
+            SortDropDownMenu(
+                isExpanded= isExpanded,
+                modifier = Modifier.wrapContentSize(),
+                coroutineScope = coroutineScope,
+                noteViewModel = noteViewModel,
+                onDismissRequest = {
+                    isExpanded = false
+                }
+            )
+        }
 
         if (noteList.isEmpty()) {
             Text(
@@ -174,9 +171,7 @@ fun HomeScreen(
                 top.linkTo(title.bottom, margin = 16.dp)
                 bottom.linkTo(parent.bottom)
                 height = Dimension.fillToConstraints
-            }.padding(top=50.dp)
-            .fillMaxWidth()
-            .background(Color.White)) {
+            }.fillMaxWidth()) {
             items(noteList) { noteItem ->
                 NoteListItem(isInHomeScreen = true,
                     noteViewModel = noteViewModel,
