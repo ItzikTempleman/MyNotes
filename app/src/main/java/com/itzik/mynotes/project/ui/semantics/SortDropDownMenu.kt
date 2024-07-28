@@ -1,20 +1,22 @@
 package com.itzik.mynotes.project.ui.semantics
 
+//noinspection UsingMaterialAndMaterial3Libraries
+//noinspection UsingMaterialAndMaterial3Libraries
 import android.annotation.SuppressLint
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.DropdownMenu
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun SortDropDownMenu(
+    updatedSortedList: (String, Int)->Unit,
     modifier: Modifier,
     coroutineScope: CoroutineScope,
     noteViewModel: NoteViewModel,
@@ -29,14 +31,17 @@ fun SortDropDownMenu(
         expanded = isExpanded,
         onDismissRequest = onDismissRequest
     ) {
-        sortOptions.forEach {option->
+        sortOptions.forEach { option ->
             DropdownMenuItem(
                 onClick = {
+                    coroutineScope.launch {
+
+                    }
                     onDismissRequest()
                 }
             ) {
-                Text(text = option)
+                    Text(text = option)
+                }
             }
         }
     }
-}

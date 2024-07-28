@@ -24,24 +24,28 @@ class NoteViewModel @Inject constructor(
     private val privateNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
     val publicNoteList: StateFlow<MutableList<Note>> get() = privateNoteList
 
-        init {
-            viewModelScope.launch {
-                fetchNotes()
-            }
+    init {
+        viewModelScope.launch {
+            fetchNotes()
         }
-
+    }
 
     fun sayHello(): String {
         return repo.sayHello().uppercase()
     }
 
-    suspend fun updateSelectedNoteContent(newChar: String, noteId: Int? = 0, isPinned: Boolean, isLiked:Boolean) {
+    suspend fun updateSelectedNoteContent(
+        newChar: String,
+        noteId: Int? = 0,
+        isPinned: Boolean,
+        isLiked: Boolean
+    ) {
         privateNote.value.isPinned = isPinned
         privateNote.value.content = newChar
         if (noteId != null) {
             privateNote.value.id = noteId
         }
-        privateNote.value.isLiked=isLiked
+        privateNote.value.isLiked = isLiked
         privateNote.value.time = getCurrentTime()
         repo.updateNote(privateNote.value)
     }
@@ -54,7 +58,11 @@ class NoteViewModel @Inject constructor(
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(note)
         } else {
-            updateSelectedNoteContent(note.content, isPinned = note.isPinned, isLiked=note.isLiked)
+            updateSelectedNoteContent(
+                note.content,
+                isPinned = note.isPinned,
+                isLiked = note.isLiked
+            )
         }
         fetchNotes()
     }
@@ -70,7 +78,7 @@ class NoteViewModel @Inject constructor(
 
     suspend fun setTrash(note: Note) {
         note.isInTrash = true
-        note.isLiked=false
+        note.isLiked = false
         repo.setTrash(note)
         repo.insertSingleNoteIntoRecycleBin(note)
         fetchNotes()
@@ -81,7 +89,10 @@ class NoteViewModel @Inject constructor(
         fetchNotes()
     }
 
-    suspend fun fetchTrashedNotes(): Flow<MutableList<Note>> {
+    suspend fun getSortedNotes(sortType: String, isAscending: Boolean) = repo.getSortedNotes(sortType,isAscending)
+
+
+    fun fetchTrashedNotes(): Flow<MutableList<Note>> {
         val noteList = flow {
             val notes = repo.fetchTrashedNotes()
             if (notes.isNotEmpty()) {
