@@ -31,6 +31,7 @@ import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.ui.navigation.Screen
+import com.itzik.mynotes.project.ui.semantics.EmptyStateMessage
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -58,7 +59,7 @@ fun DeletedNotesScreen(
             .background(Color.White)
 
     ) {
-        val (returnIcon,title,trashBtn, lazyColumn) = createRefs()
+        val (returnIcon,title,trashBtn,emptyStateMessage, lazyColumn) = createRefs()
 
         IconButton(
             modifier = Modifier
@@ -113,6 +114,17 @@ fun DeletedNotesScreen(
                 )
             }
 
+        if (noteList.isEmpty()) {
+            EmptyStateMessage(
+                screenDescription="Deleted",
+                modifier = Modifier.constrainAs(emptyStateMessage) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(parent.bottom)
+                top.linkTo(parent.top)
+            }
+            )
+        }
 
             LazyColumn(
                 modifier = Modifier

@@ -60,7 +60,8 @@ class NoteViewModel @Inject constructor(
     }
 
     private suspend fun fetchNotes() {
-        privateNoteList.value = repo.fetchNotes()
+        val notes = repo.fetchNotes()
+        privateNoteList.value = notes.toMutableList()
     }
 
     fun setNoteList(notes: MutableList<Note>) {
@@ -72,6 +73,11 @@ class NoteViewModel @Inject constructor(
         note.isLiked=false
         repo.setTrash(note)
         repo.insertSingleNoteIntoRecycleBin(note)
+        fetchNotes()
+    }
+
+    fun emptyTrashBin() = viewModelScope.launch {
+        repo.emptyTrashBin()
         fetchNotes()
     }
 
@@ -95,10 +101,6 @@ class NoteViewModel @Inject constructor(
         return noteList
     }
 
-    fun emptyTrashBin() = viewModelScope.launch {
-        repo.emptyTrashBin()
-        fetchNotes()
-    }
 
     fun toggleLikedButton(note: Note) = viewModelScope.launch {
         val updatedNote = note.copy(isLiked = !note.isLiked)

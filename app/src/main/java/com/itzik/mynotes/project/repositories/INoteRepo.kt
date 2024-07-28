@@ -22,7 +22,6 @@ interface INoteRepo {
     suspend fun fetchTrashedNotes(): MutableList<Note>
     suspend fun emptyTrashBin()
     suspend fun fetchLikedNotes():MutableList<Note>
-    suspend fun fetchPinnedNotes():MutableList<Note>
 
 
 

@@ -28,7 +28,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat
@@ -47,6 +45,7 @@ import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.ui.navigation.Screen
+import com.itzik.mynotes.project.ui.semantics.EmptyStateMessage
 import com.itzik.mynotes.project.ui.semantics.SortDropDownMenu
 import com.itzik.mynotes.project.utils.convertLatLangToLocation
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
@@ -145,7 +144,7 @@ fun HomeScreen(
                 Icon(imageVector = Icons.Default.Sort, contentDescription = null)
             }
             SortDropDownMenu(
-                isExpanded= isExpanded,
+                isExpanded = isExpanded,
                 modifier = Modifier.wrapContentSize(),
                 coroutineScope = coroutineScope,
                 noteViewModel = noteViewModel,
@@ -156,14 +155,12 @@ fun HomeScreen(
         }
 
         if (noteList.isEmpty()) {
-            Text(
-                modifier = Modifier.constrainAs(emptyStateMessage) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                    top.linkTo(parent.top)
-                }, fontSize = 40.sp, color = Color.Gray, text = "No notes"
-            )
+            EmptyStateMessage(modifier = Modifier.constrainAs(emptyStateMessage) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(parent.bottom)
+                top.linkTo(parent.top)
+            })
         }
 
         LazyColumn(modifier = Modifier
@@ -171,7 +168,8 @@ fun HomeScreen(
                 top.linkTo(title.bottom, margin = 16.dp)
                 bottom.linkTo(parent.bottom)
                 height = Dimension.fillToConstraints
-            }.fillMaxWidth()) {
+            }
+            .fillMaxWidth()) {
             items(noteList) { noteItem ->
                 NoteListItem(isInHomeScreen = true,
                     noteViewModel = noteViewModel,

@@ -20,7 +20,6 @@ interface NoteDao {
     suspend fun insertSingleNoteIntoRecycleBin(note: Note)
     @Update
     suspend fun setTrash(note: Note)
-
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)
     @Query("SELECT *FROM $NOTE_TABLE WHERE isInTrash=1")
@@ -29,10 +28,6 @@ interface NoteDao {
     suspend fun emptyTrashBin()
     @Update
     suspend fun updateNote(note: Note)
-
-    @Query("SELECT *FROM $NOTE_TABLE WHERE isPinned=1")
-    suspend fun fetchPinnedNotes(): MutableList<Note>
-
     @Query("SELECT *FROM $NOTE_TABLE WHERE isLiked=1")
     suspend fun fetchLikedNotes(): MutableList<Note>
 }
