@@ -10,21 +10,19 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.NoteAlt
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -144,27 +142,21 @@ fun HomeScreen(
         ) {
             Icon(imageVector = Icons.Default.Sort, contentDescription = null)
         }
-        if (isExpanded) {
-            Column(
-                modifier = Modifier
-                    .constrainAs(sortDropDown) {
-                        top.linkTo(sortOptionIcon.bottom)
-                        end.linkTo(parent.end)
-                    }
-                    .background(Color.Gray)
-                    .width(150.dp)
-                    .height(100.dp)
-                    .padding(8.dp)
-            ) {
-                SortDropDownMenu(
-                    isExpandedParam = isExpanded,
-                    modifier = Modifier.fillMaxSize(),
-                    coroutineScope = coroutineScope,
-                    navController = navController,
-                    noteViewModel = noteViewModel
-                )
+
+        SortDropDownMenu(
+            isExpandedParam = isExpanded,
+            modifier = Modifier
+                .constrainAs(sortDropDown) {
+                    top.linkTo(sortOptionIcon.bottom)
+                    end.linkTo(parent.end)
+                }
+                .wrapContentSize(),
+            coroutineScope = coroutineScope,
+            noteViewModel = noteViewModel,
+            onDismissRequest = {
+                isExpanded = false
             }
-        }
+        )
 
         if (noteList.isEmpty()) {
             Text(
@@ -226,7 +218,7 @@ fun HomeScreen(
                 navController.navigate(Screen.NoteScreen.route)
             }) {
             Icon(
-                Icons.Filled.Add, null, tint = Color.White
+                Icons.Outlined.NoteAlt, null, tint = Color.White
             )
         }
 
