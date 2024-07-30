@@ -119,6 +119,9 @@ fun LikedNotesScreen(
                     },
                     updatedList = { updatedNotes ->
                         noteViewModel.setNoteList(updatedNotes)
+                    },
+                    isOptionOpenMenu = {
+
                     }
                 )
             }

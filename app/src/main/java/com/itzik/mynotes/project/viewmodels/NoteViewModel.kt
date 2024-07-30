@@ -119,4 +119,10 @@ class NoteViewModel @Inject constructor(
         repo.updateNote(updatedNote)
         fetchNotes()
     }
+
+     suspend fun togglePin(note: Note) {
+         val updatedNote = note.copy(isPinned = !note.isPinned)
+         repo.updateNote(updatedNote)
+         fetchNotes()
+    }
 }

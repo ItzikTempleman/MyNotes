@@ -147,6 +147,9 @@ fun DeletedNotesScreen(
                         },
                         updatedList = {
                             noteList = it
+                        },
+                        isOptionOpenMenu = {
+
                         }
                     )
                 }

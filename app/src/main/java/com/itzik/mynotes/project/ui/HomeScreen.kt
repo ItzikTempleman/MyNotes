@@ -44,6 +44,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.R
+import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.ui.semantics.EmptyStateMessage
 import com.itzik.mynotes.project.ui.semantics.SortDropDownMenu
@@ -80,6 +81,13 @@ fun HomeScreen(
         return noteViewModel.sayHello()
     }
 
+    var note by remember {
+        mutableStateOf(
+            Note(
+                content = ""
+            )
+        )
+    }
     var sortType by remember {
         mutableStateOf("")
     }
@@ -95,6 +103,10 @@ fun HomeScreen(
     }
     var isExpanded by remember { mutableStateOf(false) }
     val noteList by noteViewModel.publicNoteList.collectAsState()
+
+    var isOptionsBarOpened by remember {
+        mutableStateOf(false)
+    }
 
     val launchMultiplePermissions =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) {
@@ -116,7 +128,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color.White),
     ) {
-        val (title, sortOptionIcon, emptyStateMessage, noteLazyColumn, locationButton, newNoteBtn, progressBar) = createRefs()
+        val (title, sortOptionIcon, emptyStateMessage, noteLazyColumn, locationButton, newNoteBtn, progressBar, optionScreen) = createRefs()
 
         Icon(
             imageVector = Icons.Outlined.Home,
@@ -179,6 +191,7 @@ fun HomeScreen(
             }
             .fillMaxWidth()) {
             items(noteList) { noteItem ->
+                note= noteItem
                 NoteListItem(isInHomeScreen = true,
                     noteViewModel = noteViewModel,
                     coroutineScope = coroutineScope,
@@ -200,7 +213,10 @@ fun HomeScreen(
                     },
                     updatedList = { updatedNotes ->
                         noteViewModel.setNoteList(updatedNotes)
-                    })
+                    }, isOptionOpenMenu = {
+                        isOptionsBarOpened = it.value
+                    }
+                )
             }
         }
 
@@ -266,6 +282,20 @@ fun HomeScreen(
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)
             })
+        }
+
+        if (isOptionsBarOpened) {
+            NoteOptionsLayout(
+                modifier = Modifier
+                    .constrainAs(optionScreen) {
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .fillMaxWidth(),
+                noteViewModel = noteViewModel,
+                coroutineScope = coroutineScope,
+                navController = navController,
+                note =note
+            )
         }
     }
 }
