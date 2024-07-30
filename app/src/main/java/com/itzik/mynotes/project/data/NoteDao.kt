@@ -32,14 +32,11 @@ interface NoteDao {
     suspend fun fetchLikedNotes(): MutableList<Note>
 
 
-    @Query("""
-        SELECT * FROM $NOTE_TABLE
-        ORDER BY
-        CASE WHEN :sortType = 'time' AND :isAscending = 1 THEN time END ASC,
-        CASE WHEN :sortType = 'time' AND :isAscending = 0 THEN time END DESC,
-        CASE WHEN :sortType = 'content' AND :isAscending = 1 THEN content END ASC,
-        CASE WHEN :sortType = 'content' AND :isAscending = 0 THEN content END DESC
-    """)
-    suspend fun getSortedNotes(sortType: String, isAscending: Boolean): MutableList<Note>
+    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrash=0 ORDER BY content ASC")
+    suspend fun fetchNotesSortedAlphabetically(): MutableList<Note>
+
+    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrash=0 ORDER BY time DESC")
+    suspend fun fetchNotesSortedByDateModified(): MutableList<Note>
+
 }
 

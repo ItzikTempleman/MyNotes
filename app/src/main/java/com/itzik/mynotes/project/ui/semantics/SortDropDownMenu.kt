@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun SortDropDownMenu(
-    updatedSortedList: (String, Int)->Unit,
+    updatedSortedList: (String) -> Unit,
     modifier: Modifier,
     coroutineScope: CoroutineScope,
     noteViewModel: NoteViewModel,
@@ -31,17 +31,18 @@ fun SortDropDownMenu(
         expanded = isExpanded,
         onDismissRequest = onDismissRequest
     ) {
-        sortOptions.forEach { option ->
+        sortOptions.forEach {
             DropdownMenuItem(
                 onClick = {
                     coroutineScope.launch {
-
+                        noteViewModel.getSortedNotes(it)
+                        updatedSortedList(it)
                     }
                     onDismissRequest()
                 }
             ) {
-                    Text(text = option)
-                }
+                Text(text = it)
             }
         }
     }
+}

@@ -22,7 +22,7 @@ interface INoteRepo {
     suspend fun fetchTrashedNotes(): MutableList<Note>
     suspend fun emptyTrashBin()
     suspend fun fetchLikedNotes():MutableList<Note>
-    suspend fun getSortedNotes(sortType: String, isAscending: Boolean): MutableList<Note>
+    suspend fun getSortedNotes(sortType: String): MutableList<Note>
 
     fun sayHello(): String
 

@@ -11,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,8 +20,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardDoubleArrowDown
-import androidx.compose.material.icons.filled.KeyboardDoubleArrowUp
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material.icons.outlined.Home
@@ -37,7 +34,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -83,8 +79,9 @@ fun HomeScreen(
     fun getSayHelloText(): String {
         return noteViewModel.sayHello()
     }
-    var isAscending by remember {
-        mutableStateOf(false)
+
+    var sortType by remember {
+        mutableStateOf("")
     }
     var isLoadingLocation by remember {
         mutableStateOf(false)
@@ -134,6 +131,7 @@ fun HomeScreen(
                     end.linkTo(parent.end)
                 }
         )
+
         Box(
             modifier = Modifier
                 .constrainAs(sortOptionIcon) {
@@ -142,30 +140,12 @@ fun HomeScreen(
                 }
                 .padding(8.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+            IconButton(
+                onClick = {
+                    isExpanded = !isExpanded
+                }
             ) {
-                IconButton(
-                    onClick = {
-                        isAscending = !isAscending
-                        coroutineScope.launch {
-                            //noteViewModel.getSortedNotes()
-                        }
-                    }
-                ) {
-                    Icon(
-                        imageVector = if (isAscending) Icons.Default.KeyboardDoubleArrowUp else Icons.Default.KeyboardDoubleArrowDown,
-                        contentDescription = null
-                    )
-                }
-
-                IconButton(
-                    onClick = {
-                        isExpanded = !isExpanded
-                    }
-                ) {
-                    Icon(imageVector = Icons.Default.Sort, contentDescription = null)
-                }
+                Icon(imageVector = Icons.Default.Sort, contentDescription = null)
             }
 
             SortDropDownMenu(
@@ -176,8 +156,8 @@ fun HomeScreen(
                 onDismissRequest = {
                     isExpanded = false
                 },
-                updatedSortedList = {timeStamp, content->
-
+                updatedSortedList = {
+                    sortType = it
                 }
             )
         }
@@ -278,7 +258,6 @@ fun HomeScreen(
                 )
             )
         }
-
 
         if (isLoadingLocation) {
             CircularProgressIndicator(modifier = Modifier.constrainAs(progressBar) {

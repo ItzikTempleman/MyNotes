@@ -42,9 +42,7 @@ class NoteViewModel @Inject constructor(
     ) {
         privateNote.value.isPinned = isPinned
         privateNote.value.content = newChar
-        if (noteId != null) {
-            privateNote.value.id = noteId
-        }
+        if (noteId != null) { privateNote.value.id = noteId }
         privateNote.value.isLiked = isLiked
         privateNote.value.time = getCurrentTime()
         repo.updateNote(privateNote.value)
@@ -67,7 +65,7 @@ class NoteViewModel @Inject constructor(
         fetchNotes()
     }
 
-    private suspend fun fetchNotes() {
+     suspend fun fetchNotes() {
         val notes = repo.fetchNotes()
         privateNoteList.value = notes.toMutableList()
     }
@@ -89,7 +87,10 @@ class NoteViewModel @Inject constructor(
         fetchNotes()
     }
 
-    suspend fun getSortedNotes(sortType: String, isAscending: Boolean) = repo.getSortedNotes(sortType,isAscending)
+    suspend fun getSortedNotes(sortType: String) {
+        val sortedNotes = repo.getSortedNotes(sortType)
+        privateNoteList.value = sortedNotes.toMutableList()
+    }
 
 
     fun fetchTrashedNotes(): Flow<MutableList<Note>> {
