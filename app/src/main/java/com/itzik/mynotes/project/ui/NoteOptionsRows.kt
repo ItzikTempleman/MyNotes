@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.project.model.Note
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 
 sealed class NoteOptionsRows(
     val title: String,
+    val modifier: Modifier=Modifier,
     var onClick: (noteViewModel: NoteViewModel, coroutineScope: CoroutineScope, navController: NavHostController) -> Unit,
     val icon: ImageVector,
     var note: Note? = null,
@@ -56,7 +58,6 @@ sealed class NoteOptionsRows(
         onClick = { noteViewModel, coroutineScope, _->
             coroutineScope.launch {
                 note?.let { noteViewModel.togglePin(it) }
-
             }
         },
         icon = Icons.Default.PushPin,

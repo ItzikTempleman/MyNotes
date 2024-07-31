@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -55,12 +56,15 @@ fun NoteOptionSectionItemScreen(
         ) {
 
             Icon(
-                modifier = Modifier
+                modifier =
+                if(noteOptionsRows.title=="Pin note") Modifier.padding(6.dp).size(36.dp).rotate(45f)  else  Modifier
                     .padding(6.dp)
                     .size(36.dp),
                 imageVector = noteOptionsRows.icon, contentDescription = null, tint = if(noteOptionsRows.title=="Star note") colorResource(
-                    id = R.color.light_yellow) else if (noteOptionsRows.title=="Pin note") Color.Red
-                    else Color.Gray
+                    id = R.color.light_yellow) else if (noteOptionsRows.title=="Pin note") colorResource(
+                    id = R.color.light_deep_purple
+                )
+                    else colorResource(id = R.color.deep_blue)
             )
 
             Text(
@@ -89,8 +93,6 @@ fun NoteOptionsLayout(
         NoteOptionsRows.DeleterNote.apply { this.note = note },
         NoteOptionsRows.StarNote.apply { this.note = note }
     )
-
-
         Box(
             modifier = modifier
                 .fillMaxWidth()
