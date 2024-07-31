@@ -4,7 +4,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.project.model.Note
@@ -32,7 +31,7 @@ sealed class NoteOptionsRows(
             note?.let { noteViewModel.toggleLikedButton(it) }
 
         },
-        icon = if (isStarred) Icons.Default.Star else Icons.Default.StarOutline,
+        icon =  Icons.Default.Star,
 
     )
 

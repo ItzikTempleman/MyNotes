@@ -3,8 +3,10 @@ package com.itzik.mynotes.project.ui
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -18,10 +20,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -105,52 +109,21 @@ fun NoteListItem(
                 Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
             }
 
-//            IconButton(
-//                modifier = Modifier
-//                    .constrainAs(likedNoteBtn) {
-//                        end.linkTo(deleteNote.start)
-//                        top.linkTo(parent.top)
-//                        bottom.linkTo(parent.bottom)
-//                    },
-//                onClick = {
-//                    noteViewModel.toggleLikedButton(note)
-//                }
-//            ) {
-//                Icon(
-//                    modifier = Modifier.size(36.dp),
-//                    imageVector = if (note.isLiked) Icons.Default.Star else Icons.Outlined.StarOutline,
-//                    contentDescription = null,
-//                    tint = colorResource(
-//                        id = R.color.light_yellow
-//                    )
-//                )
-//            }
-//
-//            IconButton(
-//                modifier = Modifier
-//                    .constrainAs(
-//                        deleteNote
-//                    ) {
-//                        end.linkTo(parent.end)
-//                        top.linkTo(parent.top)
-//                        bottom.linkTo(parent.bottom)
-//                    }
-//                    .padding(4.dp),
-//                onClick = {
-//                    coroutineScope.launch {
-//                        noteViewModel.setTrash(note)
-//                        noteViewModel.publicNoteList.collect {
-//                            updatedList(it)
-//                        }
-//                    }
-//                }
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Default.Cancel,
-//                    contentDescription = null,
-//                    tint = Color.LightGray
-//                )
-//            }
+            if (note.isLiked) {
+                Icon(
+                    modifier = Modifier
+                        .constrainAs(likedNoteBtn) {
+                            end.linkTo(optionIcon.start)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                        }.size(36.dp),
+                    imageVector =  Icons.Default.Star,
+                    contentDescription = null,
+                    tint = colorResource(
+                        id = R.color.light_yellow
+                    )
+                )
+            }
         }
     }
 }
