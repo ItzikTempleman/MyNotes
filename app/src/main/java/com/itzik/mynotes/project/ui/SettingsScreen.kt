@@ -51,15 +51,15 @@ fun SettingsScreen(
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
                 }
-                .padding(start = 4.dp, top = 16.dp)
-                .size(26.dp),
+                .padding(8.dp)
+                .size(32.dp),
             onClick = {
                 navController.navigate(Screen.Home.route)
             }
 
         ) {
             Icon(
-                tint = colorResource(id = R.color.darker_blue),
+                tint = colorResource(id = R.color.blue_green),
                 imageVector = Icons.Default.ArrowBackIosNew,
                 contentDescription = null
             )
@@ -68,11 +68,10 @@ fun SettingsScreen(
         Icon(
             imageVector = Icons.Outlined.Settings,
             contentDescription = null,
-            tint = colorResource(id = R.color.darker_blue),
-            modifier = Modifier.padding( top = 20.dp).size(60.dp).constrainAs(title) {
+            tint = colorResource(id = R.color.blue_green),
+            modifier = Modifier.padding( 8.dp).size(32.dp).constrainAs(title) {
                 top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
+                start.linkTo(returnIcon.end)
             }
         )
 

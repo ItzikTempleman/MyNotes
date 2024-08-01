@@ -58,7 +58,6 @@ fun LikedNotesScreen(
             .fillMaxSize()
 
     ) {
-
         val (title, emptyStateMessage, likedNotesLazyColumn) = createRefs()
 
         Icon(
@@ -66,10 +65,9 @@ fun LikedNotesScreen(
                 .constrainAs(title) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
-                    end.linkTo(parent.end)
                 }
-                .padding(top = 20.dp)
-                .size(60.dp),
+                .padding(8.dp)
+                .size(32.dp),
             imageVector = Icons.Outlined.StarBorder,
             contentDescription = null,
             tint = colorResource(id = R.color.light_yellow),
@@ -122,7 +120,8 @@ fun LikedNotesScreen(
                     },
                     isOptionOpenMenu = {
 
-                    }
+                    },
+                    isSelected = false
                 )
             }
         }

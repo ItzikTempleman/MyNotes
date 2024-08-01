@@ -13,6 +13,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,11 +39,19 @@ fun NoteListItem(
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
     updatedList: (MutableList<Note>) -> Unit,
-    isOptionOpenMenu: (MutableState<Boolean>) -> Unit
+    isOptionOpenMenu: (MutableState<Boolean>) -> Unit,
+    isSelected: Boolean
 ) {
+
     var isOptionVisible by remember {
-        mutableStateOf(false)
+        mutableStateOf(isSelected)
     }
+
+    LaunchedEffect(isSelected) {
+        isOptionVisible = isSelected
+    }
+
+
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
@@ -116,7 +125,7 @@ fun NoteListItem(
                             end.linkTo(optionIcon.start)
                             top.linkTo(parent.top)
                             bottom.linkTo(parent.bottom)
-                        }.size(36.dp),
+                        }.size(20.dp),
                     imageVector =  Icons.Default.Star,
                     contentDescription = null,
                     tint = colorResource(

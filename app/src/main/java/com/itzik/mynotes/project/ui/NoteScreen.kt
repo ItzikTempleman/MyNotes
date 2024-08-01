@@ -67,8 +67,8 @@ fun NoteScreen(
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
                 }
-                .padding(start = 4.dp, top = 16.dp)
-                .size(26.dp),
+                .padding(8.dp)
+                .size(32.dp),
             onClick = {
                 if (text.isNotEmpty()) {
                     coroutineScope.launch {
@@ -80,25 +80,24 @@ fun NoteScreen(
                     popUpTo(Screen.Home.route) { inclusive = true }
                 }
             }
-
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBackIosNew,
-                contentDescription = null
+                contentDescription = null,
+                tint = colorResource(id = R.color.blue_green)
             )
         }
 
         Icon(
             imageVector = Icons.Outlined.NoteAlt,
             contentDescription = null,
-            tint = colorResource(id = R.color.deep_blue),
+            tint = colorResource(id = R.color.blue_green),
             modifier = Modifier
-                .padding(top = 20.dp)
-                .size(60.dp)
+                .padding(8.dp)
+                .size(32.dp)
                 .constrainAs(title) {
                     top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
+                    start.linkTo(returnIcon.end)
                 }
         )
 
@@ -108,7 +107,6 @@ fun NoteScreen(
                 text = it
                 coroutineScope.launch {
                     noteViewModel.updateSelectedNoteContent(it, noteId, note.isPinned, note.isLiked)
-
                 }
             },
             colors = TextFieldDefaults.colors(

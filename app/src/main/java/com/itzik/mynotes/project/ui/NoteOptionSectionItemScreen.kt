@@ -1,9 +1,7 @@
 package com.itzik.mynotes.project.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,11 +13,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,9 +29,11 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
@@ -46,7 +49,8 @@ sealed class NoteOptionsRows(
     val updatedList: ((MutableList<Note>) -> Unit)? = null,
     val isStarred: Boolean = false,
     val isPinned: Boolean = false,
-) {
+
+    ) {
     class StarNote(note: Note, updatedList: ((MutableList<Note>) -> Unit)? = null) :
         NoteOptionsRows(
             title = "Star note",
@@ -87,37 +91,101 @@ fun NoteOptionsLayout(
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     modifier: Modifier,
-    note: Note
+    note: Note,
+    cancelOptionsFunction: ()->Unit
 ) {
     val optionItems = listOf(
         NoteOptionsRows.PinNote(note),
         NoteOptionsRows.DeletedNote(note),
         NoteOptionsRows.StarNote(note)
     )
-    Box(modifier = modifier
-        .fillMaxWidth()
-        .height(140.dp)
-        .background(Color.White)) {
-        LazyRow(
+
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(220.dp),
+        colors = CardDefaults.cardColors(
+            colorResource(id = R.color.very_light_gray)
+        )
+    ) {
+        ConstraintLayout(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 2.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Absolute.SpaceBetween
+                .fillMaxSize(),
         ) {
-            items(optionItems) { listItem ->
-                NoteOptionSectionItemScreen(
-                    modifier = modifier,
-                    noteViewModel = noteViewModel,
-                    coroutineScope = coroutineScope,
-                    navController = navController,
-                    noteOptionsRows = listItem,
-                    note = note
-                )
+            val (title, noteName, cancelOptions, lazyRow) = createRefs()
+
+            Text(
+                modifier = Modifier
+                    .padding(
+                        start = 20.dp, top = 12.dp
+                    )
+                    .constrainAs(title) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    },
+                text = "Selected note ",
+                fontSize = 24.sp,
+                color = Color.Gray,
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(
+                modifier = Modifier
+                    .padding(
+                        start = 28.dp, top = 4.dp
+                    )
+                    .constrainAs(noteName) {
+                        top.linkTo(title.bottom)
+                        start.linkTo(parent.start)
+                    },
+                text = note.content,
+                fontSize = 20.sp,
+                color = Color.DarkGray,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.SansSerif
+            )
+
+            IconButton(
+                modifier = Modifier
+                    .padding(
+                        12.dp
+                    )
+                    .constrainAs(cancelOptions) {
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                    },
+                onClick = {
+                    cancelOptionsFunction()
+
+                }
+            ) {
+                Icon(imageVector = Icons.Default.Cancel, contentDescription = null)
+            }
+            LazyRow(
+                modifier = Modifier
+                    .constrainAs(lazyRow) {
+                        top.linkTo(noteName.bottom)
+                    }
+                    .fillMaxWidth()
+                    .padding(horizontal = 2.dp, vertical = 4.dp),
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.Absolute.SpaceBetween
+            ) {
+                items(optionItems) { listItem ->
+                    NoteOptionSectionItemScreen(
+                        modifier = modifier,
+                        noteViewModel = noteViewModel,
+                        coroutineScope = coroutineScope,
+                        navController = navController,
+                        noteOptionsRows = listItem,
+                        note = note
+                    )
+                }
             }
         }
     }
 }
+
 
 @Composable
 fun NoteOptionSectionItemScreen(
@@ -140,7 +208,10 @@ fun NoteOptionSectionItemScreen(
                     coroutineScope,
                     navController
                 )
-            }) {
+            }, colors = CardDefaults.cardColors(
+            Color.White
+        )
+    ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,

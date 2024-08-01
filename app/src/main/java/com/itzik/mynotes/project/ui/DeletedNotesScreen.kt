@@ -12,8 +12,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.Cancel
-import androidx.compose.material.icons.outlined.DeleteForever
+import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,7 +59,7 @@ fun DeletedNotesScreen(
             .background(Color.White)
 
     ) {
-        val (returnIcon,title,trashBtn,emptyStateMessage, lazyColumn) = createRefs()
+        val (returnIcon, title, trashBtn, emptyStateMessage, lazyColumn) = createRefs()
 
         IconButton(
             modifier = Modifier
@@ -67,92 +67,96 @@ fun DeletedNotesScreen(
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
                 }
-                .padding(start = 4.dp, top = 16.dp)
-                .size(26.dp),
+                .padding(8.dp),
             onClick = {
-                    navController.navigate(Screen.Home.route)
+                navController.navigate(Screen.Home.route)
             }
 
         ) {
             Icon(
+                modifier = Modifier.size(32.dp),
                 imageVector = Icons.Default.ArrowBackIosNew,
-                contentDescription = null
+                contentDescription = null,
+                tint = colorResource(id = R.color.blue_green)
             )
         }
 
-    Icon(
-            imageVector = Icons.Outlined.DeleteForever,
+
+        Icon(
+            imageVector = Icons.Outlined.DeleteSweep,
+            tint = colorResource(id = R.color.blue_green),
             contentDescription = null,
-            tint = colorResource(id = R.color.navy_blue),
-            modifier = Modifier.padding(top = 20.dp).size(60.dp).constrainAs(title) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            modifier = Modifier
+                .padding(8.dp).size(32.dp)
+                .constrainAs(title) {
+                    top.linkTo(parent.top)
+                    start.linkTo(returnIcon.end)
+                }
         )
 
 
         IconButton(
-                modifier = Modifier
-                    .constrainAs(trashBtn) {
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                    }
-                    .padding(vertical = 8.dp, horizontal = 20.dp),
-                onClick = {
-                    coroutineScope.launch {
-                        noteViewModel.emptyTrashBin()
-                    }
-                    noteList = emptyList<Note>().toMutableList()
+            modifier = Modifier
+                .constrainAs(trashBtn) {
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
                 }
-            ) {
-                Icon(
-                    modifier = Modifier.size(36.dp),
-                    tint = colorResource(id = R.color.navy_blue),
-                    imageVector = Icons.Default.Cancel,
-                    contentDescription = null
-                )
+                .padding(8.dp),
+            onClick = {
+                coroutineScope.launch {
+                    noteViewModel.emptyTrashBin()
+                }
+                noteList = emptyList<Note>().toMutableList()
             }
-
-        if (noteList.isEmpty()) {
-            EmptyStateMessage(
-                screenDescription="Deleted",
-                modifier = Modifier.constrainAs(emptyStateMessage) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)
-                top.linkTo(parent.top)
-            }
+        ) {
+            Icon(
+                modifier = Modifier.size(32.dp),
+                tint = colorResource(id = R.color.blue_green),
+                imageVector = Icons.Default.DeleteForever,
+                contentDescription = null
             )
         }
 
-            LazyColumn(
-                modifier = Modifier
-                    .constrainAs(lazyColumn) {
-                        top.linkTo(title.bottom, margin = 16.dp)
-                        bottom.linkTo(parent.bottom)
-                        height = Dimension.fillToConstraints
-                    }
-                    .fillMaxWidth()
-                    .background(Color.White),
-            ) {
-                items(noteList) { noteItem ->
-                    NoteListItem(
-                        isInHomeScreen = false,
-                        noteViewModel = noteViewModel,
-                        coroutineScope = coroutineScope,
-                        note = noteItem,
-                        modifier = Modifier.clickable {
-                            navController.navigate(Screen.NoteScreen.route)
-                        },
-                        updatedList = {
-                            noteList = it
-                        },
-                        isOptionOpenMenu = {
-
-                        }
-                    )
+        if (noteList.isEmpty()) {
+            EmptyStateMessage(
+                screenDescription = "Deleted",
+                modifier = Modifier.constrainAs(emptyStateMessage) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    top.linkTo(parent.top)
                 }
+            )
+        }
+
+        LazyColumn(
+            modifier = Modifier
+                .constrainAs(lazyColumn) {
+                    top.linkTo(title.bottom, margin = 16.dp)
+                    bottom.linkTo(parent.bottom)
+                    height = Dimension.fillToConstraints
+                }
+                .fillMaxWidth()
+                .background(Color.White),
+        ) {
+            items(noteList) { noteItem ->
+                NoteListItem(
+                    isInHomeScreen = false,
+                    noteViewModel = noteViewModel,
+                    coroutineScope = coroutineScope,
+                    note = noteItem,
+                    modifier = Modifier.clickable {
+                        navController.navigate(Screen.NoteScreen.route)
+                    },
+                    updatedList = {
+                        noteList = it
+                    },
+                    isOptionOpenMenu = {
+
+                    },
+                    isSelected = false
+                )
+            }
         }
     }
 }
