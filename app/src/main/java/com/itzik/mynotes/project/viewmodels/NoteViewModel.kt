@@ -65,7 +65,7 @@ class NoteViewModel @Inject constructor(
         fetchNotes()
     }
 
-     suspend fun fetchNotes() {
+     private suspend fun fetchNotes() {
         val notes = repo.fetchNotes()
         privateNoteList.value = notes.toMutableList()
     }

@@ -81,13 +81,7 @@ fun HomeScreen(
         return noteViewModel.sayHello()
     }
 
-    var note by remember {
-        mutableStateOf(
-            Note(
-                content = ""
-            )
-        )
-    }
+
     var sortType by remember {
         mutableStateOf("")
     }
@@ -106,6 +100,10 @@ fun HomeScreen(
 
     var isOptionsBarOpened by remember {
         mutableStateOf(false)
+    }
+
+    var selectedNote by remember {
+        mutableStateOf<Note?>(null)
     }
 
     val launchMultiplePermissions =
@@ -191,8 +189,8 @@ fun HomeScreen(
             }
             .fillMaxWidth()) {
             items(noteList) { noteItem ->
-                note= noteItem
-                NoteListItem(isInHomeScreen = true,
+                NoteListItem(
+                    isInHomeScreen = true,
                     noteViewModel = noteViewModel,
                     coroutineScope = coroutineScope,
                     note = noteItem,
@@ -213,8 +211,11 @@ fun HomeScreen(
                     },
                     updatedList = { updatedNotes ->
                         noteViewModel.setNoteList(updatedNotes)
-                    }, isOptionOpenMenu = {
-                        isOptionsBarOpened = it.value
+                    }, isOptionOpenMenu = {isOpen->
+                        isOptionsBarOpened = isOpen.value
+                        if(isOpen.value){
+                            selectedNote=noteItem
+                        }
                     }
                 )
             }
@@ -284,7 +285,7 @@ fun HomeScreen(
             })
         }
 
-        if (isOptionsBarOpened) {
+        if (isOptionsBarOpened && selectedNote != null) {
             NoteOptionsLayout(
                 modifier = Modifier
                     .constrainAs(optionScreen) {
@@ -294,7 +295,7 @@ fun HomeScreen(
                 noteViewModel = noteViewModel,
                 coroutineScope = coroutineScope,
                 navController = navController,
-                note =note
+                note = selectedNote!!
             )
         }
     }
