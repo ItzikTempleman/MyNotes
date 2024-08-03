@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.PushPin
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -20,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
+import com.itzik.mynotes.project.ui.semantics.GenericIconButton
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 
@@ -57,7 +61,7 @@ fun NoteListItem(
             .fillMaxWidth()
             .height(50.dp)
     ) {
-        val (timeStamp, verticalDiv, content, bottomLine,likedNoteBtn, optionIcon ) = createRefs()
+        val (timeStamp, verticalDiv, content, bottomLine, pinnedNoteIcon, likedNoteIcon, optionIcon) = createRefs()
 
         Text(
             modifier = Modifier
@@ -103,36 +107,54 @@ fun NoteListItem(
 
 
         if (isInHomeScreen) {
-            IconButton(
-                modifier = Modifier
+            GenericIconButton(
+                                modifier = Modifier
                     .constrainAs(optionIcon) {
                         end.linkTo(parent.end)
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                     },
-                onClick = {
-                    isOptionVisible = !isOptionVisible
+                    onClick = {
+                                            isOptionVisible = !isOptionVisible
                     isOptionOpenMenu(mutableStateOf(isOptionVisible))
-                }
-            ) {
-                Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
-            }
+                    },
+                imageVector = Icons.Default.MoreVert,
+                colorNumber = 3
+            )
 
-            if (note.isLiked) {
-                Icon(
-                    modifier = Modifier
-                        .constrainAs(likedNoteBtn) {
-                            end.linkTo(optionIcon.start)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        }.size(20.dp),
-                    imageVector =  Icons.Default.Star,
-                    contentDescription = null,
-                    tint = colorResource(
-                        id = R.color.light_yellow
-                    )
+
+            Icon(
+                modifier = Modifier
+                    .constrainAs(likedNoteIcon) {
+                        end.linkTo(optionIcon.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .size(20.dp),
+                imageVector = if (note.isLiked) Icons.Default.Star else Icons.Outlined.StarOutline,
+                contentDescription = null,
+                tint = colorResource(
+                    id = R.color.light_yellow
                 )
-            }
+            )
+
+
+            Icon(
+                modifier = Modifier
+                    .constrainAs(pinnedNoteIcon) {
+                        end.linkTo(optionIcon.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .size(20.dp)
+                    .rotate(45f)
+                    .padding(end = 40.dp),
+                imageVector = if (note.isPinned) Icons.Default.PushPin else Icons.Outlined.PushPin,
+                contentDescription = null,
+                tint = colorResource(
+                    id = R.color.light_deep_purple
+                )
+            )
         }
     }
 }

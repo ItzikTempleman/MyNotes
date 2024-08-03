@@ -17,10 +17,11 @@ import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.PushPin
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,6 +38,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
+import com.itzik.mynotes.project.ui.semantics.GenericIconButton
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -51,17 +53,12 @@ sealed class NoteOptionsRows(
     val isPinned: Boolean = false,
 
     ) {
-    class StarNote(note: Note, updatedList: ((MutableList<Note>) -> Unit)? = null) :
+    class StarNote(note: Note, isStarred:Boolean,updatedList: ((MutableList<Note>) -> Unit)? = null) :
         NoteOptionsRows(
             title = "Star note",
             onClick = { currentNote, noteViewModel, _, _ ->
-                noteViewModel.toggleLikedButton(
-                    currentNote
-                )
-            },
-            icon = Icons.Default.Star,
-            updatedList = updatedList,
-            isStarred = note.isLiked
+                noteViewModel.toggleLikedButton(currentNote)
+            }, icon = if(isStarred) Icons.Default.Star else Icons.Outlined.StarOutline, updatedList = updatedList, isStarred = note.isLiked
         )
 
     class DeletedNote(note: Note, updatedList: ((MutableList<Note>) -> Unit)? = null) :
@@ -76,12 +73,13 @@ sealed class NoteOptionsRows(
             }, icon = Icons.Default.Delete, updatedList = updatedList
         )
 
-    class PinNote(note: Note, updatedList: ((MutableList<Note>) -> Unit)? = null) : NoteOptionsRows(
+    class PinNote(note: Note, isPinned:Boolean,updatedList: ((MutableList<Note>) -> Unit)? = null) : NoteOptionsRows(
         title = "Pin note", onClick = { currentNote, noteViewModel, coroutineScope, _ ->
             coroutineScope.launch {
                 noteViewModel.togglePin(currentNote)
+                updatedList?.invoke(noteViewModel.publicNoteList.value.toMutableList())
             }
-        }, icon = Icons.Default.PushPin, updatedList = updatedList, isPinned = note.isPinned
+        }, icon = if(isPinned) Icons.Default.PushPin else Icons.Outlined.PushPin, updatedList = updatedList, isPinned = note.isPinned
     )
 }
 
@@ -94,15 +92,25 @@ fun NoteOptionsLayout(
     note: Note,
     cancelOptionsFunction: ()->Unit
 ) {
+
     val optionItems = listOf(
-        NoteOptionsRows.PinNote(note),
+        NoteOptionsRows.PinNote(note, note.isPinned) {
+            coroutineScope.launch {
+                noteViewModel.togglePin(note)
+            }
+        },
         NoteOptionsRows.DeletedNote(note),
-        NoteOptionsRows.StarNote(note)
+        NoteOptionsRows.StarNote(note, note.isLiked) {
+            coroutineScope.launch {
+                noteViewModel.toggleLikedButton(note)
+            }
+        }
     )
 
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .padding(8.dp)
             .height(220.dp),
         colors = CardDefaults.cardColors(
             colorResource(id = R.color.very_light_gray)
@@ -145,22 +153,19 @@ fun NoteOptionsLayout(
                 fontFamily = FontFamily.SansSerif
             )
 
-            IconButton(
-                modifier = Modifier
-                    .padding(
-                        12.dp
-                    )
-                    .constrainAs(cancelOptions) {
-                        top.linkTo(parent.top)
-                        end.linkTo(parent.end)
-                    },
+            GenericIconButton(
+                modifier = Modifier.padding(12.dp)
+                .constrainAs(cancelOptions) {
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
+                },
                 onClick = {
                     cancelOptionsFunction()
+                }, imageVector = Icons.Default.Cancel,
+                colorNumber = 3
+            )
 
-                }
-            ) {
-                Icon(imageVector = Icons.Default.Cancel, contentDescription = null)
-            }
+
             LazyRow(
                 modifier = Modifier
                     .constrainAs(lazyRow) {
@@ -185,7 +190,6 @@ fun NoteOptionsLayout(
         }
     }
 }
-
 
 @Composable
 fun NoteOptionSectionItemScreen(
@@ -229,7 +233,7 @@ fun NoteOptionSectionItemScreen(
                 tint = when (noteOptionsRows.title) {
                     "Star note" -> colorResource(id = R.color.light_yellow)
                     "Pin note" -> colorResource(id = R.color.light_deep_purple)
-                    else -> colorResource(id = R.color.deep_blue)
+                    else -> colorResource(id = R.color.blue_green)
                 }
             )
             Text(
