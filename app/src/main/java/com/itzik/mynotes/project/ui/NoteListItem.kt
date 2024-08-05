@@ -154,11 +154,11 @@ fun NoteListItem(
                             top.linkTo(parent.top)
                             bottom.linkTo(parent.bottom)
                         }
-                        .padding(end = 40.dp)
+                        .padding(end = 30.dp)
                 ) {
                     Spacer(
                         modifier = Modifier
-                            .height(30.dp)
+                            .height(20.dp)
                             .constrainAs(createRef()) {
                                 top.linkTo(parent.top)
                                 start.linkTo(parent.start)
@@ -168,9 +168,8 @@ fun NoteListItem(
 
                     Icon(
                         imageVector = Icons.Default.PushPin,
-                        modifier = Modifier
-                            .rotate(45f)
-                            .size(20.dp),
+                        modifier = Modifier.size(20.dp)
+                            .rotate(45f),
                         tint = colorResource(id = R.color.light_deep_purple),
                         contentDescription = null
                     )
