@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.PushPin
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.NoteAlt
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -59,7 +61,7 @@ fun NoteScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        val (returnIcon, title, contentTF) = createRefs()
+        val (returnIcon, title, pinIcon, starIcon, contentTF) = createRefs()
 
         IconButton(
             modifier = Modifier
@@ -101,12 +103,49 @@ fun NoteScreen(
                 }
         )
 
+        if (note.isStarred) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = null,
+                tint = colorResource(id = R.color.light_yellow),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(20.dp)
+                    .constrainAs(starIcon) {
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                    }
+            )
+        }
+
+        if (note.isPinned) {
+            Icon(
+                imageVector = Icons.Default.PushPin,
+                contentDescription = null,
+                tint = colorResource(id = R.color.light_deep_purple),
+                modifier = Modifier
+                    .padding(end=38.dp, top=8.dp)
+                    .size(20.dp)
+                    .constrainAs(pinIcon) {
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                    }
+            )
+        }
+
+
+
         TextField(
             value = text,
             onValueChange = {
                 text = it
                 coroutineScope.launch {
-                    noteViewModel.updateSelectedNoteContent(it, noteId, note.isPinned, note.isStarred)
+                    noteViewModel.updateSelectedNoteContent(
+                        it,
+                        noteId,
+                        note.isPinned,
+                        note.isStarred
+                    )
                 }
             },
             colors = TextFieldDefaults.colors(

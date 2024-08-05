@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -61,6 +62,7 @@ private val permissions = arrayOf(
     Manifest.permission.ACCESS_FINE_LOCATION,
 )
 
+@OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun HomeScreen(
@@ -86,8 +88,15 @@ fun HomeScreen(
     var locationName by remember { mutableStateOf("") }
     var isExpanded by remember { mutableStateOf(false) }
     val noteList by noteViewModel.publicNoteList.collectAsState()
+    val pinnedNoteList by noteViewModel.publicPinnedNoteList.collectAsState()
     var isOptionsBarOpened by remember { mutableStateOf(false) }
     var selectedNote by remember { mutableStateOf<Note?>(null) }
+
+    val combinedList by remember(pinnedNoteList, noteList) {
+        mutableStateOf(
+            pinnedNoteList + noteList.filter { note -> !pinnedNoteList.contains(note) }
+        )
+    }
 
     val launchMultiplePermissions =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) {
@@ -125,10 +134,12 @@ fun HomeScreen(
         )
 
         GenericIconButton(
-            modifier = Modifier.constrainAs(locationButton) {
+            modifier = Modifier
+                .constrainAs(locationButton) {
                     end.linkTo(sortOptionIcon.start)
                     top.linkTo(parent.top)
-                }.padding(8.dp),
+                }
+                .padding(8.dp),
             onClick = {
                 isLoadingLocation = true
                 if (permissions.all {
@@ -223,7 +234,7 @@ fun HomeScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(noteList) { noteItem ->
+                items(combinedList, key = { "${it.id}-${it.isPinned}" }) { noteItem ->
                     NoteListItem(
                         isInHomeScreen = true,
                         noteViewModel = noteViewModel,
@@ -243,7 +254,7 @@ fun HomeScreen(
                                 )
                             }
                             navController.navigate(Screen.NoteScreen.route)
-                        },
+                        }.animateItemPlacement(),
                         updatedList = { updatedNotes ->
                             noteViewModel.setNoteList(updatedNotes)
                         },

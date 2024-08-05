@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.Note.Companion.getCurrentTime
 import com.itzik.mynotes.project.repositories.INoteRepo
+import com.itzik.mynotes.project.utils.Constants.NAX_PINNED_NOTES
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,12 +19,15 @@ class NoteViewModel @Inject constructor(
     private val repo: INoteRepo,
 ) : ViewModel() {
 
+
     private val privateNote = MutableStateFlow(Note(content = ""))
     val publicNote: StateFlow<Note> get() = privateNote
 
     private val privateNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
     val publicNoteList: StateFlow<MutableList<Note>> get() = privateNoteList
 
+    private val privatePinnedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
+    val publicPinnedNoteList: StateFlow<MutableList<Note>> get() = privateNoteList
 
     private var privatePinStateMap = MutableStateFlow(mapOf<Int, Boolean>())
     val publicPinStateMap: MutableStateFlow<Map<Int, Boolean>> get() = privatePinStateMap
@@ -118,7 +122,7 @@ class NoteViewModel @Inject constructor(
         return noteList
     }
 
-        suspend fun fetchStarredNotes(): Flow<MutableList<Note>> {
+    suspend fun fetchStarredNotes(): Flow<MutableList<Note>> {
         val noteList = flow {
             val notes = repo.fetchStarredNotes()
             if (notes.isNotEmpty()) {
@@ -130,7 +134,7 @@ class NoteViewModel @Inject constructor(
 
     suspend fun toggleStarredButton(note: Note) {
         note.isStarred = !note.isStarred
-        privateStarStateMap.value=privateStarStateMap.value.toMutableMap().apply {
+        privateStarStateMap.value = privateStarStateMap.value.toMutableMap().apply {
             put(note.id, note.isStarred)
         }
         repo.updateNote(note)
@@ -139,11 +143,22 @@ class NoteViewModel @Inject constructor(
 
     suspend fun togglePinButton(note: Note) {
         note.isPinned = !note.isPinned
-        privatePinStateMap.value=privatePinStateMap.value.toMutableMap().apply {
+        privatePinStateMap.value = privatePinStateMap.value.toMutableMap().apply {
             put(note.id, note.isPinned)
         }
+        updatePinnedNotes(note, note.isPinned)
         repo.updateNote(note)
         fetchNotes()
     }
 
+    private fun updatePinnedNotes(note: Note, isPinned: Boolean) {
+        if (isPinned) {
+            privatePinnedNoteList.value.add(note)
+            privateNoteList.value.remove(note)
+        } else {
+            privatePinnedNoteList.value.remove(note)
+            privateNoteList.value.add(note)
+        }
+        if (privatePinnedNoteList.value.size > NAX_PINNED_NOTES) return
+    }
 }
