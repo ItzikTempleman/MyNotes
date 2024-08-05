@@ -8,13 +8,13 @@ import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.utils.Converters
 
 
-@Database(entities = [User::class], version = 1, exportSchema = false )
+@Database(entities = [User::class], version = 3, exportSchema = false )
 @TypeConverters(Converters::class)
 abstract class UserDatabase:RoomDatabase() {
     abstract fun getUserDao(): UserDao
 }
 
-@Database(entities = [Note::class], version = 1, exportSchema = false )
+@Database(entities = [Note::class], version = 3, exportSchema = false )
 abstract class NoteDatabase:RoomDatabase(){
     abstract fun getNoteDao(): NoteDao
 }

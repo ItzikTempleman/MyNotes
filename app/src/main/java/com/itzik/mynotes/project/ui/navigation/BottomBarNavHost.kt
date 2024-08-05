@@ -24,9 +24,9 @@ import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.ui.BottomBarScreen
 import com.itzik.mynotes.project.ui.HomeScreen
 import com.itzik.mynotes.project.ui.LikedNotesScreen
+import com.itzik.mynotes.project.ui.NoteScreen
 import com.itzik.mynotes.project.ui.ProfileScreen
 import com.itzik.mynotes.project.ui.navigation.Graph.HOME
-import com.itzik.mynotes.project.ui.NoteScreen
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
@@ -90,6 +90,7 @@ fun BottomBarNavHost(
                 composable(route = Screen.LikedNotes.route) {
                     isNoteScreenVisible = true
                     LikedNotesScreen(
+                        modifier = Modifier.background(Color.White),
                         noteViewModel=noteViewModel,
                         userViewModel = userViewModel,
                         coroutineScope = coroutineScope,

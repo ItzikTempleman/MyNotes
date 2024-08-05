@@ -29,6 +29,7 @@ class NoteRepo @Inject constructor(
     override suspend fun fetchNotes() = noteDao.fetchNotes()
     override suspend fun setTrash(note: Note) = noteDao.setTrash(note)
     override suspend fun updateNote(note: Note) = noteDao.updateNote(note)
+
     override suspend fun insertSingleNoteIntoRecycleBin(note: Note) =
         noteDao.insertSingleNoteIntoRecycleBin(note)
 
@@ -37,7 +38,7 @@ class NoteRepo @Inject constructor(
 
     override suspend fun fetchTrashedNotes() = noteDao.fetchTrashedNotes()
     override suspend fun emptyTrashBin() = noteDao.emptyTrashBin()
-    override suspend fun fetchLikedNotes() = noteDao.fetchLikedNotes()
+    override suspend fun fetchStarredNotes() = noteDao.fetchStarredNotes()
     
     override suspend fun getSortedNotes(sortType: String): MutableList<Note> {
         return when (sortType) {

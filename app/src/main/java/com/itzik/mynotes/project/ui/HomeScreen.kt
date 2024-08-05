@@ -202,7 +202,7 @@ fun HomeScreen(
                 },
             onClick = {
                 coroutineScope.launch {
-                    noteViewModel.updateSelectedNoteContent("", isPinned = false, isLiked = false)
+                    noteViewModel.updateSelectedNoteContent("", isPinned = false, isStarred = false)
                 }
                 navController.navigate(Screen.NoteScreen.route)
             }, imageVector = Icons.Outlined.Add, colorNumber = 0
@@ -239,7 +239,7 @@ fun HomeScreen(
                                     noteItem.content,
                                     noteId,
                                     noteItem.isPinned,
-                                    noteItem.isLiked
+                                    noteItem.isStarred
                                 )
                             }
                             navController.navigate(Screen.NoteScreen.route)

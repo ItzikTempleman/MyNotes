@@ -14,22 +14,31 @@ import com.itzik.mynotes.project.utils.Constants.NOTE_TABLE
 interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun saveNote(note: Note)
+
     @Query("SELECT *FROM $NOTE_TABLE WHERE isInTrash=0")
     suspend fun fetchNotes(): MutableList<Note>
+
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSingleNoteIntoRecycleBin(note: Note)
+
     @Update
     suspend fun setTrash(note: Note)
+
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)
+
     @Query("SELECT *FROM $NOTE_TABLE WHERE isInTrash=1")
     suspend fun fetchTrashedNotes(): MutableList<Note>
+
     @Query("DELETE FROM $NOTE_TABLE WHERE isInTrash=1")
     suspend fun emptyTrashBin()
+
     @Update
     suspend fun updateNote(note: Note)
-    @Query("SELECT *FROM $NOTE_TABLE WHERE isLiked=1")
-    suspend fun fetchLikedNotes(): MutableList<Note>
+
+
+    @Query("SELECT *FROM $NOTE_TABLE WHERE isStarred=1")
+    suspend fun fetchStarredNotes(): MutableList<Note>
 
 
     @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrash=0 ORDER BY content ASC")

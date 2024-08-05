@@ -1,5 +1,6 @@
 package com.itzik.mynotes.project.ui
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -8,8 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.PushPin
-import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -17,6 +16,7 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +47,8 @@ fun NoteListItem(
     isSelected: Boolean
 ) {
 
+
+
     var isOptionVisible by remember {
         mutableStateOf(isSelected)
     }
@@ -55,6 +57,11 @@ fun NoteListItem(
         isOptionVisible = isSelected
     }
 
+    val pinStateMap by noteViewModel.publicPinStateMap.collectAsState()
+    val starStateMap by noteViewModel.publicStarStateMap.collectAsState()
+
+    val isPinned = pinStateMap[note.id] ?: false
+    val isStarred = starStateMap[note.id] ?: false
 
     ConstraintLayout(
         modifier = modifier
@@ -108,53 +115,68 @@ fun NoteListItem(
 
         if (isInHomeScreen) {
             GenericIconButton(
-                                modifier = Modifier
+                modifier = Modifier
                     .constrainAs(optionIcon) {
                         end.linkTo(parent.end)
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                     },
-                    onClick = {
-                                            isOptionVisible = !isOptionVisible
+                onClick = {
+                    isOptionVisible = !isOptionVisible
                     isOptionOpenMenu(mutableStateOf(isOptionVisible))
-                    },
+                },
                 imageVector = Icons.Default.MoreVert,
                 colorNumber = 3
             )
 
-
-            Icon(
-                modifier = Modifier
-                    .constrainAs(likedNoteIcon) {
-                        end.linkTo(optionIcon.start)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    }
-                    .size(20.dp),
-                imageVector = if (note.isLiked) Icons.Default.Star else Icons.Outlined.StarOutline,
-                contentDescription = null,
-                tint = colorResource(
-                    id = R.color.light_yellow
+            if (isStarred) {
+                Icon(
+                    modifier = Modifier
+                        .constrainAs(likedNoteIcon) {
+                            end.linkTo(optionIcon.start)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                        }
+                        .size(20.dp),
+                    imageVector = Icons.Default.Star,
+                    contentDescription = null,
+                    tint = colorResource(
+                        id = R.color.light_yellow
+                    )
                 )
-            )
+            }
 
+            if (isPinned) {
+                ConstraintLayout(
+                    modifier = Modifier
+                        .constrainAs(pinnedNoteIcon) {
+                            end.linkTo(optionIcon.start)
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                        }
+                        .padding(end = 40.dp)
+                ) {
+                    Spacer(
+                        modifier = Modifier
+                            .height(30.dp)
+                            .constrainAs(createRef()) {
+                                top.linkTo(parent.top)
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                            }
+                    )
 
-            Icon(
-                modifier = Modifier
-                    .constrainAs(pinnedNoteIcon) {
-                        end.linkTo(optionIcon.start)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    }
-                    .size(20.dp)
-                    .rotate(45f)
-                    .padding(end = 40.dp),
-                imageVector = if (note.isPinned) Icons.Default.PushPin else Icons.Outlined.PushPin,
-                contentDescription = null,
-                tint = colorResource(
-                    id = R.color.light_deep_purple
-                )
-            )
+                    Icon(
+                        imageVector = Icons.Default.PushPin,
+                        modifier = Modifier
+                            .rotate(45f)
+                            .size(20.dp),
+                        tint = colorResource(id = R.color.light_deep_purple),
+                        contentDescription = null
+                    )
+                }
+            }
+
         }
     }
 }

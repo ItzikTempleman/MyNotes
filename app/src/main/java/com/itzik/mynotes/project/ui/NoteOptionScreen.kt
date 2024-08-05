@@ -14,21 +14,17 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.PushPin
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.PushPin
-import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -43,46 +39,6 @@ import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-sealed class NoteOptionsRows(
-    val title: String,
-    val modifier: Modifier = Modifier,
-    var onClick: (note: Note, noteViewModel: NoteViewModel, coroutineScope: CoroutineScope, navController: NavHostController) -> Unit,
-    val icon: ImageVector,
-    val updatedList: ((MutableList<Note>) -> Unit)? = null,
-    val isStarred: Boolean = false,
-    val isPinned: Boolean = false,
-
-    ) {
-    class StarNote(note: Note, isStarred:Boolean,updatedList: ((MutableList<Note>) -> Unit)? = null) :
-        NoteOptionsRows(
-            title = "Star note",
-            onClick = { currentNote, noteViewModel, _, _ ->
-                noteViewModel.toggleLikedButton(currentNote)
-            }, icon = if(isStarred) Icons.Default.Star else Icons.Outlined.StarOutline, updatedList = updatedList, isStarred = note.isLiked
-        )
-
-    class DeletedNote(note: Note, updatedList: ((MutableList<Note>) -> Unit)? = null) :
-        NoteOptionsRows(
-            title = "Delete note", onClick = { currentNote, noteViewModel, coroutineScope, _ ->
-                coroutineScope.launch {
-                    noteViewModel.setTrash(currentNote)
-                    noteViewModel.publicNoteList.collect { collectedNotes ->
-                        updatedList?.invoke(collectedNotes.toMutableList())
-                    }
-                }
-            }, icon = Icons.Default.Delete, updatedList = updatedList
-        )
-
-    class PinNote(note: Note, isPinned:Boolean,updatedList: ((MutableList<Note>) -> Unit)? = null) : NoteOptionsRows(
-        title = "Pin note", onClick = { currentNote, noteViewModel, coroutineScope, _ ->
-            coroutineScope.launch {
-                noteViewModel.togglePin(currentNote)
-                updatedList?.invoke(noteViewModel.publicNoteList.value.toMutableList())
-            }
-        }, icon = if(isPinned) Icons.Default.PushPin else Icons.Outlined.PushPin, updatedList = updatedList, isPinned = note.isPinned
-    )
-}
-
 @Composable
 fun NoteOptionsLayout(
     noteViewModel: NoteViewModel,
@@ -93,16 +49,21 @@ fun NoteOptionsLayout(
     cancelOptionsFunction: ()->Unit
 ) {
 
+    val isPinned = remember { mutableStateOf(note.isPinned) }
+    val isStarred = remember { mutableStateOf(note.isStarred) }
+
     val optionItems = listOf(
-        NoteOptionsRows.PinNote(note, note.isPinned) {
+        NoteOptionsRows.PinNote(note, isPinned) {
             coroutineScope.launch {
-                noteViewModel.togglePin(note)
+                noteViewModel.togglePinButton(note)
+                isPinned.value = !isPinned.value
             }
         },
         NoteOptionsRows.DeletedNote(note),
-        NoteOptionsRows.StarNote(note, note.isLiked) {
+        NoteOptionsRows.StarNote(note, isStarred) {
             coroutineScope.launch {
-                noteViewModel.toggleLikedButton(note)
+                noteViewModel.toggleStarredButton(note)
+                isStarred.value = !isStarred.value
             }
         }
     )
@@ -155,10 +116,10 @@ fun NoteOptionsLayout(
 
             GenericIconButton(
                 modifier = Modifier.padding(12.dp)
-                .constrainAs(cancelOptions) {
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                },
+                    .constrainAs(cancelOptions) {
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                    },
                 onClick = {
                     cancelOptionsFunction()
                 }, imageVector = Icons.Default.Cancel,
@@ -246,4 +207,3 @@ fun NoteOptionSectionItemScreen(
         }
     }
 }
-

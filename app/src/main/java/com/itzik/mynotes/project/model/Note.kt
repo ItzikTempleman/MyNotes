@@ -16,7 +16,7 @@ data class Note(
     var content: String,
     var time: String = getCurrentTime(),
     var isInTrash: Boolean=false,
-    var isLiked:Boolean=false,
+    var isStarred:Boolean=false,
     var isPinned:Boolean = false
 ) : Parcelable {
     companion object {

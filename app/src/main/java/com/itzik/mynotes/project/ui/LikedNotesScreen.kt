@@ -11,6 +11,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.StarBorder
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,8 +21,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
@@ -41,6 +45,7 @@ fun LikedNotesScreen(
     navController: NavHostController,
     userViewModel: UserViewModel,
     user: User,
+    modifier: Modifier,
     noteViewModel: NoteViewModel
 ) {
 
@@ -48,7 +53,7 @@ fun LikedNotesScreen(
     var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
 
     LaunchedEffect(Unit) {
-        noteViewModel.fetchLikedNotes().collect {
+        noteViewModel.fetchStarredNotes().collect {
             noteList = it
         }
     }
@@ -76,53 +81,60 @@ fun LikedNotesScreen(
         if(noteList.isEmpty()) {
             EmptyStateMessage(
                 screenDescription="Starred",
-                modifier = Modifier.constrainAs(emptyStateMessage) {
+                modifier = Modifier.zIndex(3f).constrainAs(emptyStateMessage) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
                 bottom.linkTo(parent.bottom)
                 top.linkTo(parent.top)
             })
         }
-
-        LazyColumn(
-            modifier = Modifier
+        Card(
+            modifier = modifier
+                .padding(16.dp)
                 .constrainAs(likedNotesLazyColumn) {
                     top.linkTo(title.bottom, margin = 16.dp)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 }
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            elevation = CardDefaults.cardElevation(4.dp),
+            colors = CardDefaults.cardColors(Color.White)
         ) {
-            items(noteList) { noteItem ->
-                NoteListItem(
-                    isInHomeScreen = false,
-                    noteViewModel = noteViewModel,
-                    coroutineScope = coroutineScope,
-                    note = noteItem,
-                    modifier = Modifier.clickable {
-                        coroutineScope.launch {
-                            val noteId = noteItem.id
-                            navController.currentBackStackEntry?.savedStateHandle?.set(
-                                key = "noteId",
-                                value = noteId
-                            )
-                            noteViewModel.updateSelectedNoteContent(
-                                noteItem.content,
-                                noteId,
-                                noteItem.isPinned,
-                                noteItem.isLiked
-                            )
-                        }
-                        navController.navigate(Screen.NoteScreen.route)
-                    },
-                    updatedList = { updatedNotes ->
-                        noteViewModel.setNoteList(updatedNotes)
-                    },
-                    isOptionOpenMenu = {
+            LazyColumn(
+                modifier = Modifier
 
-                    },
-                    isSelected = false
-                )
+            ) {
+                items(noteList) { noteItem ->
+                    NoteListItem(
+                        isInHomeScreen = false,
+                        noteViewModel = noteViewModel,
+                        coroutineScope = coroutineScope,
+                        note = noteItem,
+                        modifier = Modifier.clickable {
+                            coroutineScope.launch {
+                                val noteId = noteItem.id
+                                navController.currentBackStackEntry?.savedStateHandle?.set(
+                                    key = "noteId",
+                                    value = noteId
+                                )
+                                noteViewModel.updateSelectedNoteContent(
+                                    noteItem.content,
+                                    noteId,
+                                    noteItem.isPinned,
+                                    noteItem.isStarred
+                                )
+                            }
+                            navController.navigate(Screen.NoteScreen.route)
+                        },
+                        updatedList = { updatedNotes ->
+                            noteViewModel.setNoteList(updatedNotes)
+                        },
+                        isOptionOpenMenu = {
+
+                        },
+                        isSelected = false
+                    )
+                }
             }
         }
     }

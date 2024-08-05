@@ -24,6 +24,14 @@ class NoteViewModel @Inject constructor(
     private val privateNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
     val publicNoteList: StateFlow<MutableList<Note>> get() = privateNoteList
 
+
+    private var privatePinStateMap = MutableStateFlow(mapOf<Int, Boolean>())
+    val publicPinStateMap: MutableStateFlow<Map<Int, Boolean>> get() = privatePinStateMap
+
+    private var privateStarStateMap = MutableStateFlow(mapOf<Int, Boolean>())
+    val publicStarStateMap: MutableStateFlow<Map<Int, Boolean>> get() = privateStarStateMap
+
+
     init {
         viewModelScope.launch {
             fetchNotes()
@@ -38,12 +46,14 @@ class NoteViewModel @Inject constructor(
         newChar: String,
         noteId: Int? = 0,
         isPinned: Boolean,
-        isLiked: Boolean
+        isStarred: Boolean
     ) {
         privateNote.value.isPinned = isPinned
         privateNote.value.content = newChar
-        if (noteId != null) { privateNote.value.id = noteId }
-        privateNote.value.isLiked = isLiked
+        if (noteId != null) {
+            privateNote.value.id = noteId
+        }
+        privateNote.value.isStarred = isStarred
         privateNote.value.time = getCurrentTime()
         repo.updateNote(privateNote.value)
     }
@@ -59,15 +69,20 @@ class NoteViewModel @Inject constructor(
             updateSelectedNoteContent(
                 note.content,
                 isPinned = note.isPinned,
-                isLiked = note.isLiked
+                isStarred = note.isStarred
             )
         }
         fetchNotes()
     }
 
-     private suspend fun fetchNotes() {
+    private suspend fun fetchNotes() {
         val notes = repo.fetchNotes()
         privateNoteList.value = notes.toMutableList()
+
+        val pinMap = notes.associate { it.id to it.isPinned }
+        val starMap = notes.associate { it.id to it.isStarred }
+        privatePinStateMap.value = pinMap
+        privateStarStateMap.value = starMap
     }
 
     fun setNoteList(notes: MutableList<Note>) {
@@ -76,7 +91,7 @@ class NoteViewModel @Inject constructor(
 
     suspend fun setTrash(note: Note) {
         note.isInTrash = true
-        note.isLiked = false
+        note.isStarred = false
         repo.setTrash(note)
         repo.insertSingleNoteIntoRecycleBin(note)
         fetchNotes()
@@ -103,9 +118,9 @@ class NoteViewModel @Inject constructor(
         return noteList
     }
 
-    suspend fun fetchLikedNotes(): Flow<MutableList<Note>> {
+        suspend fun fetchStarredNotes(): Flow<MutableList<Note>> {
         val noteList = flow {
-            val notes = repo.fetchLikedNotes()
+            val notes = repo.fetchStarredNotes()
             if (notes.isNotEmpty()) {
                 emit(notes)
             } else return@flow
@@ -113,16 +128,22 @@ class NoteViewModel @Inject constructor(
         return noteList
     }
 
-
-    fun toggleLikedButton(note: Note) = viewModelScope.launch {
-        val updatedNote = note.copy(isLiked = !note.isLiked)
-        repo.updateNote(updatedNote)
+    suspend fun toggleStarredButton(note: Note) {
+        note.isStarred = !note.isStarred
+        privateStarStateMap.value=privateStarStateMap.value.toMutableMap().apply {
+            put(note.id, note.isStarred)
+        }
+        repo.updateNote(note)
         fetchNotes()
     }
 
-      fun togglePin(note: Note) =viewModelScope.launch {
-         val updatedNote = note.copy(isPinned = !note.isPinned)
-         repo.updateNote(updatedNote)
-         fetchNotes()
+    suspend fun togglePinButton(note: Note) {
+        note.isPinned = !note.isPinned
+        privatePinStateMap.value=privatePinStateMap.value.toMutableMap().apply {
+            put(note.id, note.isPinned)
+        }
+        repo.updateNote(note)
+        fetchNotes()
     }
+
 }
