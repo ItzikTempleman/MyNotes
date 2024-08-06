@@ -27,7 +27,7 @@ class NoteViewModel @Inject constructor(
     val publicNoteList: StateFlow<MutableList<Note>> get() = privateNoteList
 
     private val privatePinnedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
-    val publicPinnedNoteList: StateFlow<MutableList<Note>> get() = privateNoteList
+    val publicPinnedNoteList: StateFlow<MutableList<Note>> get() = privatePinnedNoteList
 
     private var privatePinStateMap = MutableStateFlow(mapOf<Int, Boolean>())
     val publicPinStateMap: MutableStateFlow<Map<Int, Boolean>> get() = privatePinStateMap

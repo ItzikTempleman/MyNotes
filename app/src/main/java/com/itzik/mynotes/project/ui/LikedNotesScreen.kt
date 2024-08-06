@@ -90,7 +90,7 @@ fun LikedNotesScreen(
         }
         Card(
             modifier = modifier
-                .padding(16.dp)
+                .padding(8.dp)
                 .constrainAs(likedNotesLazyColumn) {
                     top.linkTo(title.bottom, margin = 16.dp)
                     bottom.linkTo(parent.bottom)

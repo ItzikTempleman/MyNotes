@@ -5,6 +5,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -96,6 +97,10 @@ fun HomeScreen(
         mutableStateOf(
             pinnedNoteList + noteList.filter { note -> !pinnedNoteList.contains(note) }
         )
+    }
+
+    for(note in pinnedNoteList) {
+        Log.d("TAGA", "pinned notes content: ${note.content}")
     }
 
     val launchMultiplePermissions =
@@ -221,7 +226,7 @@ fun HomeScreen(
 
         Card(
             modifier = modifier
-                .padding(16.dp)
+                .padding(8.dp)
                 .constrainAs(noteLazyColumn) {
                     top.linkTo(title.bottom, margin = 16.dp)
                     bottom.linkTo(parent.bottom)
@@ -234,7 +239,7 @@ fun HomeScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(combinedList, key = { "${it.id}-${it.isPinned}" }) { noteItem ->
+                items(combinedList,key = { it.id }) { noteItem ->
                     NoteListItem(
                         isInHomeScreen = true,
                         noteViewModel = noteViewModel,

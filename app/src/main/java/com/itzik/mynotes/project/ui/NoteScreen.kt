@@ -1,16 +1,22 @@
 package com.itzik.mynotes.project.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.NoteAlt
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -22,8 +28,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -50,8 +58,6 @@ fun NoteScreen(
     paramNavController: NavHostController
 ) {
     val note by noteViewModel.publicNote.collectAsState()
-
-
     var text by remember {
         mutableStateOf(note.content)
     }
@@ -61,7 +67,7 @@ fun NoteScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        val (returnIcon, title, pinIcon, starIcon, contentTF) = createRefs()
+        val (returnIcon, title, likedIcons, contentTF) = createRefs()
 
         IconButton(
             modifier = Modifier
@@ -102,38 +108,43 @@ fun NoteScreen(
                     start.linkTo(returnIcon.end)
                 }
         )
-
-        if (note.isStarred) {
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = null,
-                tint = colorResource(id = R.color.light_yellow),
+        if (note.isPinned || note.isStarred) {
+            Card(
                 modifier = Modifier
-                    .padding(8.dp)
-                    .size(20.dp)
-                    .constrainAs(starIcon) {
+                    .constrainAs(likedIcons) {
                         top.linkTo(parent.top)
                         end.linkTo(parent.end)
                     }
-            )
-        }
-
-        if (note.isPinned) {
-            Icon(
-                imageVector = Icons.Default.PushPin,
-                contentDescription = null,
-                tint = colorResource(id = R.color.light_deep_purple),
-                modifier = Modifier
-                    .padding(end=38.dp, top=8.dp)
-                    .size(20.dp)
-                    .constrainAs(pinIcon) {
-                        top.linkTo(parent.top)
-                        end.linkTo(parent.end)
+                    .width(110.dp).height(50.dp)
+                    .padding(8.dp),
+                colors = CardDefaults.cardColors(Color.White),
+                elevation = CardDefaults.cardElevation(6.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (note.isPinned) {
+                        Icon(
+                            modifier = Modifier.padding(4.dp).rotate(45f),
+                            imageVector = Icons.Default.PushPin,
+                            contentDescription = null,
+                            tint = colorResource(id = R.color.light_deep_purple)
+                        )
                     }
-            )
+                    if (note.isStarred) {
+                        Icon(
+                            modifier = Modifier.padding(4.dp),
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = colorResource(id = R.color.light_yellow),
+
+                            )
+                    }
+                }
+            }
         }
-
-
 
         TextField(
             value = text,
