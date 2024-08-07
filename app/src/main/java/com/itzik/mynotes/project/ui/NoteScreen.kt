@@ -21,6 +21,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -58,6 +59,10 @@ fun NoteScreen(
         mutableStateOf(note.content)
     }
 
+    var fontSize by remember {
+        mutableIntStateOf(18)
+    }
+
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
@@ -82,6 +87,7 @@ fun NoteScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
                 val (backBtn, fontSmaller, fontLarger, changeFontColorDialog, pin, star) = createRefs()
+
 
                 GenericIconButton(
                     modifier = Modifier
@@ -109,32 +115,42 @@ fun NoteScreen(
 
 
                 Text(
-                    modifier = Modifier.constrainAs(fontSmaller){
-                        top.linkTo(parent.top)
-                        start.linkTo(backBtn.end)
-                        bottom.linkTo(parent.bottom)
-                    }.padding(start = 40.dp).clickable {
-
-                    },
+                    modifier = Modifier
+                        .constrainAs(fontSmaller) {
+                            top.linkTo(parent.top)
+                            start.linkTo(backBtn.end)
+                            bottom.linkTo(parent.bottom)
+                        }
+                        .padding(start = 40.dp)
+                        .clickable {
+                            if (fontSize > 10) {
+                                fontSize -= 2
+                            }
+                        },
                     text = "A",
                     fontSize = 18.sp,
                     color = Color.Black
                 )
 
                 Text(
-                    modifier = Modifier.constrainAs(fontLarger){
-                        top.linkTo(parent.top)
-                        start.linkTo(fontSmaller.end)
-                        bottom.linkTo(parent.bottom)
-                    }.padding(start = 8.dp).clickable {
-
-                    },
+                    modifier = Modifier
+                        .constrainAs(fontLarger) {
+                            top.linkTo(parent.top)
+                            start.linkTo(fontSmaller.end)
+                            bottom.linkTo(parent.bottom)
+                        }
+                        .padding(start = 8.dp)
+                        .clickable {
+                            if (fontSize < 40) {
+                                fontSize += 2
+                            }
+                        },
                     text = "A",
                     fontSize = 22.sp,
                     color = Color.Black
                 )
 
-
+                
 
                 if (note.isPinned) {
                     Icon(
@@ -200,13 +216,13 @@ fun NoteScreen(
                     height = Dimension.fillToConstraints
                 },
             textStyle = TextStyle.Default.copy(
-                fontSize = 20.sp,
+                fontSize = fontSize.sp,
                 color = Color.DarkGray,
                 fontWeight = FontWeight.Bold
             ),
             placeholder = {
                 Text(
-                    fontSize = 20.sp,
+                    fontSize = fontSize.sp,
                     color = Color.DarkGray,
                     fontWeight = FontWeight.Bold,
                     text = note.content.ifEmpty { stringResource(id = R.string.new_note) }

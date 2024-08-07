@@ -142,6 +142,8 @@ class NoteViewModel @Inject constructor(
     }
 
     suspend fun togglePinButton(note: Note) {
+        if (!note.isPinned && privatePinnedNoteList.value.size >= NAX_PINNED_NOTES) return
+
         note.isPinned = !note.isPinned
         privatePinStateMap.value = privatePinStateMap.value.toMutableMap().apply {
             put(note.id, note.isPinned)
@@ -153,12 +155,12 @@ class NoteViewModel @Inject constructor(
 
     private fun updatePinnedNotes(note: Note, isPinned: Boolean) {
         if (isPinned) {
+
             privatePinnedNoteList.value.add(note)
             privateNoteList.value.remove(note)
         } else {
             privatePinnedNoteList.value.remove(note)
             privateNoteList.value.add(note)
         }
-        if (privatePinnedNoteList.value.size > NAX_PINNED_NOTES) return
     }
 }
