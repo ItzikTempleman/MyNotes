@@ -12,13 +12,16 @@ import java.time.format.DateTimeFormatter
 @Entity(tableName = NOTE_TABLE)
 data class Note(
     @PrimaryKey(autoGenerate = true)
-    var id: Int=0,
+    var id: Int = 0,
     var content: String,
     var time: String = getCurrentTime(),
-    var isInTrash: Boolean=false,
-    var isStarred:Boolean=false,
-    var isPinned:Boolean = false
-) : Parcelable {
+    var isInTrash: Boolean = false,
+    var isStarred: Boolean = false,
+    var isPinned: Boolean = false,
+    var fontColor: Int?=null,
+    var fontSize: Int?=null
+    ) : Parcelable {
+
     companion object {
         fun getCurrentTime(): String {
             val currentDateTime = LocalDateTime.now()
