@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -30,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -60,7 +62,7 @@ fun NoteScreen(
     }
 
     var fontSize by remember {
-        mutableIntStateOf(18)
+        mutableIntStateOf(20)
     }
 
     ConstraintLayout(
@@ -128,7 +130,7 @@ fun NoteScreen(
                             }
                         },
                     text = "A",
-                    fontSize = 18.sp,
+                    fontSize = 20.sp,
                     color = Color.Black
                 )
 
@@ -145,12 +147,31 @@ fun NoteScreen(
                                 fontSize += 2
                             }
                         },
+                    fontWeight = FontWeight.Bold,
                     text = "A",
-                    fontSize = 22.sp,
+                    fontSize = 26.sp,
                     color = Color.Black
                 )
 
-                
+                IconButton(
+                    modifier = Modifier
+                        .constrainAs(changeFontColorDialog) {
+                            top.linkTo(parent.top)
+                            start.linkTo(fontLarger.end)
+                            bottom.linkTo(parent.bottom)
+                        }
+                        .padding(horizontal = 30.dp),
+                    onClick = {
+
+                    }) {
+                    Icon(
+                        modifier=Modifier.size(30.dp),
+                        painter = painterResource(id = R.drawable.color_palette),
+                        contentDescription = null,
+                        tint = Color.Unspecified
+                    )
+                }
+
 
                 if (note.isPinned) {
                     Icon(
