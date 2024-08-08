@@ -81,7 +81,7 @@ fun NoteScreen(
                 .fillMaxWidth()
                 .height(60.dp)
                 .padding(8.dp),
-            colors = CardDefaults.cardColors(Color.LightGray),
+            colors = CardDefaults.cardColors(Color.White),
             elevation = CardDefaults.cardElevation(16.dp)
         ) {
             ConstraintLayout(

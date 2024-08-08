@@ -2,6 +2,7 @@ package com.itzik.mynotes.project.ui
 
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -60,7 +61,7 @@ fun LikedNotesScreen(
 
     ConstraintLayout(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize().background(Color.White)
 
     ) {
         val (title, emptyStateMessage, likedNotesLazyColumn) = createRefs()
