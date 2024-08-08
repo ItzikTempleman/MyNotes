@@ -37,6 +37,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
@@ -60,9 +61,13 @@ fun NoteScreen(
     var text by remember {
         mutableStateOf(note.content)
     }
+    var isColorPickerOpen by remember { mutableStateOf(false) }
 
     var fontSize by remember {
         mutableIntStateOf(note.fontSize)
+    }
+    var selectedColor by remember {
+        mutableIntStateOf(note.fontColor)
     }
 
     ConstraintLayout(
@@ -87,7 +92,7 @@ fun NoteScreen(
             ConstraintLayout(
                 modifier = Modifier.fillMaxSize()
             ) {
-                val (backBtn, fontSmaller, fontLarger,fontSizeIndicator, changeFontColorDialog, pin, star) = createRefs()
+                val (backBtn, fontSmaller, fontLarger, fontSizeIndicator, changeFontColorDialog, colorPicker, pin, star) = createRefs()
 
 
                 GenericIconButton(
@@ -132,7 +137,8 @@ fun NoteScreen(
                                         noteId,
                                         note.isPinned,
                                         note.isStarred,
-                                        fontSize
+                                        fontSize,
+                                        note.fontColor
                                     )
                                 }
                             }
@@ -159,7 +165,8 @@ fun NoteScreen(
                                         noteId,
                                         note.isPinned,
                                         note.isStarred,
-                                        fontSize
+                                        fontSize,
+                                        note.fontColor
                                     )
                                 }
                             }
@@ -176,9 +183,10 @@ fun NoteScreen(
                             top.linkTo(parent.top)
                             start.linkTo(fontLarger.end)
                             bottom.linkTo(parent.bottom)
-                        }.padding(start=8.dp),
+                        }
+                        .padding(start = 8.dp),
                     text = "$fontSize sp",
-                    fontSize=16.sp
+                    fontSize = 16.sp
 
                 )
                 IconButton(
@@ -190,7 +198,7 @@ fun NoteScreen(
                         }
                         .padding(horizontal = 30.dp),
                     onClick = {
-
+                        isColorPickerOpen = !isColorPickerOpen
                     }) {
                     Icon(
                         modifier = Modifier.size(30.dp),
@@ -200,6 +208,20 @@ fun NoteScreen(
                     )
                 }
 
+                if (isColorPickerOpen) {
+                    ColorPickerDialog(
+                        modifier = Modifier.constrainAs(colorPicker) {
+                            top.linkTo(topRow.bottom)
+                            end.linkTo(parent.end)
+                            start.linkTo(parent.start)
+                        }.zIndex(5f),
+                        onColorSelected = { color ->
+                            selectedColor = color
+                            isColorPickerOpen = false
+                        },
+                        onDismiss = { isColorPickerOpen = false }
+                    )
+                }
 
                 if (note.isPinned) {
                     Icon(
@@ -245,7 +267,8 @@ fun NoteScreen(
                         noteId,
                         note.isPinned,
                         note.isStarred,
-                        note.fontSize
+                        note.fontSize,
+                        note.fontColor
                     )
                 }
             },
@@ -267,13 +290,13 @@ fun NoteScreen(
                 },
             textStyle = TextStyle.Default.copy(
                 fontSize = fontSize.sp,
-                color = Color.DarkGray,
+                color = Color(selectedColor),
                 fontWeight = FontWeight.Bold
             ),
             placeholder = {
                 Text(
                     fontSize = fontSize.sp,
-                    color = Color.DarkGray,
+                    color = Color.Unspecified,
                     fontWeight = FontWeight.Bold,
                     text = note.content.ifEmpty { stringResource(id = R.string.new_note) }
                 )

@@ -51,9 +51,11 @@ class NoteViewModel @Inject constructor(
         noteId: Int? = 0,
         isPinned: Boolean,
         isStarred: Boolean,
-        fontSize: Int
+        fontSize: Int,
+        fontColor:Int
     ) {
         privateNote.value = privateNote.value.copy(fontSize = fontSize)
+        privateNote.value=privateNote.value.copy(fontColor=fontColor)
         privateNote.value.isPinned = isPinned
         privateNote.value.content = newChar
         if (noteId != null) {
@@ -76,7 +78,8 @@ class NoteViewModel @Inject constructor(
                 newChar = note.content,
                 isPinned = note.isPinned,
                 isStarred = note.isStarred,
-                fontSize = note.fontSize
+                fontSize = note.fontSize,
+                fontColor = note.fontColor
             )
         }
         fetchNotes()

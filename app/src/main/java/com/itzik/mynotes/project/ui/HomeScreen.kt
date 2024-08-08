@@ -37,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -218,7 +219,7 @@ fun HomeScreen(
                 },
             onClick = {
                 coroutineScope.launch {
-                    noteViewModel.updateSelectedNoteContent("", isPinned = false, isStarred = false, fontSize = 20)
+                    noteViewModel.updateSelectedNoteContent("", isPinned = false, isStarred = false, fontSize = 20, fontColor = Color.Unspecified.toArgb())
                 }
                 navController.navigate(Screen.NoteScreen.route)
             }, imageVector = Icons.Outlined.Add, colorNumber = 0
@@ -256,7 +257,8 @@ fun HomeScreen(
                                     noteId,
                                     noteItem.isPinned,
                                     noteItem.isStarred,
-                                    noteItem.fontSize
+                                    noteItem.fontSize,
+                                    noteItem.fontColor
                                 )
                             }
                             navController.navigate(Screen.NoteScreen.route)

@@ -1,6 +1,9 @@
 package com.itzik.mynotes.project.model
 
 import android.os.Parcelable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.itzik.mynotes.project.utils.Constants.NOTE_TABLE
@@ -18,7 +21,7 @@ data class Note(
     var isInTrash: Boolean = false,
     var isStarred: Boolean = false,
     var isPinned: Boolean = false,
-    var fontColor: Int?=null,
+    var fontColor:Int = Color.Black.toArgb(),
     var fontSize: Int =20
     ) : Parcelable {
 

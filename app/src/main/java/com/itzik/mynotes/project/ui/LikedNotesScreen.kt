@@ -125,7 +125,8 @@ fun LikedNotesScreen(
                                     noteId = noteId,
                                     isPinned = noteItem.isPinned,
                                     isStarred = noteItem.isStarred,
-                                    fontSize = noteItem.fontSize
+                                    fontSize = noteItem.fontSize,
+                                    fontColor = noteItem.fontColor
                                 )
                             }
                             navController.navigate(Screen.NoteScreen.route)
