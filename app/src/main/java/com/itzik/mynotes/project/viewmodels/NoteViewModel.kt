@@ -20,7 +20,7 @@ class NoteViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val privateNote = MutableStateFlow(Note(content = ""))
+    private val privateNote = MutableStateFlow(Note(content = "", fontSize = 20))
     val publicNote: StateFlow<Note> get() = privateNote
 
     private val privateNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
@@ -50,8 +50,10 @@ class NoteViewModel @Inject constructor(
         newChar: String,
         noteId: Int? = 0,
         isPinned: Boolean,
-        isStarred: Boolean
+        isStarred: Boolean,
+        fontSize: Int
     ) {
+        privateNote.value = privateNote.value.copy(fontSize = fontSize)
         privateNote.value.isPinned = isPinned
         privateNote.value.content = newChar
         if (noteId != null) {
@@ -71,9 +73,10 @@ class NoteViewModel @Inject constructor(
             repo.saveNote(note)
         } else {
             updateSelectedNoteContent(
-                note.content,
+                newChar = note.content,
                 isPinned = note.isPinned,
-                isStarred = note.isStarred
+                isStarred = note.isStarred,
+                fontSize = note.fontSize
             )
         }
         fetchNotes()
@@ -155,7 +158,6 @@ class NoteViewModel @Inject constructor(
 
     private fun updatePinnedNotes(note: Note, isPinned: Boolean) {
         if (isPinned) {
-
             privatePinnedNoteList.value.add(note)
             privateNoteList.value.remove(note)
         } else {

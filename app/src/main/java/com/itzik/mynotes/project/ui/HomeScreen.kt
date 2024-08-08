@@ -218,7 +218,7 @@ fun HomeScreen(
                 },
             onClick = {
                 coroutineScope.launch {
-                    noteViewModel.updateSelectedNoteContent("", isPinned = false, isStarred = false)
+                    noteViewModel.updateSelectedNoteContent("", isPinned = false, isStarred = false, fontSize = 20)
                 }
                 navController.navigate(Screen.NoteScreen.route)
             }, imageVector = Icons.Outlined.Add, colorNumber = 0
@@ -255,7 +255,8 @@ fun HomeScreen(
                                     noteItem.content,
                                     noteId,
                                     noteItem.isPinned,
-                                    noteItem.isStarred
+                                    noteItem.isStarred,
+                                    noteItem.fontSize
                                 )
                             }
                             navController.navigate(Screen.NoteScreen.route)
@@ -263,7 +264,6 @@ fun HomeScreen(
                         updatedList = { updatedNotes ->
                             noteViewModel.setNoteList(updatedNotes)
                         },
-
                         isOptionOpenMenu = { isOpen ->
                             isOptionsBarOpened = isOpen.value
                             if (isOpen.value) {

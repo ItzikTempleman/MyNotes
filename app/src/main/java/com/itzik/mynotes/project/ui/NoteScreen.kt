@@ -62,7 +62,7 @@ fun NoteScreen(
     }
 
     var fontSize by remember {
-        mutableIntStateOf(20)
+        mutableIntStateOf(note.fontSize)
     }
 
     ConstraintLayout(
@@ -77,18 +77,17 @@ fun NoteScreen(
             modifier = Modifier
                 .constrainAs(topRow) {
                     top.linkTo(parent.top)
-
                 }
                 .fillMaxWidth()
                 .height(60.dp)
                 .padding(8.dp),
-            colors = CardDefaults.cardColors(Color.White),
-            elevation = CardDefaults.cardElevation(6.dp)
+            colors = CardDefaults.cardColors(Color.LightGray),
+            elevation = CardDefaults.cardElevation(16.dp)
         ) {
             ConstraintLayout(
                 modifier = Modifier.fillMaxSize()
             ) {
-                val (backBtn, fontSmaller, fontLarger, changeFontColorDialog, pin, star) = createRefs()
+                val (backBtn, fontSmaller, fontLarger,fontSizeIndicator, changeFontColorDialog, pin, star) = createRefs()
 
 
                 GenericIconButton(
@@ -126,7 +125,16 @@ fun NoteScreen(
                         .padding(start = 40.dp)
                         .clickable {
                             if (fontSize > 10) {
-                                fontSize -= 2
+                                coroutineScope.launch {
+                                    fontSize -= 2
+                                    noteViewModel.updateSelectedNoteContent(
+                                        text,
+                                        noteId,
+                                        note.isPinned,
+                                        note.isStarred,
+                                        fontSize
+                                    )
+                                }
                             }
                         },
                     text = "A",
@@ -144,7 +152,16 @@ fun NoteScreen(
                         .padding(start = 8.dp)
                         .clickable {
                             if (fontSize < 40) {
-                                fontSize += 2
+                                coroutineScope.launch {
+                                    fontSize += 2
+                                    noteViewModel.updateSelectedNoteContent(
+                                        text,
+                                        noteId,
+                                        note.isPinned,
+                                        note.isStarred,
+                                        fontSize
+                                    )
+                                }
                             }
                         },
                     fontWeight = FontWeight.Bold,
@@ -153,11 +170,22 @@ fun NoteScreen(
                     color = Color.Black
                 )
 
+                Text(
+                    modifier = Modifier
+                        .constrainAs(fontSizeIndicator) {
+                            top.linkTo(parent.top)
+                            start.linkTo(fontLarger.end)
+                            bottom.linkTo(parent.bottom)
+                        }.padding(start=8.dp),
+                    text = "$fontSize sp",
+                    fontSize=16.sp
+
+                )
                 IconButton(
                     modifier = Modifier
                         .constrainAs(changeFontColorDialog) {
                             top.linkTo(parent.top)
-                            start.linkTo(fontLarger.end)
+                            start.linkTo(fontSizeIndicator.end)
                             bottom.linkTo(parent.bottom)
                         }
                         .padding(horizontal = 30.dp),
@@ -165,7 +193,7 @@ fun NoteScreen(
 
                     }) {
                     Icon(
-                        modifier=Modifier.size(30.dp),
+                        modifier = Modifier.size(30.dp),
                         painter = painterResource(id = R.drawable.color_palette),
                         contentDescription = null,
                         tint = Color.Unspecified
@@ -216,7 +244,8 @@ fun NoteScreen(
                         it,
                         noteId,
                         note.isPinned,
-                        note.isStarred
+                        note.isStarred,
+                        note.fontSize
                     )
                 }
             },

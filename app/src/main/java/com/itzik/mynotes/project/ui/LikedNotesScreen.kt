@@ -78,15 +78,17 @@ fun LikedNotesScreen(
             tint = colorResource(id = R.color.light_yellow),
         )
 
-        if(noteList.isEmpty()) {
+        if (noteList.isEmpty()) {
             EmptyStateMessage(
-                screenDescription="Starred",
-                modifier = Modifier.zIndex(3f).constrainAs(emptyStateMessage) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)
-                top.linkTo(parent.top)
-            })
+                screenDescription = "Starred",
+                modifier = Modifier
+                    .zIndex(3f)
+                    .constrainAs(emptyStateMessage) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                        top.linkTo(parent.top)
+                    })
         }
         Card(
             modifier = modifier
@@ -118,10 +120,11 @@ fun LikedNotesScreen(
                                     value = noteId
                                 )
                                 noteViewModel.updateSelectedNoteContent(
-                                    noteItem.content,
-                                    noteId,
-                                    noteItem.isPinned,
-                                    noteItem.isStarred
+                                    newChar = noteItem.content,
+                                    noteId = noteId,
+                                    isPinned = noteItem.isPinned,
+                                    isStarred = noteItem.isStarred,
+                                    fontSize = noteItem.fontSize
                                 )
                             }
                             navController.navigate(Screen.NoteScreen.route)

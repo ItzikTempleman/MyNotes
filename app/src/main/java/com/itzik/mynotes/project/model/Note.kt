@@ -19,7 +19,7 @@ data class Note(
     var isStarred: Boolean = false,
     var isPinned: Boolean = false,
     var fontColor: Int?=null,
-    var fontSize: Int?=null
+    var fontSize: Int =20
     ) : Parcelable {
 
     companion object {
