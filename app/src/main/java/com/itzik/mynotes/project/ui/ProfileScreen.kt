@@ -5,6 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -42,6 +43,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
@@ -94,17 +96,39 @@ fun ProfileScreen(
 
 
     ConstraintLayout(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.LightGray)
     ) {
-        val (profileCard, bottomRow) = createRefs()
+        val (imageContainer, profileCard, bottomRow) = createRefs()
 
+
+        Image(
+            painter = if (selectedImageUri != "") rememberAsyncImagePainter(model = selectedImageUri) else painterResource(
+                id = emptySateDrawable
+            ),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .constrainAs(imageContainer) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                }
+                .zIndex(4f)
+                .padding(8.dp)
+                .size(100.dp)
+                .clip(CircleShape)
+                .border(1.dp, Color.Gray, CircleShape)
+        )
 
         Card(
-            modifier = Modifier.constrainAs(profileCard){
-                top.linkTo(parent.top)
-            }
-                .padding(8.dp)
-                .fillMaxWidth().height(500.dp),
+            modifier = Modifier
+                .constrainAs(profileCard) {
+                    top.linkTo(parent.top)
+                }
+                .padding(24.dp)
+                .fillMaxWidth()
+                .height(500.dp),
             elevation = CardDefaults.cardElevation(8.dp),
             colors = CardDefaults.cardColors(Color.White)
         ) {
@@ -114,34 +138,16 @@ fun ProfileScreen(
                     .fillMaxSize()
             ) {
 
-                val (imageContainer, name, editIcon, uploadImageButton, removePhotoText, done, email, phone) = createRefs()
-
-                Image(
-                    painter = if (selectedImageUri != "") rememberAsyncImagePainter(model = selectedImageUri) else painterResource(
-                        id = emptySateDrawable
-                    ),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .constrainAs(imageContainer) {
-                            top.linkTo(parent.top)
-                            start.linkTo(parent.start)
-                        }
-                        .padding(20.dp)
-                        .size(80.dp)
-                        .clip(CircleShape)
-                        .border(1.dp, Color.Gray, CircleShape)
-                )
+                val (name, editIcon, uploadImageButton, removePhotoText, done, email, phone) = createRefs()
 
                 Text(
                     text = user.userName,
                     modifier = Modifier
                         .constrainAs(name) {
-                            top.linkTo(imageContainer.top)
-                            bottom.linkTo(imageContainer.bottom)
-                            start.linkTo(imageContainer.end)
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
                         }
-                        .padding(start = 16.dp),
+                        .padding(start = 16.dp, top = 100.dp),
                     color = Color.Black,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
@@ -149,8 +155,8 @@ fun ProfileScreen(
 
                 IconButton(
                     modifier = Modifier.constrainAs(editIcon) {
-                        top.linkTo(name.bottom)
-                        start.linkTo(name.start)
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
                     },
                     onClick = {
                         isEditClick = true
@@ -172,10 +178,10 @@ fun ProfileScreen(
                         },
                         modifier = Modifier
                             .constrainAs(uploadImageButton) {
-                                top.linkTo(name.bottom)
-                                start.linkTo(editIcon.end)
+                                top.linkTo(phone.bottom)
+                                start.linkTo(parent.start)
                             }
-                            .padding(start = 16.dp),
+                            .padding(16.dp),
                     ) {
                         Text(
                             text = "Select photo",
@@ -191,10 +197,10 @@ fun ProfileScreen(
                             },
                             modifier = Modifier
                                 .constrainAs(removePhotoText) {
-                                    top.linkTo(name.bottom)
+                                    top.linkTo(phone.bottom)
                                     start.linkTo(uploadImageButton.end)
                                 }
-                                .padding(start = 16.dp),
+                                .padding(16.dp),
                         ) {
                             Text(
                                 text = "Remove photo",
@@ -216,10 +222,10 @@ fun ProfileScreen(
                         },
                         modifier = Modifier
                             .constrainAs(done) {
-                                top.linkTo(name.bottom)
-                                start.linkTo(uploadImageButton.end)
+                                top.linkTo(phone.bottom)
+                                end.linkTo(parent.end)
                             }
-                            .padding(start = 16.dp),
+                            .padding(16.dp),
                     ) {
                         Text(
                             text = "Done",
@@ -274,25 +280,30 @@ fun ProfileScreen(
                 }
             }
         }
-                LazyColumn(
-                    modifier = Modifier
-                        .constrainAs(bottomRow) {
-                            bottom.linkTo(parent.bottom)
-                        }
-                        .fillMaxWidth()
-                ) {
-                    items(profileItems) {
-                        ProfileItem(
-                            modifier = modifier,
-                            profileItem = it,
-                            noteViewModel = noteViewModel,
-                            coroutineScope = coroutineScope,
-                            navController = navController,
-                            userViewModel = userViewModel,
-                            user = user
-                        )
-                    }
-                }
 
+        Card(
+            modifier = Modifier
+                .constrainAs(bottomRow) {
+                    bottom.linkTo(parent.bottom)
+                }
+                .fillMaxWidth().padding(horizontal = 24.dp, vertical = 12.dp),
+            colors = CardDefaults.cardColors(Color.White)
+        ) {
+            LazyColumn(
+                modifier = modifier
+            ) {
+                items(profileItems) {
+                    ProfileItem(
+                        modifier = modifier,
+                        profileItem = it,
+                        noteViewModel = noteViewModel,
+                        coroutineScope = coroutineScope,
+                        navController = navController,
+                        userViewModel = userViewModel,
+                        user = user
+                    )
+                }
+            }
+        }
     }
 }
