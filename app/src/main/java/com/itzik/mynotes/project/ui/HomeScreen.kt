@@ -5,7 +5,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -96,13 +95,12 @@ fun HomeScreen(
 
     val combinedList by remember(pinnedNoteList, noteList) {
         mutableStateOf(
-            pinnedNoteList + noteList.filter { note -> !pinnedNoteList.contains(note) }
+            (pinnedNoteList + noteList.filter { note ->
+                !pinnedNoteList.contains(note) && !note.isInTrash
+            })
         )
     }
 
-    for(note in pinnedNoteList) {
-        Log.d("TAGA", "pinned notes content: ${note.content}")
-    }
 
     val launchMultiplePermissions =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) {
@@ -124,7 +122,10 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color.White),
     ) {
-        val (title, sortOptionIcon, emptyStateMessage, noteLazyColumn, locationButton, newNoteBtn, progressBar, optionScreen) = createRefs()
+        val (
+            title, sortOptionIcon, emptyStateMessage, noteLazyColumn,
+            locationButton, newNoteBtn, progressBar, optionScreen
+        ) = createRefs()
 
         Icon(
             imageVector = Icons.Outlined.Home,
@@ -219,7 +220,8 @@ fun HomeScreen(
                 },
             onClick = {
                 coroutineScope.launch {
-                    noteViewModel.updateSelectedNoteContent("", isPinned = false, isStarred = false, fontSize = 20, fontColor = Color.Unspecified.toArgb())
+                    noteViewModel.updateSelectedNoteContent("", isPinned = false, isStarred = false,
+                        fontSize = 20, fontColor = Color.Gray.toArgb())
                 }
                 navController.navigate(Screen.NoteScreen.route)
             }, imageVector = Icons.Outlined.Add, colorNumber = 0

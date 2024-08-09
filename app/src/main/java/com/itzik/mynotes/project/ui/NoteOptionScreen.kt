@@ -2,6 +2,7 @@ package com.itzik.mynotes.project.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -46,7 +48,7 @@ fun NoteOptionsLayout(
     navController: NavHostController,
     modifier: Modifier,
     note: Note,
-    cancelOptionsFunction: ()->Unit
+    cancelOptionsFunction: () -> Unit
 ) {
 
     val isPinned = remember { mutableStateOf(note.isPinned) }
@@ -98,24 +100,32 @@ fun NoteOptionsLayout(
                 fontWeight = FontWeight.Bold
             )
 
-            Text(
+            BoxWithConstraints(
                 modifier = Modifier
-                    .padding(
-                        start = 28.dp, top = 4.dp
-                    )
                     .constrainAs(noteName) {
                         top.linkTo(title.bottom)
                         start.linkTo(parent.start)
-                    },
-                text = note.content,
-                fontSize = 20.sp,
-                color = Color.DarkGray,
-                fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.SansSerif
-            )
+                    }
+                    .padding(end = 140.dp, start = 40.dp)
+            ) {
+                val availableWidth = constraints.maxWidth * 2 / 3
+
+                Text(
+                    maxLines = 1,
+                    modifier = Modifier.width(availableWidth.dp),
+                    text = note.content,
+                    fontSize = 20.sp,
+                    color = Color.DarkGray,
+                    fontWeight = FontWeight.Bold,
+                    overflow = TextOverflow.Ellipsis,
+                    fontFamily = FontFamily.SansSerif
+                )
+            }
+
 
             GenericIconButton(
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier
+                    .padding(12.dp)
                     .constrainAs(cancelOptions) {
                         top.linkTo(parent.top)
                         end.linkTo(parent.end)

@@ -54,15 +54,19 @@ class NoteViewModel @Inject constructor(
         fontSize: Int,
         fontColor:Int
     ) {
-        privateNote.value = privateNote.value.copy(fontSize = fontSize)
-        privateNote.value=privateNote.value.copy(fontColor=fontColor)
-        privateNote.value.isPinned = isPinned
-        privateNote.value.content = newChar
+
+        privateNote.value = privateNote.value.copy(
+             fontSize = fontSize,
+            fontColor = fontColor,
+            isPinned = isPinned,
+            isStarred = isStarred,
+            content = newChar,
+            time = getCurrentTime(),
+        )
+
         if (noteId != null) {
             privateNote.value.id = noteId
         }
-        privateNote.value.isStarred = isStarred
-        privateNote.value.time = getCurrentTime()
         repo.updateNote(privateNote.value)
     }
 
@@ -87,10 +91,13 @@ class NoteViewModel @Inject constructor(
 
     private suspend fun fetchNotes() {
         val notes = repo.fetchNotes()
-        privateNoteList.value = notes.toMutableList()
 
-        val pinMap = notes.associate { it.id to it.isPinned }
-        val starMap = notes.associate { it.id to it.isStarred }
+        val activeNotes = notes.filter { !it.isInTrash }
+
+        privateNoteList.value = activeNotes.toMutableList()
+
+        val pinMap = activeNotes.associate { it.id to it.isPinned }
+        val starMap = activeNotes.associate { it.id to it.isStarred }
         privatePinStateMap.value = pinMap
         privateStarStateMap.value = starMap
     }
@@ -102,6 +109,7 @@ class NoteViewModel @Inject constructor(
     suspend fun setTrash(note: Note) {
         note.isInTrash = true
         note.isStarred = false
+        note.isPinned=false
         repo.setTrash(note)
         repo.insertSingleNoteIntoRecycleBin(note)
         fetchNotes()

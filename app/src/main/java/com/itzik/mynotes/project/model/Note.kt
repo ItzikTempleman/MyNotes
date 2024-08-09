@@ -21,7 +21,7 @@ data class Note(
     var isInTrash: Boolean = false,
     var isStarred: Boolean = false,
     var isPinned: Boolean = false,
-    var fontColor:Int = Color.Black.toArgb(),
+    var fontColor:Int = Color.Gray.toArgb(),
     var fontSize: Int =20
     ) : Parcelable {
 

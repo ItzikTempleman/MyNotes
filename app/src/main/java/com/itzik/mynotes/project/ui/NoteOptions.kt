@@ -49,8 +49,7 @@ sealed class NoteOptionsRows(
         )? = null) :
     NoteOptionsRows(
     title = "Delete note", onClick =
-    {
-        currentNote, noteViewModel, coroutineScope, _ ->
+    { currentNote, noteViewModel, coroutineScope, _ ->
         coroutineScope.launch {
             noteViewModel.setTrash(currentNote)
             noteViewModel.publicNoteList.collect { collectedNotes ->

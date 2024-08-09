@@ -1,10 +1,12 @@
 package com.itzik.mynotes.project.ui
 
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PushPin
@@ -26,6 +28,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -46,7 +49,6 @@ fun NoteListItem(
     isOptionOpenMenu: (MutableState<Boolean>) -> Unit,
     isSelected: Boolean
 ) {
-
 
 
     var isOptionVisible by remember {
@@ -90,19 +92,25 @@ fun NoteListItem(
                 .padding(vertical = 8.dp)
         )
 
-        Text(
-            modifier = Modifier
-                .constrainAs(content) {
-                    start.linkTo(verticalDiv.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                }
-                .padding(horizontal = 16.dp),
-            text = note.content,
-            fontSize = 20.sp,
-            color = Color.DarkGray,
-            fontWeight = FontWeight.Bold
-        )
+        BoxWithConstraints(modifier = Modifier.constrainAs(content) {
+            start.linkTo(verticalDiv.end)
+            top.linkTo(parent.top)
+            bottom.linkTo(parent.bottom)
+            end.linkTo(parent.end)
+        }.padding(end = 140.dp, start = 40.dp)
+        ) {
+            val availableWidth = constraints.maxWidth * 2 / 3
+
+            Text(
+                maxLines = 1,
+                modifier = Modifier.width(availableWidth.dp),
+                text = note.content,
+                fontSize = 20.sp,
+                color = Color(note.fontColor),
+                fontWeight = FontWeight.Bold,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
 
         HorizontalDivider(
             modifier = Modifier
@@ -168,7 +176,8 @@ fun NoteListItem(
 
                     Icon(
                         imageVector = Icons.Default.PushPin,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier
+                            .size(20.dp)
                             .rotate(45f),
                         tint = colorResource(id = R.color.light_deep_purple),
                         contentDescription = null

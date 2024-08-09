@@ -120,7 +120,6 @@ fun BottomBarNavHost(
                         paramNavController = paramNavController,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
-                        modifier = Modifier.background(Color.White),
                     )
                 }
             }
