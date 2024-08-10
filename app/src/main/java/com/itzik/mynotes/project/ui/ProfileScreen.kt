@@ -1,6 +1,7 @@
 package com.itzik.mynotes.project.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -33,7 +34,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,7 +44,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -71,15 +70,15 @@ fun ProfileScreen(
 ) {
     val profileItems = listOf(ProfileRows.DeletedItems, ProfileRows.Settings, ProfileRows.LogOut)
 
-    val loggedInUsers by userViewModel.publicLoggedInUsersList.collectAsState()
-    val loggedInUser =loggedInUsers.firstOrNull()
-    val profileImageUri by remember { mutableStateOf(loggedInUser?.profileImage ?: "") }
+    var selectedImageUri by remember { mutableStateOf(user.profileImage) }
+    Log.d("ProfileScreen", "user.profileImage: ${user.profileImage}")
 
-    var selectedImageUri by remember { mutableStateOf(profileImageUri) }
+    LaunchedEffect(user.profileImage) {
+            selectedImageUri = user.profileImage
+            Log.d("ProfileScreen", "Updated Image URI in LaunchedEffect: $selectedImageUri")
 
-    LaunchedEffect(loggedInUser?.profileImage) {
-        selectedImageUri = loggedInUser?.profileImage ?: ""
     }
+
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -113,10 +112,9 @@ fun ProfileScreen(
         ) {
             Image(
                 contentScale = ContentScale.Crop,
-                painter = if (selectedImageUri.isNotEmpty())
-                    rememberAsyncImagePainter(
-                        model = selectedImageUri
-                    ) else painterResource(id = R.drawable.baseline_person_24),
+               painter = rememberAsyncImagePainter(
+                    model = selectedImageUri.ifEmpty { R.drawable.baseline_person_24 }
+                ),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
