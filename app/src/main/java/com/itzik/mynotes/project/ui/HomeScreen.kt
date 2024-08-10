@@ -14,11 +14,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material.icons.outlined.Add
@@ -118,9 +120,9 @@ fun HomeScreen(
         }
 
     ConstraintLayout(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(colorResource(id = R.color.very_light_gray)),
     ) {
         val (
             title, sortOptionIcon, emptyStateMessage, noteLazyColumn,
@@ -229,14 +231,15 @@ fun HomeScreen(
 
         Card(
             modifier = modifier
-                .padding(8.dp)
+                .padding(24.dp)
                 .constrainAs(noteLazyColumn) {
                     top.linkTo(title.bottom, margin = 16.dp)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 }
                 .fillMaxWidth(),
-            elevation = CardDefaults.cardElevation(4.dp),
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(16.dp),
             colors = CardDefaults.cardColors(Color.White)
         ) {
             LazyColumn(
@@ -248,23 +251,25 @@ fun HomeScreen(
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
                         note = noteItem,
-                        modifier = Modifier.clickable {
-                            coroutineScope.launch {
-                                val noteId = noteItem.id
-                                navController.currentBackStackEntry?.savedStateHandle?.set(
-                                    key = "noteId", value = noteId
-                                )
-                                noteViewModel.updateSelectedNoteContent(
-                                    noteItem.content,
-                                    noteId,
-                                    noteItem.isPinned,
-                                    noteItem.isStarred,
-                                    noteItem.fontSize,
-                                    noteItem.fontColor
-                                )
+                        modifier = Modifier
+                            .clickable {
+                                coroutineScope.launch {
+                                    val noteId = noteItem.id
+                                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                                        key = "noteId", value = noteId
+                                    )
+                                    noteViewModel.updateSelectedNoteContent(
+                                        noteItem.content,
+                                        noteId,
+                                        noteItem.isPinned,
+                                        noteItem.isStarred,
+                                        noteItem.fontSize,
+                                        noteItem.fontColor
+                                    )
+                                }
+                                navController.navigate(Screen.NoteScreen.route)
                             }
-                            navController.navigate(Screen.NoteScreen.route)
-                        }.animateItemPlacement(),
+                            .animateItemPlacement(),
                         updatedList = { updatedNotes ->
                             noteViewModel.setNoteList(updatedNotes)
                         },
@@ -278,7 +283,6 @@ fun HomeScreen(
                         },
                         isSelected = selectedNote == noteItem
                     )
-
                 }
             }
         }
@@ -302,8 +306,7 @@ fun HomeScreen(
                     .constrainAs(optionScreen) {
                         bottom.linkTo(parent.bottom)
                     }
-                    .fillMaxWidth()
-                    .padding(4.dp),
+                    .fillMaxWidth().height(182.dp).background(Color.White),
                 noteViewModel = noteViewModel,
                 coroutineScope = coroutineScope,
                 navController = navController,

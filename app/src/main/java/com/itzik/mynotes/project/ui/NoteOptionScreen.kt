@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -70,20 +70,17 @@ fun NoteOptionsLayout(
         }
     )
 
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .height(220.dp),
-        colors = CardDefaults.cardColors(
-            colorResource(id = R.color.very_light_gray)
-        )
-    ) {
         ConstraintLayout(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = modifier.fillMaxSize()
         ) {
-            val (title, noteName, cancelOptions, lazyRow) = createRefs()
+            val (topBorder, title, noteName, cancelOptions, lazyRow) = createRefs()
+
+            HorizontalDivider(
+                modifier = Modifier
+                    .constrainAs(topBorder) {
+                        top.linkTo(parent.top)
+                    }
+            )
 
             Text(
                 modifier = Modifier
@@ -160,7 +157,7 @@ fun NoteOptionsLayout(
             }
         }
     }
-}
+
 
 @Composable
 fun NoteOptionSectionItemScreen(
@@ -194,11 +191,11 @@ fun NoteOptionSectionItemScreen(
         ) {
             Icon(
                 modifier = if (noteOptionsRows.title == "Pin note") Modifier
-                    .padding(6.dp)
-                    .size(36.dp)
+                    .padding(4.dp)
+                    .size(30.dp)
                     .rotate(45f) else Modifier
-                    .padding(6.dp)
-                    .size(36.dp),
+                    .padding(4.dp)
+                    .size(30.dp),
                 imageVector = noteOptionsRows.icon,
                 contentDescription = null,
                 tint = when (noteOptionsRows.title) {
@@ -208,7 +205,7 @@ fun NoteOptionSectionItemScreen(
                 }
             )
             Text(
-                modifier = Modifier.padding(6.dp),
+                modifier = Modifier.padding(2.dp),
                 text = noteOptionsRows.title,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,

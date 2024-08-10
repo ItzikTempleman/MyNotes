@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.Card
@@ -39,7 +40,7 @@ import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@SuppressLint("SuspiciousIndentation")
+@SuppressLint("SuspiciousIndentation", "MutableCollectionMutableState")
 @Composable
 fun LikedNotesScreen(
     coroutineScope: CoroutineScope,
@@ -61,7 +62,8 @@ fun LikedNotesScreen(
 
     ConstraintLayout(
         modifier = Modifier
-            .fillMaxSize().background(Color.White)
+            .fillMaxSize()
+            .background(colorResource(id = R.color.very_light_gray))
 
     ) {
         val (title, emptyStateMessage, likedNotesLazyColumn) = createRefs()
@@ -93,14 +95,15 @@ fun LikedNotesScreen(
         }
         Card(
             modifier = modifier
-                .padding(8.dp)
+                .padding(24.dp)
                 .constrainAs(likedNotesLazyColumn) {
                     top.linkTo(title.bottom, margin = 16.dp)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 }
                 .fillMaxWidth(),
-            elevation = CardDefaults.cardElevation(4.dp),
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(16.dp),
             colors = CardDefaults.cardColors(Color.White)
         ) {
             LazyColumn(

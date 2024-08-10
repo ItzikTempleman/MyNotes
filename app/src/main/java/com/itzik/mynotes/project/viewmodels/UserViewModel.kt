@@ -1,6 +1,5 @@
 package com.itzik.mynotes.project.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itzik.mynotes.project.model.User
@@ -19,12 +18,12 @@ class UserViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val privateLoggedInUsersList = MutableStateFlow<List<User>>(emptyList())
-    val exposedLoggedInUsersList: StateFlow<List<User>> = privateLoggedInUsersList
+    val publicLoggedInUsersList: StateFlow<List<User>> = privateLoggedInUsersList
 
 
     init {
         viewModelScope.launch {
-            privateLoggedInUsersList.value = repo.fetchLoggedInUsers()
+            fetchLoggedInUsers()
         }
     }
 
@@ -39,12 +38,10 @@ class UserViewModel @Inject constructor(
     fun registerUser(newUser: User) {
         viewModelScope.launch {
             try {
-                Log.d("UserViewModel", "Attempting to insert user: $newUser")
                 repo.insertUser(newUser)
                 fetchLoggedInUsers()
-                Log.d("UserViewModel", "User inserted successfully")
-            } catch (e: Exception) {
-                Log.e("UserViewModel", "Error inserting user: ${e.message}")
+            } catch (_: Exception) {
+
             }
         }
     }
@@ -96,11 +93,17 @@ class UserViewModel @Inject constructor(
         return regex.matches(phoneNumber)
     }
 
-    suspend fun updateProfileImage(profileImageString: String) {
-        val user = repo.fetchLoggedInUsers().firstOrNull()
-        user?.let {
-            val updatedUser: User = it.copy(profileImage = profileImageString)
-            repo.updateProfileImage(updatedUser)
+    suspend fun updateProfileImage(imageUri: String) {
+        viewModelScope.launch {
+            val user = privateLoggedInUsersList.value.firstOrNull()
+            if (user != null) {
+                val updatedUser = user.copy(profileImage = imageUri)
+                repo.updateProfileImage(updatedUser)
+
+                privateLoggedInUsersList.value = privateLoggedInUsersList.value.map {
+                    if (it.id == user.id) updatedUser else it
+                }
+            }
         }
     }
 }

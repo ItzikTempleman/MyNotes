@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.User
+import com.itzik.mynotes.project.ui.DeletedNotesScreen
 import com.itzik.mynotes.project.ui.SettingsScreen
 import com.itzik.mynotes.project.ui.auth.LoginScreen
 import com.itzik.mynotes.project.ui.auth.RegistrationScreen
@@ -21,7 +22,6 @@ import com.itzik.mynotes.project.ui.auth.SplashScreen
 import com.itzik.mynotes.project.ui.navigation.Graph.AUTHENTICATION
 import com.itzik.mynotes.project.ui.navigation.Graph.HOME
 import com.itzik.mynotes.project.ui.navigation.Graph.ROOT
-import com.itzik.mynotes.project.ui.DeletedNotesScreen
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
@@ -46,7 +46,7 @@ fun RootNavHost(
 ) {
 
 
-    val userList by userViewModel.exposedLoggedInUsersList.collectAsState(initial = emptyList())
+    val userList by userViewModel.publicLoggedInUsersList.collectAsState()
     val user = userList.firstOrNull() ?: User(userName = "", email = "", password = "", phoneNumber = 0)
 
 

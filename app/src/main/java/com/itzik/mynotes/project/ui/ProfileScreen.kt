@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,16 +18,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Call
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -54,7 +59,6 @@ import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-
 @SuppressLint("CoroutineCreationDuringComposition", "MutableCollectionMutableState")
 @Composable
 fun ProfileScreen(
@@ -63,22 +67,18 @@ fun ProfileScreen(
     navController: NavHostController,
     userViewModel: UserViewModel,
     noteViewModel: NoteViewModel,
-    user: User,
+    user: User
 ) {
-
-
-    var isEditClick by remember { mutableStateOf(false) }
-    var isDoneButtonVisible by remember { mutableStateOf(false) }
-    var selectedImageUri by remember { mutableStateOf(user.profileImage) }
     val profileItems = listOf(ProfileRows.DeletedItems, ProfileRows.Settings, ProfileRows.LogOut)
-    val emptySateDrawable = R.drawable.baseline_person_24
-    val loggedInUsers by userViewModel.exposedLoggedInUsersList.collectAsState(initial = emptyList())
 
-    LaunchedEffect(loggedInUsers) {
-        if (loggedInUsers.isNotEmpty()) {
-            val loggedInUser = loggedInUsers.firstOrNull()
-            selectedImageUri = loggedInUser?.profileImage ?: ""
-        }
+    val loggedInUsers by userViewModel.publicLoggedInUsersList.collectAsState()
+    val loggedInUser =loggedInUsers.firstOrNull()
+    val profileImageUri by remember { mutableStateOf(loggedInUser?.profileImage ?: "") }
+
+    var selectedImageUri by remember { mutableStateOf(profileImageUri) }
+
+    LaunchedEffect(loggedInUser?.profileImage) {
+        selectedImageUri = loggedInUser?.profileImage ?: ""
     }
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
@@ -87,39 +87,41 @@ fun ProfileScreen(
             coroutineScope.launch {
                 selectedImageUri = uri.toString()
                 userViewModel.updateProfileImage(selectedImageUri)
-                val loggedInUser = loggedInUsers.firstOrNull()
-                selectedImageUri = loggedInUser?.profileImage ?: ""
             }
-            isDoneButtonVisible = true
         }
     )
-
 
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.LightGray)
+            .background(colorResource(id = R.color.very_light_gray))
     ) {
         val (imageContainer, profileCard, bottomRow) = createRefs()
 
-
-        Image(
-            painter = if (selectedImageUri != "") rememberAsyncImagePainter(model = selectedImageUri) else painterResource(
-                id = emptySateDrawable
-            ),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
+        Box(
             modifier = Modifier
+                .zIndex(2f)
                 .constrainAs(imageContainer) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 }
-                .zIndex(4f)
                 .padding(8.dp)
-                .size(100.dp)
+                .size(130.dp)
                 .clip(CircleShape)
-                .border(1.dp, Color.Gray, CircleShape)
-        )
+                .background(Color.White)
+                .border(0.5.dp, Color.Black, CircleShape)
+        ) {
+            Image(
+                contentScale = ContentScale.Crop,
+                painter = if (selectedImageUri.isNotEmpty())
+                    rememberAsyncImagePainter(
+                        model = selectedImageUri
+                    ) else painterResource(id = R.drawable.baseline_person_24),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize()
+            )
+        }
 
         Card(
             modifier = Modifier
@@ -128,17 +130,62 @@ fun ProfileScreen(
                 }
                 .padding(24.dp)
                 .fillMaxWidth()
-                .height(500.dp),
-            elevation = CardDefaults.cardElevation(8.dp),
+                .height(670.dp),
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(16.dp),
             colors = CardDefaults.cardColors(Color.White)
         ) {
-
             ConstraintLayout(
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) {
+                val (horizontalLine, verticalLine, uploadImageBtn, removeImageBtn, name, email, phone) = createRefs()
 
-                val (name, editIcon, uploadImageButton, removePhotoText, done, email, phone) = createRefs()
+                HorizontalDivider(
+                    modifier = Modifier
+                        .constrainAs(horizontalLine) {
+                            top.linkTo(parent.top)
+                        }
+                        .padding(start = 8.dp, end = 8.dp, top = 40.dp),
+                    color = Color.Transparent
+                )
+
+                VerticalDivider(
+                    modifier = Modifier
+                        .constrainAs(verticalLine) {
+                            start.linkTo(parent.start)
+                        }
+                        .padding(start = 110.dp),
+                    color = Color.Transparent
+                )
+
+                IconButton(
+                    modifier = Modifier
+                        .constrainAs(uploadImageBtn) {
+                            top.linkTo(horizontalLine.bottom)
+                            start.linkTo(verticalLine.end)
+                        },
+                    onClick = {
+                        singlePhotoPickerLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    }) {
+                    Icon(imageVector = Icons.Outlined.Edit, contentDescription = null)
+                }
+
+                IconButton(
+                    modifier = Modifier
+                        .constrainAs(removeImageBtn) {
+                            top.linkTo(uploadImageBtn.top)
+                            bottom.linkTo(uploadImageBtn.bottom)
+                            start.linkTo(uploadImageBtn.end)
+                        },
+                    onClick = {
+                        coroutineScope.launch {
+                            userViewModel.updateProfileImage("")
+                        }
+                    }) {
+                    Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
+                }
 
                 Text(
                     text = user.userName,
@@ -147,98 +194,16 @@ fun ProfileScreen(
                             top.linkTo(parent.top)
                             start.linkTo(parent.start)
                         }
-                        .padding(start = 16.dp, top = 100.dp),
+                        .padding(start = 16.dp, top = 130.dp),
                     color = Color.Black,
-                    fontSize = 24.sp,
+                    fontSize = 28.sp,
                     fontWeight = FontWeight.Bold
                 )
-
-                IconButton(
-                    modifier = Modifier.constrainAs(editIcon) {
-                        top.linkTo(parent.top)
-                        end.linkTo(parent.end)
-                    },
-                    onClick = {
-                        isEditClick = true
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Edit,
-                        contentDescription = null,
-                        tint = Color.Gray,
-                    )
-                }
-
-                if (isEditClick) {
-                    TextButton(
-                        onClick = {
-                            singlePhotoPickerLauncher.launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                            )
-                        },
-                        modifier = Modifier
-                            .constrainAs(uploadImageButton) {
-                                top.linkTo(phone.bottom)
-                                start.linkTo(parent.start)
-                            }
-                            .padding(16.dp),
-                    ) {
-                        Text(
-                            text = "Select photo",
-                            color = Color.DarkGray,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    if (!isDoneButtonVisible) {
-                        TextButton(
-                            onClick = {
-                                selectedImageUri = ""
-                                isDoneButtonVisible = true
-                            },
-                            modifier = Modifier
-                                .constrainAs(removePhotoText) {
-                                    top.linkTo(phone.bottom)
-                                    start.linkTo(uploadImageButton.end)
-                                }
-                                .padding(16.dp),
-                        ) {
-                            Text(
-                                text = "Remove photo",
-                                color = Color.DarkGray,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                }
-
-                if (isDoneButtonVisible) {
-                    TextButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                userViewModel.updateProfileImage(selectedImageUri)
-                            }
-                            isDoneButtonVisible = false
-                            isEditClick = false
-                        },
-                        modifier = Modifier
-                            .constrainAs(done) {
-                                top.linkTo(phone.bottom)
-                                end.linkTo(parent.end)
-                            }
-                            .padding(16.dp),
-                    ) {
-                        Text(
-                            text = "Done",
-                            color = Color.Red,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
 
                 Row(
                     modifier = Modifier
                         .constrainAs(email) {
-                            top.linkTo(imageContainer.bottom)
+                            top.linkTo(name.bottom)
                         }
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp, vertical = 8.dp),
@@ -286,7 +251,10 @@ fun ProfileScreen(
                 .constrainAs(bottomRow) {
                     bottom.linkTo(parent.bottom)
                 }
-                .fillMaxWidth().padding(horizontal = 24.dp, vertical = 12.dp),
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 12.dp),
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(16.dp),
             colors = CardDefaults.cardColors(Color.White)
         ) {
             LazyColumn(

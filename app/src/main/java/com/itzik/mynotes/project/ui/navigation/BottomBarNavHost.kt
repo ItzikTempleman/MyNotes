@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -13,7 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -76,7 +74,7 @@ fun BottomBarNavHost(
                     HomeScreen(
                         locationViewModel = locationViewModel,
                         noteViewModel = noteViewModel,
-                        modifier = Modifier.background(Color.White),
+                        modifier = Modifier,
                         coroutineScope = coroutineScope,
                         navController = newNavController,
                         context = context,
@@ -90,7 +88,7 @@ fun BottomBarNavHost(
                 composable(route = Screen.LikedNotes.route) {
                     isNoteScreenVisible = true
                     LikedNotesScreen(
-                        modifier = Modifier.background(Color.White),
+                        modifier = Modifier,
                         noteViewModel=noteViewModel,
                         userViewModel = userViewModel,
                         coroutineScope = coroutineScope,
@@ -102,7 +100,7 @@ fun BottomBarNavHost(
                 composable(route = Screen.Profile.route) {
                     isNoteScreenVisible = true
                     ProfileScreen(
-                        modifier = Modifier.background(Color.White),
+                        modifier = Modifier,
                         navController = paramNavController,
                         userViewModel = userViewModel,
                         coroutineScope = coroutineScope,

@@ -28,7 +28,7 @@ fun SplashScreen(
     coroutineScope: CoroutineScope,
     userViewModel: UserViewModel
 ) {
-    val loggedInUsers by userViewModel.exposedLoggedInUsersList.collectAsState(initial = emptyList())
+    val loggedInUsers by userViewModel.publicLoggedInUsersList.collectAsState()
 
 
     LaunchedEffect(loggedInUsers) {
