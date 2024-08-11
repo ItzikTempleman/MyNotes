@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -44,13 +43,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
@@ -69,34 +69,30 @@ fun ProfileScreen(
     user: User
 ) {
     val profileItems = listOf(ProfileRows.DeletedItems, ProfileRows.Settings, ProfileRows.LogOut)
-
     var selectedImageUri by remember { mutableStateOf(user.profileImage) }
-    Log.d("ProfileScreen", "user.profileImage: ${user.profileImage}")
-
     LaunchedEffect(user.profileImage) {
+        if (user.profileImage.isNotEmpty()) {
             selectedImageUri = user.profileImage
-            Log.d("ProfileScreen", "Updated Image URI in LaunchedEffect: $selectedImageUri")
-
+        }
     }
-
-
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
-            coroutineScope.launch {
-                selectedImageUri = uri.toString()
-                userViewModel.updateProfileImage(selectedImageUri)
+            uri?.let {
+                coroutineScope.launch {
+                    selectedImageUri = it.toString()
+                    userViewModel.updateProfileImage(selectedImageUri)
+                    Log.d("ProfileScreen", "Picked Image URI: $selectedImageUri")
+                }
             }
         }
     )
-
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.very_light_gray))
     ) {
         val (imageContainer, profileCard, bottomRow) = createRefs()
-
         Box(
             modifier = Modifier
                 .zIndex(2f)
@@ -110,14 +106,12 @@ fun ProfileScreen(
                 .background(Color.White)
                 .border(0.5.dp, Color.Black, CircleShape)
         ) {
-            Image(
-                contentScale = ContentScale.Crop,
-               painter = rememberAsyncImagePainter(
-                    model = selectedImageUri.ifEmpty { R.drawable.baseline_person_24 }
-                ),
+            AsyncImage(
+                model = selectedImageUri.ifEmpty { R.drawable.baseline_person_24 },
                 contentDescription = null,
-                modifier = Modifier
-                    .fillMaxSize()
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize(),
+                error = painterResource(R.drawable.ic_launcher_background)
             )
         }
 
