@@ -36,6 +36,9 @@ class NoteViewModel @Inject constructor(
     val publicStarStateMap: MutableStateFlow<Map<Int, Boolean>> get() = privateStarStateMap
 
 
+
+
+
     init {
         viewModelScope.launch {
             fetchNotes()
@@ -52,11 +55,11 @@ class NoteViewModel @Inject constructor(
         isPinned: Boolean,
         isStarred: Boolean,
         fontSize: Int,
-        fontColor:Int
+        fontColor: Int
     ) {
 
         privateNote.value = privateNote.value.copy(
-             fontSize = fontSize,
+            fontSize = fontSize,
             fontColor = fontColor,
             isPinned = isPinned,
             isStarred = isStarred,
@@ -69,6 +72,7 @@ class NoteViewModel @Inject constructor(
         }
         repo.updateNote(privateNote.value)
     }
+
 
     suspend fun saveNote(note: Note) {
         val noteList = repo.fetchNotes()
@@ -109,7 +113,7 @@ class NoteViewModel @Inject constructor(
     suspend fun setTrash(note: Note) {
         note.isInTrash = true
         note.isStarred = false
-        note.isPinned=false
+        note.isPinned = false
         repo.setTrash(note)
         repo.insertSingleNoteIntoRecycleBin(note)
         fetchNotes()

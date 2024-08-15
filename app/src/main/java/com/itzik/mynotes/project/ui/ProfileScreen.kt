@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -69,8 +70,12 @@ fun ProfileScreen(
     user: User
 ) {
     val profileItems = listOf(ProfileRows.DeletedItems, ProfileRows.Settings, ProfileRows.LogOut)
+
+
+    val userList by userViewModel.publicLoggedInUsersList.collectAsState(initial = null)
+    val loggedInUser= userList?.firstOrNull()
     var selectedImageUri by remember { mutableStateOf(user.profileImage) }
-    LaunchedEffect(user.profileImage) {
+    LaunchedEffect(loggedInUser?.profileImage) {
         if (user.profileImage.isNotEmpty()) {
             selectedImageUri = user.profileImage
         }
@@ -237,7 +242,7 @@ fun ProfileScreen(
                 }
             }
         }
-
+3
         Card(
             modifier = Modifier
                 .constrainAs(bottomRow) {

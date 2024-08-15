@@ -121,7 +121,6 @@ fun RootNavHost(
             }
 
             composable(route = Screen.DeletedNotesScreen.route) {
-
                 DeletedNotesScreen(
                     noteViewModel = noteViewModel,
                     coroutineScope = coroutineScope,
