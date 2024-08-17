@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -43,7 +44,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -69,11 +69,11 @@ fun ProfileScreen(
     noteViewModel: NoteViewModel,
     user: User
 ) {
-    val profileItems = listOf(ProfileRows.DeletedItems, ProfileRows.Settings, ProfileRows.LogOut)
+    val profileItems = listOf(GenericRows.DeletedItems, GenericRows.Settings, GenericRows.LogOut)
 
 
     val userList by userViewModel.publicLoggedInUsersList.collectAsState(initial = null)
-    val loggedInUser= userList?.firstOrNull()
+    val loggedInUser = userList?.firstOrNull()
     var selectedImageUri by remember { mutableStateOf(user.profileImage) }
     LaunchedEffect(loggedInUser?.profileImage) {
         if (user.profileImage.isNotEmpty()) {
@@ -95,7 +95,7 @@ fun ProfileScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.very_light_gray))
+            .background(Color.White)
     ) {
         val (imageContainer, profileCard, bottomRow) = createRefs()
         Box(
@@ -105,7 +105,7 @@ fun ProfileScreen(
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 }
-                .padding(8.dp)
+                .padding(2.dp)
                 .size(130.dp)
                 .clip(CircleShape)
                 .background(Color.White)
@@ -125,15 +125,29 @@ fun ProfileScreen(
                 .constrainAs(profileCard) {
                     top.linkTo(parent.top)
                 }
-                .padding(24.dp)
+                .padding(8.dp)
                 .fillMaxWidth()
-                .height(670.dp),
-            shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(16.dp),
+                .height(670.dp)
+                .border(
+                    BorderStroke(1.dp, Color.Gray),
+                    RoundedCornerShape(
+                        topEnd = 16.dp,
+                        bottomEnd = 16.dp,
+                        bottomStart = 16.dp,
+                        topStart = 60.dp
+                    )
+                ),
+            shape = RoundedCornerShape(
+                topEnd = 16.dp,
+                bottomEnd = 16.dp,
+                bottomStart = 16.dp,
+                topStart = 60.dp
+            ),
+            elevation = CardDefaults.cardElevation(8.dp),
             colors = CardDefaults.cardColors(Color.White)
         ) {
             ConstraintLayout(
-                modifier = Modifier.fillMaxSize()
+                modifier = modifier.fillMaxSize()
             ) {
                 val (horizontalLine, verticalLine, uploadImageBtn, removeImageBtn, name, email, phone) = createRefs()
 
@@ -157,6 +171,7 @@ fun ProfileScreen(
 
                 IconButton(
                     modifier = Modifier
+                        .padding(start = 8.dp)
                         .constrainAs(uploadImageBtn) {
                             top.linkTo(horizontalLine.bottom)
                             start.linkTo(verticalLine.end)
@@ -242,31 +257,36 @@ fun ProfileScreen(
                 }
             }
         }
-3
+
         Card(
-            modifier = Modifier
+            modifier = modifier
                 .constrainAs(bottomRow) {
                     bottom.linkTo(parent.bottom)
                 }
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 12.dp),
+                .padding(8.dp)
+                .border(
+                    BorderStroke(1.dp, Color.Gray),
+                    RoundedCornerShape(16.dp)
+                ),
             shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(16.dp),
+            elevation = CardDefaults.cardElevation(8.dp),
             colors = CardDefaults.cardColors(Color.White)
         ) {
             LazyColumn(
                 modifier = modifier
             ) {
                 items(profileItems) {
-                    ProfileItem(
+                    GenericItem(
+                        user = user,
                         modifier = modifier,
-                        profileItem = it,
+                        item = it,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
                         navController = navController,
                         userViewModel = userViewModel,
-                        user = user
-                    )
+
+                        )
                 }
             }
         }

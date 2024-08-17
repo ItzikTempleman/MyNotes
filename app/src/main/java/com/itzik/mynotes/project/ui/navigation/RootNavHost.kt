@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -111,7 +112,6 @@ fun RootNavHost(
             }
 
             composable(route = Screen.Settings.route) {
-
                 SettingsScreen(
                     locationViewModel = locationViewModel,
                     noteViewModel = noteViewModel,
@@ -122,6 +122,9 @@ fun RootNavHost(
 
             composable(route = Screen.DeletedNotesScreen.route) {
                 DeletedNotesScreen(
+                    modifier = Modifier,
+                    user=user,
+                    userViewModel = userViewModel,
                     noteViewModel = noteViewModel,
                     coroutineScope = coroutineScope,
                     navController = navController,

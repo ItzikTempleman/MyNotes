@@ -8,8 +8,10 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,9 +24,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -39,7 +41,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -47,7 +48,6 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.LatLng
-import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.ui.semantics.EmptyStateMessage
@@ -80,10 +80,6 @@ fun HomeScreen(
     startLocationUpdates: () -> Unit,
     updateIsLocationRequired: (Boolean) -> Unit
 ) {
-
-    fun getSayHelloText(): String {
-        return noteViewModel.sayHello()
-    }
 
     var sortType by remember { mutableStateOf("") }
     var isLoadingLocation by remember { mutableStateOf(false) }
@@ -122,7 +118,7 @@ fun HomeScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.very_light_gray)),
+            .background(Color.White),
     ) {
         val (
             title, sortOptionIcon, emptyStateMessage, noteLazyColumn,
@@ -130,9 +126,9 @@ fun HomeScreen(
         ) = createRefs()
 
         Icon(
-            imageVector = Icons.Outlined.Home,
+            imageVector = Icons.Default.Home,
             contentDescription = null,
-            tint = colorResource(id = R.color.blue_green),
+            tint = Color.DarkGray,
             modifier = Modifier
                 .padding(8.dp)
                 .size(32.dp)
@@ -168,7 +164,7 @@ fun HomeScreen(
                     launchMultiplePermissions.launch(permissions)
                 }
             },
-            colorNumber = 0,
+            colorNumber = 3,
             imageVector = Icons.Outlined.LocationOn
         )
 
@@ -184,7 +180,7 @@ fun HomeScreen(
                 onClick = {
                     isExpanded = !isExpanded
                 },
-                colorNumber = 0,
+                colorNumber = 3,
                 imageVector = Icons.Default.Sort
             )
 
@@ -222,8 +218,10 @@ fun HomeScreen(
                 },
             onClick = {
                 coroutineScope.launch {
-                    noteViewModel.updateSelectedNoteContent("", isPinned = false, isStarred = false,
-                        fontSize = 20, fontColor = Color.Gray.toArgb())
+                    noteViewModel.updateSelectedNoteContent(
+                        "", isPinned = false, isStarred = false,
+                        fontSize = 20, fontColor = Color.Gray.toArgb()
+                    )
                 }
                 navController.navigate(Screen.NoteScreen.route)
             }, imageVector = Icons.Outlined.Add, colorNumber = 0
@@ -231,21 +229,25 @@ fun HomeScreen(
 
         Card(
             modifier = modifier
-                .padding(24.dp)
+                .padding(8.dp)
                 .constrainAs(noteLazyColumn) {
-                    top.linkTo(title.bottom, margin = 16.dp)
+                    top.linkTo(title.bottom, margin = 8.dp)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 }
+                .border(
+                    BorderStroke(1.dp, Color.Gray),
+                    RoundedCornerShape(16.dp)
+                )
                 .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(16.dp),
+            elevation = CardDefaults.cardElevation(8.dp),
             colors = CardDefaults.cardColors(Color.White)
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(combinedList,key = { it.id }) { noteItem ->
+                items(combinedList, key = { it.id }) { noteItem ->
                     NoteListItem(
                         isInHomeScreen = true,
                         noteViewModel = noteViewModel,
@@ -306,7 +308,9 @@ fun HomeScreen(
                     .constrainAs(optionScreen) {
                         bottom.linkTo(parent.bottom)
                     }
-                    .fillMaxWidth().height(182.dp).background(Color.White),
+                    .fillMaxWidth()
+                    .height(182.dp)
+                    .background(Color.White),
                 noteViewModel = noteViewModel,
                 coroutineScope = coroutineScope,
                 navController = navController,

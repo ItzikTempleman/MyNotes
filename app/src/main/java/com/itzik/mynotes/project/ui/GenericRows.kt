@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.PowerSettingsNew
+import androidx.compose.material.icons.filled.RestoreFromTrash
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -26,7 +27,7 @@ import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-sealed class ProfileRows(
+sealed class GenericRows(
     var itemTitle: String,
     var itemIcon: ImageVector,
     var onClick: ((
@@ -34,11 +35,11 @@ sealed class ProfileRows(
         coroutineScope: CoroutineScope,
         navController: NavHostController,
         userViewModel: UserViewModel,
-        user: User
+        user: User,
     )
     -> Unit)? = null
 ) {
-    data object Settings : ProfileRows(
+    data object Settings : GenericRows(
         itemTitle = "Settings",
         itemIcon = Icons.Default.Settings,
         onClick = { _, _, navController, _, _ ->
@@ -46,7 +47,7 @@ sealed class ProfileRows(
         }
     )
 
-    data object DeletedItems : ProfileRows(
+    data object DeletedItems : GenericRows(
         itemTitle = "Deleted notes",
         itemIcon = Icons.Default.DeleteForever,
         onClick = { _, _, navController, _, _ ->
@@ -54,7 +55,7 @@ sealed class ProfileRows(
         }
     )
 
-    data object LogOut : ProfileRows(
+    data object LogOut : GenericRows(
         itemTitle = "Log out",
         itemIcon = Icons.Default.PowerSettingsNew,
         onClick = { _, coroutineScope, navController, userViewModel, user ->
@@ -65,24 +66,43 @@ sealed class ProfileRows(
             }
         }
     )
+
+    data object RetrieveNote : GenericRows(
+        itemTitle = "Retrieve note",
+        itemIcon = Icons.Default.RestoreFromTrash,
+        onClick = { noteViewModel, coroutineScope, _, _, _ ->
+            coroutineScope.launch {
+
+            }
+        }
+    )
+
+    data object DeleteNote : GenericRows(
+        itemTitle = "Delete note forever",
+        itemIcon = Icons.Default.DeleteForever,
+        onClick = { noteViewModel, coroutineScope, _, _, _ ->
+            coroutineScope.launch {
+
+            }
+        }
+    )
 }
 
-
 @Composable
-fun ProfileItem(
+fun GenericItem(
     modifier: Modifier,
-    profileItem: ProfileRows,
+    item: GenericRows,
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     userViewModel: UserViewModel,
-    user: User
+    user: User,
 ) {
 
     ConstraintLayout(
         modifier = modifier
             .clickable {
-                profileItem.onClick?.let {
+                item.onClick?.let {
                     it(
                         noteViewModel,
                         coroutineScope,
@@ -90,6 +110,7 @@ fun ProfileItem(
                         userViewModel,
                         user
                     )
+
                 }
             }
             .fillMaxWidth()
@@ -105,9 +126,9 @@ fun ProfileItem(
                     bottom.linkTo(parent.bottom)
                     start.linkTo(parent.start)
                 },
-            imageVector = profileItem.itemIcon,
+            imageVector = item.itemIcon,
             contentDescription = null,
-            tint = if(profileItem.itemTitle=="Log out") Color.Red else Color.Black
+            tint = if (item.itemTitle == "Log out") Color.Red else if(item.itemTitle == "Retrieve note") Color.Blue else Color.Black
         )
 
         Text(
@@ -118,12 +139,12 @@ fun ProfileItem(
                     bottom.linkTo(parent.bottom)
                     start.linkTo(icon.end)
                 },
-            text =profileItem.itemTitle,
+            text = item.itemTitle,
             fontSize = 16.sp,
-            color = if(profileItem.itemTitle=="Log out") Color.Red else Color.Black
+            color = if (item.itemTitle == "Log out") Color.Red else Color.Black
         )
 
-        if(profileItem.itemTitle!="Log out") {
+        if (item.itemTitle != "Log out") {
             HorizontalDivider(
                 modifier = Modifier
                     .constrainAs(divider) {

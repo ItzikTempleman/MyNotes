@@ -2,7 +2,9 @@ package com.itzik.mynotes.project.ui
 
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.StarBorder
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -63,7 +65,7 @@ fun LikedNotesScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.very_light_gray))
+            .background(Color.White)
 
     ) {
         val (title, emptyStateMessage, likedNotesLazyColumn) = createRefs()
@@ -76,7 +78,7 @@ fun LikedNotesScreen(
                 }
                 .padding(8.dp)
                 .size(32.dp),
-            imageVector = Icons.Outlined.StarBorder,
+            imageVector = Icons.Default.Star,
             contentDescription = null,
             tint = colorResource(id = R.color.light_yellow),
         )
@@ -95,15 +97,19 @@ fun LikedNotesScreen(
         }
         Card(
             modifier = modifier
-                .padding(24.dp)
+                .padding(8.dp)
                 .constrainAs(likedNotesLazyColumn) {
-                    top.linkTo(title.bottom, margin = 16.dp)
+                    top.linkTo(title.bottom, margin = 8.dp)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 }
+                .border(
+                    BorderStroke(1.dp, Color.Gray),
+                    RoundedCornerShape(16.dp)
+                )
                 .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(16.dp),
+            elevation = CardDefaults.cardElevation(8.dp),
             colors = CardDefaults.cardColors(Color.White)
         ) {
             LazyColumn(

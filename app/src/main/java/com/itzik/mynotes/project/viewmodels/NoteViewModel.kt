@@ -37,16 +37,10 @@ class NoteViewModel @Inject constructor(
 
 
 
-
-
     init {
         viewModelScope.launch {
             fetchNotes()
         }
-    }
-
-    fun sayHello(): String {
-        return repo.sayHello().uppercase()
     }
 
     suspend fun updateSelectedNoteContent(
@@ -129,6 +123,17 @@ class NoteViewModel @Inject constructor(
         privateNoteList.value = sortedNotes.toMutableList()
     }
 
+
+    fun retrieveNote(note: Note) = viewModelScope.launch {
+        note.isInTrash = false
+        repo.updateNote(note)
+        fetchTrashedNotes()
+    }
+
+    suspend fun deleteNotePermanently(note: Note) {
+        repo.deleteNote(note)
+        fetchTrashedNotes()
+    }
 
     fun fetchTrashedNotes(): Flow<MutableList<Note>> {
         val noteList = flow {

@@ -24,4 +24,6 @@
     <string name="pinned_notes">Pinned notes\n</string>
     <string name="new_note">New note</string>
     <string name="liked_notes">Liked notes</string>
+    <string name="retrieve_note">Retrieve note</string>
+    <string name="delete_forever">Delete forever</string>
 </resources>
