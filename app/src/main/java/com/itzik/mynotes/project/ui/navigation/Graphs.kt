@@ -2,11 +2,11 @@ package com.itzik.mynotes.project.ui.navigation
 
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.DeleteForever
-import androidx.compose.material.icons.outlined.PersonOutline
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
 
@@ -27,12 +27,12 @@ sealed class Screen(
 
     data object Home : Screen(route = "home", title = "Home", icon = Icons.Default.Home)
     data object LikedNotes : Screen(route = "liked_notes", title = "liked notes", icon = Icons.Default.Star)
-    data object Profile : Screen(route = "profile", title = "Profile", icon = Icons.Outlined.PersonOutline)
+    data object Profile : Screen(route = "profile", title = "Profile", icon = Icons.Default.Person)
 
 
     data object NoteScreen : Screen(route = "note_screen", title = "Note Screen")
 
-    data object DeletedNotesScreen : Screen(route = "deleted_notes", title = "Deleted notes", icon = Icons.Outlined.DeleteForever)
-    data object Settings : Screen(route = "settings", title = "Settings", icon = Icons.Outlined.Settings)
+    data object DeletedNotesScreen : Screen(route = "deleted_notes", title = "Deleted notes", icon = Icons.Default.DeleteForever)
+    data object Settings : Screen(route = "settings", title = "Settings", icon = Icons.Default.Settings)
 }
 

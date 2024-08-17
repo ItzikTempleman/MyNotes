@@ -42,7 +42,6 @@ import androidx.navigation.compose.rememberNavController
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.ui.navigation.Screen
-import com.itzik.mynotes.project.ui.semantics.EmptyStateMessage
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -142,6 +141,7 @@ fun DeletedNotesScreen(
                             noteViewModel.emptyTrashBin()
                         }
                         noteList = emptyList<Note>().toMutableList()
+                        isDeleteAllDialogOpen=false
                     }
                     .width(230.dp)
                     .padding(24.dp)

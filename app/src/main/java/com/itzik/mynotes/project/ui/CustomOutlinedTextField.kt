@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.ui.semantics
+package com.itzik.mynotes.project.ui
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions

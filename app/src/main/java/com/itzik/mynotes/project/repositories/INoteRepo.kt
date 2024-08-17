@@ -24,6 +24,6 @@ interface INoteRepo {
     suspend fun fetchStarredNotes(): MutableList<Note>
     suspend fun getSortedNotes(sortType: String): MutableList<Note>
     suspend fun deleteNote(note: Note)
-    fun sayHello(): String
+
 
 }

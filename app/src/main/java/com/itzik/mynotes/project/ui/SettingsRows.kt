@@ -37,8 +37,6 @@ sealed class SettingsRows(
     var icon: ImageVector,
     var onClick: ((noteViewModel: NoteViewModel, coroutineScope: CoroutineScope, navController: NavHostController) -> Unit)? = null
 ) {
-
-
     data object MyLocation : SettingsRows(
         title = "",
         icon = Icons.Default.LocationOn,

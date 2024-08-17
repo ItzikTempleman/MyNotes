@@ -143,7 +143,7 @@ fun ProfileScreen(
                 bottomStart = 16.dp,
                 topStart = 60.dp
             ),
-            elevation = CardDefaults.cardElevation(8.dp),
+            elevation = CardDefaults.cardElevation(0.dp),
             colors = CardDefaults.cardColors(Color.White)
         ) {
             ConstraintLayout(
@@ -270,7 +270,7 @@ fun ProfileScreen(
                     RoundedCornerShape(16.dp)
                 ),
             shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(8.dp),
+            elevation = CardDefaults.cardElevation(0.dp),
             colors = CardDefaults.cardColors(Color.White)
         ) {
             LazyColumn(

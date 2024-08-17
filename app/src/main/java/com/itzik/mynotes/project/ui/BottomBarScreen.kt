@@ -64,10 +64,10 @@ fun BottomBarItem(
     } == true
 
     val contentColor = if (selected) when (index) {
-        0 -> colorResource(id = R.color.blue_green)
+        0 ->Color.DarkGray
         1 -> colorResource(id = R.color.light_yellow)
-        else -> colorResource(id = R.color.navy_blue)
-    } else Color.Gray
+        else -> Color.DarkGray
+    } else Color.LightGray
 
 
 

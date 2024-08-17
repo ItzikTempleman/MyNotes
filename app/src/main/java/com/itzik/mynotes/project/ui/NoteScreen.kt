@@ -44,7 +44,6 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.ui.navigation.Screen
-import com.itzik.mynotes.project.ui.semantics.GenericIconButton
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

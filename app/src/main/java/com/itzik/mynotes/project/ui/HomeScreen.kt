@@ -24,8 +24,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Card
@@ -50,9 +50,6 @@ import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.ui.navigation.Screen
-import com.itzik.mynotes.project.ui.semantics.EmptyStateMessage
-import com.itzik.mynotes.project.ui.semantics.GenericIconButton
-import com.itzik.mynotes.project.ui.semantics.SortDropDownMenu
 import com.itzik.mynotes.project.utils.convertLatLangToLocation
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
@@ -80,7 +77,6 @@ fun HomeScreen(
     startLocationUpdates: () -> Unit,
     updateIsLocationRequired: (Boolean) -> Unit
 ) {
-
     var sortType by remember { mutableStateOf("") }
     var isLoadingLocation by remember { mutableStateOf(false) }
     var mutableLocationRequired by remember { mutableStateOf(locationRequired) }
@@ -181,7 +177,7 @@ fun HomeScreen(
                     isExpanded = !isExpanded
                 },
                 colorNumber = 3,
-                imageVector = Icons.Default.Sort
+                imageVector = Icons.AutoMirrored.Filled.Sort
             )
 
             SortDropDownMenu(
@@ -224,7 +220,8 @@ fun HomeScreen(
                     )
                 }
                 navController.navigate(Screen.NoteScreen.route)
-            }, imageVector = Icons.Outlined.Add, colorNumber = 0
+            }, imageVector = Icons.Outlined.Add,
+            colorNumber = 3
         )
 
         Card(
@@ -241,7 +238,7 @@ fun HomeScreen(
                 )
                 .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(8.dp),
+            elevation = CardDefaults.cardElevation(0.dp),
             colors = CardDefaults.cardColors(Color.White)
         ) {
             LazyColumn(

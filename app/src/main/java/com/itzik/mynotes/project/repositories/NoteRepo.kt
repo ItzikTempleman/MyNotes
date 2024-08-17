@@ -50,6 +50,6 @@ class NoteRepo @Inject constructor(
 
     override suspend fun deleteNote(note: Note) = noteDao.deleteNote(note)
 
-    override fun sayHello() = "Hello"
+
 
 }

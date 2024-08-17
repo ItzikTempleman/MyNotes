@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.ui.semantics
+package com.itzik.mynotes.project.ui
 
 //noinspection UsingMaterialAndMaterial3Libraries
 //noinspection UsingMaterialAndMaterial3Libraries

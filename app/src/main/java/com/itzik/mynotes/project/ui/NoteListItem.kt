@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
-import com.itzik.mynotes.project.ui.semantics.GenericIconButton
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 

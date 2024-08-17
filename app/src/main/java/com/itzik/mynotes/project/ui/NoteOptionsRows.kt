@@ -24,7 +24,6 @@ sealed class NoteOptionsRows(
     val isStarred: Boolean = false,
     val isPinned: Boolean = false
 ) {
-
     class StarNote(
         note: Note,
         isStarred: MutableState<Boolean>,
