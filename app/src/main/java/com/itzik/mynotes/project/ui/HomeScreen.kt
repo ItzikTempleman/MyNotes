@@ -49,7 +49,6 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.Note
-import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.utils.convertLatLangToLocation
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
@@ -280,7 +279,8 @@ fun HomeScreen(
                                 selectedNote = null
                             }
                         },
-                        isSelected = selectedNote == noteItem
+                        isSelected = selectedNote == noteItem,
+                        isDeletedScreen = false
                     )
                 }
             }

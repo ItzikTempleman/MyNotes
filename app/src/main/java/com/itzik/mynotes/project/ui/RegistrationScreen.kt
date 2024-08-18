@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.ui.auth
+package com.itzik.mynotes.project.ui
 
 
 import android.util.Log
@@ -29,9 +29,6 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
-import com.itzik.mynotes.project.ui.navigation.Screen
-import com.itzik.mynotes.project.ui.CustomButton
-import com.itzik.mynotes.project.ui.CustomOutlinedTextField
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

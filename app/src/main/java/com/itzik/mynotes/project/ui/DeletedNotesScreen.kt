@@ -24,6 +24,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,7 +42,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
-import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -58,7 +58,6 @@ fun DeletedNotesScreen(
     userViewModel: UserViewModel
 
 ) {
-
     val deleteNoteDialogItems = listOf(GenericRows.RetrieveNote, GenericRows.DeleteNote)
 
     var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
@@ -78,171 +77,181 @@ fun DeletedNotesScreen(
         }
     }
 
-
-    ConstraintLayout(
-        modifier = Modifier
-            .clickable {
-                isDeleteAllDialogOpen = false
-                isDialogOpen = false
-            }
-            .fillMaxSize()
-            .background(Color.White)
-
+    Surface(
+        modifier = Modifier.fillMaxSize()
     ) {
-        val (returnIcon, trashBtn, deleteAllDialog, emptyStateMessage, lazyColumn, recoverDialog) = createRefs()
-
-        IconButton(
-            modifier = Modifier
-                .constrainAs(returnIcon) {
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top)
+        ConstraintLayout(
+            modifier = modifier
+                .clickable {
+                    isDeleteAllDialogOpen = false
+                    isDialogOpen = false
                 }
-                .padding(8.dp),
-            onClick = {
-                navController.navigate(Screen.Home.route)
-            }
+                .fillMaxSize()
+                .background(Color.White)
 
         ) {
-            Icon(
-                modifier = Modifier.size(24.dp),
-                imageVector = Icons.Default.ArrowBackIosNew,
-                contentDescription = null,
-                tint = Color.Black
-            )
-        }
+            val (returnIcon, trashBtn, deleteAllDialog, emptyStateMessage, lazyColumn, recoverDialog) = createRefs()
 
-        IconButton(
-            modifier = Modifier
-                .constrainAs(trashBtn) {
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                }
-                .padding(8.dp),
-            onClick = {
-                isDeleteAllDialogOpen = !isDeleteAllDialogOpen
-            }
-        ) {
-            Icon(
-                modifier = Modifier.size(24.dp),
-                tint = Color.Black,
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = null
-            )
-        }
-        if (isDeleteAllDialogOpen) {
-            Card(
+            IconButton(
                 modifier = Modifier
-                    .constrainAs(deleteAllDialog) {
+                    .constrainAs(returnIcon) {
+                        start.linkTo(parent.start)
                         top.linkTo(parent.top)
-                        end.linkTo(trashBtn.start)
                     }
-                    .clickable {
-                        coroutineScope.launch {
-                            noteViewModel.emptyTrashBin()
-                        }
-                        noteList = emptyList<Note>().toMutableList()
-                        isDeleteAllDialogOpen=false
-                    }
-                    .width(230.dp)
-                    .padding(24.dp)
-                    .border(
-                        BorderStroke(1.dp, Color.Gray),
-                        RoundedCornerShape(16.dp)
-                    ),
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(4.dp),
-                colors = CardDefaults.cardColors(Color.White)
+                    .padding(8.dp),
+                onClick = {
+                    navController.navigate(Screen.Home.route)
+                }
+
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    Icon(
-                        modifier = Modifier.padding(4.dp),
-                        imageVector = Icons.Default.DeleteForever,
-                        tint = Color.Red,
-                        contentDescription = null
-                    )
-                    Text(text = "Delete all notes")
-                }
-            }
-        }
-
-
-        if (noteList.isEmpty()) {
-            EmptyStateMessage(
-                screenDescription = "Deleted",
-                modifier = Modifier.constrainAs(emptyStateMessage) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                    top.linkTo(parent.top)
-                }
-            )
-        }
-
-        LazyColumn(
-            modifier = Modifier
-                .constrainAs(lazyColumn) {
-                    top.linkTo(returnIcon.bottom, margin = 16.dp)
-                    bottom.linkTo(parent.bottom)
-                    height = Dimension.fillToConstraints
-                }
-                .fillMaxWidth()
-                .background(Color.White),
-        ) {
-            items(noteList) { noteItem ->
-                NoteListItem(
-                    isInHomeScreen = false,
-                    noteViewModel = noteViewModel,
-                    coroutineScope = coroutineScope,
-                    note = noteItem,
-                    modifier = Modifier.clickable {
-                        selectedNote = noteItem
-                        isDialogOpen = !isDialogOpen
-                    },
-                    updatedList = {
-                        noteList = it
-                    },
-                    isOptionOpenMenu = {
-
-                    },
-                    isSelected = false
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    imageVector = Icons.Default.ArrowBackIosNew,
+                    contentDescription = null,
+                    tint = Color.Black
                 )
             }
-        }
-        if (isDialogOpen) {
-            Card(
+
+            IconButton(
                 modifier = Modifier
-                    .constrainAs(recoverDialog) {
+                    .constrainAs(trashBtn) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                    }
+                    .padding(8.dp),
+                onClick = {
+                    isDeleteAllDialogOpen = !isDeleteAllDialogOpen
+                }
+            ) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    tint = Color.Black,
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = null
+                )
+            }
+            if (isDeleteAllDialogOpen) {
+                Card(
+                    modifier = Modifier
+                        .constrainAs(deleteAllDialog) {
+                            top.linkTo(parent.top)
+                            end.linkTo(trashBtn.start)
+                        }
+                        .clickable {
+                            coroutineScope.launch {
+                                noteViewModel.emptyTrashBin()
+                            }
+                            noteList = emptyList<Note>().toMutableList()
+                            isDeleteAllDialogOpen = false
+                        }
+                        .width(230.dp)
+                        .padding(24.dp)
+                        .border(
+                            BorderStroke(1.dp, Color.Gray),
+                            RoundedCornerShape(16.dp)
+                        ),
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(4.dp),
+                    colors = CardDefaults.cardColors(Color.White)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Icon(
+                            modifier = Modifier.padding(4.dp),
+                            imageVector = Icons.Default.DeleteForever,
+                            tint = Color.Red,
+                            contentDescription = null
+                        )
+                        Text(text = "Delete all notes")
+                    }
+                }
+            }
+
+            if (noteList.isEmpty()) {
+                EmptyStateMessage(
+                    screenDescription = "Deleted",
+                    modifier = Modifier.constrainAs(emptyStateMessage) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)
+                        top.linkTo(parent.top)
+                    }
+                )
+            }
+
+            LazyColumn(
+                modifier = Modifier
+                    .constrainAs(lazyColumn) {
+                        top.linkTo(returnIcon.bottom, margin = 16.dp)
+                        bottom.linkTo(parent.bottom)
+                        height = Dimension.fillToConstraints
                     }
                     .fillMaxWidth()
-                    .padding(24.dp)
-                    .border(
-                        BorderStroke(1.dp, Color.Gray),
-                        RoundedCornerShape(16.dp)
-                    ),
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(4.dp),
-                colors = CardDefaults.cardColors(Color.White)
+                    .background(Color.White),
             ) {
-                LazyColumn(
-                    modifier = modifier
-                ) {
-                    items(deleteNoteDialogItems) {
-                        GenericItem(
-                            modifier = modifier,
-                            item = it,
+                items(noteList) { noteItem ->
+                    SwipeToDeleteContainer(
+                        item = noteItem,
+                        onDelete = {
+                            coroutineScope.launch {
+                            noteViewModel.deleteNotePermanently(noteItem)
+                            }
+                        }
+                    ) {
+                        NoteListItem(
+                            isInHomeScreen = false,
                             noteViewModel = noteViewModel,
                             coroutineScope = coroutineScope,
-                            navController = navController,
-                            userViewModel = userViewModel,
-                            user = user
+                            note = noteItem,
+                            modifier = Modifier
+                            , updatedList = {
+                                noteList = it
+                            },
+                            isOptionOpenMenu = {
+
+                            },
+                            isSelected = false,
+                            isDeletedScreen = true
                         )
+                    }
+                }
+            }
+
+            if (isDialogOpen) {
+                Card(
+                    modifier = Modifier
+                        .constrainAs(recoverDialog) {
+                            bottom.linkTo(parent.bottom)
+                        }
+                        .fillMaxWidth()
+                        .padding(24.dp)
+                        .border(
+                            BorderStroke(1.dp, Color.Gray),
+                            RoundedCornerShape(16.dp)
+                        ),
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(4.dp),
+                    colors = CardDefaults.cardColors(Color.White)
+                ) {
+                    LazyColumn(
+                        modifier = modifier
+                    ) {
+                        items(deleteNoteDialogItems) {
+                            GenericItem(
+                                modifier = modifier,
+                                item = it,
+                                noteViewModel = noteViewModel,
+                                coroutineScope = coroutineScope,
+                                navController = navController,
+                                userViewModel = userViewModel,
+                                user = user
+                            )
+                        }
                     }
                 }
             }

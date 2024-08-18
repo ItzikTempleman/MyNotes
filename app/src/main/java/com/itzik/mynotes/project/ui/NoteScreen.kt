@@ -43,7 +43,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
-import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -184,10 +183,10 @@ fun NoteScreen(
                     modifier = Modifier
                         .constrainAs(changeFontColorDialog) {
                             top.linkTo(parent.top)
-                            start.linkTo(fontSizeIndicator.end)
+                          end.linkTo(parent.end)
                             bottom.linkTo(parent.bottom)
                         }
-                        .padding(horizontal = 30.dp),
+                        .padding(4.dp),
                     onClick = {
                         isColorPickerOpen = !isColorPickerOpen
                     }) {
@@ -207,10 +206,10 @@ fun NoteScreen(
                         modifier = Modifier
                             .constrainAs(pin) {
                                 top.linkTo(parent.top)
-                                end.linkTo(parent.end)
+                                end.linkTo(changeFontColorDialog.start)
                                 bottom.linkTo(parent.bottom)
                             }
-                            .padding(horizontal = 40.dp)
+                            .padding(horizontal = 44.dp)
                             .rotate(45f),
                         imageVector = Icons.Default.PushPin,
                         contentDescription = null,
@@ -223,7 +222,7 @@ fun NoteScreen(
                             .padding(4.dp)
                             .constrainAs(star) {
                                 top.linkTo(parent.top)
-                                end.linkTo(parent.end)
+                                end.linkTo(changeFontColorDialog.start)
                                 bottom.linkTo(parent.bottom)
                             },
                         imageVector = Icons.Default.Star,

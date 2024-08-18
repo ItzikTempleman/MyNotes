@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.ui.navigation
+package com.itzik.mynotes.project.ui
 
 
 import android.annotation.SuppressLint
@@ -15,14 +15,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.User
-import com.itzik.mynotes.project.ui.DeletedNotesScreen
-import com.itzik.mynotes.project.ui.SettingsScreen
-import com.itzik.mynotes.project.ui.auth.LoginScreen
-import com.itzik.mynotes.project.ui.auth.RegistrationScreen
-import com.itzik.mynotes.project.ui.auth.SplashScreen
-import com.itzik.mynotes.project.ui.navigation.Graph.AUTHENTICATION
-import com.itzik.mynotes.project.ui.navigation.Graph.HOME
-import com.itzik.mynotes.project.ui.navigation.Graph.ROOT
+import com.itzik.mynotes.project.ui.Graph.AUTHENTICATION
+import com.itzik.mynotes.project.ui.Graph.HOME
+import com.itzik.mynotes.project.ui.Graph.ROOT
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel

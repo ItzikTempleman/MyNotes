@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.ui.navigation
+package com.itzik.mynotes.project.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -19,12 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.User
-import com.itzik.mynotes.project.ui.BottomBarScreen
-import com.itzik.mynotes.project.ui.HomeScreen
-import com.itzik.mynotes.project.ui.LikedNotesScreen
-import com.itzik.mynotes.project.ui.NoteScreen
-import com.itzik.mynotes.project.ui.ProfileScreen
-import com.itzik.mynotes.project.ui.navigation.Graph.HOME
+import com.itzik.mynotes.project.ui.Graph.HOME
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel

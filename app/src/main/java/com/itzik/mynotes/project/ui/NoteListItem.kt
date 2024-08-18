@@ -46,9 +46,9 @@ fun NoteListItem(
     coroutineScope: CoroutineScope,
     updatedList: (MutableList<Note>) -> Unit,
     isOptionOpenMenu: (MutableState<Boolean>) -> Unit,
-    isSelected: Boolean
+    isSelected: Boolean,
+    isDeletedScreen: Boolean
 ) {
-
 
     var isOptionVisible by remember {
         mutableStateOf(isSelected)
@@ -64,6 +64,7 @@ fun NoteListItem(
     val isPinned = pinStateMap[note.id] ?: false
     val isStarred = starStateMap[note.id] ?: false
 
+
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
@@ -71,32 +72,17 @@ fun NoteListItem(
     ) {
         val (timeStamp, verticalDiv, content, bottomLine, pinnedNoteIcon, likedNoteIcon, optionIcon) = createRefs()
 
-        Text(
-            modifier = Modifier
-                .constrainAs(timeStamp) {
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                }
-                .padding(8.dp),
-            text = note.time,
-            fontSize = 12.sp
-        )
 
-        VerticalDivider(
-            modifier = Modifier
-                .constrainAs(verticalDiv) {
-                    start.linkTo(timeStamp.end)
-                }
-                .padding(vertical = 8.dp)
-        )
-
-        BoxWithConstraints(modifier = Modifier.constrainAs(content) {
+        BoxWithConstraints(modifier = if(isInHomeScreen ) Modifier.constrainAs(content) {
             start.linkTo(verticalDiv.end)
             top.linkTo(parent.top)
             bottom.linkTo(parent.bottom)
             end.linkTo(parent.end)
-        }.padding(end = 140.dp, start = 40.dp)
+        }.padding(end = 140.dp, start = 40.dp) else Modifier.constrainAs(content) {
+            start.linkTo(parent.start)
+            top.linkTo(parent.top)
+            bottom.linkTo(parent.bottom)
+        }.padding(8.dp)
         ) {
             val availableWidth = constraints.maxWidth * 2 / 3
 
@@ -105,7 +91,7 @@ fun NoteListItem(
                 modifier = Modifier.width(availableWidth.dp),
                 text = note.content,
                 fontSize = 20.sp,
-                color = Color(note.fontColor),
+                color = if(isInHomeScreen) Color(note.fontColor) else Color.DarkGray,
                 fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -121,6 +107,27 @@ fun NoteListItem(
 
 
         if (isInHomeScreen) {
+
+            Text(
+                modifier = Modifier
+                    .constrainAs(timeStamp) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .padding(8.dp),
+                text = note.time,
+                fontSize = 12.sp
+            )
+
+            VerticalDivider(
+                modifier = Modifier
+                    .constrainAs(verticalDiv) {
+                        start.linkTo(timeStamp.end)
+                    }
+                    .padding(vertical = 8.dp)
+            )
+
             GenericIconButton(
                 modifier = Modifier
                     .constrainAs(optionIcon) {

@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.ui.auth
+package com.itzik.mynotes.project.ui
 
 
 import android.annotation.SuppressLint
@@ -15,8 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
-import com.itzik.mynotes.project.ui.navigation.Graph.AUTHENTICATION
-import com.itzik.mynotes.project.ui.navigation.Graph.HOME
+import com.itzik.mynotes.project.ui.Graph.AUTHENTICATION
+import com.itzik.mynotes.project.ui.Graph.HOME
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
