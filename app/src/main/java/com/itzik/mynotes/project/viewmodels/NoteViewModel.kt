@@ -19,7 +19,6 @@ class NoteViewModel @Inject constructor(
     private val repo: INoteRepo,
 ) : ViewModel() {
 
-
     private val privateNote = MutableStateFlow(Note(content = "", fontSize = 20))
     val publicNote: StateFlow<Note> get() = privateNote
 
@@ -35,6 +34,8 @@ class NoteViewModel @Inject constructor(
     private var privateStarStateMap = MutableStateFlow(mapOf<Int, Boolean>())
     val publicStarStateMap: MutableStateFlow<Map<Int, Boolean>> get() = privateStarStateMap
 
+    private val privateDeletedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
+    val publicDeletedNoteList: StateFlow<MutableList<Note>> get() = privateDeletedNoteList
 
     init {
         viewModelScope.launch {
@@ -110,11 +111,12 @@ class NoteViewModel @Inject constructor(
         repo.setTrash(note)
         repo.insertSingleNoteIntoRecycleBin(note)
         fetchNotes()
+        fetchDeletedNotes()
     }
 
     fun emptyTrashBin() = viewModelScope.launch {
         repo.emptyTrashBin()
-        fetchNotes()
+        fetchDeletedNotes()
     }
 
     suspend fun getSortedNotes(sortType: String) {
@@ -127,21 +129,17 @@ class NoteViewModel @Inject constructor(
         note.isInTrash = false
         repo.updateNote(note)
         fetchNotes()
+        fetchDeletedNotes()
     }
 
     suspend fun deleteNotePermanently(note: Note) {
         repo.deleteNote(note)
-        fetchNotes()
+        fetchDeletedNotes()
     }
 
-    fun fetchTrashedNotes(): Flow<MutableList<Note>> {
-        val noteList = flow {
-            val notes = repo.fetchTrashedNotes()
-            if (notes.isNotEmpty()) {
-                emit(notes)
-            } else return@flow
-        }
-        return noteList
+    private suspend fun fetchDeletedNotes() {
+        val notes = repo.fetchTrashedNotes()
+        privateDeletedNoteList.value = notes.toMutableList()
     }
 
     suspend fun fetchStarredNotes(): Flow<MutableList<Note>> {

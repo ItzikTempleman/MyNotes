@@ -29,6 +29,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,7 +68,8 @@ fun DeletedNotesScreen(
 ) {
     val deleteNoteDialogItems = listOf(GenericRows.RetrieveNote, GenericRows.DeleteNote)
 
-    var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
+    val deletedNotes by noteViewModel.publicDeletedNoteList.collectAsState()
+
     var isDialogOpen by remember {
         mutableStateOf(false)
     }
@@ -76,12 +78,11 @@ fun DeletedNotesScreen(
         mutableStateOf(false)
     }
 
-    var selectedNote by remember { mutableStateOf<Note?>(null) }
+    val selectedNote by remember { mutableStateOf<Note?>(null) }
+    var noteList by remember { mutableStateOf(deletedNotes) }
 
-    LaunchedEffect(Unit) {
-        noteViewModel.fetchTrashedNotes().collect {
-            noteList = it
-        }
+    LaunchedEffect(deletedNotes) {
+        noteList = deletedNotes
     }
 
     Surface(
@@ -180,7 +181,7 @@ fun DeletedNotesScreen(
                 }
             }
 
-            if (noteList.isEmpty()) {
+            if (deletedNotes.isEmpty()) {
                 EmptyStateMessage(
                     screenDescription = "Deleted",
                     modifier = Modifier.constrainAs(emptyStateMessage) {
@@ -202,17 +203,19 @@ fun DeletedNotesScreen(
                     .fillMaxWidth()
                     .background(Color.White),
             ) {
-                items(noteList) { noteItem ->
+                items(deletedNotes) { noteItem ->
                     CustomSwipeToActionContainer(
                         item = selectedNote,
                         onRetrieve = {
                             coroutineScope.launch {
                                 noteViewModel.retrieveNote(noteItem)
+                                noteList = noteList.filter { it.id != noteItem.id }.toMutableList()
                             }
                         },
                         onDelete = {
                             coroutineScope.launch {
                                 noteViewModel.deleteNotePermanently(noteItem)
+                                noteList = noteList.filter { it.id != noteItem.id }.toMutableList()
                             }
                         }
                     ) {
