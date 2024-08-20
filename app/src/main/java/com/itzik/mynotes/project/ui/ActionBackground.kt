@@ -1,0 +1,131 @@
+package com.itzik.mynotes.project.ui
+
+import android.annotation.SuppressLint
+import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.RestoreFromTrash
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.consumeAllChanges
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
+
+
+@SuppressLint("RememberReturnType")
+@Composable
+fun <T> CustomSwipeToActionContainer(
+    item: T,
+    onRetrieve: (T) -> Unit,
+    onDelete: (T) -> Unit,
+    content: @Composable (T) -> Unit
+) {
+    val boxSizeDp = 50.dp
+    val boxSizePx = with(LocalDensity.current) { boxSizeDp.toPx() }
+    val maxSwipeDistancePx = boxSizePx * 2
+    val swipeState = remember { Animatable(0f) }
+    val coroutineScope = rememberCoroutineScope()
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures { change, dragAmount ->
+                    change.consumeAllChanges()
+                    coroutineScope.launch {
+                        swipeState.snapTo((swipeState.value + dragAmount).coerceIn(-maxSwipeDistancePx, 0f))
+                    }
+                }
+            }
+            .offset { IntOffset(swipeState.value.roundToInt(), 0) }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .offset { IntOffset(swipeState.value.roundToInt(), 0) }
+        ) {
+            content(item)
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxHeight()
+                .align(Alignment.CenterEnd)
+                .offset { IntOffset(maxSwipeDistancePx.toInt(), 0) },
+            horizontalArrangement = Arrangement.End
+        ) {
+            
+            Box(
+                modifier = Modifier
+                    .size(boxSizeDp)
+                    .background(Color.Gray)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        onRetrieve(item)
+                        coroutineScope.launch { swipeState.animateTo(0f) }
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.RestoreFromTrash,
+                    tint = Color.White,
+                    contentDescription = null
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .size(boxSizeDp)
+                    .background(Color.Red)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        onDelete(item)
+                        coroutineScope.launch { swipeState.animateTo(0f) }
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    tint = Color.White,
+                    contentDescription = null
+                )
+            }
+        }
+    }
+
+    LaunchedEffect(swipeState.value) {
+        if (swipeState.value < -maxSwipeDistancePx / 3) {
+            swipeState.animateTo(-maxSwipeDistancePx)
+        } else {
+            swipeState.animateTo(0f)
+        }
+    }
+}

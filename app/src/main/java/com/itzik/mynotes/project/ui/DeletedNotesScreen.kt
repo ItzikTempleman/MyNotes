@@ -195,8 +195,13 @@ fun DeletedNotesScreen(
                     .background(Color.White),
             ) {
                 items(noteList) { noteItem ->
-                    SwipeToDeleteContainer(
+                    CustomSwipeToActionContainer(
                         item = noteItem,
+                        onRetrieve = {
+                            coroutineScope.launch {
+                                noteViewModel.retrieveNote(noteItem)
+                            }
+                        },
                         onDelete = {
                             coroutineScope.launch {
                             noteViewModel.deleteNotePermanently(noteItem)
