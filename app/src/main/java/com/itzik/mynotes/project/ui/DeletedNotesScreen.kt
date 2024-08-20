@@ -19,7 +19,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.DeleteForever
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -35,11 +36,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
@@ -112,63 +119,64 @@ fun DeletedNotesScreen(
                 )
             }
 
-            IconButton(
+
+            Card(
+                colors = CardDefaults.cardColors(Color.White),
+                elevation = CardDefaults.cardElevation(4.dp),
+                shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .constrainAs(trashBtn) {
                         end.linkTo(parent.end)
                         top.linkTo(parent.top)
                     }
+                    .width(180.dp)
+                    .height(70.dp)
                     .padding(8.dp),
-                onClick = {
-                    isDeleteAllDialogOpen = !isDeleteAllDialogOpen
-                }
             ) {
-                Icon(
-                    modifier = Modifier.size(24.dp),
-                    tint = Color.Black,
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = null
-                )
-            }
-            if (isDeleteAllDialogOpen) {
-                Card(
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .constrainAs(deleteAllDialog) {
-                            top.linkTo(parent.top)
-                            end.linkTo(trashBtn.start)
-                        }
+                        .fillMaxSize()
                         .clickable {
-                            coroutineScope.launch {
-                                noteViewModel.emptyTrashBin()
-                            }
-                            noteList = emptyList<Note>().toMutableList()
-                            isDeleteAllDialogOpen = false
+                            isDeleteAllDialogOpen = !isDeleteAllDialogOpen
                         }
-                        .width(230.dp)
-                        .padding(24.dp)
-                        .border(
-                            BorderStroke(1.dp, Color.Gray),
-                            RoundedCornerShape(16.dp)
-                        ),
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(4.dp),
-                    colors = CardDefaults.cardColors(Color.White)
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        Icon(
-                            modifier = Modifier.padding(4.dp),
-                            imageVector = Icons.Default.DeleteForever,
-                            tint = Color.Red,
-                            contentDescription = null
-                        )
-                        Text(text = "Delete all notes")
+                    Text(text = stringResource(id = R.string.empty_trash_bin))
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        tint = Color.Black,
+                        imageVector = Icons.Default.DeleteForever,
+                        contentDescription = null
+                    )
+                }
+            }
+
+            if (isDeleteAllDialogOpen) {
+                Button(
+                    elevation = ButtonDefaults.buttonElevation(30.dp),
+                    colors = ButtonDefaults.buttonColors(colorResource(id = R.color.very_light_gray)),
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .constrainAs(deleteAllDialog) {
+                            bottom.linkTo(parent.bottom)
+                        }
+                        .padding(8.dp)
+                        .zIndex(3f),
+                    onClick = {
+                        coroutineScope.launch {
+                            noteViewModel.emptyTrashBin()
+                        }
+                        noteList = emptyList<Note>().toMutableList()
+                        isDeleteAllDialogOpen = false
                     }
+                ) {
+                    Text(
+                        color = Color.Red,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 28.sp,
+                        text = "Delete all notes")
                 }
             }
 
@@ -196,7 +204,7 @@ fun DeletedNotesScreen(
             ) {
                 items(noteList) { noteItem ->
                     CustomSwipeToActionContainer(
-                        item = noteItem,
+                        item = selectedNote,
                         onRetrieve = {
                             coroutineScope.launch {
                                 noteViewModel.retrieveNote(noteItem)
@@ -204,7 +212,7 @@ fun DeletedNotesScreen(
                         },
                         onDelete = {
                             coroutineScope.launch {
-                            noteViewModel.deleteNotePermanently(noteItem)
+                                noteViewModel.deleteNotePermanently(noteItem)
                             }
                         }
                     ) {
@@ -213,8 +221,7 @@ fun DeletedNotesScreen(
                             noteViewModel = noteViewModel,
                             coroutineScope = coroutineScope,
                             note = noteItem,
-                            modifier = Modifier
-                            , updatedList = {
+                            modifier = Modifier, updatedList = {
                                 noteList = it
                             },
                             isOptionOpenMenu = {

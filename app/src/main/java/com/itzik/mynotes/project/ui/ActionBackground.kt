@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +17,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.RestoreFromTrash
+import androidx.compose.material.icons.filled.Restore
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,8 +30,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.itzik.mynotes.R
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -47,7 +51,7 @@ fun <T> CustomSwipeToActionContainer(
     val maxSwipeDistancePx = boxSizePx * 2
     val swipeState = remember { Animatable(0f) }
     val coroutineScope = rememberCoroutineScope()
-
+    val interactionSource = remember { MutableInteractionSource() }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -56,7 +60,12 @@ fun <T> CustomSwipeToActionContainer(
                 detectHorizontalDragGestures { change, dragAmount ->
                     change.consumeAllChanges()
                     coroutineScope.launch {
-                        swipeState.snapTo((swipeState.value + dragAmount).coerceIn(-maxSwipeDistancePx, 0f))
+                        swipeState.snapTo(
+                            (swipeState.value + dragAmount).coerceIn(
+                                -maxSwipeDistancePx,
+                                0f
+                            )
+                        )
                     }
                 }
             }
@@ -71,53 +80,61 @@ fun <T> CustomSwipeToActionContainer(
             content(item)
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxHeight()
-                .align(Alignment.CenterEnd)
-                .offset { IntOffset(maxSwipeDistancePx.toInt(), 0) },
-            horizontalArrangement = Arrangement.End
+        Column(
+            modifier = Modifier,
+            horizontalAlignment = Alignment.End
         ) {
-            
-            Box(
+            Row(
                 modifier = Modifier
-                    .size(boxSizeDp)
-                    .background(Color.Gray)
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        onRetrieve(item)
-                        coroutineScope.launch { swipeState.animateTo(0f) }
-                    },
-                contentAlignment = Alignment.Center
+                    .fillMaxHeight()
+                    .offset { IntOffset(maxSwipeDistancePx.toInt(), 0) },
+                horizontalArrangement = Arrangement.End
             ) {
-                Icon(
-                    imageVector = Icons.Default.RestoreFromTrash,
-                    tint = Color.White,
-                    contentDescription = null
-                )
-            }
 
-            Box(
-                modifier = Modifier
-                    .size(boxSizeDp)
-                    .background(Color.Red)
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        onDelete(item)
-                        coroutineScope.launch { swipeState.animateTo(0f) }
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    tint = Color.White,
-                    contentDescription = null
-                )
+                Box(
+                    modifier = Modifier
+                        .size(boxSizeDp)
+                        .background(colorResource(id = R.color.darker_blue))
+                        .clickable(
+                            indication = null,
+                            interactionSource = interactionSource
+                        ) {
+                            onRetrieve(item)
+                            coroutineScope.launch { swipeState.animateTo(0f) }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        imageVector = Icons.Default.Restore,
+                        tint = Color.White,
+                        contentDescription = null
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .size(boxSizeDp)
+                        .background(Color.Red)
+                        .clickable(
+                            indication = null,
+                            interactionSource = interactionSource
+                        ) {
+                            onDelete(item)
+                            coroutineScope.launch { swipeState.animateTo(0f) }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(modifier = Modifier.size(24.dp),
+                        imageVector = Icons.Default.Delete,
+                        tint = Color.White,
+                        contentDescription = null
+                    )
+                }
             }
+            HorizontalDivider(
+                thickness = 1.dp,
+            )
         }
     }
 

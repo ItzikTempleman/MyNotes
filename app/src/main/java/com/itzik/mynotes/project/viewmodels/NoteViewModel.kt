@@ -36,7 +36,6 @@ class NoteViewModel @Inject constructor(
     val publicStarStateMap: MutableStateFlow<Map<Int, Boolean>> get() = privateStarStateMap
 
 
-
     init {
         viewModelScope.launch {
             fetchNotes()
@@ -127,12 +126,12 @@ class NoteViewModel @Inject constructor(
     fun retrieveNote(note: Note) = viewModelScope.launch {
         note.isInTrash = false
         repo.updateNote(note)
-        fetchTrashedNotes()
+        fetchNotes()
     }
 
     suspend fun deleteNotePermanently(note: Note) {
         repo.deleteNote(note)
-        fetchTrashedNotes()
+        fetchNotes()
     }
 
     fun fetchTrashedNotes(): Flow<MutableList<Note>> {

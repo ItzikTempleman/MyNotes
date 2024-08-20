@@ -73,16 +73,20 @@ fun NoteListItem(
         val (timeStamp, verticalDiv, content, bottomLine, pinnedNoteIcon, likedNoteIcon, optionIcon) = createRefs()
 
 
-        BoxWithConstraints(modifier = if(isInHomeScreen ) Modifier.constrainAs(content) {
-            start.linkTo(verticalDiv.end)
-            top.linkTo(parent.top)
-            bottom.linkTo(parent.bottom)
-            end.linkTo(parent.end)
-        }.padding(end = 140.dp, start = 40.dp) else Modifier.constrainAs(content) {
-            start.linkTo(parent.start)
-            top.linkTo(parent.top)
-            bottom.linkTo(parent.bottom)
-        }.padding(8.dp)
+        BoxWithConstraints(modifier = if (isInHomeScreen) Modifier
+            .constrainAs(content) {
+                start.linkTo(verticalDiv.end)
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                end.linkTo(parent.end)
+            }
+            .padding(end = 140.dp, start = 40.dp) else Modifier
+            .constrainAs(content) {
+                start.linkTo(parent.start)
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+            }
+            .padding(8.dp)
         ) {
             val availableWidth = constraints.maxWidth * 2 / 3
 
@@ -91,23 +95,23 @@ fun NoteListItem(
                 modifier = Modifier.width(availableWidth.dp),
                 text = note.content,
                 fontSize = 20.sp,
-                color = if(isInHomeScreen) Color(note.fontColor) else Color.DarkGray,
+                color = if (isInHomeScreen) Color(note.fontColor) else Color.DarkGray,
                 fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
             )
         }
 
-        HorizontalDivider(
-            modifier = Modifier
-                .constrainAs(bottomLine) {
-                    bottom.linkTo(parent.bottom)
-                }
-                .padding(horizontal = 8.dp)
-        )
 
 
         if (isInHomeScreen) {
-
+            HorizontalDivider(
+                modifier = Modifier
+                    .constrainAs(bottomLine) {
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .padding(start = 8.dp),
+                thickness = 0.5.dp,
+            )
             Text(
                 modifier = Modifier
                     .constrainAs(timeStamp) {
