@@ -66,6 +66,11 @@ fun DeletedNotesScreen(
     userViewModel: UserViewModel
 
 ) {
+
+    LaunchedEffect(Unit) {
+        noteViewModel.fetchDeletedNotes()
+    }
+
     val deleteNoteDialogItems = listOf(GenericRows.RetrieveNote, GenericRows.DeleteNote)
 
     val deletedNotes by noteViewModel.publicDeletedNoteList.collectAsState()
@@ -81,9 +86,7 @@ fun DeletedNotesScreen(
     val selectedNote by remember { mutableStateOf<Note?>(null) }
     var noteList by remember { mutableStateOf(deletedNotes) }
 
-    LaunchedEffect(deletedNotes) {
-        noteList = deletedNotes
-    }
+
 
     Surface(
         modifier = Modifier.fillMaxSize()

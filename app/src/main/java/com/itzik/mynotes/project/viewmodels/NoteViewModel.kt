@@ -137,7 +137,7 @@ class NoteViewModel @Inject constructor(
         fetchDeletedNotes()
     }
 
-    private suspend fun fetchDeletedNotes() {
+    suspend fun fetchDeletedNotes() {
         val notes = repo.fetchTrashedNotes()
         privateDeletedNoteList.value = notes.toMutableList()
     }

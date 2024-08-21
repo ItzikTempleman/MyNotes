@@ -27,7 +27,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
@@ -52,20 +51,31 @@ fun <T> CustomSwipeToActionContainer(
     val swipeState = remember { Animatable(0f) }
     val coroutineScope = rememberCoroutineScope()
     val interactionSource = remember { MutableInteractionSource() }
+
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
             .pointerInput(Unit) {
-                detectHorizontalDragGestures { change, dragAmount ->
-                    change.consumeAllChanges()
+                detectHorizontalDragGestures(
+                    onDragStart = {
+
+                    },
+                    onDragEnd = {
+
+                    },
+                    onDragCancel = {
+
+                    }
+                ) { change, dragAmount ->
+                    change.consume()
                     coroutineScope.launch {
-                        swipeState.snapTo(
-                            (swipeState.value + dragAmount).coerceIn(
-                                -maxSwipeDistancePx,
-                                0f
-                            )
+                        val newSwipeValue = (swipeState.value + dragAmount).coerceIn(
+                            -maxSwipeDistancePx,
+                            0f
                         )
+                        swipeState.snapTo(newSwipeValue)
                     }
                 }
             }
@@ -85,7 +95,10 @@ fun <T> CustomSwipeToActionContainer(
             horizontalAlignment = Alignment.End
         ) {
             Row(
-                modifier = Modifier
+                modifier = Modifier.clickable(
+                    indication = null,
+                    interactionSource = interactionSource
+                ){}
                     .fillMaxHeight()
                     .offset { IntOffset(maxSwipeDistancePx.toInt(), 0) },
                 horizontalArrangement = Arrangement.End
@@ -100,7 +113,9 @@ fun <T> CustomSwipeToActionContainer(
                             interactionSource = interactionSource
                         ) {
                             onRetrieve(item)
-                            coroutineScope.launch { swipeState.animateTo(0f) }
+                            coroutineScope.launch {
+                                    swipeState.snapTo(0f)
+                            }
                         },
                     contentAlignment = Alignment.Center
                 ) {
@@ -121,7 +136,9 @@ fun <T> CustomSwipeToActionContainer(
                             interactionSource = interactionSource
                         ) {
                             onDelete(item)
-                            coroutineScope.launch { swipeState.animateTo(0f) }
+                            coroutineScope.launch {
+                                swipeState.snapTo(0f)
+                            }
                         },
                     contentAlignment = Alignment.Center
                 ) {
