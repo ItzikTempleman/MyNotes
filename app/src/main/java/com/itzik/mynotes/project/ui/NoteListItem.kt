@@ -1,7 +1,6 @@
 package com.itzik.mynotes.project.ui
 
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,7 +38,7 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun NoteListItem(
     isInHomeScreen: Boolean,
-    isInLikedScreen:Boolean,
+    isInLikedScreen: Boolean,
     modifier: Modifier,
     note: Note,
     noteViewModel: NoteViewModel,
@@ -156,7 +155,7 @@ fun NoteListItem(
                             top.linkTo(parent.top)
                             bottom.linkTo(parent.bottom)
                         }
-                        .size(20.dp),
+                        .size(24.dp).padding(end=8.dp),
                     imageVector = Icons.Default.Star,
                     contentDescription = null,
                     tint = colorResource(
@@ -166,34 +165,20 @@ fun NoteListItem(
             }
 
             if (isPinned) {
-                ConstraintLayout(
+                Icon(
+                    imageVector = Icons.Default.PushPin,
                     modifier = Modifier
                         .constrainAs(pinnedNoteIcon) {
-                            end.linkTo(likedNoteIcon.start)
+                            end.linkTo(parent.end)
                             top.linkTo(parent.top)
                             bottom.linkTo(parent.bottom)
                         }
-                        .padding(end = 30.dp)
-                ) {
-                    Spacer(
-                        modifier = Modifier
-                            .height(20.dp)
-                            .constrainAs(createRef()) {
-                                top.linkTo(parent.top)
-                                start.linkTo(parent.start)
-                                end.linkTo(parent.end)
-                            }
-                    )
-
-                    Icon(
-                        imageVector = Icons.Default.PushPin,
-                        modifier = Modifier
-                            .size(20.dp)
-                            .rotate(45f),
-                        tint = colorResource(id = R.color.light_deep_purple),
-                        contentDescription = null
-                    )
-                }
+                        .padding(end = 40.dp)
+                        .size(24.dp)
+                        .rotate(45f),
+                    tint = colorResource(id = R.color.light_deep_purple),
+                    contentDescription = null
+                )
             }
 
         }
