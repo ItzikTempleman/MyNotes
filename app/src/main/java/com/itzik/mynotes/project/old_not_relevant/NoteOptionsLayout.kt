@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.ui
+package com.itzik.mynotes.project.old_not_relevant
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.project.model.Note
+import com.itzik.mynotes.project.ui.GenericIconButton
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

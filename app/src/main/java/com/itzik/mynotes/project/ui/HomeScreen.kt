@@ -13,8 +13,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -79,7 +77,7 @@ fun HomeScreen(
     var isExpanded by remember { mutableStateOf(false) }
     val noteList by noteViewModel.publicNoteList.collectAsState()
     val pinnedNoteList by noteViewModel.publicPinnedNoteList.collectAsState()
-    var isOptionsBarOpened by remember { mutableStateOf(false) }
+   // var isOptionsBarOpened by remember { mutableStateOf(false) }
     var selectedNote by remember { mutableStateOf<Note?>(null) }
 
     val combinedList by remember(pinnedNoteList, noteList) {
@@ -276,14 +274,7 @@ fun HomeScreen(
                             updatedList = { updatedNotes ->
                                 noteViewModel.setNoteList(updatedNotes)
                             },
-                            isOptionOpenMenu = { isOpen ->
-                                isOptionsBarOpened = isOpen.value
-                                if (isOpen.value) {
-                                    selectedNote = noteItem
-                                } else if (selectedNote == noteItem) {
-                                    selectedNote = null
-                                }
-                            },
+
                             isSelected = selectedNote == noteItem,
                             isDeletedScreen = false,
                             isInLikedScreen = false
@@ -301,25 +292,6 @@ fun HomeScreen(
                 })
             }
 
-            if (isOptionsBarOpened && selectedNote != null) {
-                NoteOptionsLayout(
-                    cancelOptionsFunction = {
-                        isOptionsBarOpened = false
-                        selectedNote = null
-                    },
-                    modifier = Modifier
-                        .constrainAs(optionScreen) {
-                            bottom.linkTo(parent.bottom)
-                        }
-                        .fillMaxWidth()
-                        .height(182.dp)
-                        .background(Color.White),
-                    noteViewModel = noteViewModel,
-                    coroutineScope = coroutineScope,
-                    navController = navController,
-                    note = selectedNote!!
-                )
-            }
         }
     }
 }

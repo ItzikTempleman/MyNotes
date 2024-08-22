@@ -61,7 +61,7 @@ fun  SwipeToOptions(
             .background(Color.White)
             .pointerInput(Unit) {
                 detectHorizontalDragGestures(
-                    onDragStart = { /* Handle drag start if needed */ },
+                    onDragStart = { },
                     onDragEnd = {
                         coroutineScope.launch {
                             if (swipeState.value < -maxSwipeDistancePx / 3) {

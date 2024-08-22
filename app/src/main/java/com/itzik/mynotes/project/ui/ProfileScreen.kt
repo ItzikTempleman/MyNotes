@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -13,20 +12,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,7 +43,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -97,15 +91,14 @@ fun ProfileScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        val (imageContainer, profileCard, bottomRow) = createRefs()
+        val (imageContainer, horizontalLine, verticalLine, uploadImageBtn, removeImageBtn, name, email, phone, bottomRow) = createRefs()
         Box(
             modifier = Modifier
-                .zIndex(2f)
                 .constrainAs(imageContainer) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 }
-                .padding(2.dp)
+                .padding(16.dp)
                 .size(130.dp)
                 .clip(CircleShape)
                 .background(Color.White)
@@ -120,174 +113,129 @@ fun ProfileScreen(
             )
         }
 
-        Card(
+
+        HorizontalDivider(
             modifier = Modifier
-                .constrainAs(profileCard) {
+                .constrainAs(horizontalLine) {
                     top.linkTo(parent.top)
                 }
-                .padding(8.dp)
-                .fillMaxWidth()
-                .height(670.dp)
-                .border(
-                    BorderStroke(1.dp, Color.Gray),
-                    RoundedCornerShape(
-                        topEnd = 16.dp,
-                        bottomEnd = 16.dp,
-                        bottomStart = 16.dp,
-                        topStart = 60.dp
-                    )
-                ),
-            shape = RoundedCornerShape(
-                topEnd = 16.dp,
-                bottomEnd = 16.dp,
-                bottomStart = 16.dp,
-                topStart = 60.dp
-            ),
-            elevation = CardDefaults.cardElevation(0.dp),
-            colors = CardDefaults.cardColors(Color.White)
-        ) {
-            ConstraintLayout(
-                modifier = modifier.fillMaxSize()
-            ) {
-                val (horizontalLine, verticalLine, uploadImageBtn, removeImageBtn, name, email, phone) = createRefs()
+                .padding(start = 8.dp, end = 8.dp, top = 50.dp),
+            color = Color.Transparent
+        )
 
-                HorizontalDivider(
-                    modifier = Modifier
-                        .constrainAs(horizontalLine) {
-                            top.linkTo(parent.top)
-                        }
-                        .padding(start = 8.dp, end = 8.dp, top = 40.dp),
-                    color = Color.Transparent
+        VerticalDivider(
+            modifier = Modifier
+                .constrainAs(verticalLine) {
+                    start.linkTo(parent.start)
+                }
+                .padding(start = 140.dp),
+            color = Color.Transparent
+        )
+
+        IconButton(
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .constrainAs(uploadImageBtn) {
+                    top.linkTo(horizontalLine.bottom)
+                    start.linkTo(verticalLine.end)
+                },
+            onClick = {
+                singlePhotoPickerLauncher.launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                 )
-
-                VerticalDivider(
-                    modifier = Modifier
-                        .constrainAs(verticalLine) {
-                            start.linkTo(parent.start)
-                        }
-                        .padding(start = 110.dp),
-                    color = Color.Transparent
-                )
-
-                IconButton(
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .constrainAs(uploadImageBtn) {
-                            top.linkTo(horizontalLine.bottom)
-                            start.linkTo(verticalLine.end)
-                        },
-                    onClick = {
-                        singlePhotoPickerLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
-                    }) {
-                    Icon(imageVector = Icons.Outlined.Edit, contentDescription = null)
-                }
-
-                IconButton(
-                    modifier = Modifier
-                        .constrainAs(removeImageBtn) {
-                            top.linkTo(uploadImageBtn.top)
-                            bottom.linkTo(uploadImageBtn.bottom)
-                            start.linkTo(uploadImageBtn.end)
-                        },
-                    onClick = {
-                        coroutineScope.launch {
-                            userViewModel.updateProfileImage("")
-                        }
-                    }) {
-                    Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
-                }
-
-                Text(
-                    text = user.userName,
-                    modifier = Modifier
-                        .constrainAs(name) {
-                            top.linkTo(parent.top)
-                            start.linkTo(parent.start)
-                        }
-                        .padding(start = 16.dp, top = 130.dp),
-                    color = Color.Black,
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Row(
-                    modifier = Modifier
-                        .constrainAs(email) {
-                            top.linkTo(name.bottom)
-                        }
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Email,
-                        contentDescription = null,
-                        tint = Color.DarkGray
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 8.dp),
-                        color = Color.DarkGray,
-                        text = user.email
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .constrainAs(phone) {
-                            top.linkTo(email.bottom)
-                        }
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Call,
-                        contentDescription = null,
-                        tint = Color.DarkGray
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 8.dp),
-                        color = Color.DarkGray,
-                        text = user.phoneNumber.toString()
-                    )
-                }
-            }
+            }) {
+            Icon(imageVector = Icons.Outlined.Edit, contentDescription = null)
         }
 
-        Card(
-            modifier = modifier
-                .constrainAs(bottomRow) {
-                    bottom.linkTo(parent.bottom)
+        IconButton(
+            modifier = Modifier
+                .constrainAs(removeImageBtn) {
+                    top.linkTo(uploadImageBtn.top)
+                    bottom.linkTo(uploadImageBtn.bottom)
+                    start.linkTo(uploadImageBtn.end)
+                },
+            onClick = {
+                coroutineScope.launch {
+                    userViewModel.updateProfileImage("")
+                }
+            }) {
+            Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
+        }
+
+        Text(
+            text = user.userName,
+            modifier = Modifier
+                .constrainAs(name) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                }
+                .padding(start = 16.dp, top = 160.dp),
+            color = Color.Black,
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Row(
+            modifier = Modifier
+                .constrainAs(email) {
+                    top.linkTo(name.bottom)
                 }
                 .fillMaxWidth()
-                .padding(8.dp)
-                .border(
-                    BorderStroke(1.dp, Color.Gray),
-                    RoundedCornerShape(16.dp)
-                ),
-            shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(0.dp),
-            colors = CardDefaults.cardColors(Color.White)
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            LazyColumn(
-                modifier = modifier
-            ) {
-                items(profileItems) {
-                    GenericItem(
-                        user = user,
-                        modifier = modifier,
-                        item = it,
-                        noteViewModel = noteViewModel,
-                        coroutineScope = coroutineScope,
-                        navController = navController,
-                        userViewModel = userViewModel,
+            Icon(
+                imageVector = Icons.Outlined.Email,
+                contentDescription = null,
+                tint = Color.DarkGray
+            )
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                color = Color.DarkGray,
+                text = user.email
+            )
+        }
 
-                        )
+        Row(
+            modifier = Modifier
+                .constrainAs(phone) {
+                    top.linkTo(email.bottom)
                 }
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Call,
+                contentDescription = null,
+                tint = Color.DarkGray
+            )
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                color = Color.DarkGray,
+                text = user.phoneNumber.toString()
+            )
+        }
+
+        LazyColumn(
+            modifier = Modifier
+                .constrainAs(bottomRow) {
+                    bottom.linkTo(parent.bottom)
+                }.fillMaxWidth()
+        ) {
+            items(profileItems) {
+                GenericItem(
+                    user = user,
+                    modifier = modifier,
+                    item = it,
+                    noteViewModel = noteViewModel,
+                    coroutineScope = coroutineScope,
+                    navController = navController,
+                    userViewModel = userViewModel,
+
+                    )
             }
         }
     }

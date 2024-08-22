@@ -40,7 +40,7 @@ import kotlin.math.roundToInt
 @SuppressLint("RememberReturnType")
 @Composable
 fun <T> SwipeToDeleteOrRetrieve(
-    item: T,
+    note: T,
     onRetrieve: (T) -> Unit,
     onDelete: (T) -> Unit,
     content: @Composable (T) -> Unit
@@ -87,7 +87,7 @@ fun <T> SwipeToDeleteOrRetrieve(
                 .background(Color.White)
                 .offset { IntOffset(swipeState.value.roundToInt(), 0) }
         ) {
-            content(item)
+            content(note)
         }
 
         Column(
@@ -112,7 +112,7 @@ fun <T> SwipeToDeleteOrRetrieve(
                             indication = null,
                             interactionSource = interactionSource
                         ) {
-                            onRetrieve(item)
+                            onRetrieve(note)
                             coroutineScope.launch {
                                     swipeState.snapTo(0f)
                             }
@@ -135,7 +135,7 @@ fun <T> SwipeToDeleteOrRetrieve(
                             indication = null,
                             interactionSource = interactionSource
                         ) {
-                            onDelete(item)
+                            onDelete(note)
                             coroutineScope.launch {
                                 swipeState.snapTo(0f)
                             }

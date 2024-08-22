@@ -89,52 +89,51 @@ fun LikedNotesScreen(
                     })
         }
 
-            LazyColumn(
-                modifier = Modifier .fillMaxWidth()               .constrainAs(likedNotesLazyColumn) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(likedNotesLazyColumn) {
                     top.linkTo(title.bottom, margin = 8.dp)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 }
 
-            ) {
-                items(noteList) { noteItem ->
-                    NoteListItem(
-                        isInHomeScreen = false,
-                        noteViewModel = noteViewModel,
-                        coroutineScope = coroutineScope,
-                        note = noteItem,
-                        modifier = Modifier.clickable {
-                            coroutineScope.launch {
-                                val noteId = noteItem.id
-                                navController.currentBackStackEntry?.savedStateHandle?.set(
-                                    key = "noteId",
-                                    value = noteId
-                                )
-                                noteViewModel.updateSelectedNoteContent(
-                                    newChar = noteItem.content,
-                                    noteId = noteId,
-                                    isPinned = noteItem.isPinned,
-                                    isStarred = noteItem.isStarred,
-                                    fontSize = noteItem.fontSize,
-                                    fontColor = noteItem.fontColor
-                                )
-                            }
-                            navController.navigate(Screen.NoteScreen.route)
-                        },
-                        updatedList = { updatedNotes ->
-                            noteViewModel.setNoteList(updatedNotes)
-                        },
-                        isOptionOpenMenu = {
-
-                        },
-                        isSelected = false,
-                        isDeletedScreen = false,
-                        isInLikedScreen = true
-                    )
-                }
+        ) {
+            items(noteList) { noteItem ->
+                NoteListItem(
+                    isInHomeScreen = false,
+                    noteViewModel = noteViewModel,
+                    coroutineScope = coroutineScope,
+                    note = noteItem,
+                    modifier = Modifier.clickable {
+                        coroutineScope.launch {
+                            val noteId = noteItem.id
+                            navController.currentBackStackEntry?.savedStateHandle?.set(
+                                key = "noteId",
+                                value = noteId
+                            )
+                            noteViewModel.updateSelectedNoteContent(
+                                newChar = noteItem.content,
+                                noteId = noteId,
+                                isPinned = noteItem.isPinned,
+                                isStarred = noteItem.isStarred,
+                                fontSize = noteItem.fontSize,
+                                fontColor = noteItem.fontColor
+                            )
+                        }
+                        navController.navigate(Screen.NoteScreen.route)
+                    },
+                    updatedList = { updatedNotes ->
+                        noteViewModel.setNoteList(updatedNotes)
+                    },
+                    isSelected = false,
+                    isDeletedScreen = false,
+                    isInLikedScreen = true
+                )
             }
         }
     }
+}
 
 
 

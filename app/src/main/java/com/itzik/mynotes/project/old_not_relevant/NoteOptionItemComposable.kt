@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.ui
+package com.itzik.mynotes.project.old_not_relevant
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

@@ -208,7 +208,7 @@ fun DeletedNotesScreen(
             ) {
                 items(deletedNotes) { noteItem ->
                     SwipeToDeleteOrRetrieve(
-                        item = selectedNote,
+                        note = selectedNote,
                         onRetrieve = {
                             coroutineScope.launch {
                                 noteViewModel.retrieveNote(noteItem)
@@ -229,9 +229,6 @@ fun DeletedNotesScreen(
                             note = noteItem,
                             modifier = Modifier, updatedList = {
                                 noteList = it
-                            },
-                            isOptionOpenMenu = {
-
                             },
                             isSelected = false,
                             isDeletedScreen = true,

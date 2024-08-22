@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,7 +43,6 @@ fun NoteListItem(
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
     updatedList: (MutableList<Note>) -> Unit,
-    isOptionOpenMenu: (MutableState<Boolean>) -> Unit,
     isSelected: Boolean,
     isDeletedScreen: Boolean
 ) {
@@ -100,9 +98,6 @@ fun NoteListItem(
             )
         }
 
-
-
-
         if (isInLikedScreen) {
             HorizontalDivider(
                 modifier = Modifier
@@ -155,7 +150,7 @@ fun NoteListItem(
                             top.linkTo(parent.top)
                             bottom.linkTo(parent.bottom)
                         }
-                        .size(24.dp).padding(end=8.dp),
+                        .size(30.dp).padding(end=8.dp),
                     imageVector = Icons.Default.Star,
                     contentDescription = null,
                     tint = colorResource(
