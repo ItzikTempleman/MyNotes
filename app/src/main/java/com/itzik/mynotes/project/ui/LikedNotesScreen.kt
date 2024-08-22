@@ -2,9 +2,7 @@ package com.itzik.mynotes.project.ui
 
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,11 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -93,25 +88,13 @@ fun LikedNotesScreen(
                         top.linkTo(parent.top)
                     })
         }
-        Card(
-            modifier = modifier
-                .padding(8.dp)
-                .constrainAs(likedNotesLazyColumn) {
+
+            LazyColumn(
+                modifier = Modifier .fillMaxWidth()               .constrainAs(likedNotesLazyColumn) {
                     top.linkTo(title.bottom, margin = 8.dp)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 }
-                .border(
-                    BorderStroke(1.dp, Color.Gray),
-                    RoundedCornerShape(16.dp)
-                )
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(0.dp),
-            colors = CardDefaults.cardColors(Color.White)
-        ) {
-            LazyColumn(
-                modifier = Modifier
 
             ) {
                 items(noteList) { noteItem ->
@@ -145,13 +128,14 @@ fun LikedNotesScreen(
 
                         },
                         isSelected = false,
-                        isDeletedScreen = false
+                        isDeletedScreen = false,
+                        isInLikedScreen = true
                     )
                 }
             }
         }
     }
-}
+
 
 
 

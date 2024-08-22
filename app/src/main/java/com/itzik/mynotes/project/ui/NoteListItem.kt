@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.HorizontalDivider
@@ -40,6 +39,7 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun NoteListItem(
     isInHomeScreen: Boolean,
+    isInLikedScreen:Boolean,
     modifier: Modifier,
     note: Note,
     noteViewModel: NoteViewModel,
@@ -103,15 +103,29 @@ fun NoteListItem(
 
 
 
-        if (isInHomeScreen) {
+
+        if (isInLikedScreen) {
             HorizontalDivider(
                 modifier = Modifier
                     .constrainAs(bottomLine) {
                         bottom.linkTo(parent.bottom)
                     }
                     .padding(start = 8.dp),
-                thickness = 0.5.dp,
+                thickness = 1.dp,
             )
+        }
+
+        if (isInHomeScreen) {
+
+            HorizontalDivider(
+                modifier = Modifier
+                    .constrainAs(bottomLine) {
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .padding(start = 8.dp),
+                thickness = 1.dp,
+            )
+
             Text(
                 modifier = Modifier
                     .constrainAs(timeStamp) {
@@ -132,26 +146,13 @@ fun NoteListItem(
                     .padding(vertical = 8.dp)
             )
 
-            GenericIconButton(
-                modifier = Modifier
-                    .constrainAs(optionIcon) {
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    },
-                onClick = {
-                    isOptionVisible = !isOptionVisible
-                    isOptionOpenMenu(mutableStateOf(isOptionVisible))
-                },
-                imageVector = Icons.Default.MoreVert,
-                colorNumber = 3
-            )
+
 
             if (isStarred) {
                 Icon(
                     modifier = Modifier
                         .constrainAs(likedNoteIcon) {
-                            end.linkTo(optionIcon.start)
+                            end.linkTo(parent.end)
                             top.linkTo(parent.top)
                             bottom.linkTo(parent.bottom)
                         }
@@ -168,7 +169,7 @@ fun NoteListItem(
                 ConstraintLayout(
                     modifier = Modifier
                         .constrainAs(pinnedNoteIcon) {
-                            end.linkTo(optionIcon.start)
+                            end.linkTo(likedNoteIcon.start)
                             top.linkTo(parent.top)
                             bottom.linkTo(parent.bottom)
                         }

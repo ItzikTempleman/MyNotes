@@ -8,10 +8,8 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,16 +20,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -110,209 +106,220 @@ fun HomeScreen(
             updateIsLocationRequired(mutableLocationRequired)
         }
 
-    ConstraintLayout(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
+    Surface(
+        modifier = Modifier.fillMaxSize()
     ) {
-        val (
-            title, sortOptionIcon, emptyStateMessage, noteLazyColumn,
-            locationButton, newNoteBtn, progressBar, optionScreen
-        ) = createRefs()
-
-        Icon(
-            imageVector = Icons.Default.Home,
-            contentDescription = null,
-            tint = Color.DarkGray,
+        ConstraintLayout(
             modifier = Modifier
-                .padding(8.dp)
-                .size(32.dp)
-                .constrainAs(title) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                }
-        )
-
-        GenericIconButton(
-            modifier = Modifier
-                .constrainAs(locationButton) {
-                    end.linkTo(sortOptionIcon.start)
-                    top.linkTo(parent.top)
-                }
-                .padding(8.dp),
-            onClick = {
-                isLoadingLocation = true
-                if (permissions.all {
-                        ContextCompat.checkSelfPermission(
-                            context, it
-                        ) == PackageManager.PERMISSION_GRANTED
-                    }) {
-                    startLocationUpdates()
-                    locationName = convertLatLangToLocation(currentLocation, context)
-                    locationViewModel.setLocationName(
-                        convertLatLangToLocation(
-                            currentLocation, context
-                        )
-                    )
-                    if (locationName.isNotBlank()) isLoadingLocation = false
-                } else {
-                    launchMultiplePermissions.launch(permissions)
-                }
-            },
-            colorNumber = 3,
-            imageVector = Icons.Outlined.LocationOn
-        )
-
-        Box(
-            modifier = Modifier
-                .constrainAs(sortOptionIcon) {
-                    top.linkTo(parent.top)
-                    end.linkTo(newNoteBtn.start)
-                }
-                .padding(8.dp)
+                .fillMaxSize()
+                .background(Color.White),
         ) {
+            val (
+                title, sortOptionIcon, emptyStateMessage, noteLazyColumn,
+                locationButton, newNoteBtn, progressBar, optionScreen
+            ) = createRefs()
+
+            Icon(
+                imageVector = Icons.Default.Home,
+                contentDescription = null,
+                tint = Color.DarkGray,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(32.dp)
+                    .constrainAs(title) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    }
+            )
+
             GenericIconButton(
+                modifier = Modifier
+                    .constrainAs(locationButton) {
+                        end.linkTo(sortOptionIcon.start)
+                        top.linkTo(parent.top)
+                    }
+                    .padding(8.dp),
                 onClick = {
-                    isExpanded = !isExpanded
+                    isLoadingLocation = true
+                    if (permissions.all {
+                            ContextCompat.checkSelfPermission(
+                                context, it
+                            ) == PackageManager.PERMISSION_GRANTED
+                        }) {
+                        startLocationUpdates()
+                        locationName = convertLatLangToLocation(currentLocation, context)
+                        locationViewModel.setLocationName(
+                            convertLatLangToLocation(
+                                currentLocation, context
+                            )
+                        )
+                        if (locationName.isNotBlank()) isLoadingLocation = false
+                    } else {
+                        launchMultiplePermissions.launch(permissions)
+                    }
                 },
                 colorNumber = 3,
-                imageVector = Icons.AutoMirrored.Filled.Sort
+                imageVector = Icons.Outlined.LocationOn
             )
 
-            SortDropDownMenu(
-                isExpanded = isExpanded,
-                modifier = Modifier.wrapContentSize(),
-                coroutineScope = coroutineScope,
-                noteViewModel = noteViewModel,
-                onDismissRequest = {
-                    isExpanded = false
-                },
-                updatedSortedList = {
-                    sortType = it
-                }
+            Box(
+                modifier = Modifier
+                    .constrainAs(sortOptionIcon) {
+                        top.linkTo(parent.top)
+                        end.linkTo(newNoteBtn.start)
+                    }
+                    .padding(8.dp)
+            ) {
+                GenericIconButton(
+                    onClick = {
+                        isExpanded = !isExpanded
+                    },
+                    colorNumber = 3,
+                    imageVector = Icons.AutoMirrored.Filled.Sort
+                )
+
+                SortDropDownMenu(
+                    isExpanded = isExpanded,
+                    modifier = Modifier.wrapContentSize(),
+                    coroutineScope = coroutineScope,
+                    noteViewModel = noteViewModel,
+                    onDismissRequest = {
+                        isExpanded = false
+                    },
+                    updatedSortedList = {
+                        sortType = it
+                    }
+                )
+            }
+
+            if (noteList.isEmpty()) {
+                EmptyStateMessage(modifier = Modifier
+                    .zIndex(4f)
+                    .constrainAs(emptyStateMessage) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                        top.linkTo(parent.top)
+                    })
+            }
+
+            GenericIconButton(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .constrainAs(newNoteBtn) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                    },
+                onClick = {
+                    coroutineScope.launch {
+                        noteViewModel.updateSelectedNoteContent(
+                            "", isPinned = false, isStarred = false,
+                            fontSize = 20, fontColor = Color.Gray.toArgb()
+                        )
+                    }
+                    navController.navigate(Screen.NoteScreen.route)
+                }, imageVector = Icons.Outlined.Add,
+                colorNumber = 3
             )
-        }
 
-        if (noteList.isEmpty()) {
-            EmptyStateMessage(modifier = Modifier
-                .zIndex(4f)
-                .constrainAs(emptyStateMessage) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                    top.linkTo(parent.top)
-                })
-        }
-
-        GenericIconButton(
-            modifier = Modifier
-                .padding(8.dp)
-                .constrainAs(newNoteBtn) {
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                },
-            onClick = {
-                coroutineScope.launch {
-                    noteViewModel.updateSelectedNoteContent(
-                        "", isPinned = false, isStarred = false,
-                        fontSize = 20, fontColor = Color.Gray.toArgb()
-                    )
-                }
-                navController.navigate(Screen.NoteScreen.route)
-            }, imageVector = Icons.Outlined.Add,
-            colorNumber = 3
-        )
-
-        Card(
-            modifier = modifier
-                .padding(8.dp)
-                .constrainAs(noteLazyColumn) {
+            LazyColumn(
+                modifier = Modifier.constrainAs(noteLazyColumn) {
                     top.linkTo(title.bottom, margin = 8.dp)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 }
-                .border(
-                    BorderStroke(1.dp, Color.Gray),
-                    RoundedCornerShape(16.dp)
-                )
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(0.dp),
-            colors = CardDefaults.cardColors(Color.White)
-        ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize()
             ) {
                 items(combinedList, key = { it.id }) { noteItem ->
-                    NoteListItem(
-                        isInHomeScreen = true,
-                        noteViewModel = noteViewModel,
-                        coroutineScope = coroutineScope,
+
+                    SwipeToOptions(
                         note = noteItem,
-                        modifier = Modifier
-                            .clickable {
-                                coroutineScope.launch {
-                                    val noteId = noteItem.id
-                                    navController.currentBackStackEntry?.savedStateHandle?.set(
-                                        key = "noteId", value = noteId
-                                    )
-                                    noteViewModel.updateSelectedNoteContent(
-                                        noteItem.content,
-                                        noteId,
-                                        noteItem.isPinned,
-                                        noteItem.isStarred,
-                                        noteItem.fontSize,
-                                        noteItem.fontColor
-                                    )
+                        onPin = {
+                            coroutineScope.launch {
+                                noteViewModel.togglePinButton(noteItem)
+                            }
+                        },
+                        onStar = {
+                            coroutineScope.launch {
+                                noteViewModel.toggleStarredButton(noteItem)
+                            }
+                        },
+                        onDelete = {
+                            coroutineScope.launch {
+                                noteViewModel.setTrash(noteItem)
+                            }
+                        }
+                    ) {
+                        NoteListItem(
+                            isInHomeScreen = true,
+                            noteViewModel = noteViewModel,
+                            coroutineScope = coroutineScope,
+                            note = noteItem,
+                            modifier = Modifier
+                                .clickable {
+                                    coroutineScope.launch {
+                                        val noteId = noteItem.id
+                                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                                            key = "noteId", value = noteId
+                                        )
+                                        noteViewModel.updateSelectedNoteContent(
+                                            noteItem.content,
+                                            noteId,
+                                            noteItem.isPinned,
+                                            noteItem.isStarred,
+                                            noteItem.fontSize,
+                                            noteItem.fontColor
+                                        )
+                                    }
+                                    navController.navigate(Screen.NoteScreen.route)
                                 }
-                                navController.navigate(Screen.NoteScreen.route)
-                            }
-                            .animateItemPlacement(),
-                        updatedList = { updatedNotes ->
-                            noteViewModel.setNoteList(updatedNotes)
-                        },
-                        isOptionOpenMenu = { isOpen ->
-                            isOptionsBarOpened = isOpen.value
-                            if (isOpen.value) {
-                                selectedNote = noteItem
-                            } else if (selectedNote == noteItem) {
-                                selectedNote = null
-                            }
-                        },
-                        isSelected = selectedNote == noteItem,
-                        isDeletedScreen = false
-                    )
+                                .animateItemPlacement(),
+                            updatedList = { updatedNotes ->
+                                noteViewModel.setNoteList(updatedNotes)
+                            },
+                            isOptionOpenMenu = { isOpen ->
+                                isOptionsBarOpened = isOpen.value
+                                if (isOpen.value) {
+                                    selectedNote = noteItem
+                                } else if (selectedNote == noteItem) {
+                                    selectedNote = null
+                                }
+                            },
+                            isSelected = selectedNote == noteItem,
+                            isDeletedScreen = false,
+                            isInLikedScreen = false
+                        )
+                    }
                 }
             }
-        }
 
-        if (isLoadingLocation) {
-            CircularProgressIndicator(modifier = Modifier.constrainAs(progressBar) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            })
-        }
+            if (isLoadingLocation) {
+                CircularProgressIndicator(modifier = Modifier.constrainAs(progressBar) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                })
+            }
 
-        if (isOptionsBarOpened && selectedNote != null) {
-            NoteOptionsLayout(
-                cancelOptionsFunction = {
-                    isOptionsBarOpened = false
-                    selectedNote = null
-                },
-                modifier = Modifier
-                    .constrainAs(optionScreen) {
-                        bottom.linkTo(parent.bottom)
-                    }
-                    .fillMaxWidth()
-                    .height(182.dp)
-                    .background(Color.White),
-                noteViewModel = noteViewModel,
-                coroutineScope = coroutineScope,
-                navController = navController,
-                note = selectedNote!!
-            )
+            if (isOptionsBarOpened && selectedNote != null) {
+                NoteOptionsLayout(
+                    cancelOptionsFunction = {
+                        isOptionsBarOpened = false
+                        selectedNote = null
+                    },
+                    modifier = Modifier
+                        .constrainAs(optionScreen) {
+                            bottom.linkTo(parent.bottom)
+                        }
+                        .fillMaxWidth()
+                        .height(182.dp)
+                        .background(Color.White),
+                    noteViewModel = noteViewModel,
+                    coroutineScope = coroutineScope,
+                    navController = navController,
+                    note = selectedNote!!
+                )
+            }
         }
     }
 }

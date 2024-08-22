@@ -207,7 +207,7 @@ fun DeletedNotesScreen(
                     .background(Color.White),
             ) {
                 items(deletedNotes) { noteItem ->
-                    CustomSwipeToActionContainer(
+                    SwipeToDeleteOrRetrieve(
                         item = selectedNote,
                         onRetrieve = {
                             coroutineScope.launch {
@@ -234,7 +234,8 @@ fun DeletedNotesScreen(
 
                             },
                             isSelected = false,
-                            isDeletedScreen = true
+                            isDeletedScreen = true,
+                            isInLikedScreen = false
                         )
                     }
                 }

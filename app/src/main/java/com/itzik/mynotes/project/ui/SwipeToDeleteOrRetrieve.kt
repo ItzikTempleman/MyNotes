@@ -39,7 +39,7 @@ import kotlin.math.roundToInt
 
 @SuppressLint("RememberReturnType")
 @Composable
-fun <T> CustomSwipeToActionContainer(
+fun <T> SwipeToDeleteOrRetrieve(
     item: T,
     onRetrieve: (T) -> Unit,
     onDelete: (T) -> Unit,
