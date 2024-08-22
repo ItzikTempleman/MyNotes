@@ -1,12 +1,10 @@
 package com.itzik.mynotes.project.ui
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -18,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
@@ -28,25 +27,17 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
-import com.itzik.mynotes.R
+import coil.compose.rememberAsyncImagePainter
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
@@ -65,33 +56,23 @@ fun ProfileScreen(
 ) {
     val profileItems = listOf(GenericRows.DeletedItems, GenericRows.Settings, GenericRows.LogOut)
 
-
-    val userList by userViewModel.publicLoggedInUsersList.collectAsState(initial = null)
-    val loggedInUser = userList?.firstOrNull()
-    var selectedImageUri by remember { mutableStateOf(user.profileImage) }
-    LaunchedEffect(loggedInUser?.profileImage) {
-        if (user.profileImage.isNotEmpty()) {
-            selectedImageUri = user.profileImage
-        }
-    }
-    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri ->
+    val imagePickerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
                 coroutineScope.launch {
-                    selectedImageUri = it.toString()
-                    userViewModel.updateProfileImage(selectedImageUri)
-                    Log.d("ProfileScreen", "Picked Image URI: $selectedImageUri")
+                    userViewModel.updateProfileImage(it.toString())
                 }
             }
         }
-    )
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
         val (imageContainer, horizontalLine, verticalLine, uploadImageBtn, removeImageBtn, name, email, phone, bottomRow) = createRefs()
+
+
         Box(
             modifier = Modifier
                 .constrainAs(imageContainer) {
@@ -101,19 +82,24 @@ fun ProfileScreen(
                 .padding(16.dp)
                 .size(130.dp)
                 .clip(CircleShape)
-                .background(Color.White)
-                .border(0.5.dp, Color.Black, CircleShape)
+                .background(Color.LightGray),
+            contentAlignment = Alignment.Center
         ) {
-            AsyncImage(
-                model = selectedImageUri.ifEmpty { R.drawable.baseline_person_24 },
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize(),
-                error = painterResource(R.drawable.ic_launcher_background)
-            )
+            if (user.profileImage.isNotEmpty()) {
+                Image(
+                    contentScale = ContentScale.Crop,
+                    painter = rememberAsyncImagePainter(model = user.profileImage),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                Image(
+                    imageVector = Icons.Default.Person,
+                    contentDescription = null,
+                    modifier = Modifier.size(50.dp)
+                )
+            }
         }
-
-
         HorizontalDivider(
             modifier = Modifier
                 .constrainAs(horizontalLine) {
@@ -140,9 +126,7 @@ fun ProfileScreen(
                     start.linkTo(verticalLine.end)
                 },
             onClick = {
-                singlePhotoPickerLauncher.launch(
-                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                )
+                imagePickerLauncher.launch("image/*")
             }) {
             Icon(imageVector = Icons.Outlined.Edit, contentDescription = null)
         }
@@ -223,7 +207,8 @@ fun ProfileScreen(
             modifier = Modifier
                 .constrainAs(bottomRow) {
                     bottom.linkTo(parent.bottom)
-                }.fillMaxWidth()
+                }
+                .fillMaxWidth()
         ) {
             items(profileItems) {
                 GenericItem(

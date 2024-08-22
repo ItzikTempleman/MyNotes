@@ -10,13 +10,13 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = USER_TABLE)
 data class User(
     @PrimaryKey
-    var id: String= nextUserId(),
+    var id: String = nextUserId(),
     val userName: String,
     val email: String,
     val password: String,
     var isLoggedIn: Boolean = false,
     var phoneNumber: Long,
-    var profileImage: String=""
+    var profileImage: String = ""
 ) : Parcelable {
     companion object {
 
