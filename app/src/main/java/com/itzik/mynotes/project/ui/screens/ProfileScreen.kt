@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.ui
+package com.itzik.mynotes.project.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -39,6 +39,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.itzik.mynotes.project.model.User
+import com.itzik.mynotes.project.ui.composable_elements.GenericItem
+import com.itzik.mynotes.project.ui.composable_elements.GenericRows
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope

@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.ui
+package com.itzik.mynotes.project.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,6 +43,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
+import com.itzik.mynotes.project.ui.composable_elements.ColorPickerDialog
+import com.itzik.mynotes.project.ui.composable_elements.GenericIconButton
+import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

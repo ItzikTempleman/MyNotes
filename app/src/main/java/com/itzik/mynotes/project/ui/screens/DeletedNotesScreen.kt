@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.ui
+package com.itzik.mynotes.project.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
@@ -50,6 +50,12 @@ import androidx.navigation.compose.rememberNavController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
+import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
+import com.itzik.mynotes.project.ui.composable_elements.GenericItem
+import com.itzik.mynotes.project.ui.composable_elements.GenericRows
+import com.itzik.mynotes.project.ui.composable_elements.SwipeToDeleteOrRetrieve
+import com.itzik.mynotes.project.ui.navigation.Screen
+import com.itzik.mynotes.project.ui.screen_sections.NoteListItem
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope

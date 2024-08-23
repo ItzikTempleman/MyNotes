@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.ui
+package com.itzik.mynotes.project.ui.screens
 
 
 import android.Manifest
@@ -43,6 +43,12 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.Note
+import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
+import com.itzik.mynotes.project.ui.composable_elements.GenericIconButton
+import com.itzik.mynotes.project.ui.screen_sections.NoteListItem
+import com.itzik.mynotes.project.ui.composable_elements.SortDropDownMenu
+import com.itzik.mynotes.project.ui.composable_elements.SwipeToOptions
+import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.utils.convertLatLangToLocation
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel

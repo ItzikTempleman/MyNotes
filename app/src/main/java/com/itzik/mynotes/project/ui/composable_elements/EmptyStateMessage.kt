@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.ui
+package com.itzik.mynotes.project.ui.composable_elements
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

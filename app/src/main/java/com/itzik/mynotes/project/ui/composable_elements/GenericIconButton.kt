@@ -1,4 +1,4 @@
-package com.itzik.mynotes.project.ui
+package com.itzik.mynotes.project.ui.composable_elements
 
 
 import androidx.compose.foundation.layout.size
