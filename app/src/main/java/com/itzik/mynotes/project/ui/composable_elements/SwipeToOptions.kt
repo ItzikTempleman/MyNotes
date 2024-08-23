@@ -114,7 +114,7 @@ fun  SwipeToOptions(
                 Box(
                     modifier = Modifier
                         .size(boxSizeDp)
-                        .background(colorResource(id = R.color.light_deep_purple))
+                        .background(colorResource(id = R.color.light_purple))
                         .clickable(
                             indication = null,
                             interactionSource = interactionSource
@@ -137,7 +137,7 @@ fun  SwipeToOptions(
                 Box(
                     modifier = Modifier
                         .size(boxSizeDp)
-                        .background(colorResource(id = R.color.light_yellow))
+                        .background(colorResource(id = R.color.muted_yellow))
                         .clickable(
                             indication = null,
                             interactionSource = interactionSource

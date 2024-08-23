@@ -92,7 +92,7 @@ fun NoteListItem(
                 modifier = Modifier.width(availableWidth.dp),
                 text = note.content,
                 fontSize = 20.sp,
-                color = if (isInHomeScreen) Color(note.fontColor) else Color.DarkGray,
+                color = Color(note.fontColor),
                 fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -154,7 +154,7 @@ fun NoteListItem(
                     imageVector = Icons.Default.Star,
                     contentDescription = null,
                     tint = colorResource(
-                        id = R.color.light_yellow
+                        id = R.color.muted_yellow
                     )
                 )
             }
@@ -171,7 +171,7 @@ fun NoteListItem(
                         .padding(end = 40.dp)
                         .size(24.dp)
                         .rotate(45f),
-                    tint = colorResource(id = R.color.light_deep_purple),
+                    tint = colorResource(id = R.color.light_purple),
                     contentDescription = null
                 )
             }

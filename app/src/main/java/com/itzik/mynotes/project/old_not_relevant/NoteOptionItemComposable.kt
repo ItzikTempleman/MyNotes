@@ -67,8 +67,8 @@ fun NoteOptionItemComposable(
                 imageVector = noteOptionsRows.icon,
                 contentDescription = null,
                 tint = when (noteOptionsRows.title) {
-                    "Star note" -> colorResource(id = R.color.light_yellow)
-                    "Pin note" -> colorResource(id = R.color.light_deep_purple)
+                    "Star note" -> colorResource(id = R.color.muted_yellow)
+                    "Pin note" -> colorResource(id = R.color.muted_yellow)
                     else -> colorResource(id = R.color.blue_green)
                 }
             )

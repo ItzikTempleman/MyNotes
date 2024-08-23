@@ -1,10 +1,11 @@
 package com.itzik.mynotes.project.ui.screens
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -13,8 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -51,6 +50,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun NoteScreen(
     noteId: Int?,
@@ -69,31 +69,13 @@ fun NoteScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        val (topRow, contentTF, colorPickerScreen) = createRefs()
-
-        Card(
-            modifier = Modifier
-                .constrainAs(topRow) {
-                    top.linkTo(parent.top)
-                }
-                .fillMaxWidth()
-                .height(60.dp)
-                .padding(8.dp),
-            colors = CardDefaults.cardColors(Color.White),
-            elevation = CardDefaults.cardElevation(16.dp)
-        ) {
-            ConstraintLayout(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                val (backBtn, fontSmaller, fontLarger, fontSizeIndicator, changeFontColorDialog, pin, star) = createRefs()
-
-
+        val ( backBtn, fontSmaller, fontLarger, fontSizeIndicator, changeFontColorDialog, pin, star ,colorPickerScreen, contentTF) = createRefs()
+Log.d("TAG","selectedColor: ${Color(selectedColor)}" )
                 GenericIconButton(
                     modifier = Modifier
                         .constrainAs(backBtn) {
                             top.linkTo(parent.top)
                             start.linkTo(parent.start)
-                            bottom.linkTo(parent.bottom)
                         }
                         .padding(8.dp)
                         .size(32.dp),
@@ -109,16 +91,16 @@ fun NoteScreen(
                         }
                     },
                     imageVector = Icons.Default.ArrowBackIosNew,
-                    colorNumber = 0
+                    colorNumber = 4
                 )
 
 
                 Text(
                     modifier = Modifier
                         .constrainAs(fontSmaller) {
-                            top.linkTo(parent.top)
+                            top.linkTo(backBtn.top)
                             start.linkTo(backBtn.end)
-                            bottom.linkTo(parent.bottom)
+                            bottom.linkTo(backBtn.bottom)
                         }
                         .padding(start = 40.dp)
                         .clickable {
@@ -144,9 +126,9 @@ fun NoteScreen(
                 Text(
                     modifier = Modifier
                         .constrainAs(fontLarger) {
-                            top.linkTo(parent.top)
+                            top.linkTo(backBtn.top)
                             start.linkTo(fontSmaller.end)
-                            bottom.linkTo(parent.bottom)
+                            bottom.linkTo(backBtn.bottom)
                         }
                         .padding(start = 8.dp)
                         .clickable {
@@ -173,21 +155,20 @@ fun NoteScreen(
                 Text(
                     modifier = Modifier
                         .constrainAs(fontSizeIndicator) {
-                            top.linkTo(parent.top)
+                            top.linkTo(backBtn.top)
                             start.linkTo(fontLarger.end)
-                            bottom.linkTo(parent.bottom)
+                            bottom.linkTo(backBtn.bottom)
                         }
                         .padding(start = 8.dp),
                     text = "$fontSize sp",
-                    fontSize = 16.sp
-
+                    fontSize = 16.sp, color = Color.Black
                 )
                 IconButton(
                     modifier = Modifier
                         .constrainAs(changeFontColorDialog) {
-                            top.linkTo(parent.top)
+                            top.linkTo(backBtn.top)
                           end.linkTo(parent.end)
-                            bottom.linkTo(parent.bottom)
+                            bottom.linkTo(backBtn.bottom)
                         }
                         .padding(4.dp),
                     onClick = {
@@ -201,22 +182,18 @@ fun NoteScreen(
                     )
                 }
 
-
-
-
                 if (note.isPinned) {
                     Icon(
                         modifier = Modifier
                             .constrainAs(pin) {
                                 top.linkTo(parent.top)
                                 end.linkTo(changeFontColorDialog.start)
-                                bottom.linkTo(parent.bottom)
                             }
                             .padding(horizontal = 44.dp)
                             .rotate(45f),
                         imageVector = Icons.Default.PushPin,
                         contentDescription = null,
-                        tint = colorResource(id = R.color.light_deep_purple)
+                        tint = colorResource(id = R.color.light_purple)
                     )
                 }
                 if (note.isStarred) {
@@ -226,16 +203,14 @@ fun NoteScreen(
                             .constrainAs(star) {
                                 top.linkTo(parent.top)
                                 end.linkTo(changeFontColorDialog.start)
-                                bottom.linkTo(parent.bottom)
                             },
                         imageVector = Icons.Default.Star,
                         contentDescription = null,
-                        tint = colorResource(id = R.color.light_yellow),
+                        tint = colorResource(id = R.color.muted_yellow),
 
                         )
                 }
-            }
-        }
+
 
         TextField(
             value = text,
@@ -259,10 +234,10 @@ fun NoteScreen(
                 unfocusedIndicatorColor = Color.White
             ),
             modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(topEnd = 0.dp, topStart = 0.dp))
+                .fillMaxWidth().padding(top=8.dp)
+                .clip(RoundedCornerShape(0.dp))
                 .constrainAs(contentTF) {
-                    top.linkTo(topRow.bottom)
+                    top.linkTo(backBtn.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
@@ -270,13 +245,13 @@ fun NoteScreen(
                 },
             textStyle = TextStyle.Default.copy(
                 fontSize = fontSize.sp,
-                color = Color(selectedColor).copy(alpha = 1.0f),
+                color = Color(selectedColor),
                 fontWeight = FontWeight.Bold
             ),
             placeholder = {
                 Text(
                     fontSize = fontSize.sp,
-                    color = Color(selectedColor).copy(alpha = 1.0f),
+                    color = Color(selectedColor),
                     fontWeight = FontWeight.Bold,
                     text = note.content.ifEmpty { stringResource(id = R.string.new_note) }
                 )
@@ -288,6 +263,8 @@ fun NoteScreen(
                 modifier = Modifier
                     .constrainAs(colorPickerScreen) {
                         top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                        start.linkTo(parent.start)
                     }
                     .fillMaxWidth()
                     .wrapContentHeight()

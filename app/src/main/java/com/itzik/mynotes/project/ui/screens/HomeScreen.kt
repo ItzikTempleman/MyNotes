@@ -45,10 +45,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
 import com.itzik.mynotes.project.ui.composable_elements.GenericIconButton
-import com.itzik.mynotes.project.ui.screen_sections.NoteListItem
 import com.itzik.mynotes.project.ui.composable_elements.SortDropDownMenu
 import com.itzik.mynotes.project.ui.composable_elements.SwipeToOptions
 import com.itzik.mynotes.project.ui.navigation.Screen
+import com.itzik.mynotes.project.ui.screen_sections.NoteListItem
 import com.itzik.mynotes.project.utils.convertLatLangToLocation
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
@@ -83,8 +83,7 @@ fun HomeScreen(
     var isExpanded by remember { mutableStateOf(false) }
     val noteList by noteViewModel.publicNoteList.collectAsState()
     val pinnedNoteList by noteViewModel.publicPinnedNoteList.collectAsState()
-   // var isOptionsBarOpened by remember { mutableStateOf(false) }
-    var selectedNote by remember { mutableStateOf<Note?>(null) }
+    val selectedNote by remember { mutableStateOf<Note?>(null) }
 
     val combinedList by remember(pinnedNoteList, noteList) {
         mutableStateOf(
@@ -162,7 +161,7 @@ fun HomeScreen(
                         launchMultiplePermissions.launch(permissions)
                     }
                 },
-                colorNumber = 3,
+                colorNumber = 4,
                 imageVector = Icons.Outlined.LocationOn
             )
 
@@ -178,7 +177,7 @@ fun HomeScreen(
                     onClick = {
                         isExpanded = !isExpanded
                     },
-                    colorNumber = 3,
+                    colorNumber = 4,
                     imageVector = Icons.AutoMirrored.Filled.Sort
                 )
 
@@ -218,12 +217,12 @@ fun HomeScreen(
                     coroutineScope.launch {
                         noteViewModel.updateSelectedNoteContent(
                             "", isPinned = false, isStarred = false,
-                            fontSize = 20, fontColor = Color.Gray.toArgb()
+                            fontSize = 20, fontColor = Color.Black.toArgb()
                         )
                     }
                     navController.navigate(Screen.NoteScreen.route)
                 }, imageVector = Icons.Outlined.Add,
-                colorNumber = 3
+                colorNumber = 4
             )
 
             LazyColumn(

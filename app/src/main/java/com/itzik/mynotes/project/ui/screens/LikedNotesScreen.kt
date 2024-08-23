@@ -31,8 +31,8 @@ import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
-import com.itzik.mynotes.project.ui.screen_sections.NoteListItem
 import com.itzik.mynotes.project.ui.navigation.Screen
+import com.itzik.mynotes.project.ui.screen_sections.NoteListItem
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -76,7 +76,7 @@ fun LikedNotesScreen(
                 .size(32.dp),
             imageVector = Icons.Default.Star,
             contentDescription = null,
-            tint = colorResource(id = R.color.light_yellow),
+            tint = colorResource(id = R.color.muted_yellow),
         )
 
         if (noteList.isEmpty()) {

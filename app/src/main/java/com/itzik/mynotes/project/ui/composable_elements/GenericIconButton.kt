@@ -28,8 +28,8 @@ fun GenericIconButton(
     ) {
         Icon(modifier =iconSize , imageVector = imageVector, contentDescription =null , tint = when(colorNumber) {
             0 -> colorResource(id = R.color.blue_green)
-            1 -> colorResource(id = R.color.light_yellow)
-            2 -> colorResource(id = R.color.light_deep_purple)
+            1 -> colorResource(id = R.color.muted_yellow)
+            2 -> colorResource(id = R.color.light_purple)
             3 -> Color.Gray
             else -> {
                 Color.DarkGray
