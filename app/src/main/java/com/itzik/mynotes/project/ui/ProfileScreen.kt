@@ -44,7 +44,9 @@ import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@SuppressLint("CoroutineCreationDuringComposition", "MutableCollectionMutableState")
+@SuppressLint("CoroutineCreationDuringComposition", "MutableCollectionMutableState",
+    "StateFlowValueCalledInComposition"
+)
 @Composable
 fun ProfileScreen(
     modifier: Modifier,
@@ -55,6 +57,8 @@ fun ProfileScreen(
     user: User
 ) {
     val profileItems = listOf(GenericRows.DeletedItems, GenericRows.Settings, GenericRows.LogOut)
+
+
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -88,7 +92,7 @@ fun ProfileScreen(
             if (user.profileImage.isNotEmpty()) {
                 Image(
                     contentScale = ContentScale.Crop,
-                    painter = rememberAsyncImagePainter(model = user.profileImage),
+                    painter = rememberAsyncImagePainter( user.profileImage),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize()
                 )

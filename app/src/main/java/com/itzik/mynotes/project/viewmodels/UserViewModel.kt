@@ -1,5 +1,6 @@
 package com.itzik.mynotes.project.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itzik.mynotes.project.model.User
@@ -93,13 +94,14 @@ class UserViewModel @Inject constructor(
         return regex.matches(phoneNumber)
     }
 
+
     suspend fun updateProfileImage(imageUri: String) {
         viewModelScope.launch {
             val user = privateLoggedInUsersList.value.firstOrNull()
             if (user != null) {
                 val updatedUser = user.copy(profileImage = imageUri)
                 repo.updateProfileImage(updatedUser)
-
+                Log.d("UserViewModel", "Updating profile image: $imageUri")
                 privateLoggedInUsersList.value = privateLoggedInUsersList.value.map {
                     if (it.id == user.id) updatedUser else it
                 }
