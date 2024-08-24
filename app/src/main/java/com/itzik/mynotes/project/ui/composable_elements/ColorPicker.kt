@@ -1,24 +1,28 @@
 package com.itzik.mynotes.project.ui.composable_elements
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import com.itzik.mynotes.R
+import com.itzik.mynotes.project.utils.provideColorList
 
 @Composable
 fun ColorPickerDialog(
@@ -26,65 +30,59 @@ fun ColorPickerDialog(
     onColorSelected: (Color) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val colorList = listOf(
-        colorResource(id = R.color.deep_purple),
-        colorResource(id = R.color.deeper_purple),
-        colorResource(id = R.color.mid_purple),
-        colorResource(id = R.color.light_purple),
-        colorResource(id = R.color.very_light_purple),
-        colorResource(id = R.color.purple_blue),
-        colorResource(id = R.color.steel_blue),
-        colorResource(id = R.color.light_steel_blue),
-        colorResource(id = R.color.navy_blue),
-        colorResource(id = R.color.darker_blue),
-        colorResource(id = R.color.deep_blue),
-        colorResource(id = R.color.lighter_blue),
-        colorResource(id = R.color.blue_green),
-        colorResource(id = R.color.semi_transparent_blue_green),
-        colorResource(id = R.color.very_light_green),
-        colorResource(id = R.color.light_green),
-        colorResource(id = R.color.bb_green),
-        colorResource(id = R.color.dark_green),
-        colorResource(id = R.color.muted_yellow),
-        colorResource(id = R.color.bb_orange),
-        colorResource(id = R.color.light_pink),
-        colorResource(id = R.color.pink),
-        colorResource(id = R.color.light_red),
-        colorResource(id = R.color.red),
-        colorResource(id = R.color.black),
-        colorResource(id = R.color.dark_gray),
-        colorResource(id = R.color.gray),
-        colorResource(id = R.color.light_gray),
+    val colorList = provideColorList()
+    val outerPadding = 16.dp
+    val innerPadding = 16.dp
+    val borderWidth = 0.75.dp
+    val roundedCornerSize = 12.dp
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val totalPadding = outerPadding * 2 + innerPadding * 2
+    val availableWidth = screenWidth - totalPadding
+    val boxSize = remember { (availableWidth / (availableWidth / 50.dp)).coerceAtMost(50.dp) }
+    val numberOfColumns = (availableWidth / boxSize).toInt()
+    val numberOfRows = (colorList.size + numberOfColumns - 1) / numberOfColumns
 
-    )
-
-    Column(
+    Box(
         modifier = modifier
+            .padding(outerPadding)
+            .clip(RoundedCornerShape(roundedCornerSize))
+            .background(Color.White, shape = RoundedCornerShape(roundedCornerSize))
+            .border(BorderStroke(borderWidth, Color.Black), shape = RoundedCornerShape(roundedCornerSize))
             .fillMaxWidth()
-            .height(220.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .wrapContentHeight()
     ) {
-        LazyHorizontalGrid(
-            rows = GridCells.Fixed(4),
+        Column(
             modifier = Modifier
+                .padding(innerPadding)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(0.dp),
-            horizontalArrangement = Arrangement.spacedBy(0.dp)
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(colorList) { color ->
-                Box(
-                    modifier = Modifier
-                        .aspectRatio(1f)
-                        .size(50.dp)
-                        .background(color)
-                        .clickable {
-                            onColorSelected(color)
-                            onDismiss()
+            for (rowIndex in 0 until numberOfRows) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(0.dp)
+                ) {
+                    for (columnIndex in 0 until numberOfColumns) {
+                        val itemIndex = rowIndex * numberOfColumns + columnIndex
+                        if (itemIndex < colorList.size) {
+                            val color = colorList[itemIndex]
+                            Box(
+                                modifier = Modifier
+                                    .size(boxSize)
+                                    .background(color)
+                                    .clickable {
+                                        onColorSelected(color)
+                                        onDismiss()
+                                    },
+                            )
+                        } else {
+                            Spacer(modifier = Modifier.size(boxSize))
                         }
-                )
+                    }
+                }
             }
         }
-
     }
 }
