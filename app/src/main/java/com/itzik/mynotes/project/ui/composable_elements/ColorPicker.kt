@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,15 +31,16 @@ fun ColorPickerDialog(
 ) {
     val colorList = provideColorList()
     val outerPadding = 16.dp
-    val innerPadding = 16.dp
     val borderWidth = 0.75.dp
     val roundedCornerSize = 12.dp
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
-    val totalPadding = outerPadding * 2 + innerPadding * 2
+    val totalPadding = outerPadding * 2
     val availableWidth = screenWidth - totalPadding
-    val boxSize = remember { (availableWidth / (availableWidth / 50.dp)).coerceAtMost(50.dp) }
-    val numberOfColumns = (availableWidth / boxSize).toInt()
+
+    val numberOfColumns = 13 // Fixed number of columns for 12 boxes in a row
+    val boxSize = availableWidth / numberOfColumns // Box size calculation
+
     val numberOfRows = (colorList.size + numberOfColumns - 1) / numberOfColumns
 
     Box(
@@ -53,9 +53,7 @@ fun ColorPickerDialog(
             .wrapContentHeight()
     ) {
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(0.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -75,7 +73,7 @@ fun ColorPickerDialog(
                                     .clickable {
                                         onColorSelected(color)
                                         onDismiss()
-                                    },
+                                    }
                             )
                         } else {
                             Spacer(modifier = Modifier.size(boxSize))

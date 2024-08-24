@@ -279,7 +279,6 @@ fun HomeScreen(
                             updatedList = { updatedNotes ->
                                 noteViewModel.setNoteList(updatedNotes)
                             },
-
                             isSelected = selectedNote == noteItem,
                             isDeletedScreen = false,
                             isInLikedScreen = false
