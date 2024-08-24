@@ -173,6 +173,15 @@ class NoteViewModel @Inject constructor(
         fetchNotes()
     }
 
+    suspend fun unLikeNote(note: Note) {
+        note.isStarred=false
+        privateStarStateMap.value = privateStarStateMap.value.toMutableMap().apply {
+            put(note.id, note.isStarred)
+        }
+        repo.updateNote(note)
+        fetchNotes()
+    }
+
     private fun updatePinnedNotes(note: Note, isPinned: Boolean) {
         if (isPinned) {
             privatePinnedNoteList.value.add(note)

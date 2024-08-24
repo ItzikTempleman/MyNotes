@@ -53,7 +53,7 @@ import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
 import com.itzik.mynotes.project.ui.composable_elements.GenericItem
 import com.itzik.mynotes.project.ui.composable_elements.GenericRows
-import com.itzik.mynotes.project.ui.composable_elements.SwipeToDeleteOrRetrieve
+import com.itzik.mynotes.project.ui.composable_elements.swipe_to_action.SwipeToDeleteOrRetrieve
 import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.ui.screen_sections.NoteListItem
 import com.itzik.mynotes.project.viewmodels.NoteViewModel

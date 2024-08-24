@@ -46,7 +46,7 @@ import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
 import com.itzik.mynotes.project.ui.composable_elements.GenericIconButton
 import com.itzik.mynotes.project.ui.composable_elements.SortDropDownMenu
-import com.itzik.mynotes.project.ui.composable_elements.SwipeToOptions
+import com.itzik.mynotes.project.ui.composable_elements.swipe_to_action.SwipeToOptions
 import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.ui.screen_sections.NoteListItem
 import com.itzik.mynotes.project.utils.convertLatLangToLocation
@@ -119,7 +119,7 @@ fun HomeScreen(
         ) {
             val (
                 title, sortOptionIcon, emptyStateMessage, noteLazyColumn,
-                locationButton, newNoteBtn, progressBar, optionScreen
+                locationButton, newNoteBtn, progressBar
             ) = createRefs()
 
             Icon(
