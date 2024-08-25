@@ -16,10 +16,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -29,7 +27,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
-import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
 import com.itzik.mynotes.project.ui.composable_elements.swipe_to_action.SwipeToUnlike
 import com.itzik.mynotes.project.ui.navigation.Screen
@@ -46,13 +43,11 @@ fun LikedNotesScreen(
     noteViewModel: NoteViewModel
 ) {
 
-    var noteList by remember { mutableStateOf(mutableListOf<Note>()) }
-
     LaunchedEffect(Unit) {
-        noteViewModel.fetchStarredNotes().collect {
-            noteList = it
-        }
+        noteViewModel.fetchStarredNotes()
     }
+
+    val noteList by noteViewModel.publicStarredNoteList.collectAsState()
 
 
     Surface(

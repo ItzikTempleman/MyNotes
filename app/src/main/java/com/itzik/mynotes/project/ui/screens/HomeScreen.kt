@@ -67,7 +67,6 @@ private val permissions = arrayOf(
 fun HomeScreen(
     locationViewModel: LocationViewModel,
     context: Context,
-    modifier: Modifier,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     noteViewModel: NoteViewModel,
@@ -76,6 +75,9 @@ fun HomeScreen(
     startLocationUpdates: () -> Unit,
     updateIsLocationRequired: (Boolean) -> Unit
 ) {
+
+
+
     var sortType by remember { mutableStateOf("") }
     var isLoadingLocation by remember { mutableStateOf(false) }
     var mutableLocationRequired by remember { mutableStateOf(locationRequired) }
@@ -89,11 +91,9 @@ fun HomeScreen(
         mutableStateOf(
             (pinnedNoteList + noteList.filter { note ->
                 !pinnedNoteList.contains(note) && !note.isInTrash
-            })
+            }).distinctBy { it.id }
         )
     }
-
-
     val launchMultiplePermissions =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) {
             val areGranted = it.values.reduce { acc, next -> acc && next }

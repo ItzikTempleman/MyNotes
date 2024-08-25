@@ -37,10 +37,8 @@ fun ColorPickerDialog(
     val screenWidth = configuration.screenWidthDp.dp
     val totalPadding = outerPadding * 2
     val availableWidth = screenWidth - totalPadding
-
-    val numberOfColumns = 13 // Fixed number of columns for 12 boxes in a row
-    val boxSize = availableWidth / numberOfColumns // Box size calculation
-
+    val numberOfColumns = 13
+    val boxSize = availableWidth / numberOfColumns
     val numberOfRows = (colorList.size + numberOfColumns - 1) / numberOfColumns
 
     Box(

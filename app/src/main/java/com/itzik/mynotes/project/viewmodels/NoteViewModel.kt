@@ -7,10 +7,8 @@ import com.itzik.mynotes.project.model.Note.Companion.getCurrentTime
 import com.itzik.mynotes.project.repositories.INoteRepo
 import com.itzik.mynotes.project.utils.Constants.NAX_PINNED_NOTES
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,6 +26,9 @@ class NoteViewModel @Inject constructor(
     private val privatePinnedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
     val publicPinnedNoteList: StateFlow<MutableList<Note>> get() = privatePinnedNoteList
 
+    private val privateStarredNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
+    val publicStarredNoteList: StateFlow<MutableList<Note>> get() = privateStarredNoteList
+
     private var privatePinStateMap = MutableStateFlow(mapOf<Int, Boolean>())
     val publicPinStateMap: MutableStateFlow<Map<Int, Boolean>> get() = privatePinStateMap
 
@@ -36,6 +37,8 @@ class NoteViewModel @Inject constructor(
 
     private val privateDeletedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
     val publicDeletedNoteList: StateFlow<MutableList<Note>> get() = privateDeletedNoteList
+
+
 
     init {
         viewModelScope.launch {
@@ -132,6 +135,7 @@ class NoteViewModel @Inject constructor(
         fetchDeletedNotes()
     }
 
+
     suspend fun deleteNotePermanently(note: Note) {
         repo.deleteNote(note)
         fetchDeletedNotes()
@@ -139,26 +143,24 @@ class NoteViewModel @Inject constructor(
 
     suspend fun fetchDeletedNotes() {
         val notes = repo.fetchTrashedNotes()
-        privateDeletedNoteList.value = notes.toMutableList()
+        privateDeletedNoteList.value = notes
     }
 
-    suspend fun fetchStarredNotes(): Flow<MutableList<Note>> {
-        val noteList = flow {
-            val notes = repo.fetchStarredNotes()
-            if (notes.isNotEmpty()) {
-                emit(notes)
-            } else return@flow
-        }
-        return noteList
+    suspend fun fetchStarredNotes() = viewModelScope.launch {
+        val starredNotes = repo.fetchStarredNotes()
+        privateStarredNoteList.value = starredNotes
+
     }
+
 
     suspend fun toggleStarredButton(note: Note) {
-        note.isStarred = !note.isStarred
-        privateStarStateMap.value = privateStarStateMap.value.toMutableMap().apply {
-            put(note.id, note.isStarred)
-        }
-        repo.updateNote(note)
+        val updatedNote = note.copy(isStarred = !note.isStarred)
+        repo.updateNote(updatedNote)
         fetchNotes()
+        privateStarStateMap.value = privateStarStateMap.value.toMutableMap().apply {
+            put(updatedNote.id, updatedNote.isStarred)
+        }
+        fetchStarredNotes()
     }
 
     suspend fun togglePinButton(note: Note) {
@@ -174,10 +176,16 @@ class NoteViewModel @Inject constructor(
     }
 
     suspend fun unLikeNote(note: Note) {
-        note.isStarred=false
-        repo.updateNote(note)
-        fetchNotes()
-        fetchStarredNotes()
+        viewModelScope.launch {
+            val updatedNote = note.copy(isStarred = false)
+            repo.updateNote(updatedNote)
+            fetchNotes()
+            privateStarStateMap.value = privateStarStateMap.value.toMutableMap().apply {
+                put(updatedNote.id, updatedNote.isStarred)
+            }
+            fetchStarredNotes()
+
+        }
     }
 
     private fun updatePinnedNotes(note: Note, isPinned: Boolean) {
@@ -190,3 +198,21 @@ class NoteViewModel @Inject constructor(
         }
     }
 }
+
+
+
+//            repo.updateNote(note.copy(isStarred = false))
+//            privateStarStateMap.value = privateStarStateMap.value.toMutableMap().apply {
+//                this[note.id] = false
+//                fetchStarredNotes()
+//            }
+
+
+
+////        val updatedNote = note.copy(isStarred = false)
+////        repo.updateNote(updatedNote)
+////        val updatedList = privateStarredNoteList.value.toMutableList().apply {
+////            remove(updatedNote)
+////        }
+////        privateStarredNoteList.value = updatedList
+////        fetchStarredNotes()

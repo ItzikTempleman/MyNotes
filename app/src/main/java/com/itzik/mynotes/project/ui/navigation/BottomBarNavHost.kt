@@ -74,7 +74,6 @@ fun BottomBarNavHost(
                     HomeScreen(
                         locationViewModel = locationViewModel,
                         noteViewModel = noteViewModel,
-                        modifier = Modifier,
                         coroutineScope = coroutineScope,
                         navController = newNavController,
                         context = context,
