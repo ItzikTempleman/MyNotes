@@ -58,8 +58,8 @@ fun NoteListItem(
     val pinStateMap by noteViewModel.publicPinStateMap.collectAsState()
     val starStateMap by noteViewModel.publicStarStateMap.collectAsState()
 
-    val isPinned = pinStateMap[note.id] ?: false
-    val isStarred = starStateMap[note.id] ?: false
+    val isPinned = pinStateMap[note.noteId] ?: false
+    val isStarred = starStateMap[note.noteId] ?: false
 
 
     ConstraintLayout(

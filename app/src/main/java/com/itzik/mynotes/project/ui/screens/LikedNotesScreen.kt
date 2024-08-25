@@ -113,7 +113,7 @@ fun LikedNotesScreen(
                             note = noteItem,
                             modifier = Modifier.clickable {
                                 coroutineScope.launch {
-                                    val noteId = noteItem.id
+                                    val noteId = noteItem.noteId
                                     navController.currentBackStackEntry?.savedStateHandle?.set(
                                         key = "noteId",
                                         value = noteId

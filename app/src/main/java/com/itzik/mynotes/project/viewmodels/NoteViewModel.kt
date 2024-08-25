@@ -65,7 +65,7 @@ class NoteViewModel @Inject constructor(
         )
 
         if (noteId != null) {
-            privateNote.value.id = noteId
+            privateNote.value.noteId = noteId
         }
         repo.updateNote(privateNote.value)
     }
@@ -74,7 +74,7 @@ class NoteViewModel @Inject constructor(
     suspend fun saveNote(note: Note) {
         val noteList = repo.fetchNotes()
         val matchingNoteToPreviousVersion = noteList.find {
-            it.id == note.id
+            it.noteId == note.noteId
         }
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(note)
@@ -97,8 +97,8 @@ class NoteViewModel @Inject constructor(
 
         privateNoteList.value = activeNotes.toMutableList()
 
-        val pinMap = activeNotes.associate { it.id to it.isPinned }
-        val starMap = activeNotes.associate { it.id to it.isStarred }
+        val pinMap = activeNotes.associate { it.noteId to it.isPinned }
+        val starMap = activeNotes.associate { it.noteId to it.isStarred }
         privatePinStateMap.value = pinMap
         privateStarStateMap.value = starMap
     }
@@ -158,7 +158,7 @@ class NoteViewModel @Inject constructor(
         repo.updateNote(updatedNote)
         fetchNotes()
         privateStarStateMap.value = privateStarStateMap.value.toMutableMap().apply {
-            put(updatedNote.id, updatedNote.isStarred)
+            put(updatedNote.noteId, updatedNote.isStarred)
         }
         fetchStarredNotes()
     }
@@ -168,7 +168,7 @@ class NoteViewModel @Inject constructor(
 
         note.isPinned = !note.isPinned
         privatePinStateMap.value = privatePinStateMap.value.toMutableMap().apply {
-            put(note.id, note.isPinned)
+            put(note.noteId, note.isPinned)
         }
         updatePinnedNotes(note, note.isPinned)
         repo.updateNote(note)
@@ -181,7 +181,7 @@ class NoteViewModel @Inject constructor(
             repo.updateNote(updatedNote)
             fetchNotes()
             privateStarStateMap.value = privateStarStateMap.value.toMutableMap().apply {
-                put(updatedNote.id, updatedNote.isStarred)
+                put(updatedNote.noteId, updatedNote.isStarred)
             }
             fetchStarredNotes()
 
@@ -198,21 +198,3 @@ class NoteViewModel @Inject constructor(
         }
     }
 }
-
-
-
-//            repo.updateNote(note.copy(isStarred = false))
-//            privateStarStateMap.value = privateStarStateMap.value.toMutableMap().apply {
-//                this[note.id] = false
-//                fetchStarredNotes()
-//            }
-
-
-
-////        val updatedNote = note.copy(isStarred = false)
-////        repo.updateNote(updatedNote)
-////        val updatedList = privateStarredNoteList.value.toMutableList().apply {
-////            remove(updatedNote)
-////        }
-////        privateStarredNoteList.value = updatedList
-////        fetchStarredNotes()

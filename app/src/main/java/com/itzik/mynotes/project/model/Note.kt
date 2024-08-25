@@ -11,10 +11,20 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Parcelize
-@Entity(tableName = NOTE_TABLE)
+@Entity(
+    tableName = NOTE_TABLE,
+//foreignKeys = [ForeignKey(
+//    entity = User::class,
+//    parentColumns = ["noteId"],
+//    childColumns = ["userId"],
+//    onDelete = ForeignKey.CASCADE
+//)],
+//    indices = [Index(value = ["userId"])]
+)
+
 data class Note(
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
+    var noteId: Int = 0,
     var content: String,
     var time: String = getCurrentTime(),
     var isInTrash: Boolean = false,

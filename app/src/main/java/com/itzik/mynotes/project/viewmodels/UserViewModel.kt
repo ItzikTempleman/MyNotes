@@ -103,7 +103,7 @@ class UserViewModel @Inject constructor(
                 repo.updateProfileImage(updatedUser)
                 Log.d("UserViewModel", "Updating profile image: $imageUri")
                 privateLoggedInUsersList.value = privateLoggedInUsersList.value.map {
-                    if (it.id == user.id) updatedUser else it
+                    if (it.userId == user.userId) updatedUser else it
                 }
             }
         }

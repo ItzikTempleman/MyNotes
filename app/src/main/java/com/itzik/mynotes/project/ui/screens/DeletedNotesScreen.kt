@@ -218,13 +218,13 @@ fun DeletedNotesScreen(
                         onRetrieve = {
                             coroutineScope.launch {
                                 noteViewModel.retrieveNote(noteItem)
-                                noteList = noteList.filter { it.id != noteItem.id }.toMutableList()
+                                noteList = noteList.filter { it.noteId != noteItem.noteId }.toMutableList()
                             }
                         },
                         onDelete = {
                             coroutineScope.launch {
                                 noteViewModel.deleteNotePermanently(noteItem)
-                                noteList = noteList.filter { it.id != noteItem.id }.toMutableList()
+                                noteList = noteList.filter { it.noteId != noteItem.noteId }.toMutableList()
                             }
                         }
                     ) {

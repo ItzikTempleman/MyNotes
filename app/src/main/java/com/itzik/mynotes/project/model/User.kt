@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = USER_TABLE)
 data class User(
     @PrimaryKey
-    var id: String = nextUserId(),
+    var userId: String = nextUserId(),
     val userName: String,
     val email: String,
     val password: String,

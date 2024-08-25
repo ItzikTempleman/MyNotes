@@ -91,7 +91,7 @@ fun HomeScreen(
         mutableStateOf(
             (pinnedNoteList + noteList.filter { note ->
                 !pinnedNoteList.contains(note) && !note.isInTrash
-            }).distinctBy { it.id }
+            }).distinctBy { it.noteId }
         )
     }
     val launchMultiplePermissions =
@@ -232,7 +232,7 @@ fun HomeScreen(
                     height = Dimension.fillToConstraints
                 }
             ) {
-                items(combinedList, key = { it.id }) { noteItem ->
+                items(combinedList, key = { it.noteId }) { noteItem ->
 
                     SwipeToOptions(
                         note = noteItem,
@@ -260,7 +260,7 @@ fun HomeScreen(
                             modifier = Modifier
                                 .clickable {
                                     coroutineScope.launch {
-                                        val noteId = noteItem.id
+                                        val noteId = noteItem.noteId
                                         navController.currentBackStackEntry?.savedStateHandle?.set(
                                             key = "noteId", value = noteId
                                         )
