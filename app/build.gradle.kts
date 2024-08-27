@@ -1,14 +1,14 @@
 plugins {
-    kotlin("kapt")
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
+    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+    kotlin("kapt")
 }
 
 android {
-    namespace = "com.itzik.mynotes"
     compileSdk = 34
 
     defaultConfig {
@@ -17,57 +17,34 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
         }
-    }
-
-    kapt {
-        correctErrorTypes = true
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
     }
 }
 
 dependencies {
-
+    implementation(libs.androidx.room.runtime.v251)
+    ksp(libs.androidx.room.compiler.v251)
+    implementation(libs.hilt.android.v244)
+    kapt(libs.hilt.android.compiler)
 
     implementation(libs.play.services.maps)
-    kapt("androidx.room:room-compiler:2.6.1")
-    kapt("com.google.dagger:hilt-compiler:2.50")
-    annotationProcessor(libs.room.compiler)
-
-
     implementation(platform(libs.androidx.compose.bom.v20240401))
     implementation(libs.material)
     implementation(libs.androidx.material)
@@ -106,7 +83,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx.v1130)
     implementation(libs.play.services.location)
-
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core.v100)

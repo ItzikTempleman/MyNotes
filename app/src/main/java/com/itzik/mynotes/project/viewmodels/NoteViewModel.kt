@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.Note.Companion.getCurrentTime
-import com.itzik.mynotes.project.repositories.INoteRepo
+import com.itzik.mynotes.project.repositories.AppRepositoryInterface
 import com.itzik.mynotes.project.utils.Constants.NAX_PINNED_NOTES
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteViewModel @Inject constructor(
-    private val repo: INoteRepo,
+    private val repo: AppRepositoryInterface,
+    private val userId: String
 ) : ViewModel() {
 
     private val privateNote = MutableStateFlow(Note(content = "", fontSize = 20))
@@ -72,7 +73,7 @@ class NoteViewModel @Inject constructor(
 
 
     suspend fun saveNote(note: Note) {
-        val noteList = repo.fetchNotes()
+        val noteList = repo.fetchNotes(userId)
         val matchingNoteToPreviousVersion = noteList.find {
             it.noteId == note.noteId
         }
@@ -91,7 +92,7 @@ class NoteViewModel @Inject constructor(
     }
 
     private suspend fun fetchNotes() {
-        val notes = repo.fetchNotes()
+        val notes = repo.fetchNotes(userId)
 
         val activeNotes = notes.filter { !it.isInTrash }
 
@@ -123,7 +124,7 @@ class NoteViewModel @Inject constructor(
     }
 
     suspend fun getSortedNotes(sortType: String) {
-        val sortedNotes = repo.getSortedNotes(sortType)
+        val sortedNotes = repo.getSortedNotes(sortType, userId)
         privateNoteList.value = sortedNotes.toMutableList()
     }
 
@@ -142,7 +143,7 @@ class NoteViewModel @Inject constructor(
     }
 
     suspend fun fetchDeletedNotes() {
-        val notes = repo.fetchTrashedNotes()
+        val notes = repo.fetchTrashedNotes(userId)
         privateDeletedNoteList.value = notes
     }
 
@@ -198,3 +199,4 @@ class NoteViewModel @Inject constructor(
         }
     }
 }
+

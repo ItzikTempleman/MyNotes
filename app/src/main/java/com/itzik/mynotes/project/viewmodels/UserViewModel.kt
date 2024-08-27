@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itzik.mynotes.project.model.User
-import com.itzik.mynotes.project.repositories.INoteRepo
+import com.itzik.mynotes.project.repositories.AppRepositoryInterface
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val repo: INoteRepo
+    private val repo: AppRepositoryInterface
 ) : ViewModel() {
 
     private val privateLoggedInUsersList = MutableStateFlow<List<User>>(emptyList())

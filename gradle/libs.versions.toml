@@ -9,9 +9,13 @@ converterGson = "2.9.0"
 coreKtxVersion = "1.13.0"
 datetime = "0.9.0"
 espressoCoreVersion = "3.6.1"
+gradle = "8.5.2"
 gson = "2.10.1"
 hiltAndroid = "2.50"
+hiltAndroidCompiler = "2.44"
 hiltAndroidGradlePlugin = "2.50"
+hiltAndroidGradlePluginVersion = "2.44"
+hiltAndroidVersion = "2.44"
 hiltCompiler = "2.50"
 hiltNavigationCompose = "1.2.0"
 kotlin = "1.9.0"
@@ -24,6 +28,8 @@ kotlinxCoroutinesAndroid = "1.8.0"
 kotlinxCoroutinesCore = "1.9.0-RC"
 kotlinxCoroutinesTest = "1.9.0-RC"
 kotlinxSerializationJson = "1.6.1"
+kslPlugin = "2.0.20-1.0.25"
+kspGradlePlugin = "2.0.20-1.0.24"
 lifecycleCommonJava8 = "*version*"
 lifecycleLivedataKtx = "2.8.3"
 lifecycleRuntimeCompose = "2.8.3"
@@ -47,9 +53,11 @@ playServices = "12.0.1"
 playServicesLocation = "21.3.0"
 playServicesMaps = "18.2.0"
 retrofit = "2.9.0"
+roomCompiler = "2.5.1"
 roomCompilerVersion = "2.6.1"
 roomKtx = "2.6.1"
 roomRuntime = "2.6.1"
+roomRuntimeVersion = "2.5.1"
 runtimeLivedata = "1.6.8"
 toolbarCompose = "2.3.5"
 ui = "1.6.8"
@@ -76,15 +84,21 @@ androidx-material = { module = "androidx.compose.material:material", version.ref
 androidx-material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "materialIconsCore" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-room-compiler-v251 = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+androidx-room-runtime-v251 = { module = "androidx.room:room-runtime", version.ref = "roomRuntimeVersion" }
 androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedata" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 datetime = { module = "io.github.vanpra.compose-material-dialogs:datetime", version.ref = "datetime" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltAndroidGradlePlugin" }
+hilt-android-gradle-plugin-v244 = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltAndroidGradlePluginVersion" }
+hilt-android-v244 = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltCompiler" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -104,6 +118,8 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+ksl-plugin = { module = "com.google.devtools.ksp:ksl-plugin", version.ref = "kslPlugin" }
+ksp-gradle-plugin = { module = "com.google.devtools.ksp:ksp-gradle-plugin", version.ref = "kspGradlePlugin" }
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 material3 = { module = "androidx.compose.material3:material3" }

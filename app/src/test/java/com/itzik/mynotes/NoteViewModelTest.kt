@@ -1,13 +1,13 @@
 package com.itzik.mynotes
 
-import com.itzik.mynotes.project.repositories.INoteRepo
+import com.itzik.mynotes.project.repositories.AppRepositoryInterface
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.newSingleThreadContext
 
 
 class NoteViewModelTest {
     private lateinit var mockNoteViewModel: NoteViewModel
-    private lateinit var mockNoteRepository: INoteRepo
+    private lateinit var mockNoteRepository: AppRepositoryInterface
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 

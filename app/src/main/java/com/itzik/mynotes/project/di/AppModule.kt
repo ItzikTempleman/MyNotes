@@ -1,23 +1,22 @@
 package com.itzik.mynotes.project.di
 
 
-
 import android.content.Context
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
+import com.itzik.mynotes.project.data.AppDatabase
 import com.itzik.mynotes.project.data.NoteDao
-import com.itzik.mynotes.project.data.NoteDatabase
 import com.itzik.mynotes.project.data.UserDao
-import com.itzik.mynotes.project.data.UserDatabase
-import com.itzik.mynotes.project.repositories.INoteRepo
-import com.itzik.mynotes.project.repositories.NoteRepo
-import com.itzik.mynotes.project.utils.Constants.NOTE_DATABASE
-import com.itzik.mynotes.project.utils.Constants.USER_DATABASE
-import com.itzik.mynotes.project.utils.Converters
+import com.itzik.mynotes.project.repositories.AppRepository
+import com.itzik.mynotes.project.repositories.AppRepositoryInterface
+import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -26,36 +25,53 @@ import javax.inject.Singleton
 object AppModule {
 
     @Provides
-    @Singleton
-    fun provideUserConverter(): Converters = Converters()
+    fun provideNoteViewModelFactory(
+        factory: NoteViewModelFactory
+    ): NoteViewModelFactory {
+        return factory
+    }
 
     @Provides
     @Singleton
-    fun provideRepo(repoImpl: NoteRepo): INoteRepo = repoImpl
+    fun provideAppRepository(
+        @Named("user_dao") userDao: UserDao,
+        @Named("note_dao") noteDao: NoteDao
+    ): AppRepositoryInterface {
+        return AppRepository(userDao, noteDao)
+    }
 
-    @Singleton
     @Provides
     @Named("user_dao")
-    fun provideUserDao(userDatabase: UserDatabase): UserDao = userDatabase.getUserDao()
+    fun provideUserDao(database: AppDatabase): UserDao {
+        return database.getUserDao()
+    }
 
-    @Singleton
-    @Provides
-    fun provideUserDatabase(@ApplicationContext applicationContext: Context) =
-        Room.databaseBuilder(applicationContext, UserDatabase::class.java, USER_DATABASE)
-            .allowMainThreadQueries()
-            .fallbackToDestructiveMigration()
-            .fallbackToDestructiveMigration().build()
-
-    @Singleton
     @Provides
     @Named("note_dao")
-    fun provideNoteDao(noteDatabase: NoteDatabase): NoteDao = noteDatabase.getNoteDao()
+    fun provideNoteDao(database: AppDatabase): NoteDao {
+        return database.getNoteDao()
+    }
 
-    @Singleton
     @Provides
-    fun provideNoteDatabase(@ApplicationContext applicationContext: Context)=
-        Room.databaseBuilder(applicationContext, NoteDatabase::class.java, NOTE_DATABASE)
-            .allowMainThreadQueries()
-            .fallbackToDestructiveMigration()
-            .fallbackToDestructiveMigration().build()
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "app_database"
+        ).build()
+    }
+}
+
+
+class NoteViewModelFactory @Inject constructor(
+    private val userId: String,
+    private val appRepository: AppRepositoryInterface
+) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(NoteViewModel::class.java)) {
+            return NoteViewModel(appRepository, userId) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }

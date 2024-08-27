@@ -15,8 +15,8 @@ interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun saveNote(note: Note)
 
-    @Query("SELECT *FROM $NOTE_TABLE WHERE isInTrash=0")
-    suspend fun fetchNotes(): MutableList<Note>
+    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrash = 0 AND userId = :userId")
+    suspend fun fetchNotes(userId: String): MutableList<Note>
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSingleNoteIntoRecycleBin(note: Note)
@@ -27,8 +27,8 @@ interface NoteDao {
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)
 
-    @Query("SELECT *FROM $NOTE_TABLE WHERE isInTrash=1")
-    suspend fun fetchTrashedNotes(): MutableList<Note>
+    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrash = 1 AND userId = :userId")
+    suspend fun fetchTrashedNotes(userId: String): MutableList<Note>
 
     @Query("DELETE FROM $NOTE_TABLE WHERE isInTrash=1")
     suspend fun emptyTrashBin()

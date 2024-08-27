@@ -4,7 +4,7 @@ import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
 
 
-interface INoteRepo {
+interface AppRepositoryInterface {
     suspend fun insertUser(user: User)
     suspend fun fetchLoggedInUsers(): MutableList<User>
     suspend fun getUserFromEmailAndPassword(email: String, password: String): User
@@ -13,16 +13,16 @@ interface INoteRepo {
 
 
     suspend fun saveNote(note: Note)
-    suspend fun fetchNotes(): MutableList<Note>
+    suspend fun fetchNotes(userId: String): MutableList<Note>
     suspend fun insertSingleNoteIntoRecycleBin(note: Note)
     suspend fun setTrash(note: Note)
     suspend fun updateNote(note: Note)
 
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)
-    suspend fun fetchTrashedNotes(): MutableList<Note>
+    suspend fun fetchTrashedNotes(userId: String): MutableList<Note>
     suspend fun emptyTrashBin()
     suspend fun fetchStarredNotes(): MutableList<Note>
-    suspend fun getSortedNotes(sortType: String): MutableList<Note>
+    suspend fun getSortedNotes(sortType: String, userId: String): MutableList<Note>
     suspend fun deleteNote(note: Note)
 
 

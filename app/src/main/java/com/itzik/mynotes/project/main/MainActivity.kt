@@ -7,11 +7,14 @@ import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -22,6 +25,8 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
+import com.itzik.mynotes.project.di.NoteViewModelFactory
+import com.itzik.mynotes.project.repositories.AppRepositoryInterface
 import com.itzik.mynotes.project.ui.navigation.RootNavHost
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
@@ -29,12 +34,19 @@ import com.itzik.mynotes.project.viewmodels.UserViewModel
 import com.itzik.mynotes.ui.theme.MyNotesTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+
+    @Inject
+    lateinit var appRepository: AppRepositoryInterface
+
+    @Inject
+    lateinit var noteViewModelFactory: NoteViewModelFactory
+
     private lateinit var locationViewModel: LocationViewModel
-    private lateinit var noteViewModel: NoteViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
@@ -56,7 +68,7 @@ class MainActivity : ComponentActivity() {
 
     @SuppressLint("MissingPermission")
     private fun startLocationUpdates() {
-        locationCallback?.let {
+        locationCallback.let {
             val locationRequest = LocationRequest.Builder(
                 Priority.PRIORITY_HIGH_ACCURACY, 100
             )
@@ -64,24 +76,21 @@ class MainActivity : ComponentActivity() {
                 .setMinUpdateIntervalMillis(3000)
                 .setMaxUpdateDelayMillis(100).build()
 
-            fusedLocationClient?.requestLocationUpdates(
+            fusedLocationClient.requestLocationUpdates(
                 locationRequest, it, Looper.getMainLooper()
             )
         }
     }
 
-
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         setContent {
             var currentLocation by remember {
-                mutableStateOf(LatLng(0.toDouble(), 0.toDouble()))
+                mutableStateOf(LatLng(0.0, 0.0))
             }
 
             locationCallback = object : LocationCallback() {
@@ -93,31 +102,52 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            locationViewModel = viewModel()
-            noteViewModel = viewModel()
-            userViewModel = viewModel()
-
-
             val coroutineScope: CoroutineScope = rememberCoroutineScope()
             val navController: NavHostController = rememberNavController()
-            MyNotesTheme {
 
-                RootNavHost(
-                    locationViewModel=locationViewModel,
-                    noteViewModel = noteViewModel,
-                    context = this,
-                    locationRequired = locationRequired,
-                    startLocationUpdates = { startLocationUpdates() },
-                    currentLocation = currentLocation,
-                    userViewModel = userViewModel,
-                    coroutineScope = coroutineScope,
-                    navController = navController,
-                    updateIsLocationRequired = {
-                        locationRequired = it
+
+            var userId by remember { mutableStateOf<String?>(null) }
+
+
+            LaunchedEffect(Unit) {
+                coroutineScope.launch {
+                    val users = appRepository.fetchLoggedInUsers()
+                    if (users.isNotEmpty()) {
+                        userId = users.first().userId
                     }
-                )
+                }
+            }
+
+            MyNotesTheme {
+                if (userId != null) {
+
+                    val noteViewModel: NoteViewModel = ViewModelProvider(
+                        this@MainActivity,
+                        NoteViewModelFactory(userId!!, appRepository)
+                    )[NoteViewModel::class.java]
+
+
+                    locationViewModel = viewModel()
+                    userViewModel = viewModel()
+
+                    RootNavHost(
+                        locationViewModel = locationViewModel,
+                        noteViewModel = noteViewModel,
+                        context = this,
+                        locationRequired = locationRequired,
+                        startLocationUpdates = { startLocationUpdates() },
+                        currentLocation = currentLocation,
+                        userViewModel = userViewModel,
+                        coroutineScope = coroutineScope,
+                        navController = navController,
+                        updateIsLocationRequired = {
+                            locationRequired = it
+                        }
+                    )
+                } else {
+                    CircularProgressIndicator()
+                }
             }
         }
     }
 }
-
