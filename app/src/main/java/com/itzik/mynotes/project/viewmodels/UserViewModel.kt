@@ -29,7 +29,7 @@ class UserViewModel @Inject constructor(
     }
 
 
-    private suspend fun fetchLoggedInUsers() {
+     private suspend fun fetchLoggedInUsers() {
         viewModelScope.launch {
             val users = repo.fetchLoggedInUsers()
             privateLoggedInUsersList.value = users

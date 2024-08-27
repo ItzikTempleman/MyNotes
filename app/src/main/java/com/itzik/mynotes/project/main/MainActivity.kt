@@ -1,5 +1,6 @@
 package com.itzik.mynotes.project.main
 
+//noinspection UsingMaterialAndMaterial3Libraries
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
@@ -7,14 +8,11 @@ import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -25,8 +23,6 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
-import com.itzik.mynotes.project.di.NoteViewModelFactory
-import com.itzik.mynotes.project.repositories.AppRepositoryInterface
 import com.itzik.mynotes.project.ui.navigation.RootNavHost
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
@@ -34,18 +30,11 @@ import com.itzik.mynotes.project.viewmodels.UserViewModel
 import com.itzik.mynotes.ui.theme.MyNotesTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var appRepository: AppRepositoryInterface
-
-    @Inject
-    lateinit var noteViewModelFactory: NoteViewModelFactory
-
+    private lateinit var noteViewModel: NoteViewModel
     private lateinit var locationViewModel: LocationViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -106,47 +95,28 @@ class MainActivity : ComponentActivity() {
             val navController: NavHostController = rememberNavController()
 
 
-            var userId by remember { mutableStateOf<String?>(null) }
 
 
-            LaunchedEffect(Unit) {
-                coroutineScope.launch {
-                    val users = appRepository.fetchLoggedInUsers()
-                    if (users.isNotEmpty()) {
-                        userId = users.first().userId
-                    }
-                }
-            }
+            userViewModel = viewModel()
+            noteViewModel = viewModel()
+            locationViewModel = viewModel()
 
             MyNotesTheme {
-                if (userId != null) {
 
-                    val noteViewModel: NoteViewModel = ViewModelProvider(
-                        this@MainActivity,
-                        NoteViewModelFactory(userId!!, appRepository)
-                    )[NoteViewModel::class.java]
-
-
-                    locationViewModel = viewModel()
-                    userViewModel = viewModel()
-
-                    RootNavHost(
-                        locationViewModel = locationViewModel,
-                        noteViewModel = noteViewModel,
-                        context = this,
-                        locationRequired = locationRequired,
-                        startLocationUpdates = { startLocationUpdates() },
-                        currentLocation = currentLocation,
-                        userViewModel = userViewModel,
-                        coroutineScope = coroutineScope,
-                        navController = navController,
-                        updateIsLocationRequired = {
-                            locationRequired = it
-                        }
-                    )
-                } else {
-                    CircularProgressIndicator()
-                }
+                RootNavHost(
+                    locationViewModel = locationViewModel,
+                    noteViewModel = noteViewModel,
+                    context = this,
+                    locationRequired = locationRequired,
+                    startLocationUpdates = { startLocationUpdates() },
+                    currentLocation = currentLocation,
+                    userViewModel = userViewModel,
+                    coroutineScope = coroutineScope,
+                    navController = navController,
+                    updateIsLocationRequired = {
+                        locationRequired = it
+                    }
+                )
             }
         }
     }

@@ -15,8 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class NoteViewModel @Inject constructor(
     private val repo: AppRepositoryInterface,
-    private val userId: String
 ) : ViewModel() {
+
 
     private val privateNote = MutableStateFlow(Note(content = "", fontSize = 20))
     val publicNote: StateFlow<Note> get() = privateNote
@@ -39,13 +39,18 @@ class NoteViewModel @Inject constructor(
     private val privateDeletedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
     val publicDeletedNoteList: StateFlow<MutableList<Note>> get() = privateDeletedNoteList
 
+    var userId=""
 
+        init {
+            viewModelScope.launch {
+                val users = repo.fetchLoggedInUsers()
+                if (users.isNotEmpty()) {
+                    userId = users.first().userId
+                }
 
-    init {
-        viewModelScope.launch {
-            fetchNotes()
+                    fetchNotes()
+            }
         }
-    }
 
     suspend fun updateSelectedNoteContent(
         newChar: String,
