@@ -18,7 +18,8 @@ class NoteViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val privateNote = MutableStateFlow(Note(content = "", fontSize = 20))
+    private val privateNote = MutableStateFlow(Note(content = "", userId = "", fontSize = 20))
+
     val publicNote: StateFlow<Note> get() = privateNote
 
     private val privateNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
@@ -46,6 +47,7 @@ class NoteViewModel @Inject constructor(
                 val users = repo.fetchLoggedInUsers()
                 if (users.isNotEmpty()) {
                     userId = users.first().userId
+                    privateNote.value = privateNote.value.copy(userId = userId)
                 }
 
                     fetchNotes()

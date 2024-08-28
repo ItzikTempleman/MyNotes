@@ -8,6 +8,7 @@ import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -101,9 +102,16 @@ class MainActivity : ComponentActivity() {
             noteViewModel = viewModel()
             locationViewModel = viewModel()
 
+
+
+            val user by userViewModel.publicLoggedInUsersList.collectAsState()
+            val userId = user.firstOrNull()?.userId ?: ""
+
+
             MyNotesTheme {
 
                 RootNavHost(
+                    userId=userId,
                     locationViewModel = locationViewModel,
                     noteViewModel = noteViewModel,
                     context = this,

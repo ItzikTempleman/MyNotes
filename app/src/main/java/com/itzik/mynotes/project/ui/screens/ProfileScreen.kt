@@ -51,6 +51,7 @@ import kotlinx.coroutines.launch
 )
 @Composable
 fun ProfileScreen(
+    userId:String,
     modifier: Modifier,
     coroutineScope: CoroutineScope,
     navController: NavHostController,

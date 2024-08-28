@@ -69,7 +69,8 @@ fun DeletedNotesScreen(
     coroutineScope: CoroutineScope,
     navController: NavHostController = rememberNavController(),
     user: User,
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    userId:String
 
 ) {
 

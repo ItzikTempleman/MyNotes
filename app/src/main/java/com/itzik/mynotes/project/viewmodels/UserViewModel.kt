@@ -55,9 +55,16 @@ class UserViewModel @Inject constructor(
         return user
     }
 
+    suspend fun updateIsLoggedIn(user: User) {
+        try {
+            repo.updateIsLoggedIn(user)
+            fetchLoggedInUsers()
+        } catch (e: Exception) {
+            Log.e("UserViewModel", "Error updating user login status: ${e.message}")
+        }
+    }
 
-
-    suspend fun updateIsLoggedIn(user: User) = repo.updateIsLoggedIn(user)
+//    suspend fun updateIsLoggedIn(user: User) = repo.updateIsLoggedIn(user)
 
     fun createUser(
         name: String,

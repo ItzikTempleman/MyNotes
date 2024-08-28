@@ -34,6 +34,7 @@ import kotlinx.coroutines.CoroutineScope
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun BottomBarNavHost(
+    userId:String,
     locationViewModel: LocationViewModel,
     context: Context,
     noteViewModel: NoteViewModel,
@@ -72,6 +73,7 @@ fun BottomBarNavHost(
                 composable(route = Screen.Home.route) {
                     isNoteScreenVisible = true
                     HomeScreen(
+                        userId=userId,
                         locationViewModel = locationViewModel,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
@@ -87,6 +89,7 @@ fun BottomBarNavHost(
                 composable(route = Screen.LikedNotes.route) {
                     isNoteScreenVisible = true
                     LikedNotesScreen(
+                        userId=userId,
                         noteViewModel=noteViewModel,
                         coroutineScope = coroutineScope,
                         navController = newNavController,
@@ -96,6 +99,7 @@ fun BottomBarNavHost(
                 composable(route = Screen.Profile.route) {
                     isNoteScreenVisible = true
                     ProfileScreen(
+                        userId=userId,
                         modifier = Modifier,
                         navController = paramNavController,
                         userViewModel = userViewModel,

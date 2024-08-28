@@ -2,6 +2,7 @@ package com.itzik.mynotes.project.ui.screens
 
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,11 +39,13 @@ import kotlinx.coroutines.launch
 @SuppressLint("SuspiciousIndentation", "MutableCollectionMutableState")
 @Composable
 fun LikedNotesScreen(
+    userId:String,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
     noteViewModel: NoteViewModel
 ) {
 
+    Log.d("TAG","User id from user id string: $userId ")
     LaunchedEffect(Unit) {
         noteViewModel.fetchStarredNotes()
     }

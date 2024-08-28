@@ -34,6 +34,7 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun RootNavHost(
+    userId:String,
     locationViewModel: LocationViewModel,
     noteViewModel: NoteViewModel,
     context: Context,
@@ -107,7 +108,8 @@ fun RootNavHost(
                     userViewModel = userViewModel,
                     coroutineScope = coroutineScope,
                     updateIsLocationRequired = updateIsLocationRequired,
-                    user = user
+                    userId = userId,
+                    user=user
                 )
             }
 
@@ -123,6 +125,7 @@ fun RootNavHost(
             composable(route = Screen.DeletedNotesScreen.route) {
                 DeletedNotesScreen(
                     modifier = Modifier,
+                    userId=userId,
                     user=user,
                     userViewModel = userViewModel,
                     noteViewModel = noteViewModel,

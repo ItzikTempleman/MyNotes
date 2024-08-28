@@ -65,6 +65,7 @@ private val permissions = arrayOf(
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun HomeScreen(
+    userId:String,
     locationViewModel: LocationViewModel,
     context: Context,
     coroutineScope: CoroutineScope,
@@ -75,8 +76,6 @@ fun HomeScreen(
     startLocationUpdates: () -> Unit,
     updateIsLocationRequired: (Boolean) -> Unit
 ) {
-
-
 
     var sortType by remember { mutableStateOf("") }
     var isLoadingLocation by remember { mutableStateOf(false) }
@@ -94,6 +93,8 @@ fun HomeScreen(
             }).distinctBy { it.noteId }
         )
     }
+
+
     val launchMultiplePermissions =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) {
             val areGranted = it.values.reduce { acc, next -> acc && next }

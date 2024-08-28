@@ -11,13 +11,11 @@ interface AppRepositoryInterface {
     suspend fun updateIsLoggedIn(user: User)
     suspend fun updateProfileImage(user: User)
 
-
     suspend fun saveNote(note: Note)
     suspend fun fetchNotes(userId: String): MutableList<Note>
     suspend fun insertSingleNoteIntoRecycleBin(note: Note)
     suspend fun setTrash(note: Note)
     suspend fun updateNote(note: Note)
-
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)
     suspend fun fetchTrashedNotes(userId: String): MutableList<Note>
     suspend fun emptyTrashBin()
