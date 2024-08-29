@@ -45,12 +45,16 @@ class NoteViewModel @Inject constructor(
         init {
             viewModelScope.launch {
                 val users = repo.fetchLoggedInUsers()
-                if (users.isNotEmpty()) {
-                    userId = users.first().userId
+                val loggedInUser = users.firstOrNull { it.isLoggedIn }
+
+                if(loggedInUser!=null){
+                    userId=loggedInUser.userId
                     privateNote.value = privateNote.value.copy(userId = userId)
+                    fetchNotesForUser(userId)
+                }else {
+                    privateNoteList.value = mutableListOf()
                 }
 
-                    fetchNotes()
             }
         }
 
@@ -95,20 +99,24 @@ class NoteViewModel @Inject constructor(
                 fontColor = note.fontColor
             )
         }
-        fetchNotes()
+        fetchNotesForUser(userId)
     }
 
-    private suspend fun fetchNotes() {
-        val notes = repo.fetchNotes(userId)
+    suspend fun fetchNotesForUser(userId: String) {
+        if (userId.isNotEmpty()) {
+            val notes = repo.fetchNotes(userId)
 
-        val activeNotes = notes.filter { !it.isInTrash }
+            val activeNotes = notes.filter { !it.isInTrash }
 
-        privateNoteList.value = activeNotes.toMutableList()
+            privateNoteList.value = activeNotes.toMutableList()
 
-        val pinMap = activeNotes.associate { it.noteId to it.isPinned }
-        val starMap = activeNotes.associate { it.noteId to it.isStarred }
-        privatePinStateMap.value = pinMap
-        privateStarStateMap.value = starMap
+            val pinMap = activeNotes.associate { it.noteId to it.isPinned }
+            val starMap = activeNotes.associate { it.noteId to it.isStarred }
+            privatePinStateMap.value = pinMap
+            privateStarStateMap.value = starMap
+        }else {
+            privateNoteList.value = mutableListOf()
+        }
     }
 
     fun setNoteList(notes: MutableList<Note>) {
@@ -121,7 +129,7 @@ class NoteViewModel @Inject constructor(
         note.isPinned = false
         repo.setTrash(note)
         repo.insertSingleNoteIntoRecycleBin(note)
-        fetchNotes()
+        fetchNotesForUser(userId)
         fetchDeletedNotes()
     }
 
@@ -139,7 +147,7 @@ class NoteViewModel @Inject constructor(
     fun retrieveNote(note: Note) = viewModelScope.launch {
         note.isInTrash = false
         repo.updateNote(note)
-        fetchNotes()
+        fetchNotesForUser(userId)
         fetchDeletedNotes()
     }
 
@@ -164,7 +172,7 @@ class NoteViewModel @Inject constructor(
     suspend fun toggleStarredButton(note: Note) {
         val updatedNote = note.copy(isStarred = !note.isStarred)
         repo.updateNote(updatedNote)
-        fetchNotes()
+        fetchNotesForUser(userId)
         privateStarStateMap.value = privateStarStateMap.value.toMutableMap().apply {
             put(updatedNote.noteId, updatedNote.isStarred)
         }
@@ -180,14 +188,14 @@ class NoteViewModel @Inject constructor(
         }
         updatePinnedNotes(note, note.isPinned)
         repo.updateNote(note)
-        fetchNotes()
+        fetchNotesForUser(userId)
     }
 
     suspend fun unLikeNote(note: Note) {
         viewModelScope.launch {
             val updatedNote = note.copy(isStarred = false)
             repo.updateNote(updatedNote)
-            fetchNotes()
+            fetchNotesForUser(userId)
             privateStarStateMap.value = privateStarStateMap.value.toMutableMap().apply {
                 put(updatedNote.noteId, updatedNote.isStarred)
             }

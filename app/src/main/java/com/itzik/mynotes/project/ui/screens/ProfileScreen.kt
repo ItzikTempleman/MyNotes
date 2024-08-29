@@ -27,6 +27,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,7 +41,6 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.ui.composable_elements.GenericItem
 import com.itzik.mynotes.project.ui.composable_elements.GenericRows
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
@@ -57,8 +59,13 @@ fun ProfileScreen(
     navController: NavHostController,
     userViewModel: UserViewModel,
     noteViewModel: NoteViewModel,
-    user: User
 ) {
+
+    LaunchedEffect(userId) {
+        userViewModel.fetchUserById(userId)
+    }
+
+    val user by userViewModel.publicUser.collectAsState()
     val profileItems = listOf(GenericRows.DeletedItems, GenericRows.Settings, GenericRows.LogOut)
 
 
@@ -92,10 +99,10 @@ fun ProfileScreen(
                 .background(Color.LightGray),
             contentAlignment = Alignment.Center
         ) {
-            if (user.profileImage.isNotEmpty()) {
+            if (user?.profileImage?.isNotEmpty() == true) {
                 Image(
                     contentScale = ContentScale.Crop,
-                    painter = rememberAsyncImagePainter( user.profileImage),
+                    painter = rememberAsyncImagePainter(user?.profileImage),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -153,18 +160,20 @@ fun ProfileScreen(
             Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
         }
 
-        Text(
-            text = user.userName,
-            modifier = Modifier
-                .constrainAs(name) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                }
-                .padding(start = 16.dp, top = 160.dp),
-            color = Color.Black,
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold
-        )
+        user?.let {
+            Text(
+                text = it.userName,
+                modifier = Modifier
+                    .constrainAs(name) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    }
+                    .padding(start = 16.dp, top = 160.dp),
+                color = Color.Black,
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
         Row(
             modifier = Modifier
@@ -181,11 +190,13 @@ fun ProfileScreen(
                 contentDescription = null,
                 tint = Color.DarkGray
             )
-            Text(
-                modifier = Modifier.padding(start = 8.dp),
-                color = Color.DarkGray,
-                text = user.email
-            )
+            user?.let {
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    color = Color.DarkGray,
+                    text = it.email
+                )
+            }
         }
 
         Row(
@@ -206,7 +217,7 @@ fun ProfileScreen(
             Text(
                 modifier = Modifier.padding(start = 8.dp),
                 color = Color.DarkGray,
-                text = user.phoneNumber.toString()
+                text = user?.phoneNumber.toString()
             )
         }
 
@@ -218,16 +229,18 @@ fun ProfileScreen(
                 .fillMaxWidth()
         ) {
             items(profileItems) {
-                GenericItem(
-                    user = user,
-                    modifier = modifier,
-                    item = it,
-                    noteViewModel = noteViewModel,
-                    coroutineScope = coroutineScope,
-                    navController = navController,
-                    userViewModel = userViewModel,
+                user?.let { it1 ->
+                    GenericItem(
+                        user = it1,
+                        modifier = modifier,
+                        item = it,
+                        noteViewModel = noteViewModel,
+                        coroutineScope = coroutineScope,
+                        navController = navController,
+                        userViewModel = userViewModel,
 
-                    )
+                        )
+                }
             }
         }
     }

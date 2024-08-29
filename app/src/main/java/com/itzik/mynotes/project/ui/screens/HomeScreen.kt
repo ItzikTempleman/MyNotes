@@ -27,6 +27,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +53,7 @@ import com.itzik.mynotes.project.ui.screen_sections.NoteListItem
 import com.itzik.mynotes.project.utils.convertLatLangToLocation
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
+import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -65,6 +67,7 @@ private val permissions = arrayOf(
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun HomeScreen(
+    userViewModel:UserViewModel,
     userId:String,
     locationViewModel: LocationViewModel,
     context: Context,
@@ -76,6 +79,10 @@ fun HomeScreen(
     startLocationUpdates: () -> Unit,
     updateIsLocationRequired: (Boolean) -> Unit
 ) {
+    LaunchedEffect(userId) {
+        userViewModel.fetchUserById(userId)
+    }
+
 
     var sortType by remember { mutableStateOf("") }
     var isLoadingLocation by remember { mutableStateOf(false) }
@@ -86,14 +93,14 @@ fun HomeScreen(
     val pinnedNoteList by noteViewModel.publicPinnedNoteList.collectAsState()
     val selectedNote by remember { mutableStateOf<Note?>(null) }
 
+
     val combinedList by remember(pinnedNoteList, noteList) {
         mutableStateOf(
             (pinnedNoteList + noteList.filter { note ->
-                !pinnedNoteList.contains(note) && !note.isInTrash
+                !pinnedNoteList.contains(note) && !note.isInTrash && note.userId == userId
             }).distinctBy { it.noteId }
         )
     }
-
 
     val launchMultiplePermissions =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) {

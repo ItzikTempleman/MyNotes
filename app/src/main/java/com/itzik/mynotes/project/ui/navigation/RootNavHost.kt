@@ -6,15 +6,12 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.google.android.gms.maps.model.LatLng
-import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.ui.navigation.Graph.AUTHENTICATION
 import com.itzik.mynotes.project.ui.navigation.Graph.HOME
 import com.itzik.mynotes.project.ui.navigation.Graph.ROOT
@@ -46,11 +43,6 @@ fun RootNavHost(
     locationRequired: Boolean,
     updateIsLocationRequired: (Boolean) -> Unit,
 ) {
-
-
-    val userList by userViewModel.publicLoggedInUsersList.collectAsState()
-    val user = userList.firstOrNull() ?: User(userName = "", email = "", password = "", phoneNumber = 0)
-
 
     NavHost(
         startDestination = ROOT,
@@ -109,7 +101,6 @@ fun RootNavHost(
                     coroutineScope = coroutineScope,
                     updateIsLocationRequired = updateIsLocationRequired,
                     userId = userId,
-                    user=user
                 )
             }
 
@@ -126,7 +117,6 @@ fun RootNavHost(
                 DeletedNotesScreen(
                     modifier = Modifier,
                     userId=userId,
-                    user=user,
                     userViewModel = userViewModel,
                     noteViewModel = noteViewModel,
                     coroutineScope = coroutineScope,

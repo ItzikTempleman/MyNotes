@@ -49,7 +49,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
-import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
 import com.itzik.mynotes.project.ui.composable_elements.GenericItem
 import com.itzik.mynotes.project.ui.composable_elements.GenericRows
@@ -68,15 +67,16 @@ fun DeletedNotesScreen(
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
     navController: NavHostController = rememberNavController(),
-    user: User,
     userViewModel: UserViewModel,
     userId:String
 
 ) {
 
     LaunchedEffect(Unit) {
+        userViewModel.fetchUserById(userId)
         noteViewModel.fetchDeletedNotes()
     }
+    val user by userViewModel.publicUser.collectAsState()
 
     val deleteNoteDialogItems = listOf(GenericRows.RetrieveNote, GenericRows.DeleteNote)
 
@@ -265,15 +265,17 @@ fun DeletedNotesScreen(
                         modifier = modifier
                     ) {
                         items(deleteNoteDialogItems) {
-                            GenericItem(
-                                modifier = modifier,
-                                item = it,
-                                noteViewModel = noteViewModel,
-                                coroutineScope = coroutineScope,
-                                navController = navController,
-                                userViewModel = userViewModel,
-                                user = user
-                            )
+                            user?.let { it1 ->
+                                GenericItem(
+                                    modifier = modifier,
+                                    item = it,
+                                    noteViewModel = noteViewModel,
+                                    coroutineScope = coroutineScope,
+                                    navController = navController,
+                                    userViewModel = userViewModel,
+                                    user = it1
+                                )
+                            }
                         }
                     }
                 }

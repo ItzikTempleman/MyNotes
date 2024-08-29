@@ -24,6 +24,7 @@ class AppRepository @Inject constructor(
 
     override suspend fun updateIsLoggedIn(user: User) = userDao.updateIsLoggedIn(user)
     override suspend fun updateProfileImage(user: User) = userDao.updateProfileImage(user)
+    override suspend fun getUserById(userId: String): User = userDao.getUserById(userId)
 
     override suspend fun saveNote(note: Note) = noteDao.saveNote(note)
     override suspend fun fetchNotes(userId: String) = noteDao.fetchNotes(userId)

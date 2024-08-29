@@ -18,7 +18,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.google.android.gms.maps.model.LatLng
-import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.ui.navigation.Graph.HOME
 import com.itzik.mynotes.project.ui.screen_sections.BottomBarScreen
 import com.itzik.mynotes.project.ui.screens.HomeScreen
@@ -46,7 +45,6 @@ fun BottomBarNavHost(
     locationRequired: Boolean,
     startLocationUpdates: () -> Unit,
     updateIsLocationRequired: (Boolean) -> Unit,
-    user: User,
 ) {
     var isNoteScreenVisible by remember {
         mutableStateOf(false)
@@ -73,6 +71,7 @@ fun BottomBarNavHost(
                 composable(route = Screen.Home.route) {
                     isNoteScreenVisible = true
                     HomeScreen(
+                        userViewModel=userViewModel,
                         userId=userId,
                         locationViewModel = locationViewModel,
                         noteViewModel = noteViewModel,
@@ -104,7 +103,6 @@ fun BottomBarNavHost(
                         navController = paramNavController,
                         userViewModel = userViewModel,
                         coroutineScope = coroutineScope,
-                        user = user,
                         noteViewModel = noteViewModel
                     )
                 }

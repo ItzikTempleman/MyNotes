@@ -23,6 +23,9 @@ interface UserDao {
     @Query("SELECT*FROM ${Constants.USER_TABLE} WHERE email = :email AND password = :password")
     suspend fun getUserFromEmailAndPassword(email: String, password: String): User
 
+    @Query("SELECT * FROM ${Constants.USER_TABLE} WHERE userId = :userId")
+    suspend fun getUserById(userId: String): User
+
     @Update
     suspend fun updateIsLoggedIn(user: User)
 

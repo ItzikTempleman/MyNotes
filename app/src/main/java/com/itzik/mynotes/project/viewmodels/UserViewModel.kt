@@ -21,6 +21,8 @@ class UserViewModel @Inject constructor(
     private val privateLoggedInUsersList = MutableStateFlow<List<User>>(emptyList())
     val publicLoggedInUsersList: StateFlow<List<User>> = privateLoggedInUsersList
 
+    private val privateUser = MutableStateFlow<User?>(null)
+    val publicUser: StateFlow<User?> = privateUser
 
     init {
         viewModelScope.launch {
@@ -28,8 +30,14 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    fun fetchUserById(userId: String) {
+        viewModelScope.launch {
+            val user = repo.getUserById(userId)
+            privateUser.value = user
+        }
+    }
 
-     private suspend fun fetchLoggedInUsers() {
+    private suspend fun fetchLoggedInUsers() {
         viewModelScope.launch {
             val users = repo.fetchLoggedInUsers()
             privateLoggedInUsersList.value = users

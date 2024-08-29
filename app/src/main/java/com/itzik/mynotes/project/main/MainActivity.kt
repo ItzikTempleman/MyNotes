@@ -8,6 +8,7 @@ import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -95,19 +96,18 @@ class MainActivity : ComponentActivity() {
             val coroutineScope: CoroutineScope = rememberCoroutineScope()
             val navController: NavHostController = rememberNavController()
 
-
-
-
             userViewModel = viewModel()
             noteViewModel = viewModel()
             locationViewModel = viewModel()
 
-
-
             val user by userViewModel.publicLoggedInUsersList.collectAsState()
             val userId = user.firstOrNull()?.userId ?: ""
 
-
+            LaunchedEffect(userId) {
+                if (userId.isNotEmpty()) {
+                    noteViewModel.fetchNotesForUser(userId)
+                }
+            }
             MyNotesTheme {
 
                 RootNavHost(
