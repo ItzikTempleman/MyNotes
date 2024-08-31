@@ -62,7 +62,7 @@ dependencies {
 
 
     implementation(libs.play.services.maps)
-    testImplementation(libs.junit.jupiter)
+
 
 
     //noinspection KaptUsageInsteadOfKsp
@@ -111,11 +111,16 @@ dependencies {
 
 
 
-
+    testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit.v121)
     androidTestImplementation(libs.androidx.espresso.core.v361)
     androidTestImplementation(libs.androidx.compose.ui.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.ui.test.manifest)
+    testImplementation (libs.kotlinx.coroutines.test)
+    testImplementation (libs.mockito.core)
+    testImplementation (libs.byte.buddy)
+    testImplementation (libs.androidx.core)
+
 }
