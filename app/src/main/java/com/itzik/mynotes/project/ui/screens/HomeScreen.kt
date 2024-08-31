@@ -249,12 +249,12 @@ fun HomeScreen(
                 onClick = {
                     isViewGrid = !isViewGrid
                 },
-                imageVector = if (isViewGrid) Icons.Default.GridView else Icons.Default.List,
+                imageVector = if (!isViewGrid) Icons.Default.GridView else Icons.Default.List,
                 colorNumber = 3
             )
 
 
-            if (isViewGrid) {
+            if (!isViewGrid) {
                 LazyColumn(
                     modifier = Modifier.constrainAs(noteLazyColumn) {
                         top.linkTo(viewBtn.bottom)
@@ -330,7 +330,7 @@ fun HomeScreen(
                             modifier = Modifier.fillMaxSize(),
                             note = noteItem,
                             noteViewModel = noteViewModel,
-                            isSelected = selectedNote == noteItem
+                            isSelected = selectedNote == noteItem,
                         )
 
                     }
