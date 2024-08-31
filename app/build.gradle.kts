@@ -62,14 +62,15 @@ dependencies {
 
 
     implementation(libs.play.services.maps)
+    testImplementation(libs.junit.jupiter)
 
 
     //noinspection KaptUsageInsteadOfKsp
-    kapt("androidx.room:room-compiler:2.6.1")
-    kapt("com.google.dagger:hilt-compiler:2.50")
-    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    kapt(libs.room.compiler)
+    kapt(libs.hilt.compiler)
+    annotationProcessor(libs.room.compiler)
 
-    implementation(libs.androidx.compose.bom.v20240800)
+    implementation(platform(libs.androidx.compose.bom.v20240800))
     implementation(libs.material.v1110)
     implementation(libs.androidx.material.v166)
     implementation(libs.androidx.material.icons.core.v166)
