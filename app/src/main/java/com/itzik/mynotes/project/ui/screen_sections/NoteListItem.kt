@@ -67,7 +67,7 @@ fun NoteListItem(
             .fillMaxWidth()
             .height(50.dp)
     ) {
-        val (timeStamp, verticalDiv, content, bottomLine, pinnedNoteIcon, likedNoteIcon, optionIcon) = createRefs()
+        val (timeStamp, verticalDiv, content, bottomLine, pinnedNoteIcon, likedNoteIcon) = createRefs()
 
 
         BoxWithConstraints(modifier = if (isInHomeScreen) Modifier

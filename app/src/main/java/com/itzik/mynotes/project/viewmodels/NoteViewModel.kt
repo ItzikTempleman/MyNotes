@@ -19,7 +19,6 @@ class NoteViewModel @Inject constructor(
 
 
     private val privateNote = MutableStateFlow(Note(content = "", userId = "", fontSize = 20))
-
     val publicNote: StateFlow<Note> get() = privateNote
 
     private val privateNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
