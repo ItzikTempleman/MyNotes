@@ -110,7 +110,7 @@ dependencies {
     implementation(libs.play.services.location.v2120)
 
 
-
+    testImplementation(libs.androidx.core.testing)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit.v121)
