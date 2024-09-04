@@ -242,15 +242,15 @@ fun HomeScreen(
             GenericIconButton(
                 modifier = Modifier
                     .constrainAs(viewBtn) {
-                        end.linkTo(parent.end)
-                        top.linkTo(newNoteBtn.bottom)
+                        end.linkTo(locationButton.start)
+                        top.linkTo(parent.top)
                     }
                     .padding(8.dp),
                 onClick = {
                     isViewGrid = !isViewGrid
                 },
                 imageVector = if (!isViewGrid) Icons.Default.GridView else Icons.Default.List,
-                colorNumber = 3
+                colorNumber = 0
             )
 
 
