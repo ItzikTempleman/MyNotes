@@ -24,48 +24,49 @@ import org.mockito.junit.MockitoRule
 
 class NoteViewModelTest {
 
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @get:Rule
-    val mockitoRule: MockitoRule = MockitoJUnit.rule()
+        @get:Rule
+        val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Mock
-    private lateinit var mockRepository: AppRepositoryInterface
-    private lateinit var mockNoteviewModel: NoteViewModel
-    private val testDispatcher = StandardTestDispatcher()
+        @get:Rule
+        val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
-    @Before
-    fun setup() {
-        Dispatchers.setMain(testDispatcher)
-        mockNoteviewModel = NoteViewModel(mockRepository)
-    }
+        @Mock
+        private lateinit var mockRepository: AppRepositoryInterface
+        private lateinit var mockNoteViewModel: NoteViewModel
+        private val testDispatcher = StandardTestDispatcher()
 
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-        testDispatcher.cancel()
-    }
+        @Before
+        fun setup() {
+            Dispatchers.setMain(testDispatcher)
+            mockNoteViewModel = NoteViewModel(mockRepository)
+        }
 
-    @Test
-    fun `fetchNotesForUser get correct note `() = runTest {
+        @After
+        fun tearDown() {
+            Dispatchers.resetMain()
+            testDispatcher.cancel()
+        }
 
-        val userId = "10000001"
-        val sampleNoteListResponse = mutableListOf(
-            Note(
-                userId = userId, content = "Hello"
-            ),
-            Note(
-                userId = userId, content = "Itzik",
+        @Test
+        fun `fetchNotesForUser get correct note `() = runTest {
+
+            val userId = "10000001"
+            val sampleNoteListResponse = mutableListOf(
+                Note(
+                    userId = userId, content = "Hello"
+                ),
+                Note(
+                    userId = userId, content = "Itzik",
+                )
             )
-        )
-        `when`(mockRepository.fetchNotes(userId)).thenReturn(sampleNoteListResponse)
-        mockNoteviewModel.fetchNotesForUser(userId)
-        advanceUntilIdle()
+            `when`(mockRepository.fetchNotes(userId)).thenReturn(sampleNoteListResponse)
+            mockNoteViewModel.fetchNotesForUser(userId)
+            advanceUntilIdle()
 
-        val result = mockNoteviewModel.publicNote.value
+            val result = mockNoteViewModel.publicNote.value
 
-        assertEquals("10000003",userId)
-        assertEquals("How are you",result.content)
+            assertEquals("10000001",userId)
+            assertEquals("How are you",result.content)
+        }
     }
-}

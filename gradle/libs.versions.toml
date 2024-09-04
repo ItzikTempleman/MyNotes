@@ -65,6 +65,7 @@ materialVersion = "1.6.8"
 mockitoCore = "1.1.0"
 mockitoCoreVersion = "1.0.0"
 mockitoKotlin = "5.3.1"
+mockitoKotlinVersion = "5.1.0"
 navigationCompose = "2.7.7"
 playServices = "12.0.1"
 playServicesLocation = "21.3.0"
@@ -174,6 +175,7 @@ material3 = { module = "androidx.compose.material3:material3" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 mockito-core-v100 = { module = "org.mockito:mockito-core", version.ref = "mockitoCoreVersion" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
+mockito-kotlin-v510 = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlinVersion" }
 play-services = { module = "com.google.android.gms:play-services", version.ref = "playServices" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-location-v2120 = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocationVersion" }
