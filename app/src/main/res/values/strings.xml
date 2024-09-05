@@ -27,4 +27,5 @@
     <string name="retrieve_note">Retrieve note</string>
     <string name="delete_forever">Delete forever</string>
     <string name="empty_trash_bin">Empty trash bin</string>
+    <string name="welcome">Welcome\n</string>
 </resources>

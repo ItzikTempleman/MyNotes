@@ -89,7 +89,6 @@ fun HomeScreen(
         userViewModel.fetchUserById(userId)
     }
 
-
     var sortType by remember { mutableStateOf("") }
     var isLoadingLocation by remember { mutableStateOf(false) }
     var mutableLocationRequired by remember { mutableStateOf(locationRequired) }
@@ -237,8 +236,6 @@ fun HomeScreen(
                 colorNumber = 4
             )
 
-
-
             GenericIconButton(
                 modifier = Modifier
                     .constrainAs(viewBtn) {
@@ -252,7 +249,6 @@ fun HomeScreen(
                 imageVector = if (!isViewGrid) Icons.Default.GridView else Icons.Default.List,
                 colorNumber = 0
             )
-
 
             if (!isViewGrid) {
                 LazyColumn(
@@ -343,7 +339,6 @@ fun HomeScreen(
                         bottom.linkTo(parent.bottom)
                     })
                 }
-
             }
         }
     }
