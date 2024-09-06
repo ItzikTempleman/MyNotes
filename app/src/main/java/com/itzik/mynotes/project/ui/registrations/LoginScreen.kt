@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -26,12 +27,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
@@ -72,47 +73,84 @@ fun LoginScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
     ) {
-        val (title, cardContainer) = createRefs()
+        val (loginTextTop, loginTextLine, loginTextBottom, cardContainer) = createRefs()
 
-        Image(painter = painterResource(id = R.drawable.ripple), modifier = Modifier.fillMaxSize(),contentDescription = null, contentScale = ContentScale.FillHeight)
+        Image(
+            painter = painterResource(id = R.drawable.ripple),
+            modifier = Modifier.fillMaxSize(),
+            contentDescription = null,
+            contentScale = ContentScale.FillHeight
+        )
 
         Text(
             modifier = Modifier
-                .constrainAs(title) {
+                .constrainAs(loginTextTop) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
-                .padding(top = 40.dp)
-                .zIndex(2f),
+                .padding(top = 40.dp),
             fontWeight = FontWeight.Bold,
+            fontSize = 36.sp,
+            fontFamily = FontFamily.Cursive,
+            color = Color.White,
+            text = stringResource(id = R.string.notes)
+        )
+
+        HorizontalDivider(
+            modifier = Modifier
+                .constrainAs(loginTextLine) {
+                    top.linkTo(loginTextTop.bottom)
+                }.background(Color.White)
+                .padding(horizontal = 20.dp)
+        )
+
+        Text(
+            modifier = Modifier
+                .constrainAs(loginTextBottom) {
+                    top.linkTo(loginTextLine.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
             fontSize = 28.sp,
             color = Color.White,
-            text = stringResource(id = R.string.welcome)
+            text = stringResource(id = R.string.manage)
         )
+
 
         Card(
             elevation = CardDefaults.cardElevation(8.dp),
-            shape = RoundedCornerShape(16.dp) ,
-                colors = CardDefaults.cardColors(Color.White),
+            shape = RoundedCornerShape(30.dp),
+            colors = CardDefaults.cardColors(Color.White),
             modifier = Modifier
                 .constrainAs(cardContainer) {
-                    top.linkTo(parent.top)
+                    top.linkTo(loginTextBottom.bottom)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 }
                 .fillMaxWidth()
-                .padding(top = 120.dp, start = 12.dp, end = 12.dp, bottom = 12.dp)
+                .padding(30.dp)
 
         ) {
             ConstraintLayout(
                 modifier = Modifier.fillMaxSize()
             ) {
 
-                val (emailTF, passwordTF, loginBtn, signUpBtn) = createRefs()
+                val (title, emailTF, passwordTF, loginBtn, orBtn, googleBtn, facebookBtn, signUpBtn) = createRefs()
 
+
+                Text(
+                    modifier = Modifier
+                        .constrainAs(title) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        },
+                    fontSize = 32.sp,
+                    color = Color.Black,
+                    text = stringResource(id = R.string.login_account)
+                )
 
 
                 CustomOutlinedTextField(
@@ -124,7 +162,7 @@ fun LoginScreen(
                     label = emailLabelMessage,
                     modifier = Modifier
                         .constrainAs(emailTF) {
-                            top.linkTo(parent.top)
+                            top.linkTo(title.bottom)
                         }
                         .fillMaxWidth()
                         .padding(8.dp),
