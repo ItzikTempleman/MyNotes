@@ -3,6 +3,7 @@ package com.itzik.mynotes.project.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.itzik.mynotes.project.model.Gender
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.repositories.AppRepositoryInterface
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -72,14 +73,16 @@ class UserViewModel @Inject constructor(
         }
     }
 
-//    suspend fun updateIsLoggedIn(user: User) = repo.updateIsLoggedIn(user)
 
     fun createUser(
         name: String,
         email: String,
         password: String,
         phoneNumber: Long,
-        profileImage: String
+        profileImage: String,
+        gender: Gender,
+        dateOfBirth:String
+
     ): User {
         return User(
             userName = name,
@@ -87,9 +90,14 @@ class UserViewModel @Inject constructor(
             password = password,
             isLoggedIn = true,
             phoneNumber = phoneNumber,
-            profileImage = profileImage
+            profileImage = profileImage,
+            genger = gender,
+            dateOfBirth = dateOfBirth
         )
     }
+
+
+
 
     fun validateName(name: String) = name.length > 4
 

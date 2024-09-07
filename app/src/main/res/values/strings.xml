@@ -33,4 +33,5 @@
     <string name="manage">MANAGE EVERY DAY</string>
     <string name="dont_have">Don\'t have an account?</string>
     <string name="forgot">Forgot password?</string>
+    <string name="select_gender">Select gender</string>
 </resources>

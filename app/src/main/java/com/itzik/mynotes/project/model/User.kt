@@ -16,7 +16,9 @@ data class User(
     val password: String,
     var isLoggedIn: Boolean = false,
     var phoneNumber: Long,
-    var profileImage: String = ""
+    var profileImage: String = "",
+    var genger:Gender,
+    var dateOfBirth:String
 ) : Parcelable {
     companion object {
 
@@ -27,4 +29,7 @@ data class User(
             return "user_id_$lastId"
         }
     }
+}
+enum class Gender{
+    MALE, FEMALE, OTHER
 }

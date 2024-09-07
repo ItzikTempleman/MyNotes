@@ -152,7 +152,7 @@ fun LoginScreen(
                 }
                 .height(600.dp)
                 .fillMaxWidth()
-                .padding(50.dp)
+                .padding(30.dp)
 
         ) {
             ConstraintLayout(
@@ -238,6 +238,7 @@ fun LoginScreen(
                 }
 
                 Button(
+                    enabled =  isButtonEnabled,
                     shape = RoundedCornerShape(40.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(R.color.darker_blue)

@@ -50,8 +50,8 @@ import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
+import com.itzik.mynotes.project.ui.composable_elements.GenericDropDownMenu
 import com.itzik.mynotes.project.ui.composable_elements.GenericIconButton
-import com.itzik.mynotes.project.ui.composable_elements.SortDropDownMenu
 import com.itzik.mynotes.project.ui.composable_elements.swipe_to_action.SwipeToOptions
 import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.ui.screen_sections.NoteListItem
@@ -192,7 +192,7 @@ fun HomeScreen(
                     imageVector = Icons.AutoMirrored.Filled.Sort
                 )
 
-                SortDropDownMenu(
+                GenericDropDownMenu(
                     isExpanded = isExpanded,
                     modifier = Modifier.wrapContentSize(),
                     coroutineScope = coroutineScope,
@@ -200,7 +200,8 @@ fun HomeScreen(
                     onDismissRequest = {
                         isExpanded = false
                     },
-                    updatedSortedList = {
+                    isSelectSort = true,
+                    updatedList = {
                         sortType = it
                     }
                 )
