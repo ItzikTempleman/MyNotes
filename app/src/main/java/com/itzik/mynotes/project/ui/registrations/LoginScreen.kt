@@ -37,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -166,7 +167,8 @@ fun LoginScreen(
                             end.linkTo(parent.end)
                         }
                         .padding(30.dp),
-                    fontSize = 26.sp,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
                     color = Color.Black,
                     text = stringResource(id = R.string.login_account)
                 )
@@ -347,22 +349,20 @@ fun LoginScreen(
             }
         }
 
-        TextButton(
-            modifier = Modifier
-                .constrainAs(doNotHaveText) {
-                    top.linkTo(cardContainer.bottom)
-                    end.linkTo(parent.end)
-                    start.linkTo(parent.start)
-                }
-                .padding(8.dp),
-            onClick = {
 
-            }
-        ) {
             Text(
+                modifier = Modifier
+                    .constrainAs(doNotHaveText) {
+                        top.linkTo(cardContainer.bottom)
+                        end.linkTo(parent.end)
+                        start.linkTo(parent.start)
+                    },
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                fontSize = 18.sp,
                 text = stringResource(id = R.string.dont_have),
             )
-        }
+
 
         TextButton(
             onClick = {
@@ -374,9 +374,9 @@ fun LoginScreen(
                     end.linkTo(parent.end)
                     start.linkTo(parent.start)
                 }
-                .padding(8.dp)
         ) {
             Text(
+                fontSize = 22.sp,
                 text = stringResource(id = R.string.register),
             )
         }
