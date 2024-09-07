@@ -2,8 +2,8 @@
     <string name="app_name">MyNotes</string>
 
     <string name="log_in" translatable="false">LOG IN</string>
-    <string name="email" translatable="false">Enter username</string>
-    <string name="password" translatable="false">Enter password</string>
+    <string name="email" translatable="false">Username</string>
+    <string name="password" translatable="false">Password</string>
     <string name="register" translatable="false">REGISTER</string>
     <string name="registration" translatable="false">Registration</string>
     <string name="create_name" translatable="false">Name</string>

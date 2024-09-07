@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,10 +25,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.ui.composable_elements.CustomButton
 import com.itzik.mynotes.project.ui.composable_elements.CustomOutlinedTextField
@@ -40,7 +43,7 @@ import kotlinx.coroutines.launch
 fun RegistrationScreen(
     coroutineScope: CoroutineScope,
     navController: NavHostController,
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel?=null
 ) {
     val nameText = stringResource(id = R.string.full_name)
     val nameLabelMessage by remember { mutableStateOf(nameText) }
@@ -66,11 +69,13 @@ fun RegistrationScreen(
     var isButtonEnabled by remember { mutableStateOf(false) }
 
     fun updateButtonState(name: String, email: String, password: String, phoneNumber: String) {
-        isButtonEnabled =
-            userViewModel.validateName(name) &&
-                    userViewModel.validateEmail(email) &&
-                    userViewModel.validatePassword(password) &&
-                    userViewModel.validatePhoneNumber(phoneNumber)
+        if (userViewModel != null) {
+            isButtonEnabled =
+                userViewModel.validateName(name) &&
+                        userViewModel.validateEmail(email) &&
+                        userViewModel.validatePassword(password) &&
+                        userViewModel.validatePhoneNumber(phoneNumber)
+        }
 
     }
 
@@ -187,40 +192,46 @@ fun RegistrationScreen(
                 }
                 .padding(8.dp),
             onButtonClick = {
-                if (!userViewModel.validateEmail(createEmail)) {
-                    isNewEmailError = true
-                    createEmailLabelMessage = "Invalid username / email format"
-                } else {
-                    isNewEmailError = false
-                    createEmailLabelMessage = createEmailText
+                if (userViewModel != null) {
+                    if (!userViewModel.validateEmail(createEmail)) {
+                        isNewEmailError = true
+                        createEmailLabelMessage = "Invalid username / email format"
+                    } else {
+                        isNewEmailError = false
+                        createEmailLabelMessage = createEmailText
+                    }
                 }
 
-                if (!userViewModel.validatePassword(createPassword)) {
-                    isCreatePasswordError = true
-                    createPasswordLabelMessage = "Enter symbols of type format X, x, $ , 1"
+                if (userViewModel != null) {
+                    if (!userViewModel.validatePassword(createPassword)) {
+                        isCreatePasswordError = true
+                        createPasswordLabelMessage = "Enter symbols of type format X, x, $ , 1"
 
-                } else {
-                    isCreatePasswordError = false
-                    createPasswordLabelMessage = createdPasswordText
+                    } else {
+                        isCreatePasswordError = false
+                        createPasswordLabelMessage = createdPasswordText
+                    }
                 }
 
-                if (userViewModel.validateEmail(createEmail) && userViewModel.validatePassword(
-                        createPassword
-                    )
-                ) {
-                    val user = userViewModel.createUser(
-                        name,
-                        createEmail,
-                        createPassword,
-                        createPhoneNumber.toLong(),
-                        profileImage = ""
-                    )
-                    coroutineScope.launch {
-                        try {
-                            userViewModel.registerUser(user)
-                            navController.navigate(Screen.Home.route)
-                        } catch (e: Exception) {
-                            Log.e("RegistrationScreen", "Error registering user: ${e.message}")
+                if (userViewModel != null) {
+                    if (userViewModel.validateEmail(createEmail) && userViewModel.validatePassword(
+                            createPassword
+                        )
+                    ) {
+                        val user = userViewModel.createUser(
+                            name,
+                            createEmail,
+                            createPassword,
+                            createPhoneNumber.toLong(),
+                            profileImage = ""
+                        )
+                        coroutineScope.launch {
+                            try {
+                                userViewModel.registerUser(user)
+                                navController.navigate(Screen.Home.route)
+                            } catch (e: Exception) {
+                                Log.e("RegistrationScreen", "Error registering user: ${e.message}")
+                            }
                         }
                     }
                 }
@@ -233,4 +244,14 @@ fun RegistrationScreen(
             borderColor = Color.Gray,
         )
     }
+}
+
+
+@Preview(showBackground = true,device = "spec:width=412dp,height=932dp")
+@Composable
+fun RegistrationScreenPreview() {
+    RegistrationScreen(
+        coroutineScope = rememberCoroutineScope(),
+        navController = rememberNavController()
+    )
 }

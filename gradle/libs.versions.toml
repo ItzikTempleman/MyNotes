@@ -82,6 +82,7 @@ runtimeLivedataVersion = "1.6.6"
 toolbarCompose = "2.3.5"
 ui = "1.6.8"
 uiTestJunit4 = "2.0"
+uiToolingPreview = "1.7.0"
 uiVersion = "1.6.6"
 junitJupiter = "5.8.1"
 xorgMockitoCore = "3.5.13"
@@ -99,6 +100,7 @@ androidx-compose-ui-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-jun
 androidx-compose-ui-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 androidx-compose-ui-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-ui-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-compose-ui-ui-tooling-preview2 = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
 androidx-compose-ui-ui2 = { module = "androidx.compose.ui:ui" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core = { module = "androidx.test:core", version.ref = "core" }
