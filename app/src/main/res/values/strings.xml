@@ -4,7 +4,7 @@
     <string name="log_in" translatable="false">Log in</string>
     <string name="email" translatable="false">Enter username</string>
     <string name="password" translatable="false">Enter password</string>
-    <string name="register" translatable="false">Sign up</string>
+    <string name="register" translatable="false">REGISTER</string>
     <string name="registration" translatable="false">Registration</string>
     <string name="create_name" translatable="false">Name</string>
     <string name="create_email" translatable="false">Email</string>
@@ -30,5 +30,7 @@
     <string name="welcome">Welcome\n</string>
     <string name="login_account">Login Account</string>
     <string name="notes">Notes\n</string>
-    <string name="manage">Manage your everyday thoughts</string>
+    <string name="manage">MANAGE EVERY DAY</string>
+    <string name="dont_have">Don\'t have an account?</string>
+    <string name="forgot">Forgot password?</string>
 </resources>

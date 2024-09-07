@@ -2,33 +2,41 @@ package com.itzik.mynotes.project.ui.registrations
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -37,7 +45,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
-import com.itzik.mynotes.project.ui.composable_elements.CustomButton
 import com.itzik.mynotes.project.ui.composable_elements.CustomOutlinedTextField
 import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.viewmodels.UserViewModel
@@ -74,26 +81,36 @@ fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        val (loginTextTop, loginTextLine, loginTextBottom, cardContainer) = createRefs()
+        val (backgroundBox, loginTextTop, loginTextLine, loginTextBottom, cardContainer, doNotHaveText, signUpBtn) = createRefs()
 
-        Image(
-            painter = painterResource(id = R.drawable.ripple),
-            modifier = Modifier.fillMaxSize(),
-            contentDescription = null,
-            contentScale = ContentScale.FillHeight
-        )
-
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(backgroundBox) {
+                    top.linkTo(parent.top)
+                    height = Dimension.percent(0.7f)
+                }
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            colorResource(R.color.lighter_blue),
+                            colorResource(R.color.darker_blue),
+                        )
+                    )
+                )
+        ) {}
         Text(
             modifier = Modifier
                 .constrainAs(loginTextTop) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
+                    bottom.linkTo(loginTextLine.top)
                 }
-                .padding(top = 40.dp),
-            fontWeight = FontWeight.Bold,
+                .padding(top = 150.dp),
             fontSize = 36.sp,
-            fontFamily = FontFamily.Cursive,
+            fontFamily = FontFamily.SansSerif,
+            fontStyle = FontStyle.Italic,
             color = Color.White,
             text = stringResource(id = R.string.notes)
         )
@@ -101,9 +118,11 @@ fun LoginScreen(
         HorizontalDivider(
             modifier = Modifier
                 .constrainAs(loginTextLine) {
-                    top.linkTo(loginTextTop.bottom)
-                }.background(Color.White)
-                .padding(horizontal = 20.dp)
+                    top.linkTo(loginTextTop.bottom, margin = (-20).dp)
+                }
+                .padding(horizontal = 125.dp),
+            thickness = 1.dp,
+            color = Color.White
         )
 
         Text(
@@ -113,7 +132,7 @@ fun LoginScreen(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 },
-            fontSize = 28.sp,
+            fontSize = 20.sp,
             color = Color.White,
             text = stringResource(id = R.string.manage)
         )
@@ -126,18 +145,17 @@ fun LoginScreen(
             modifier = Modifier
                 .constrainAs(cardContainer) {
                     top.linkTo(loginTextBottom.bottom)
-                    bottom.linkTo(parent.bottom)
-                    height = Dimension.fillToConstraints
                 }
+                .height(600.dp)
                 .fillMaxWidth()
-                .padding(30.dp)
+                .padding(50.dp)
 
         ) {
             ConstraintLayout(
                 modifier = Modifier.fillMaxSize()
             ) {
 
-                val (title, emailTF, passwordTF, loginBtn, orBtn, googleBtn, facebookBtn, signUpBtn) = createRefs()
+                val (title, emailTF, passwordTF, forgotPassword, loginBtn, orText, googleBtn, verticalLine, facebookBtn) = createRefs()
 
 
                 Text(
@@ -146,12 +164,12 @@ fun LoginScreen(
                             top.linkTo(parent.top)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
-                        },
-                    fontSize = 32.sp,
+                        }
+                        .padding(30.dp),
+                    fontSize = 26.sp,
                     color = Color.Black,
                     text = stringResource(id = R.string.login_account)
                 )
-
 
                 CustomOutlinedTextField(
                     value = email,
@@ -170,7 +188,6 @@ fun LoginScreen(
                     isError = isEmailError,
                     visualTransformation = VisualTransformation.None,
                     tint = Color.Black,
-                    contentColor = Color.Black
                 )
 
                 CustomOutlinedTextField(
@@ -197,17 +214,36 @@ fun LoginScreen(
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None
                     else PasswordVisualTransformation(),
                     tint = Color.Black,
-                    contentColor = Color.Black
                 )
 
-                CustomButton(
-                    text = stringResource(id = R.string.log_in),
+                TextButton(
+                    onClick = {
+
+                    },
+                    modifier = Modifier
+                        .constrainAs(forgotPassword) {
+                            top.linkTo(passwordTF.bottom)
+                            start.linkTo(parent.start)
+                        }.padding(start = 20.dp),
+
+                    ) {
+                    Text(
+                        text = stringResource(R.string.forgot)
+                    )
+                }
+
+                Button(
+                    shape = RoundedCornerShape(40.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(R.color.darker_blue)
+                    ),
                     modifier = Modifier
                         .constrainAs(loginBtn) {
-                            bottom.linkTo(signUpBtn.top)
+                            top.linkTo(forgotPassword.bottom)
                         }
-                        .padding(horizontal = 8.dp),
-                    onButtonClick = {
+                        .fillMaxWidth()
+                        .padding(24.dp),
+                    onClick = {
                         if (!userViewModel.validateEmail(email)) {
                             isEmailError = true
                             emailLabelMessage = "Invalid username / email format"
@@ -245,35 +281,104 @@ fun LoginScreen(
                         } else {
                             Log.e("LoginScreen", "Invalid email or password format")
                         }
-                    },
-                    isEnabled = isButtonEnabled,
-                    fontSize = 20.sp,
-                    containerColor = Color.Gray,
-                    contentColor = Color.White,
-                    roundedShape = 8.dp,
-                    borderColor = Color.Gray
-                )
-
-                TextButton(
-                    onClick = {
-                        navController.navigate(Screen.Registration.route)
-                    },
-                    modifier = Modifier
-                        .constrainAs(signUpBtn) {
-                            bottom.linkTo(parent.bottom)
-                            end.linkTo(parent.end)
-                            start.linkTo(parent.start)
-                        }
-                        .padding(8.dp)
+                    }
                 ) {
                     Text(
-                        text = stringResource(id = R.string.register),
-                        color = Color.Gray,
-                        fontSize = 23.sp,
-                        fontWeight = FontWeight.Bold
+                        fontSize = 20.sp,
+                        text = stringResource(id = R.string.log_in)
+                    )
+                }
+
+                Text(
+                    modifier = Modifier.constrainAs(orText) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        top.linkTo(loginBtn.bottom)
+                    },
+                    text = "OR",
+                    fontSize = 14.sp
+                )
+
+                IconButton(
+                    modifier = Modifier
+                        .constrainAs(facebookBtn) {
+                            top.linkTo(orText.bottom)
+                            end.linkTo(verticalLine.start)
+                        }
+                        .size(60.dp)
+                        .padding(12.dp),
+                    onClick = {
+
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.facebook_logo),
+                        contentDescription = null,
+                        tint = Color.Unspecified
+                    )
+                }
+
+                VerticalDivider(
+                    modifier = Modifier.constrainAs(verticalLine) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    },
+                    color = Color.Transparent
+                )
+
+                IconButton(
+                    modifier = Modifier
+                        .constrainAs(googleBtn) {
+                            top.linkTo(orText.bottom)
+                            start.linkTo(verticalLine.end)
+                        }
+                        .size(60.dp)
+                        .padding(12.dp),
+                    onClick = {
+
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.google_logo),
+                        contentDescription = null,
+                        tint = Color.Unspecified
                     )
                 }
             }
+        }
+
+        TextButton(
+            modifier = Modifier
+                .constrainAs(doNotHaveText) {
+                    top.linkTo(cardContainer.bottom)
+                    end.linkTo(parent.end)
+                    start.linkTo(parent.start)
+                }
+                .padding(8.dp),
+            onClick = {
+
+            }
+        ) {
+            Text(
+                text = stringResource(id = R.string.dont_have),
+            )
+        }
+
+        TextButton(
+            onClick = {
+                navController.navigate(Screen.Registration.route)
+            },
+            modifier = Modifier
+                .constrainAs(signUpBtn) {
+                    top.linkTo(doNotHaveText.bottom)
+                    end.linkTo(parent.end)
+                    start.linkTo(parent.start)
+                }
+                .padding(8.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.register),
+            )
         }
     }
 }

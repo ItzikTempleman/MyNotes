@@ -108,7 +108,7 @@ fun RegistrationScreen(
             isError = nameError,
             visualTransformation = VisualTransformation.None,
             tint = Color.Black,
-            contentColor = Color.Black
+
         )
 
         CustomOutlinedTextField(
@@ -128,7 +128,7 @@ fun RegistrationScreen(
             isError = isNewEmailError,
             visualTransformation = VisualTransformation.None,
             tint = Color.Black,
-            contentColor = Color.Black
+
         )
 
         CustomOutlinedTextField(
@@ -155,7 +155,7 @@ fun RegistrationScreen(
             visualTransformation = if (isCreatedPasswordVisible) VisualTransformation.None
             else PasswordVisualTransformation(),
             tint = Color.Black,
-            contentColor = Color.Black
+
         )
 
         CustomOutlinedTextField(
@@ -175,7 +175,7 @@ fun RegistrationScreen(
             isError = phoneNumberError,
             visualTransformation = VisualTransformation.None,
             tint = Color.Black,
-            contentColor = Color.Black,
+
             isKeyboardNumberType = true
         )
 
