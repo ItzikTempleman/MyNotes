@@ -15,59 +15,66 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun GenericDropDownMenu(
-    updatedList: (String) -> Unit,
+fun SortDropDownMenu(
+    updatedSortedList: (String) -> Unit,
     modifier: Modifier,
     coroutineScope: CoroutineScope,
-    noteViewModel: NoteViewModel? = null,
-    isExpanded: Boolean? = null,
-    isGenderExpanded: Boolean? = null,
-    onDismissRequest: () -> Unit,
-    isSelectSort: Boolean
+    noteViewModel: NoteViewModel,
+    isExpanded: Boolean,
+    onDismissRequest: () -> Unit
 ) {
 
     val sortOptions: List<String> = listOf("Sort by date modified", "Sort alphabetically")
-    val genderList: List<String> = listOf("Male", "Female", "Other")
 
-    if (isSelectSort && isExpanded != null) {
-            DropdownMenu(
-                modifier = modifier,
-                expanded = isExpanded,
-                onDismissRequest = onDismissRequest
-            ) {
-                sortOptions.forEach {
-                    DropdownMenuItem(
-                        onClick = {
-                            coroutineScope.launch {
-                                noteViewModel?.getSortedNotes(it)
-                                updatedList(it)
-                            }
-                            onDismissRequest()
-                        }
-                    ) {
-                        Text(text = it)
+    DropdownMenu(
+        modifier = modifier,
+        expanded = isExpanded,
+        onDismissRequest = onDismissRequest
+    ) {
+        sortOptions.forEach {
+            DropdownMenuItem(
+                onClick = {
+                    coroutineScope.launch {
+                        noteViewModel.getSortedNotes(it)
+                        updatedSortedList(it)
                     }
+                    onDismissRequest()
                 }
-            }
-
-    } else if (!isSelectSort && isGenderExpanded != null) {
-            DropdownMenu(
-                modifier = modifier,
-                expanded = isGenderExpanded,
-                onDismissRequest = onDismissRequest
             ) {
-                genderList.forEach {
-                    DropdownMenuItem(
-                        onClick = {
-                            updatedList(it)
-                            onDismissRequest()
-                        }
-                    ) {
-                        Text(text = it)
-                    }
-                }
+                Text(text = it)
             }
         }
+    }
 }
 
 
+@Composable
+fun GenderDropDownMenu(
+    updatedList: (String) -> Unit,
+    modifier: Modifier,
+    coroutineScope: CoroutineScope,
+    isExpanded: Boolean,
+    onDismissRequest: () -> Unit
+) {
+
+    val genderList: List<String> = listOf("Male", "Female", "Other")
+
+    DropdownMenu(
+        modifier = modifier,
+        expanded = isExpanded,
+        onDismissRequest = onDismissRequest
+    ) {
+        genderList.forEach {
+            DropdownMenuItem(
+                onClick = {
+                    coroutineScope.launch {
+                        updatedList(it)
+                    }
+                    onDismissRequest()
+                }
+            ) {
+                Text(text = it)
+            }
+        }
+    }
+}

@@ -15,12 +15,14 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Transgender
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,7 +47,7 @@ import androidx.navigation.compose.rememberNavController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Gender
 import com.itzik.mynotes.project.ui.composable_elements.CustomOutlinedTextField
-import com.itzik.mynotes.project.ui.composable_elements.GenericDropDownMenu
+import com.itzik.mynotes.project.ui.composable_elements.GenderDropDownMenu
 import com.itzik.mynotes.project.ui.composable_elements.GenericIconButton
 import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.viewmodels.UserViewModel
@@ -78,11 +80,12 @@ fun RegistrationScreen(
     val createPhoneNumberText = stringResource(id = R.string.enter_phone_number)
     val createPhoneNumberLabelMessage by remember { mutableStateOf(createPhoneNumberText) }
     val phoneNumberError by remember { mutableStateOf(false) }
-    var isExpanded by remember { mutableStateOf(false) }
 
     var isButtonEnabled by remember { mutableStateOf(false) }
-
-
+    var dropDownMenuInitialText = stringResource(R.string.select_gender)
+    var dropDownMenuPlaceHolder by remember {
+        mutableStateOf(dropDownMenuInitialText)
+    }
     var isGenderExpanded by remember { mutableStateOf(false) }
     var selectedGender by remember { mutableStateOf(Gender.MALE) }
 
@@ -141,7 +144,7 @@ fun RegistrationScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
 
-                val (nameTF, emailTF, passwordTF, phoneNumberTF,genderSelector, selectGenderTitle, birthDate) = createRefs()
+                val (nameTF, emailTF, passwordTF, phoneNumberTF, dropDownIcon, genderSelector, selectGenderTitle, birthDate) = createRefs()
 
                 CustomOutlinedTextField(
                     value = name,
@@ -230,30 +233,45 @@ fun RegistrationScreen(
                     isKeyboardNumberType = true
                 )
 
+                Icon(
+                    modifier = Modifier
+                        .constrainAs(dropDownIcon) {
+                            top.linkTo(phoneNumberTF.bottom)
+                            start.linkTo(parent.start)
+                        }
+                        .padding(start = 22.dp, top = 24.dp),
+                    imageVector = Icons.Default.Transgender,
+                    contentDescription = null
+                )
+
+                Text(
+                    modifier = Modifier
+                        .constrainAs(selectGenderTitle) {
+                            top.linkTo(phoneNumberTF.bottom)
+                            start.linkTo(dropDownIcon.end)
+                        }
+                        .padding(top = 26.dp, start = 14.dp),
+                    text = dropDownMenuPlaceHolder,
+                    fontSize = 16.sp,
+                )
+
+
                 Box(
                     modifier = Modifier
                         .constrainAs(genderSelector) {
                             top.linkTo(phoneNumberTF.bottom)
-                            start.linkTo(parent.start)
+                            start.linkTo(selectGenderTitle.end)
                         }
-                        .padding(8.dp)
+                        .padding(top=12.dp)
                 ) {
-                    GenericIconButton(
-                        onClick = {
-                            isExpanded = !isExpanded
-                        },
-                        colorNumber = 4,
-                        imageVector = if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
-                    )
 
-                    GenericDropDownMenu(
-                        isGenderExpanded = isGenderExpanded,
-                        modifier = Modifier.wrapContentSize(),
+                    GenderDropDownMenu(
+                        modifier = Modifier.wrapContentSize().padding(top=8.dp),
                         coroutineScope = coroutineScope,
                         onDismissRequest = {
                             isGenderExpanded = false
                         },
-                        isSelectSort = false,
+                        isExpanded = isGenderExpanded,
                         updatedList = {
                             selectedGender = when (it) {
                                 "Male" -> Gender.MALE
@@ -261,18 +279,20 @@ fun RegistrationScreen(
                                 "Other" -> Gender.OTHER
                                 else -> Gender.MALE
                             }
+                            dropDownMenuPlaceHolder = it
                         }
                     )
+
+                    GenericIconButton(
+                        onClick = {
+                            isGenderExpanded = !isGenderExpanded
+                        },
+                        colorNumber = 4,
+                        imageVector = if (isGenderExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
+                    )
                 }
-                Text(
-                    modifier = Modifier.constrainAs(selectGenderTitle){
-                        top.linkTo(phoneNumberTF.bottom)
-                        start.linkTo(genderSelector.end)
-                    } .padding(20.dp),
-                    text= stringResource(R.string.select_gender),
-                    fontSize = 20.sp,
-                    color = Color.Black
-                )
+
+
             }
         }
 
@@ -341,7 +361,7 @@ fun RegistrationScreen(
         ) {
             Text(
                 fontSize = 20.sp,
-                text = stringResource(id = R.string.create_user)
+                text = dropDownMenuPlaceHolder
 
             )
         }
