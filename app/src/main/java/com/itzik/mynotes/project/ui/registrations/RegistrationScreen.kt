@@ -89,6 +89,10 @@ fun RegistrationScreen(
     var isGenderExpanded by remember { mutableStateOf(false) }
     var selectedGender by remember { mutableStateOf(Gender.MALE) }
 
+    var dateSelected by remember {
+        mutableStateOf("")
+    }
+
     fun updateButtonState(name: String, email: String, password: String, phoneNumber: String) {
         if (userViewModel != null) {
             isButtonEnabled =
@@ -106,7 +110,7 @@ fun RegistrationScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        val (backgroundBox, cardContainer, signUpBtn) = createRefs()
+        val (backgroundBox, cardContainer) = createRefs()
 
         Box(
             modifier = Modifier
@@ -133,18 +137,18 @@ fun RegistrationScreen(
             modifier = Modifier
                 .constrainAs(cardContainer) {
                     top.linkTo(parent.top)
-                    bottom.linkTo(signUpBtn.top)
+                    bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 }
                 .fillMaxWidth()
-                .padding(start = 30.dp, end = 30.dp, top = 30.dp, bottom = 12.dp)
+                .padding(start = 30.dp, end = 30.dp, top = 260.dp, bottom = 30.dp)
 
         ) {
             ConstraintLayout(
                 modifier = Modifier.fillMaxSize()
             ) {
 
-                val (nameTF, emailTF, passwordTF, phoneNumberTF, dropDownIcon, genderSelector, selectGenderTitle, birthDate) = createRefs()
+                val (nameTF, emailTF, passwordTF, phoneNumberTF, dropDownIcon, genderSelector, selectGenderTitle, birthDateSelector, signUpBtn) = createRefs()
 
                 CustomOutlinedTextField(
                     value = name,
@@ -262,11 +266,13 @@ fun RegistrationScreen(
                             top.linkTo(phoneNumberTF.bottom)
                             start.linkTo(selectGenderTitle.end)
                         }
-                        .padding(top=12.dp)
+                        .padding(top = 12.dp)
                 ) {
 
                     GenderDropDownMenu(
-                        modifier = Modifier.wrapContentSize().padding(top=8.dp),
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .padding(top = 8.dp),
                         coroutineScope = coroutineScope,
                         onDismissRequest = {
                             isGenderExpanded = false
@@ -292,78 +298,90 @@ fun RegistrationScreen(
                     )
                 }
 
+//                DateOfBirthSelector(
+//                    modifier = Modifier
+//                        .constrainAs(birthDateSelector) {
+//                            top.linkTo(genderSelector.bottom)
+//                            start.linkTo(parent.start)
+//                            end.linkTo(parent.end)
+//                        }
+//                        .padding(20.dp),
+//                    onDateSelected = {
+//                        dateSelected = it
+//                    }
+//                )
 
-            }
-        }
 
-        Button(
-            modifier = Modifier
-                .constrainAs(signUpBtn) {
-                    bottom.linkTo(parent.bottom)
-                }
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 12.dp),
-            onClick = {
-                if (userViewModel != null) {
-                    if (!userViewModel.validateEmail(createEmail)) {
-                        isNewEmailError = true
-                        createEmailLabelMessage = "Invalid username / email format"
-                    } else {
-                        isNewEmailError = false
-                        createEmailLabelMessage = createEmailText
-                    }
-                }
-
-                if (userViewModel != null) {
-                    if (!userViewModel.validatePassword(createPassword)) {
-                        isCreatePasswordError = true
-                        createPasswordLabelMessage =
-                            "Enter symbols of type format X, x, $ , 1"
-                    } else {
-                        isCreatePasswordError = false
-                        createPasswordLabelMessage = createdPasswordText
-                    }
-                }
-
-                if (userViewModel != null) {
-                    if (userViewModel.validateEmail(createEmail) && userViewModel.validatePassword(
-                            createPassword
-                        )
-                    ) {
-                        val user = userViewModel.createUser(
-                            name,
-                            createEmail,
-                            createPassword,
-                            createPhoneNumber.toLong(),
-                            profileImage = "",
-                            gender = selectedGender,
-                            dateOfBirth = ""
-                        )
-                        coroutineScope.launch {
-                            try {
-                                userViewModel.registerUser(user)
-                                navController.navigate(Screen.Home.route)
-                            } catch (e: Exception) {
-                                Log.e(
-                                    "RegistrationScreen",
-                                    "Error registering user: ${e.message}"
-                                )
+                Button(
+                    modifier = Modifier
+                        .constrainAs(signUpBtn) {
+                            bottom.linkTo(parent.bottom)
+                        }
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 12.dp),
+                    onClick = {
+                        if (userViewModel != null) {
+                            if (!userViewModel.validateEmail(createEmail)) {
+                                isNewEmailError = true
+                                createEmailLabelMessage = "Invalid username / email format"
+                            } else {
+                                isNewEmailError = false
+                                createEmailLabelMessage = createEmailText
                             }
                         }
-                    }
-                }
-            },
-            enabled = isButtonEnabled,
-            shape = RoundedCornerShape(40.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(R.color.darker_blue)
-            ),
-        ) {
-            Text(
-                fontSize = 20.sp,
-                text = dropDownMenuPlaceHolder
 
-            )
+                        if (userViewModel != null) {
+                            if (!userViewModel.validatePassword(createPassword)) {
+                                isCreatePasswordError = true
+                                createPasswordLabelMessage =
+                                    "Enter symbols of type format X, x, $ , 1"
+                            } else {
+                                isCreatePasswordError = false
+                                createPasswordLabelMessage = createdPasswordText
+                            }
+                        }
+
+                        if (userViewModel != null) {
+                            if (userViewModel.validateEmail(createEmail) && userViewModel.validatePassword(
+                                    createPassword
+                                )
+                            ) {
+                                val user = userViewModel.createUser(
+                                    name,
+                                    createEmail,
+                                    createPassword,
+                                    createPhoneNumber.toLong(),
+                                    profileImage = "",
+                                    gender = selectedGender,
+                                    dateOfBirth = ""
+                                )
+                                coroutineScope.launch {
+                                    try {
+                                        userViewModel.registerUser(user)
+                                        navController.navigate(Screen.Home.route)
+                                    } catch (e: Exception) {
+                                        Log.e(
+                                            "RegistrationScreen",
+                                            "Error registering user: ${e.message}"
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    enabled = isButtonEnabled,
+                    shape = RoundedCornerShape(40.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(R.color.darker_blue)
+                    ),
+                ) {
+                    Text(
+                        fontSize = 20.sp,
+                        text = dropDownMenuPlaceHolder
+
+                    )
+                }
+            }
         }
     }
 }

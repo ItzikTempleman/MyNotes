@@ -63,8 +63,6 @@ dependencies {
 
     implementation(libs.play.services.maps)
 
-
-
     //noinspection KaptUsageInsteadOfKsp
     kapt(libs.room.compiler)
     kapt(libs.hilt.compiler)
@@ -123,5 +121,6 @@ dependencies {
     testImplementation (libs.mockito.core)
     testImplementation (libs.byte.buddy)
     testImplementation (libs.androidx.core)
+
 
 }
