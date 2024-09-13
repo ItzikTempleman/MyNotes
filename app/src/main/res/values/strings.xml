@@ -10,7 +10,7 @@
     <string name="create_email" translatable="false">Email</string>
     <string name="create_password" translatable="false">Password</string>
     <string name="enter_phone_number" translatable="false">Phone Number</string>
-    <string name="create_user" translatable="false">Create user</string>
+    <string name="create_user" translatable="false">CREATE USER</string>
     <string name="full_name" translatable="false">Name</string>
     <string name="user_email" translatable="false">Email</string>
     <string name="log_out" translatable="false">Log out</string>

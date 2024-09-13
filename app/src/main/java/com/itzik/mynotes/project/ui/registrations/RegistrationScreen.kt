@@ -3,13 +3,17 @@ package com.itzik.mynotes.project.ui.registrations
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -30,6 +34,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -55,6 +60,7 @@ import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun RegistrationScreen(
@@ -92,7 +98,7 @@ fun RegistrationScreen(
     var selectedGender by remember { mutableStateOf(Gender.MALE) }
 
     var dateSelected by remember {
-        mutableStateOf(LocalDate.now())
+        mutableStateOf("")
     }
 
     fun updateButtonState(name: String, email: String, password: String, phoneNumber: String) {
@@ -300,19 +306,29 @@ fun RegistrationScreen(
                     )
                 }
 
-                DateTextField(
+                Row(
                     modifier = Modifier
                         .constrainAs(birthDateSelector) {
                             top.linkTo(genderSelector.bottom)
                             start.linkTo(parent.start)
-                            end.linkTo(parent.end)
                         }
-                        .padding(20.dp),
-                    onValueChanged = {
-                        dateSelected=it
-                        Log.d("TAG", "dateSelected: $dateSelected")
-                    }
-                )
+                        .padding(start=22.dp, top=28.dp),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        imageVector = Icons.Default.CalendarMonth,
+                        contentDescription = null
+                    )
+
+                    DateTextField(
+                        modifier = Modifier.padding(start = 12.dp),
+                        onValueChanged = {
+                            dateSelected = reverseDateFormat(it.toString())
+                        }
+                    )
+                }
 
 
 
@@ -357,7 +373,7 @@ fun RegistrationScreen(
                                     createPhoneNumber.toLong(),
                                     profileImage = "",
                                     gender = selectedGender,
-                                    dateOfBirth = ""
+                                    dateOfBirth = dateSelected
                                 )
                                 coroutineScope.launch {
                                     try {
@@ -389,6 +405,14 @@ fun RegistrationScreen(
         }
     }
 }
+
+fun reverseDateFormat(date: String): String {
+    val localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    return localDate.format(formatter)
+}
+
+
 
 
 @Preview(showBackground = true, device = "spec:width=412dp,height=932dp")
