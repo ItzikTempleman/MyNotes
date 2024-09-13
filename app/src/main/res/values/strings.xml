@@ -34,4 +34,7 @@
     <string name="dont_have">Don\'t have an account?</string>
     <string name="forgot">Forgot password?</string>
     <string name="select_gender">Gender</string>
+    <string name="D">D</string>
+    <string name="M">M</string>
+    <string name="Y">Y</string>
 </resources>
