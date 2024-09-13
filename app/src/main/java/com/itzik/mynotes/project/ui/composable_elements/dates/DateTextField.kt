@@ -74,7 +74,7 @@ import kotlin.jvm.optionals.getOrElse
 fun DateTextField(
     modifier: Modifier = Modifier,
     initialValue: LocalDate? = null,
-    onValueChanged: (LocalDate?) -> Unit = {},
+    onValueChanged: (LocalDate?) -> Unit ,
     format: Format = Format.DDMMYYYY,
     minDate: LocalDate = LocalDate.of(1900, 1, 1),
     maxDate: LocalDate = LocalDate.of(2100, 12, 31),

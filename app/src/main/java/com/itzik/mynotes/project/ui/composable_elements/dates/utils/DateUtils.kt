@@ -2,9 +2,9 @@ package com.lanars.compose.datetextfield.utils
 
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
-import com.lanars.compose.datetextfield.DateField
-import com.lanars.compose.datetextfield.DateFieldValue
-import org.threeten.bp.LocalDate
+import com.itzik.mynotes.project.ui.composable_elements.dates.DateField
+import com.itzik.mynotes.project.ui.composable_elements.dates.DateFieldValue
+import java.time.LocalDate
 
 internal object DateUtils {
     fun localDateToFieldMap(date: LocalDate?): SnapshotStateMap<DateField, DateFieldValue> {

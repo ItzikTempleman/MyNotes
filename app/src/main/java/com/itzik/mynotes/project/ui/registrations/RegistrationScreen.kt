@@ -49,10 +49,12 @@ import com.itzik.mynotes.project.model.Gender
 import com.itzik.mynotes.project.ui.composable_elements.CustomOutlinedTextField
 import com.itzik.mynotes.project.ui.composable_elements.GenderDropDownMenu
 import com.itzik.mynotes.project.ui.composable_elements.GenericIconButton
+import com.itzik.mynotes.project.ui.composable_elements.dates.DateTextField
 import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 @Composable
 fun RegistrationScreen(
@@ -90,7 +92,7 @@ fun RegistrationScreen(
     var selectedGender by remember { mutableStateOf(Gender.MALE) }
 
     var dateSelected by remember {
-        mutableStateOf("")
+        mutableStateOf(LocalDate.now())
     }
 
     fun updateButtonState(name: String, email: String, password: String, phoneNumber: String) {
@@ -298,18 +300,20 @@ fun RegistrationScreen(
                     )
                 }
 
-//                DateOfBirthSelector(
-//                    modifier = Modifier
-//                        .constrainAs(birthDateSelector) {
-//                            top.linkTo(genderSelector.bottom)
-//                            start.linkTo(parent.start)
-//                            end.linkTo(parent.end)
-//                        }
-//                        .padding(20.dp),
-//                    onDateSelected = {
-//                        dateSelected = it
-//                    }
-//                )
+                DateTextField(
+                    modifier = Modifier
+                        .constrainAs(birthDateSelector) {
+                            top.linkTo(genderSelector.bottom)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
+                        .padding(20.dp),
+                    onValueChanged = {
+                        dateSelected=it
+                        Log.d("TAG", "dateSelected: $dateSelected")
+                    }
+                )
+
 
 
                 Button(
@@ -377,7 +381,7 @@ fun RegistrationScreen(
                 ) {
                     Text(
                         fontSize = 20.sp,
-                        text = dropDownMenuPlaceHolder
+                        text = stringResource(R.string.create_user)
 
                     )
                 }
