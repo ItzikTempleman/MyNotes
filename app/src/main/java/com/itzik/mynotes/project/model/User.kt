@@ -17,7 +17,7 @@ data class User(
     var isLoggedIn: Boolean = false,
     var phoneNumber: Long,
     var profileImage: String = "",
-    var genger:Gender,
+    var gender:Gender,
     var dateOfBirth:String
 ) : Parcelable {
     companion object {

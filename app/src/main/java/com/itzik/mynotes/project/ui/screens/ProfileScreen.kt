@@ -21,6 +21,8 @@ import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.PermContactCalendar
+import androidx.compose.material.icons.outlined.Transgender
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,12 +50,13 @@ import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@SuppressLint("CoroutineCreationDuringComposition", "MutableCollectionMutableState",
+@SuppressLint(
+    "CoroutineCreationDuringComposition", "MutableCollectionMutableState",
     "StateFlowValueCalledInComposition"
 )
 @Composable
 fun ProfileScreen(
-    userId:String,
+    userId: String,
     modifier: Modifier,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
@@ -67,7 +70,6 @@ fun ProfileScreen(
 
     val user by userViewModel.publicUser.collectAsState()
     val profileItems = listOf(GenericRows.DeletedItems, GenericRows.Settings, GenericRows.LogOut)
-
 
 
     val imagePickerLauncher =
@@ -84,7 +86,7 @@ fun ProfileScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        val (imageContainer, horizontalLine, verticalLine, uploadImageBtn, removeImageBtn, name, email, phone, bottomRow) = createRefs()
+        val (imageContainer, horizontalLine, verticalLine, uploadImageBtn, removeImageBtn, name, email, phone, gender, age, bottomRow) = createRefs()
 
 
         Box(
@@ -220,6 +222,52 @@ fun ProfileScreen(
                 text = user?.phoneNumber.toString()
             )
         }
+        Row(
+            modifier = Modifier
+                .constrainAs(gender) {
+                    top.linkTo(phone.bottom)
+                }
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Transgender,
+                contentDescription = null,
+                tint = Color.DarkGray
+            )
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                color = Color.DarkGray,
+                text = user?.gender.toString().lowercase()
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .constrainAs(age) {
+                    top.linkTo(gender.bottom)
+                }
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.PermContactCalendar,
+                contentDescription = null,
+                tint = Color.DarkGray
+            )
+
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                color = Color.DarkGray,
+                text = "${user?.dateOfBirth} (age ${user?.let { userViewModel.getAgeFromSDateString(it.dateOfBirth) }})"
+            )
+
+        }
+
 
         LazyColumn(
             modifier = Modifier
@@ -237,9 +285,8 @@ fun ProfileScreen(
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
                         navController = navController,
-                        userViewModel = userViewModel,
-
-                        )
+                        userViewModel = userViewModel
+                    )
                 }
             }
         }

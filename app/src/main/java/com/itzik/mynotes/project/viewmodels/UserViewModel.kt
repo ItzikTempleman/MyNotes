@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -81,7 +84,7 @@ class UserViewModel @Inject constructor(
         phoneNumber: Long,
         profileImage: String,
         gender: Gender,
-        dateOfBirth:String
+        dateOfBirth: String
 
     ): User {
         return User(
@@ -91,12 +94,10 @@ class UserViewModel @Inject constructor(
             isLoggedIn = true,
             phoneNumber = phoneNumber,
             profileImage = profileImage,
-            genger = gender,
+            gender = gender,
             dateOfBirth = dateOfBirth
         )
     }
-
-
 
 
     fun validateName(name: String) = name.length > 4
@@ -115,6 +116,15 @@ class UserViewModel @Inject constructor(
     fun validatePhoneNumber(phoneNumber: String): Boolean {
         val regex = Regex("^\\d{9,11}$")
         return regex.matches(phoneNumber)
+    }
+
+
+    fun getAgeFromSDateString(date: String): String {
+        val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val birthDate = LocalDate.parse(date, dateFormatter)
+        val currentDate = LocalDate.now()
+        val age= Period.between(birthDate, currentDate).years
+        return age.toString()
     }
 
 

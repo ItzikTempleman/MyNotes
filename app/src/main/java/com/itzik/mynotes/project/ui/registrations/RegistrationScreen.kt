@@ -100,7 +100,8 @@ fun RegistrationScreen(
     var dateSelected by remember {
         mutableStateOf("")
     }
-
+    var isDateSelected by remember { mutableStateOf(false) }
+    var isGenderSelected by remember { mutableStateOf(false) }
     fun updateButtonState(name: String, email: String, password: String, phoneNumber: String) {
         if (userViewModel != null) {
             isButtonEnabled =
@@ -293,6 +294,8 @@ fun RegistrationScreen(
                                 "Other" -> Gender.OTHER
                                 else -> Gender.MALE
                             }
+                            isGenderSelected = true
+                            Log.d("TAGA", "isGenderSelected: $isGenderSelected")
                             dropDownMenuPlaceHolder = it
                         }
                     )
@@ -312,7 +315,7 @@ fun RegistrationScreen(
                             top.linkTo(genderSelector.bottom)
                             start.linkTo(parent.start)
                         }
-                        .padding(start=22.dp, top=28.dp),
+                        .padding(22.dp),
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -324,13 +327,17 @@ fun RegistrationScreen(
 
                     DateTextField(
                         modifier = Modifier.padding(start = 12.dp),
-                        onValueChanged = {
-                            dateSelected = reverseDateFormat(it.toString())
+                        onValueChanged = { localDate ->
+                            localDate?.let {
+                                dateSelected = reverseDateFormat(it.toString())
+                                isDateSelected = true
+                                Log.d("TAGA", "isDateSelected: $isDateSelected")
+                            } ?: run {
+                                dateSelected = ""
+                            }
                         }
                     )
                 }
-
-
 
                 Button(
                     modifier = Modifier
@@ -348,9 +355,7 @@ fun RegistrationScreen(
                                 isNewEmailError = false
                                 createEmailLabelMessage = createEmailText
                             }
-                        }
 
-                        if (userViewModel != null) {
                             if (!userViewModel.validatePassword(createPassword)) {
                                 isCreatePasswordError = true
                                 createPasswordLabelMessage =
@@ -359,18 +364,18 @@ fun RegistrationScreen(
                                 isCreatePasswordError = false
                                 createPasswordLabelMessage = createdPasswordText
                             }
-                        }
 
-                        if (userViewModel != null) {
                             if (userViewModel.validateEmail(createEmail) && userViewModel.validatePassword(
                                     createPassword
-                                )
-                            ) {
+                                ) && isGenderSelected && isDateSelected
+                            )
+                            //&& userViewModel.validateName(name) && userViewModel.validatePhoneNumber(createPhoneNumber)
+                            {
                                 val user = userViewModel.createUser(
-                                    name,
-                                    createEmail,
-                                    createPassword,
-                                    createPhoneNumber.toLong(),
+                                    name = name,
+                                    email = createEmail,
+                                    password = createPassword,
+                                    phoneNumber = createPhoneNumber.toLong(),
                                     profileImage = "",
                                     gender = selectedGender,
                                     dateOfBirth = dateSelected
@@ -411,8 +416,6 @@ fun reverseDateFormat(date: String): String {
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     return localDate.format(formatter)
 }
-
-
 
 
 @Preview(showBackground = true, device = "spec:width=412dp,height=932dp")
