@@ -67,6 +67,7 @@ dependencies {
     kapt(libs.room.compiler)
     kapt(libs.hilt.compiler)
     annotationProcessor(libs.room.compiler)
+    implementation(libs.coil.compose)
 
     implementation (libs.androidx.compose.ui.ui.tooling.preview2)
     implementation(platform(libs.androidx.compose.bom.v20240800))

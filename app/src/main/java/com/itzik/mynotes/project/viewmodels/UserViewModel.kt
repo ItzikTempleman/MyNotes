@@ -134,6 +134,7 @@ class UserViewModel @Inject constructor(
             if (user != null) {
                 val updatedUser = user.copy(profileImage = imageUri)
                 repo.updateProfileImage(updatedUser)
+                privateUser.value = updatedUser
                 Log.d("UserViewModel", "Updating profile image: $imageUri")
                 privateLoggedInUsersList.value = privateLoggedInUsersList.value.map {
                     if (it.userId == user.userId) updatedUser else it

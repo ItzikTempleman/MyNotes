@@ -5,12 +5,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.itzik.mynotes.project.utils.Constants.USER_TABLE
 import kotlinx.parcelize.Parcelize
+import java.util.UUID
 
 @Parcelize
 @Entity(tableName = USER_TABLE)
 data class User(
     @PrimaryKey
-    var userId: String = nextUserId(),
+    var userId: String = UUID.randomUUID().toString(),
     val userName: String,
     val email: String,
     val password: String,
@@ -19,17 +20,9 @@ data class User(
     var profileImage: String = "",
     var gender:Gender,
     var dateOfBirth:String
-) : Parcelable {
-    companion object {
+) : Parcelable
 
-        private var lastId: Long = 100000
 
-        private fun nextUserId(): String {
-            lastId += 1
-            return "user_id_$lastId"
-        }
-    }
-}
 enum class Gender{
     MALE, FEMALE, OTHER
 }

@@ -266,6 +266,7 @@ fun RegistrationScreen(
                         .padding(top = 26.dp, start = 14.dp),
                     text = dropDownMenuPlaceHolder,
                     fontSize = 16.sp,
+                    color = Color.Gray
                 )
 
 

@@ -1,15 +1,10 @@
 package com.itzik.mynotes.project.viewmodels
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.compose.rememberNavController
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.Note.Companion.getCurrentTime
 import com.itzik.mynotes.project.repositories.AppRepositoryInterface
-import com.itzik.mynotes.project.ui.registrations.LoginScreen
 import com.itzik.mynotes.project.utils.Constants.NAX_PINNED_NOTES
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -93,6 +88,7 @@ class NoteViewModel @Inject constructor(
             it.noteId == note.noteId
         }
         if (matchingNoteToPreviousVersion == null) {
+            note.userId = userId
             repo.saveNote(note)
         } else {
             updateSelectedNoteContent(

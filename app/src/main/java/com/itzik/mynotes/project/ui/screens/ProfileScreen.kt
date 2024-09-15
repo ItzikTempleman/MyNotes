@@ -1,6 +1,8 @@
 package com.itzik.mynotes.project.ui.screens
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -29,7 +31,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.itzik.mynotes.project.main.NoteApp
 import com.itzik.mynotes.project.ui.composable_elements.GenericItem
 import com.itzik.mynotes.project.ui.composable_elements.GenericRows
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
@@ -64,20 +66,25 @@ fun ProfileScreen(
     noteViewModel: NoteViewModel,
 ) {
 
-    LaunchedEffect(userId) {
-        userViewModel.fetchUserById(userId)
-    }
-
     val user by userViewModel.publicUser.collectAsState()
-    val profileItems = listOf(GenericRows.DeletedItems, GenericRows.Settings, GenericRows.LogOut)
 
+
+    Log.d("WOW", "User profile image " + user?.profileImage)
+
+
+    val profileItems = listOf(GenericRows.DeletedItems, GenericRows.Settings, GenericRows.LogOut)
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
+                NoteApp.instance.applicationContext.contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
                 coroutineScope.launch {
                     userViewModel.updateProfileImage(it.toString())
                 }
+
             }
         }
 
@@ -88,7 +95,6 @@ fun ProfileScreen(
     ) {
         val (imageContainer, horizontalLine, verticalLine, uploadImageBtn, removeImageBtn, name, email, phone, gender, age, bottomRow) = createRefs()
 
-
         Box(
             modifier = Modifier
                 .constrainAs(imageContainer) {
@@ -98,21 +104,24 @@ fun ProfileScreen(
                 .padding(16.dp)
                 .size(130.dp)
                 .clip(CircleShape)
-                .background(Color.LightGray),
+                .background(Color.LightGray.copy(0.3f))
+            ,
             contentAlignment = Alignment.Center
         ) {
-            if (user?.profileImage?.isNotEmpty() == true) {
+            if (!user?.profileImage.isNullOrEmpty()) {
+                Log.d("WOW", "if (user?.profileImage?.isNotEmpty() == true)")
+                Log.d("WOW", "image: " + user?.profileImage)
                 Image(
                     contentScale = ContentScale.Crop,
-                    painter = rememberAsyncImagePainter(user?.profileImage),
-                    contentDescription = null,
+                    painter = rememberAsyncImagePainter( user?.profileImage),
+                    contentDescription = "Profile image",
                     modifier = Modifier.fillMaxSize()
                 )
             } else {
                 Image(
                     imageVector = Icons.Default.Person,
                     contentDescription = null,
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier.size(50.dp),
                 )
             }
         }
