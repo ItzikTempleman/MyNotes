@@ -85,8 +85,11 @@ fun HomeScreen(
     startLocationUpdates: () -> Unit,
     updateIsLocationRequired: (Boolean) -> Unit
 ) {
+
     LaunchedEffect(userId) {
         userViewModel.fetchUserById(userId)
+        noteViewModel.updateUserIdForNewLogin()
+
     }
 
     var sortType by remember { mutableStateOf("") }
@@ -228,7 +231,7 @@ fun HomeScreen(
                     coroutineScope.launch {
                         noteViewModel.updateSelectedNoteContent(
                             "", isPinned = false, isStarred = false,
-                            fontSize = 20, fontColor = Color.Black.toArgb()
+                            fontSize = 20, fontColor = Color.Black.toArgb(), userId = userId
                         )
                     }
                     navController.navigate(Screen.NoteScreen.route)
@@ -247,7 +250,7 @@ fun HomeScreen(
                     isViewGrid = !isViewGrid
                 },
                 imageVector = if (!isViewGrid) Icons.Default.GridView else Icons.Default.List,
-                colorNumber = 0
+                colorNumber = 4
             )
 
             if (!isViewGrid) {
@@ -291,12 +294,13 @@ fun HomeScreen(
                                                 key = "noteId", value = noteId
                                             )
                                             noteViewModel.updateSelectedNoteContent(
-                                                noteItem.content,
-                                                noteId,
-                                                noteItem.isPinned,
-                                                noteItem.isStarred,
-                                                noteItem.fontSize,
-                                                noteItem.fontColor
+                                                newChar = noteItem.content,
+                                                noteId = noteItem.noteId,
+                                                userId = noteItem.userId,
+                                                isPinned = noteItem.isPinned,
+                                                isStarred = noteItem.isStarred,
+                                                fontSize = noteItem.fontSize,
+                                                fontColor = noteItem.fontColor
                                             )
                                         }
                                         navController.navigate(Screen.NoteScreen.route)

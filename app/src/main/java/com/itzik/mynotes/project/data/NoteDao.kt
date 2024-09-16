@@ -36,8 +36,8 @@ interface NoteDao {
     @Update
     suspend fun updateNote(note: Note)
 
-    @Query("SELECT *FROM $NOTE_TABLE WHERE isStarred=1")
-    suspend fun fetchStarredNotes(): MutableList<Note>
+    @Query("SELECT * FROM $NOTE_TABLE WHERE isStarred = 1 AND userId = :userId")
+    suspend fun fetchStarredNotes(userId: String): MutableList<Note>
 
     @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrash=0 ORDER BY content ASC")
     suspend fun fetchNotesSortedAlphabetically(): MutableList<Note>

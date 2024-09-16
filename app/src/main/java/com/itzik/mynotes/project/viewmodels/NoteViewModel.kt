@@ -43,22 +43,21 @@ class NoteViewModel @Inject constructor(
 
         init {
             viewModelScope.launch {
-                val users = repo.fetchLoggedInUsers()
-                val loggedInUser = users.firstOrNull { it.isLoggedIn }
-
-                if(loggedInUser!=null){
-                    userId=loggedInUser.userId
-                    privateNote.value = privateNote.value.copy(userId = userId)
-                    fetchNotesForUser(userId)
-                }else {
-                    privateNoteList.value = mutableListOf()
-                }
-
+                fetchCurrentLoggedInUserId()
             }
         }
 
+
+    private suspend fun fetchCurrentLoggedInUserId() {
+        val users = repo.fetchLoggedInUsers()
+        val loggedInUser = users.firstOrNull { it.isLoggedIn }
+        userId = loggedInUser?.userId ?: ""
+
+    }
+
     suspend fun updateSelectedNoteContent(
         newChar: String,
+        userId: String,
         noteId: Int? = 0,
         isPinned: Boolean,
         isStarred: Boolean,
@@ -68,6 +67,7 @@ class NoteViewModel @Inject constructor(
 
         privateNote.value = privateNote.value.copy(
             fontSize = fontSize,
+            userId=userId,
             fontColor = fontColor,
             isPinned = isPinned,
             isStarred = isStarred,
@@ -82,16 +82,29 @@ class NoteViewModel @Inject constructor(
     }
 
 
+    fun updateUserIdForNewLogin() {
+        viewModelScope.launch {
+            fetchCurrentLoggedInUserId()
+        }
+    }
+
     suspend fun saveNote(note: Note) {
+        if (userId.isEmpty()) {
+            fetchCurrentLoggedInUserId()
+        }
+
+        val noteToSave = note.copy(userId = userId)
+
         val noteList = repo.fetchNotes(userId)
         val matchingNoteToPreviousVersion = noteList.find {
             it.noteId == note.noteId
         }
+
         if (matchingNoteToPreviousVersion == null) {
-            note.userId = userId
-            repo.saveNote(note)
+            repo.saveNote(noteToSave)
         } else {
             updateSelectedNoteContent(
+                userId=note.userId,
                 newChar = note.content,
                 isPinned = note.isPinned,
                 isStarred = note.isStarred,
@@ -163,7 +176,7 @@ class NoteViewModel @Inject constructor(
     }
 
     suspend fun fetchStarredNotes() = viewModelScope.launch {
-        val starredNotes = repo.fetchStarredNotes()
+        val starredNotes = repo.fetchStarredNotes(userId = userId)
         privateStarredNoteList.value = starredNotes
 
     }

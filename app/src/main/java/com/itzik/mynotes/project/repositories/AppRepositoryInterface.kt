@@ -21,7 +21,7 @@ interface AppRepositoryInterface {
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)
     suspend fun fetchTrashedNotes(userId: String): MutableList<Note>
     suspend fun emptyTrashBin()
-    suspend fun fetchStarredNotes(): MutableList<Note>
+    suspend fun fetchStarredNotes(userId:String): MutableList<Note>
     suspend fun getSortedNotes(sortType: String, userId: String): MutableList<Note>
     suspend fun deleteNote(note: Note)
 

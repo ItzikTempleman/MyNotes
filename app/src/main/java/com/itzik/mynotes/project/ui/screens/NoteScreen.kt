@@ -68,146 +68,148 @@ fun NoteScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        val ( backBtn, fontSmaller, fontLarger, fontSizeIndicator, changeFontColorDialog, pin, star ,colorPickerScreen, contentTF) = createRefs()
-                GenericIconButton(
-                    modifier = Modifier
-                        .constrainAs(backBtn) {
-                            top.linkTo(parent.top)
-                            start.linkTo(parent.start)
+        val (backBtn, fontSmaller, fontLarger, fontSizeIndicator, changeFontColorDialog, pin, star, colorPickerScreen, contentTF) = createRefs()
+        GenericIconButton(
+            modifier = Modifier
+                .constrainAs(backBtn) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                }
+                .padding(8.dp)
+                .size(32.dp),
+            onClick = {
+                if (text.isNotEmpty()) {
+                    coroutineScope.launch {
+                        note.content = text
+                        noteViewModel.saveNote(note)
+                    }
+                }
+                paramNavController.navigate(Screen.Home.route) {
+                    popUpTo(Screen.Home.route) { inclusive = true }
+                }
+            },
+            imageVector = Icons.Default.ArrowBackIosNew,
+            colorNumber = 4
+        )
+
+        Text(
+            modifier = Modifier
+                .constrainAs(fontSmaller) {
+                    top.linkTo(backBtn.top)
+                    start.linkTo(backBtn.end)
+                    bottom.linkTo(backBtn.bottom)
+                }
+                .padding(start = 40.dp)
+                .clickable {
+                    if (fontSize > 10) {
+                        coroutineScope.launch {
+                            fontSize -= 2
+                            noteViewModel.updateSelectedNoteContent(
+                                text,
+                                noteId = noteId,
+                                isStarred = note.isPinned,
+                                isPinned = note.isStarred,
+                                fontSize = fontSize,
+                                fontColor = note.fontColor,
+                                userId = note.userId
+                            )
                         }
-                        .padding(8.dp)
-                        .size(32.dp),
-                    onClick = {
-                        if (text.isNotEmpty()) {
-                            coroutineScope.launch {
-                                note.content = text
-                                noteViewModel.saveNote(note)
-                            }
+                    }
+                },
+            text = "A",
+            fontSize = 20.sp,
+            color = Color.Black
+        )
+
+        Text(
+            modifier = Modifier
+                .constrainAs(fontLarger) {
+                    top.linkTo(backBtn.top)
+                    start.linkTo(fontSmaller.end)
+                    bottom.linkTo(backBtn.bottom)
+                }
+                .padding(start = 8.dp)
+                .clickable {
+                    if (fontSize < 40) {
+                        coroutineScope.launch {
+                            fontSize += 2
+                            noteViewModel.updateSelectedNoteContent(
+                                text,
+                              noteId=  noteId,
+                              isPinned =   note.isPinned,
+                                isStarred= note.isStarred,
+                                fontSize = fontSize,
+                               fontColor =  note.fontColor,
+                                userId = note.userId
+                            )
                         }
-                        paramNavController.navigate(Screen.Home.route) {
-                            popUpTo(Screen.Home.route) { inclusive = true }
-                        }
+                    }
+                },
+            fontWeight = FontWeight.Bold,
+            text = "A",
+            fontSize = 26.sp,
+            color = Color.Black
+        )
+
+        Text(
+            modifier = Modifier
+                .constrainAs(fontSizeIndicator) {
+                    top.linkTo(backBtn.top)
+                    start.linkTo(fontLarger.end)
+                    bottom.linkTo(backBtn.bottom)
+                }
+                .padding(start = 8.dp),
+            text = "$fontSize sp",
+            fontSize = 16.sp, color = Color.Black
+        )
+        IconButton(
+            modifier = Modifier
+                .constrainAs(changeFontColorDialog) {
+                    top.linkTo(backBtn.top)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(backBtn.bottom)
+                }
+                .padding(4.dp),
+            onClick = {
+                isColorPickerOpen = !isColorPickerOpen
+            }) {
+            Icon(
+                modifier = Modifier.size(30.dp),
+                painter = painterResource(id = R.drawable.color_palette),
+                contentDescription = null,
+                tint = Color.Unspecified
+            )
+        }
+
+        if (note.isPinned) {
+            Icon(
+                modifier = Modifier
+                    .constrainAs(pin) {
+                        top.linkTo(changeFontColorDialog.top)
+                        bottom.linkTo(changeFontColorDialog.bottom)
+                        end.linkTo(changeFontColorDialog.start)
+                    }
+                    .padding(horizontal = 44.dp)
+                    .rotate(45f),
+                imageVector = Icons.Default.PushPin,
+                contentDescription = null,
+                tint = colorResource(id = R.color.light_purple)
+            )
+        }
+        if (note.isStarred) {
+            Icon(
+                modifier = Modifier
+                    .padding(horizontal = 4.dp)
+                    .constrainAs(star) {
+                        top.linkTo(changeFontColorDialog.top)
+                        bottom.linkTo(changeFontColorDialog.bottom)
+                        end.linkTo(changeFontColorDialog.start)
                     },
-                    imageVector = Icons.Default.ArrowBackIosNew,
-                    colorNumber = 4
-                )
-
-                Text(
-                    modifier = Modifier
-                        .constrainAs(fontSmaller) {
-                            top.linkTo(backBtn.top)
-                            start.linkTo(backBtn.end)
-                            bottom.linkTo(backBtn.bottom)
-                        }
-                        .padding(start = 40.dp)
-                        .clickable {
-                            if (fontSize > 10) {
-                                coroutineScope.launch {
-                                    fontSize -= 2
-                                    noteViewModel.updateSelectedNoteContent(
-                                        text,
-                                        noteId,
-                                        note.isPinned,
-                                        note.isStarred,
-                                        fontSize,
-                                        note.fontColor
-                                    )
-                                }
-                            }
-                        },
-                    text = "A",
-                    fontSize = 20.sp,
-                    color = Color.Black
-                )
-
-                Text(
-                    modifier = Modifier
-                        .constrainAs(fontLarger) {
-                            top.linkTo(backBtn.top)
-                            start.linkTo(fontSmaller.end)
-                            bottom.linkTo(backBtn.bottom)
-                        }
-                        .padding(start = 8.dp)
-                        .clickable {
-                            if (fontSize < 40) {
-                                coroutineScope.launch {
-                                    fontSize += 2
-                                    noteViewModel.updateSelectedNoteContent(
-                                        text,
-                                        noteId,
-                                        note.isPinned,
-                                        note.isStarred,
-                                        fontSize,
-                                        note.fontColor
-                                    )
-                                }
-                            }
-                        },
-                    fontWeight = FontWeight.Bold,
-                    text = "A",
-                    fontSize = 26.sp,
-                    color = Color.Black
-                )
-
-                Text(
-                    modifier = Modifier
-                        .constrainAs(fontSizeIndicator) {
-                            top.linkTo(backBtn.top)
-                            start.linkTo(fontLarger.end)
-                            bottom.linkTo(backBtn.bottom)
-                        }
-                        .padding(start = 8.dp),
-                    text = "$fontSize sp",
-                    fontSize = 16.sp, color = Color.Black
-                )
-                IconButton(
-                    modifier = Modifier
-                        .constrainAs(changeFontColorDialog) {
-                            top.linkTo(backBtn.top)
-                          end.linkTo(parent.end)
-                            bottom.linkTo(backBtn.bottom)
-                        }
-                        .padding(4.dp),
-                    onClick = {
-                        isColorPickerOpen = !isColorPickerOpen
-                    }) {
-                    Icon(
-                        modifier = Modifier.size(30.dp),
-                        painter = painterResource(id = R.drawable.color_palette),
-                        contentDescription = null,
-                        tint = Color.Unspecified
-                    )
-                }
-
-                if (note.isPinned) {
-                    Icon(
-                        modifier = Modifier
-                            .constrainAs(pin) {
-                                top.linkTo(changeFontColorDialog.top)
-                                bottom.linkTo(changeFontColorDialog.bottom)
-                                end.linkTo(changeFontColorDialog.start)
-                            }
-                            .padding(horizontal = 44.dp)
-                            .rotate(45f),
-                        imageVector = Icons.Default.PushPin,
-                        contentDescription = null,
-                        tint = colorResource(id = R.color.light_purple)
-                    )
-                }
-                if (note.isStarred) {
-                    Icon(
-                        modifier = Modifier
-                            .padding(horizontal = 4.dp)
-                            .constrainAs(star) {
-                                top.linkTo(changeFontColorDialog.top)
-                                bottom.linkTo(changeFontColorDialog.bottom)
-                                end.linkTo(changeFontColorDialog.start)
-                            },
-                        imageVector = Icons.Default.Star,
-                        contentDescription = null,
-                        tint = colorResource(id = R.color.muted_yellow),
-                        )
-                }
+                imageVector = Icons.Default.Star,
+                contentDescription = null,
+                tint = colorResource(id = R.color.muted_yellow),
+            )
+        }
 
         TextField(
             value = text,
@@ -216,11 +218,12 @@ fun NoteScreen(
                 coroutineScope.launch {
                     noteViewModel.updateSelectedNoteContent(
                         it,
-                        noteId,
-                        note.isPinned,
-                        note.isStarred,
-                        note.fontSize,
-                        note.fontColor
+                        noteId = noteId,
+                        isPinned = note.isPinned,
+                        isStarred = note.isStarred,
+                        fontSize = fontSize,
+                        fontColor = note.fontColor,
+                        userId = note.userId
                     )
                 }
             },
@@ -231,7 +234,8 @@ fun NoteScreen(
                 unfocusedIndicatorColor = Color.White
             ),
             modifier = Modifier
-                .fillMaxWidth().padding(top=8.dp)
+                .fillMaxWidth()
+                .padding(top = 8.dp)
                 .clip(RoundedCornerShape(0.dp))
                 .constrainAs(contentTF) {
                     top.linkTo(backBtn.bottom)
@@ -271,11 +275,12 @@ fun NoteScreen(
                         selectedColor = color.toArgb()
                         noteViewModel.updateSelectedNoteContent(
                             text,
-                            noteId,
-                            note.isPinned,
-                            note.isStarred,
-                            fontSize,
-                            selectedColor
+                            noteId = noteId,
+                            isStarred = note.isPinned,
+                            isPinned = note.isStarred,
+                            fontSize = fontSize,
+                            fontColor = selectedColor,
+                            userId = note.userId
                         )
                     }
                     isColorPickerOpen = false
