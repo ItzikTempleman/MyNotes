@@ -39,11 +39,11 @@ interface NoteDao {
     @Query("SELECT * FROM $NOTE_TABLE WHERE isStarred = 1 AND userId = :userId")
     suspend fun fetchStarredNotes(userId: String): MutableList<Note>
 
-    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrash=0 ORDER BY content ASC")
-    suspend fun fetchNotesSortedAlphabetically(): MutableList<Note>
+    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrash = 0 AND userId = :userId ORDER BY isPinned DESC, content ASC")
+    suspend fun fetchNotesSortedAlphabetically(userId: String): MutableList<Note>
 
-    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrash=0 ORDER BY time DESC")
-    suspend fun fetchNotesSortedByDateModified(): MutableList<Note>
+    @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrash = 0 AND userId = :userId ORDER BY isPinned DESC, time DESC")
+    suspend fun fetchNotesSortedByDateModified(userId: String): MutableList<Note>
 
     @Delete
     suspend fun deleteNote(note: Note)

@@ -40,11 +40,11 @@ class AppRepository @Inject constructor(
     override suspend fun fetchTrashedNotes(userId: String) = noteDao.fetchTrashedNotes(userId)
     override suspend fun emptyTrashBin() = noteDao.emptyTrashBin()
     override suspend fun fetchStarredNotes(userId: String) = noteDao.fetchStarredNotes(userId)
-    
+
     override suspend fun getSortedNotes(sortType: String, userId: String): MutableList<Note> {
         return when (sortType) {
-            "Sort alphabetically" -> noteDao.fetchNotesSortedAlphabetically()
-            "Sort by date modified" -> noteDao.fetchNotesSortedByDateModified()
+            "Sort alphabetically" -> noteDao.fetchNotesSortedAlphabetically(userId)
+            "Sort by date modified" -> noteDao.fetchNotesSortedByDateModified(userId)
             else -> noteDao.fetchNotes(userId)
         }
     }
