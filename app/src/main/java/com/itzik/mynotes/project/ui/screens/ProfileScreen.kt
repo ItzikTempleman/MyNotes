@@ -2,7 +2,6 @@ package com.itzik.mynotes.project.ui.screens
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -68,11 +67,7 @@ fun ProfileScreen(
 
     val user by userViewModel.publicUser.collectAsState()
 
-
-    Log.d("WOW", "User profile image " + user?.profileImage)
-
-
-    val profileItems = listOf(GenericRows.DeletedItems, GenericRows.Settings, GenericRows.LogOut)
+    val profileItems = listOf(GenericRows.DeletedItems, GenericRows.LogOut)
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -109,12 +104,11 @@ fun ProfileScreen(
             contentAlignment = Alignment.Center
         ) {
             if (!user?.profileImage.isNullOrEmpty()) {
-                Log.d("WOW", "if (user?.profileImage?.isNotEmpty() == true)")
-                Log.d("WOW", "image: " + user?.profileImage)
+
                 Image(
                     contentScale = ContentScale.Crop,
                     painter = rememberAsyncImagePainter( user?.profileImage),
-                    contentDescription = "Profile image",
+                    contentDescription =null,
                     modifier = Modifier.fillMaxSize()
                 )
             } else {

@@ -2,7 +2,6 @@ package com.itzik.mynotes.project.ui.navigation
 
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -11,7 +10,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.ui.navigation.Graph.AUTHENTICATION
 import com.itzik.mynotes.project.ui.navigation.Graph.HOME
 import com.itzik.mynotes.project.ui.navigation.Graph.ROOT
@@ -19,11 +17,8 @@ import com.itzik.mynotes.project.ui.registrations.LoginScreen
 import com.itzik.mynotes.project.ui.registrations.RegistrationScreen
 import com.itzik.mynotes.project.ui.registrations.SplashScreen
 import com.itzik.mynotes.project.ui.screens.DeletedNotesScreen
-import com.itzik.mynotes.project.ui.screens.SettingsScreen
-import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
-import com.itzik.mynotes.project.viewmodels.WeatherViewModel
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -33,17 +28,10 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun RootNavHost(
     userId: String,
-    locationViewModel: LocationViewModel,
     noteViewModel: NoteViewModel,
-    context: Context,
     navController: NavHostController,
     userViewModel: UserViewModel,
     coroutineScope: CoroutineScope,
-    currentLocation: LatLng,
-    startLocationUpdates: () -> Unit,
-    locationRequired: Boolean,
-    updateIsLocationRequired: (Boolean) -> Unit,
-    weatherViewModel: WeatherViewModel,
 ) {
 
     NavHost(
@@ -92,27 +80,11 @@ fun RootNavHost(
         ) {
             composable(route = Screen.Home.route) {
                 BottomBarNavHost(
-                    weatherViewModel=weatherViewModel,
-                    locationViewModel=locationViewModel,
                     noteViewModel = noteViewModel,
-                    context = context,
-                    locationRequired = locationRequired,
-                    startLocationUpdates = { startLocationUpdates() },
-                    currentLocation = currentLocation,
                     paramNavController = navController,
                     userViewModel = userViewModel,
                     coroutineScope = coroutineScope,
-                    updateIsLocationRequired = updateIsLocationRequired,
                     userId = userId,
-                )
-            }
-
-            composable(route = Screen.Settings.route) {
-                SettingsScreen(
-                    locationViewModel = locationViewModel,
-                    noteViewModel = noteViewModel,
-                    navController = navController,
-                    coroutineScope = coroutineScope,
                 )
             }
 

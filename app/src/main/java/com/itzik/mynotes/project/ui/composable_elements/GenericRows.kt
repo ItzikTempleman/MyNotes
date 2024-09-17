@@ -8,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.RestoreFromTrash
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -39,13 +38,13 @@ sealed class GenericRows(
     )
     -> Unit)? = null
 ) {
-    data object Settings : GenericRows(
-        itemTitle = "Settings",
-        itemIcon = Icons.Default.Settings,
-        onClick = { _, _, navController, _, _ ->
-            navController.navigate(Screen.Settings.route)
-        }
-    )
+//    data object Settings : GenericRows(
+//        itemTitle = "Settings",
+//        itemIcon = Icons.Default.Settings,
+//        onClick = { _, _, navController, _, _ ->
+//            navController.navigate(Screen.Settings.route)
+//        }
+//    )
 
     data object DeletedItems : GenericRows(
         itemTitle = "Deleted notes",

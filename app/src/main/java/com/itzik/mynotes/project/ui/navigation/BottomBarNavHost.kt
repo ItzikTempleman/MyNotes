@@ -1,7 +1,6 @@
 package com.itzik.mynotes.project.ui.navigation
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
@@ -17,17 +16,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.ui.navigation.Graph.HOME
 import com.itzik.mynotes.project.ui.screen_sections.BottomBarScreen
 import com.itzik.mynotes.project.ui.screens.HomeScreen
 import com.itzik.mynotes.project.ui.screens.LikedNotesScreen
 import com.itzik.mynotes.project.ui.screens.NoteScreen
 import com.itzik.mynotes.project.ui.screens.ProfileScreen
-import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
-import com.itzik.mynotes.project.viewmodels.WeatherViewModel
 import kotlinx.coroutines.CoroutineScope
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -35,18 +31,11 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun BottomBarNavHost(
     userId: String,
-    locationViewModel: LocationViewModel,
-    context: Context,
     noteViewModel: NoteViewModel,
     newNavController: NavHostController = rememberNavController(),
     paramNavController: NavHostController = rememberNavController(),
     userViewModel: UserViewModel,
     coroutineScope: CoroutineScope,
-    currentLocation: LatLng,
-    locationRequired: Boolean,
-    startLocationUpdates: () -> Unit,
-    updateIsLocationRequired: (Boolean) -> Unit,
-    weatherViewModel: WeatherViewModel,
 ) {
     var isNoteScreenVisible by remember {
         mutableStateOf(false)
@@ -75,16 +64,9 @@ fun BottomBarNavHost(
                     HomeScreen(
                         userViewModel=userViewModel,
                         userId=userId,
-                        locationViewModel = locationViewModel,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
                         navController = newNavController,
-                        context = context,
-                        updateIsLocationRequired = updateIsLocationRequired,
-                        locationRequired = locationRequired,
-                        startLocationUpdates = { startLocationUpdates() },
-                        currentLocation = currentLocation,
-                        weatherViewModel=weatherViewModel,
                     )
                 }
 
