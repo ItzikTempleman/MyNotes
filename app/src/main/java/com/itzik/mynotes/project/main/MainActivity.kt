@@ -29,6 +29,7 @@ import com.itzik.mynotes.project.ui.navigation.RootNavHost
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
+import com.itzik.mynotes.project.viewmodels.WeatherViewModel
 import com.itzik.mynotes.ui.theme.MyNotesTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +37,7 @@ import kotlinx.coroutines.CoroutineScope
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private lateinit var weatherViewModel: WeatherViewModel
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var locationViewModel: LocationViewModel
     private lateinit var userViewModel: UserViewModel
@@ -99,6 +101,7 @@ class MainActivity : ComponentActivity() {
             userViewModel = viewModel()
             noteViewModel = viewModel()
             locationViewModel = viewModel()
+            weatherViewModel= viewModel()
 
             val user by userViewModel.publicLoggedInUsersList.collectAsState()
             val userId = user.firstOrNull()?.userId ?: ""
@@ -111,6 +114,7 @@ class MainActivity : ComponentActivity() {
             MyNotesTheme {
 
                 RootNavHost(
+                    weatherViewModel=weatherViewModel,
                     userId=userId,
                     locationViewModel = locationViewModel,
                     noteViewModel = noteViewModel,

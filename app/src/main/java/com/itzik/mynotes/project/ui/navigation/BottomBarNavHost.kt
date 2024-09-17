@@ -27,13 +27,14 @@ import com.itzik.mynotes.project.ui.screens.ProfileScreen
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
+import com.itzik.mynotes.project.viewmodels.WeatherViewModel
 import kotlinx.coroutines.CoroutineScope
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun BottomBarNavHost(
-    userId:String,
+    userId: String,
     locationViewModel: LocationViewModel,
     context: Context,
     noteViewModel: NoteViewModel,
@@ -45,6 +46,7 @@ fun BottomBarNavHost(
     locationRequired: Boolean,
     startLocationUpdates: () -> Unit,
     updateIsLocationRequired: (Boolean) -> Unit,
+    weatherViewModel: WeatherViewModel,
 ) {
     var isNoteScreenVisible by remember {
         mutableStateOf(false)
@@ -82,6 +84,7 @@ fun BottomBarNavHost(
                         locationRequired = locationRequired,
                         startLocationUpdates = { startLocationUpdates() },
                         currentLocation = currentLocation,
+                        weatherViewModel=weatherViewModel,
                     )
                 }
 

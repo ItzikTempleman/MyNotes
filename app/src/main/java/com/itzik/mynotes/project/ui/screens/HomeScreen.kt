@@ -9,12 +9,15 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -31,6 +34,7 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -47,6 +51,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
@@ -60,6 +65,7 @@ import com.itzik.mynotes.project.utils.convertLatLangToLocation
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
+import com.itzik.mynotes.project.viewmodels.WeatherViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -83,7 +89,8 @@ fun HomeScreen(
     currentLocation: LatLng,
     locationRequired: Boolean,
     startLocationUpdates: () -> Unit,
-    updateIsLocationRequired: (Boolean) -> Unit
+    updateIsLocationRequired: (Boolean) -> Unit,
+    weatherViewModel: WeatherViewModel
 ) {
 
     LaunchedEffect(userId) {
@@ -101,6 +108,7 @@ fun HomeScreen(
     val pinnedNoteList by noteViewModel.publicPinnedNoteList.collectAsState()
     val selectedNote by remember { mutableStateOf<Note?>(null) }
     var isViewGrid by remember { mutableStateOf(false) }
+    val weatherItem by weatherViewModel.publicWeatherInstance.collectAsState()
 
     val combinedList by remember(pinnedNoteList, noteList) {
         mutableStateOf(
@@ -133,8 +141,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .background(Color.White),
         ) {
-            val (
-                title, sortOptionIcon, locationButton, newNoteBtn, viewBtn, noteLazyColumn, emptyStateMessage, progressBar) = createRefs()
+            val (title, weatherIcon, temperature, sortOptionIcon, locationButton, newNoteBtn, viewBtn, noteLazyColumn, emptyStateMessage, progressBar) = createRefs()
 
             Icon(
                 imageVector = Icons.Default.Home,
@@ -148,6 +155,31 @@ fun HomeScreen(
                         start.linkTo(parent.start)
                     }
             )
+            val firstWeatherOrNull = weatherItem.weather.firstOrNull()
+            val painter = rememberAsyncImagePainter(model = firstWeatherOrNull?.getImage())
+            
+            Image(
+                modifier = Modifier
+                    .height(70.dp)
+                    .width(70.dp)
+                    .constrainAs(weatherIcon) {
+                        start.linkTo(title.end)
+                        top.linkTo(parent.top)
+                    },
+                painter = painter,
+                contentDescription = null
+            )
+
+            Text(
+                modifier = Modifier
+                    .constrainAs(temperature) {
+                        start.linkTo(weatherIcon.end)
+                        top.linkTo(parent.top)
+                    }
+                    .padding(12.dp), text = weatherItem.main.temp.toString()
+            )
+
+
 
             GenericIconButton(
                 modifier = Modifier
@@ -170,7 +202,12 @@ fun HomeScreen(
                                 currentLocation, context
                             )
                         )
-                        if (locationName.isNotBlank()) isLoadingLocation = false
+                        if (locationName.isNotBlank()) {
+                            isLoadingLocation = false
+                            coroutineScope.launch {
+                                weatherViewModel.getWeather(locationName)
+                            }
+                        }
                     } else {
                         launchMultiplePermissions.launch(permissions)
                     }

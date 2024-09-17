@@ -23,6 +23,7 @@ import com.itzik.mynotes.project.ui.screens.SettingsScreen
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
+import com.itzik.mynotes.project.viewmodels.WeatherViewModel
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -31,7 +32,7 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun RootNavHost(
-    userId:String,
+    userId: String,
     locationViewModel: LocationViewModel,
     noteViewModel: NoteViewModel,
     context: Context,
@@ -42,6 +43,7 @@ fun RootNavHost(
     startLocationUpdates: () -> Unit,
     locationRequired: Boolean,
     updateIsLocationRequired: (Boolean) -> Unit,
+    weatherViewModel: WeatherViewModel,
 ) {
 
     NavHost(
@@ -90,6 +92,7 @@ fun RootNavHost(
         ) {
             composable(route = Screen.Home.route) {
                 BottomBarNavHost(
+                    weatherViewModel=weatherViewModel,
                     locationViewModel=locationViewModel,
                     noteViewModel = noteViewModel,
                     context = context,

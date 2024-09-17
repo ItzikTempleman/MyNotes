@@ -4,6 +4,8 @@ import com.itzik.mynotes.project.data.NoteDao
 import com.itzik.mynotes.project.data.UserDao
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
+import com.itzik.mynotes.project.model.WeatherResponse
+import com.itzik.mynotes.project.requests.WeatherApiService
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -15,6 +17,9 @@ class AppRepository @Inject constructor(
     @Named("note_dao")
     @Singleton
     private val noteDao: NoteDao,
+    @Named("weather_service")
+    @Singleton
+    private val weatherApiService: WeatherApiService
 ) : AppRepositoryInterface {
 
     override suspend fun insertUser(user: User) = userDao.insertUser(user)
@@ -51,6 +56,6 @@ class AppRepository @Inject constructor(
 
     override suspend fun deleteNote(note: Note) = noteDao.deleteNote(note)
 
-
+    override suspend fun getWeather(cityName: String): WeatherResponse =weatherApiService.getWeather(cityName)
 
 }

@@ -6,8 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" tools:node="remove" />
 
     <application
+        android:usesCleartextTraffic="true"
         android:name=".project.main.NoteApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -18,13 +20,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyNotes"
         tools:targetApi="34">
+
         <activity
+            android:windowSoftInputMode="adjustPan"
             android:name=".project.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.MyNotes">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

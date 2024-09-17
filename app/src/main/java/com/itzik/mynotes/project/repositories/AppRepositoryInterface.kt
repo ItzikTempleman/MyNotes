@@ -2,6 +2,7 @@ package com.itzik.mynotes.project.repositories
 
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
+import com.itzik.mynotes.project.model.WeatherResponse
 
 
 interface AppRepositoryInterface {
@@ -25,5 +26,5 @@ interface AppRepositoryInterface {
     suspend fun getSortedNotes(sortType: String, userId: String): MutableList<Note>
     suspend fun deleteNote(note: Note)
 
-
+    suspend fun getWeather(cityName:String): WeatherResponse
 }
