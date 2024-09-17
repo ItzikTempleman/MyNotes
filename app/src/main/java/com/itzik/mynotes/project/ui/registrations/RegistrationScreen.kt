@@ -369,9 +369,10 @@ fun RegistrationScreen(
                             if (userViewModel.validateEmail(createEmail) && userViewModel.validatePassword(
                                     createPassword
                                 ) && isGenderSelected && isDateSelected
-                            )
-                            //&& userViewModel.validateName(name) && userViewModel.validatePhoneNumber(createPhoneNumber)
-                            {
+                                && userViewModel.validateName(name) && userViewModel.validatePhoneNumber(
+                                    createPhoneNumber
+                                )
+                            ) {
                                 val user = userViewModel.createUser(
                                     name = name,
                                     email = createEmail,

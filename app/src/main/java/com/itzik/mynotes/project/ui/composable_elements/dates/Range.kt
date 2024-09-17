@@ -1,4 +1,4 @@
-package com.lanars.compose.datetextfield.utils
+package com.itzik.mynotes.project.ui.composable_elements.dates
 
 internal class Range<T : Comparable<T>> internal constructor(val lower: T, val upper: T) {
     operator fun contains(t: T): Boolean = t in lower..upper

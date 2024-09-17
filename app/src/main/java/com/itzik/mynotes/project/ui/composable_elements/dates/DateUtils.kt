@@ -1,9 +1,7 @@
-package com.lanars.compose.datetextfield.utils
+package com.itzik.mynotes.project.ui.composable_elements.dates
 
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
-import com.itzik.mynotes.project.ui.composable_elements.dates.DateField
-import com.itzik.mynotes.project.ui.composable_elements.dates.DateFieldValue
 import java.time.LocalDate
 
 internal object DateUtils {

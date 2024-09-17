@@ -48,7 +48,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TextInputSession
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.lanars.compose.datetextfield.utils.DateUtils.localDateToFieldMap
+import com.itzik.mynotes.project.ui.composable_elements.dates.DateUtils.localDateToFieldMap
 import java.time.LocalDate
 import kotlin.jvm.optionals.getOrElse
 
