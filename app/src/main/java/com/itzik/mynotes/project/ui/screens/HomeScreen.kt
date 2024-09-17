@@ -8,9 +8,11 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +26,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.GridView
@@ -34,7 +37,6 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -43,6 +45,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
@@ -51,7 +54,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.google.android.gms.maps.model.LatLng
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
@@ -61,6 +64,8 @@ import com.itzik.mynotes.project.ui.composable_elements.swipe_to_action.SwipeToO
 import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.ui.screen_sections.NoteListItem
 import com.itzik.mynotes.project.ui.screen_sections.NoteListItemForGrid
+import com.itzik.mynotes.project.utils.TemperatureText
+import com.itzik.mynotes.project.utils.convertFahrenheitToCelsius
 import com.itzik.mynotes.project.utils.convertLatLangToLocation
 import com.itzik.mynotes.project.viewmodels.LocationViewModel
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
@@ -156,30 +161,36 @@ fun HomeScreen(
                     }
             )
             val firstWeatherOrNull = weatherItem.weather.firstOrNull()
-            val painter = rememberAsyncImagePainter(model = firstWeatherOrNull?.getImage())
-            
+            val painter = rememberImagePainter(data = firstWeatherOrNull?.getImage())
+
+
             Image(
                 modifier = Modifier
-                    .height(70.dp)
-                    .width(70.dp)
+                    .clip(CircleShape)
+                    .border(
+                        BorderStroke(1.dp, Color.Gray),
+                        CircleShape
+                    )
+                    .height(40.dp)
+                    .width(40.dp)
                     .constrainAs(weatherIcon) {
                         start.linkTo(title.end)
-                        top.linkTo(parent.top)
+                        top.linkTo(parent.top, margin = 6.dp)
                     },
                 painter = painter,
                 contentDescription = null
             )
 
-            Text(
+            TemperatureText(
                 modifier = Modifier
                     .constrainAs(temperature) {
                         start.linkTo(weatherIcon.end)
                         top.linkTo(parent.top)
                     }
-                    .padding(12.dp), text = weatherItem.main.temp.toString()
+                    .padding(12.dp),
+                temperature = convertFahrenheitToCelsius(weatherItem.main.temp)
+
             )
-
-
 
             GenericIconButton(
                 modifier = Modifier
@@ -384,3 +395,5 @@ fun HomeScreen(
         }
     }
 }
+
+
