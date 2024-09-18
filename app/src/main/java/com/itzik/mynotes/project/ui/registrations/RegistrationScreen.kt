@@ -56,11 +56,10 @@ import com.itzik.mynotes.project.ui.composable_elements.GenderDropDownMenu
 import com.itzik.mynotes.project.ui.composable_elements.GenericIconButton
 import com.itzik.mynotes.project.ui.composable_elements.dates.DateTextField
 import com.itzik.mynotes.project.ui.navigation.Screen
+import com.itzik.mynotes.project.utils.reverseDateFormat
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun RegistrationScreen(
@@ -113,20 +112,18 @@ fun RegistrationScreen(
 
     }
 
-
-
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        val (backgroundBox, cardContainer) = createRefs()
+        val (backgroundBox, cardContainer, signUpBtn) = createRefs()
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .constrainAs(backgroundBox) {
                     top.linkTo(parent.top)
-                    height = Dimension.percent(0.7f)
+                    height = Dimension.percent(0.45f)
                 }
                 .background(
                     brush = Brush.verticalGradient(
@@ -146,18 +143,16 @@ fun RegistrationScreen(
             modifier = Modifier
                 .constrainAs(cardContainer) {
                     top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    height = Dimension.fillToConstraints
                 }
                 .fillMaxWidth()
-                .padding(start = 30.dp, end = 30.dp, top = 260.dp, bottom = 30.dp)
+                .padding(30.dp)
 
         ) {
             ConstraintLayout(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxWidth()
             ) {
 
-                val (nameTF, emailTF, passwordTF, phoneNumberTF, dropDownIcon, genderSelector, selectGenderTitle, birthDateSelector, signUpBtn) = createRefs()
+                val (nameTF, emailTF, passwordTF, phoneNumberTF, dropDownIcon, genderSelector, selectGenderTitle, birthDateTitle, birthDateSelector) = createRefs()
 
                 CustomOutlinedTextField(
                     value = name,
@@ -310,10 +305,19 @@ fun RegistrationScreen(
                     )
                 }
 
+                Text(
+                    modifier = Modifier
+                        .constrainAs(birthDateTitle) {
+                            top.linkTo(genderSelector.bottom)
+                            start.linkTo(parent.start)
+                        }
+                        .padding(start = 60.dp, top = 60.dp),
+                    text = stringResource(R.string.enter_birthdate)
+                )
                 Row(
                     modifier = Modifier
                         .constrainAs(birthDateSelector) {
-                            top.linkTo(genderSelector.bottom)
+                            top.linkTo(birthDateTitle.bottom)
                             start.linkTo(parent.start)
                         }
                         .padding(22.dp),
@@ -332,91 +336,83 @@ fun RegistrationScreen(
                             localDate?.let {
                                 dateSelected = reverseDateFormat(it.toString())
                                 isDateSelected = true
-                                Log.d("TAGA", "isDateSelected: $isDateSelected")
                             } ?: run {
                                 dateSelected = ""
                             }
                         }
                     )
                 }
-
-                Button(
-                    modifier = Modifier
-                        .constrainAs(signUpBtn) {
-                            bottom.linkTo(parent.bottom)
-                        }
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 12.dp),
-                    onClick = {
-                        if (userViewModel != null) {
-                            if (!userViewModel.validateEmail(createEmail)) {
-                                isNewEmailError = true
-                                createEmailLabelMessage = "Invalid username / email format"
-                            } else {
-                                isNewEmailError = false
-                                createEmailLabelMessage = createEmailText
-                            }
-
-                            if (!userViewModel.validatePassword(createPassword)) {
-                                isCreatePasswordError = true
-                                createPasswordLabelMessage =
-                                    "Enter symbols of type format X, x, $ , 1"
-                            } else {
-                                isCreatePasswordError = false
-                                createPasswordLabelMessage = createdPasswordText
-                            }
-
-                            if (userViewModel.validateEmail(createEmail) && userViewModel.validatePassword(
-                                    createPassword
-                                ) && isGenderSelected && isDateSelected
-                                && userViewModel.validateName(name) && userViewModel.validatePhoneNumber(
-                                    createPhoneNumber
-                                )
-                            ) {
-                                val user = userViewModel.createUser(
-                                    name = name,
-                                    email = createEmail,
-                                    password = createPassword,
-                                    phoneNumber = createPhoneNumber.toLong(),
-                                    profileImage = "",
-                                    gender = selectedGender,
-                                    dateOfBirth = dateSelected
-                                )
-                                coroutineScope.launch {
-                                    try {
-                                        userViewModel.registerUser(user)
-                                        navController.navigate(Screen.Home.route)
-                                    } catch (e: Exception) {
-                                        Log.e(
-                                            "RegistrationScreen",
-                                            "Error registering user: ${e.message}"
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    enabled = isButtonEnabled,
-                    shape = RoundedCornerShape(40.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(R.color.darker_blue)
-                    ),
-                ) {
-                    Text(
-                        fontSize = 20.sp,
-                        text = stringResource(R.string.create_user)
-
-                    )
-                }
             }
         }
-    }
-}
+        Button(
+            modifier = Modifier
+                .constrainAs(signUpBtn) {
+                    top.linkTo(cardContainer.bottom)
+                }
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 12.dp),
+            onClick = {
+                if (userViewModel != null) {
+                    if (!userViewModel.validateEmail(createEmail)) {
+                        isNewEmailError = true
+                        createEmailLabelMessage = "Invalid username / email format"
+                    } else {
+                        isNewEmailError = false
+                        createEmailLabelMessage = createEmailText
+                    }
 
-fun reverseDateFormat(date: String): String {
-    val localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-    return localDate.format(formatter)
+                    if (!userViewModel.validatePassword(createPassword)) {
+                        isCreatePasswordError = true
+                        createPasswordLabelMessage =
+                            "Enter symbols of type format X, x, $ , 1"
+                    } else {
+                        isCreatePasswordError = false
+                        createPasswordLabelMessage = createdPasswordText
+                    }
+
+                    if (userViewModel.validateEmail(createEmail) && userViewModel.validatePassword(
+                            createPassword
+                        ) && isGenderSelected && isDateSelected
+                        && userViewModel.validateName(name) && userViewModel.validatePhoneNumber(
+                            createPhoneNumber
+                        )
+                    ) {
+                        val user = userViewModel.createUser(
+                            name = name,
+                            email = createEmail,
+                            password = createPassword,
+                            phoneNumber = createPhoneNumber.toLong(),
+                            profileImage = "",
+                            gender = selectedGender,
+                            dateOfBirth = dateSelected
+                        )
+                        coroutineScope.launch {
+                            try {
+                                userViewModel.registerUser(user)
+                                navController.navigate(Screen.Home.route)
+                            } catch (e: Exception) {
+                                Log.e(
+                                    "RegistrationScreen",
+                                    "Error registering user: ${e.message}"
+                                )
+                            }
+                        }
+                    }
+                }
+            },
+            enabled = isButtonEnabled,
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.darker_blue)
+            ),
+        ) {
+            Text(
+                fontSize = 20.sp,
+                text = stringResource(R.string.create_user)
+
+            )
+        }
+    }
 }
 
 

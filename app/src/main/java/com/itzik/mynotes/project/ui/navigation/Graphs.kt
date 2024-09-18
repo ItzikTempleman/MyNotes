@@ -5,7 +5,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -33,6 +32,5 @@ sealed class Screen(
     data object NoteScreen : Screen(route = "note_screen", title = "Note Screen")
 
     data object DeletedNotesScreen : Screen(route = "deleted_notes", title = "Deleted notes", icon = Icons.Default.DeleteForever)
-    data object Settings : Screen(route = "settings", title = "Settings", icon = Icons.Default.Settings)
 }
 

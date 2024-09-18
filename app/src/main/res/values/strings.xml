@@ -37,4 +37,5 @@
     <string name="D">D</string>
     <string name="M">M</string>
     <string name="Y">Y</string>
+    <string name="enter_birthdate">Date of birth</string>
 </resources>
