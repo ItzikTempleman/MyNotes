@@ -1,6 +1,5 @@
 package com.itzik.mynotes.project.ui.screens
 
-
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -60,11 +59,6 @@ fun HomeScreen(
     navController: NavHostController,
     noteViewModel: NoteViewModel
 ) {
-    LaunchedEffect(userId) {
-        userViewModel.fetchUserById(userId)
-        noteViewModel.updateUserIdForNewLogin()
-    }
-
     var sortType by remember { mutableStateOf("") }
     var isExpanded by remember { mutableStateOf(false) }
     val noteList by noteViewModel.publicNoteList.collectAsState()
@@ -80,198 +74,198 @@ fun HomeScreen(
         )
     }
 
+    LaunchedEffect(userId) {
+        userViewModel.fetchUserById(userId)
+        noteViewModel.updateUserIdForNewLogin()
+    }
 
-        ConstraintLayout(
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
+    ) {
+        val (title, temperature, sortOptionIcon, locationCity, newNoteBtn, viewBtn, noteLazyColumn, emptyStateMessage) = createRefs()
+
+        Icon(
+            imageVector = Icons.Default.Home,
+            contentDescription = null,
+            tint = Color.DarkGray,
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White),
+                .padding(8.dp)
+                .size(32.dp)
+                .constrainAs(title) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                }
+        )
+
+        Text(
+            modifier = Modifier
+                .padding(4.dp)
+                .constrainAs(locationCity) {
+                    start.linkTo(temperature.end)
+                    top.linkTo(parent.top, margin = 6.dp)
+                }
+                .padding(12.dp),
+            text = "",
+            fontSize = 18.sp
+        )
+
+        Box(
+            modifier = Modifier
+                .constrainAs(sortOptionIcon) {
+                    top.linkTo(parent.top)
+                    end.linkTo(newNoteBtn.start)
+                }
+                .padding(8.dp)
         ) {
-            val (title, weatherIcon, temperature, sortOptionIcon,locationCity, newNoteBtn, viewBtn, noteLazyColumn, emptyStateMessage) = createRefs()
-
-            Icon(
-                imageVector = Icons.Default.Home,
-                contentDescription = null,
-                tint = Color.DarkGray,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .size(32.dp)
-                    .constrainAs(title) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                    }
-            )
-
-
-
-
-
-            Text(
-                modifier = Modifier
-                    .padding(4.dp)
-                    .constrainAs(locationCity) {
-                        start.linkTo(temperature.end)
-                        top.linkTo(parent.top,margin = 6.dp)
-                    }.padding(12.dp),
-                text = "",
-                fontSize = 18.sp
-            )
-
-            Box(
-                modifier = Modifier
-                    .constrainAs(sortOptionIcon) {
-                        top.linkTo(parent.top)
-                        end.linkTo(newNoteBtn.start)
-                    }
-                    .padding(8.dp)
-            ) {
-                GenericIconButton(
-                    onClick = {
-                        isExpanded = !isExpanded
-                    },
-                    colorNumber = 4,
-                    imageVector = Icons.AutoMirrored.Filled.Sort
-                )
-
-                SortDropDownMenu(
-                    isExpanded = isExpanded,
-                    modifier = Modifier.wrapContentSize(),
-                    coroutineScope = coroutineScope,
-                    noteViewModel = noteViewModel,
-                    onDismissRequest = {
-                        isExpanded = false
-                    },
-                    updatedSortedList = {
-                        sortType = it
-                    }
-                )
-            }
-
-            if (noteList.isEmpty()) {
-                EmptyStateMessage(modifier = Modifier
-                    .zIndex(4f)
-                    .constrainAs(emptyStateMessage) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                        top.linkTo(parent.top)
-                    })
-            }
-
             GenericIconButton(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .constrainAs(newNoteBtn) {
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                    },
                 onClick = {
-                    coroutineScope.launch {
-                        noteViewModel.updateSelectedNoteContent(
-                            "", isPinned = false, isStarred = false,
-                            fontSize = 20, fontColor = Color.Black.toArgb(), userId = userId
-                        )
-                    }
-                    navController.navigate(Screen.NoteScreen.route)
-                }, imageVector = Icons.Outlined.Add,
-                colorNumber = 4
-            )
-
-            GenericIconButton(
-                modifier = Modifier
-                    .constrainAs(viewBtn) {
-                        end.linkTo(sortOptionIcon.start)
-                        top.linkTo(parent.top)
-                    }
-                    .padding(8.dp),
-                onClick = {
-                    isViewGrid = !isViewGrid
+                    isExpanded = !isExpanded
                 },
-                imageVector = if (!isViewGrid) Icons.Default.GridView else Icons.Default.List,
-                colorNumber = 4
+                colorNumber = 4,
+                imageVector = Icons.AutoMirrored.Filled.Sort
             )
 
-            if (!isViewGrid) {
-                LazyColumn(
-                    modifier = Modifier.constrainAs(noteLazyColumn) {
-                        top.linkTo(viewBtn.bottom)
-                        bottom.linkTo(parent.bottom)
-                        height = Dimension.fillToConstraints
-                    }
-                ) {
-                    items(combinedList, key = { it.noteId }) { noteItem ->
+            SortDropDownMenu(
+                isExpanded = isExpanded,
+                modifier = Modifier.wrapContentSize(),
+                coroutineScope = coroutineScope,
+                noteViewModel = noteViewModel,
+                onDismissRequest = {
+                    isExpanded = false
+                },
+                updatedSortedList = {
+                    sortType = it
+                }
+            )
+        }
 
-                        SwipeToOptions(
-                            note = noteItem,
-                            onPin = {
-                                coroutineScope.launch {
-                                    noteViewModel.togglePinButton(noteItem)
-                                }
-                            },
-                            onStar = {
-                                coroutineScope.launch {
-                                    noteViewModel.toggleStarredButton(noteItem)
-                                }
-                            },
-                            onDelete = {
-                                coroutineScope.launch {
-                                    noteViewModel.setTrash(noteItem)
-                                }
+        if (noteList.isEmpty()) {
+            EmptyStateMessage(modifier = Modifier
+                .zIndex(4f)
+                .constrainAs(emptyStateMessage) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    top.linkTo(parent.top)
+                })
+        }
+
+        GenericIconButton(
+            modifier = Modifier
+                .padding(8.dp)
+                .constrainAs(newNoteBtn) {
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                },
+            onClick = {
+                coroutineScope.launch {
+                    noteViewModel.updateSelectedNoteContent(
+                        "", isPinned = false, isStarred = false,
+                        fontSize = 20, fontColor = Color.Black.toArgb(), userId = userId
+                    )
+                }
+                navController.navigate(Screen.NoteScreen.route)
+            }, imageVector = Icons.Outlined.Add,
+            colorNumber = 4
+        )
+
+        GenericIconButton(
+            modifier = Modifier
+                .constrainAs(viewBtn) {
+                    end.linkTo(sortOptionIcon.start)
+                    top.linkTo(parent.top)
+                }
+                .padding(8.dp),
+            onClick = {
+                isViewGrid = !isViewGrid
+            },
+            imageVector = if (!isViewGrid) Icons.Default.GridView else Icons.Default.List,
+            colorNumber = 4
+        )
+
+        if (!isViewGrid) {
+            LazyColumn(
+                modifier = Modifier.constrainAs(noteLazyColumn) {
+                    top.linkTo(viewBtn.bottom)
+                    bottom.linkTo(parent.bottom)
+                    height = Dimension.fillToConstraints
+                }
+            ) {
+                items(combinedList, key = { it.noteId }) { noteItem ->
+
+                    SwipeToOptions(
+                        note = noteItem,
+                        onPin = {
+                            coroutineScope.launch {
+                                noteViewModel.togglePinButton(noteItem)
                             }
-                        ) {
-                            NoteListItem(
-                                isInHomeScreen = true,
-                                noteViewModel = noteViewModel,
-                                coroutineScope = coroutineScope,
-                                note = noteItem,
-                                modifier = Modifier
-                                    .clickable {
-                                        coroutineScope.launch {
-                                            val noteId = noteItem.noteId
-                                            navController.currentBackStackEntry?.savedStateHandle?.set(
-                                                key = "noteId", value = noteId
-                                            )
-                                            noteViewModel.updateSelectedNoteContent(
-                                                newChar = noteItem.content,
-                                                noteId = noteItem.noteId,
-                                                userId = noteItem.userId,
-                                                isPinned = noteItem.isPinned,
-                                                isStarred = noteItem.isStarred,
-                                                fontSize = noteItem.fontSize,
-                                                fontColor = noteItem.fontColor
-                                            )
-                                        }
-                                        navController.navigate(Screen.NoteScreen.route)
-                                    }
-                                    .animateItemPlacement(),
-                                updatedList = { updatedNotes ->
-                                    noteViewModel.setNoteList(updatedNotes)
-                                },
-                                isSelected = selectedNote == noteItem,
-                                isDeletedScreen = false,
-                                isInLikedScreen = false
-                            )
+                        },
+                        onStar = {
+                            coroutineScope.launch {
+                                noteViewModel.toggleStarredButton(noteItem)
+                            }
+                        },
+                        onDelete = {
+                            coroutineScope.launch {
+                                noteViewModel.setTrash(noteItem)
+                            }
                         }
+                    ) {
+                        NoteListItem(
+                            isInHomeScreen = true,
+                            noteViewModel = noteViewModel,
+                            coroutineScope = coroutineScope,
+                            note = noteItem,
+                            modifier = Modifier
+                                .clickable {
+                                    coroutineScope.launch {
+                                        val noteId = noteItem.noteId
+                                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                                            key = "noteId", value = noteId
+                                        )
+                                        noteViewModel.updateSelectedNoteContent(
+                                            newChar = noteItem.content,
+                                            noteId = noteItem.noteId,
+                                            userId = noteItem.userId,
+                                            isPinned = noteItem.isPinned,
+                                            isStarred = noteItem.isStarred,
+                                            fontSize = noteItem.fontSize,
+                                            fontColor = noteItem.fontColor
+                                        )
+                                    }
+                                    navController.navigate(Screen.NoteScreen.route)
+                                }
+                                .animateItemPlacement(),
+                            updatedList = { updatedNotes ->
+                                noteViewModel.setNoteList(updatedNotes)
+                            },
+                            isSelected = selectedNote == noteItem,
+                            isDeletedScreen = false,
+                            isInLikedScreen = false
+                        )
                     }
                 }
-            } else {
-                LazyVerticalGrid(
-                    modifier = Modifier.constrainAs(noteLazyColumn) {
-                        top.linkTo(viewBtn.bottom)
-                        bottom.linkTo(parent.bottom)
-                        height = Dimension.fillToConstraints
-                    },
-                    columns = GridCells.Fixed(2),
-                ) {
-                    items(combinedList, key = { it.noteId }) { noteItem ->
-                        NoteListItemForGrid(
-                            modifier = Modifier.fillMaxSize(),
-                            note = noteItem,
-                            noteViewModel = noteViewModel,
-                            isSelected = selectedNote == noteItem,
-                        )
-
-                    }
+            }
+        } else {
+            LazyVerticalGrid(
+                modifier = Modifier.constrainAs(noteLazyColumn) {
+                    top.linkTo(viewBtn.bottom)
+                    bottom.linkTo(parent.bottom)
+                    height = Dimension.fillToConstraints
+                },
+                columns = GridCells.Fixed(2),
+            ) {
+                items(combinedList, key = { it.noteId }) { noteItem ->
+                    NoteListItemForGrid(
+                        modifier = Modifier.fillMaxSize(),
+                        note = noteItem,
+                        noteViewModel = noteViewModel,
+                        isSelected = selectedNote == noteItem,
+                    )
                 }
             }
         }
     }
+}

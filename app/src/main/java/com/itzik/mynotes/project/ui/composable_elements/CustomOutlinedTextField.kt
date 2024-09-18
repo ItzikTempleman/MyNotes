@@ -127,5 +127,13 @@ fun CustomOutlinedTextField(
     }
 }
 
-
+@Composable
+fun EmptyStateMessage(
+    modifier:Modifier,
+    screenDescription:String?=""
+) {
+    Text(
+        modifier = modifier, fontSize = 40.sp, color = Color.Gray, text = "No $screenDescription notes"
+    )
+}
 

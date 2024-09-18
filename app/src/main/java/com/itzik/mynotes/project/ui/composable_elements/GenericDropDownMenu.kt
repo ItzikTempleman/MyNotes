@@ -1,10 +1,10 @@
 package com.itzik.mynotes.project.ui.composable_elements
 
-//noinspection UsingMaterialAndMaterial3Libraries
-//noinspection UsingMaterialAndMaterial3Libraries
 import android.annotation.SuppressLint
-import androidx.compose.material.DropdownMenu
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material3.DropdownMenu
+
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -46,7 +46,6 @@ fun SortDropDownMenu(
         }
     }
 }
-
 
 @Composable
 fun GenderDropDownMenu(

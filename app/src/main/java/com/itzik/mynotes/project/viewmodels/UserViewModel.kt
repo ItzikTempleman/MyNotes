@@ -76,7 +76,6 @@ class UserViewModel @Inject constructor(
         }
     }
 
-
     fun createUser(
         name: String,
         email: String,

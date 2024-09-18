@@ -226,5 +226,12 @@ class NoteViewModel @Inject constructor(
             privateNoteList.value.add(note)
         }
     }
+
+    fun clearAllNoteList() {
+        privateNoteList.value= emptyList<Note>().toMutableList()
+        privateStarredNoteList.value= emptyList<Note>().toMutableList()
+        privateDeletedNoteList.value= emptyList<Note>().toMutableList()
+        privatePinnedNoteList.value= emptyList<Note>().toMutableList()
+    }
 }
 

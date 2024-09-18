@@ -38,13 +38,7 @@ sealed class GenericRows(
     )
     -> Unit)? = null
 ) {
-//    data object Settings : GenericRows(
-//        itemTitle = "Settings",
-//        itemIcon = Icons.Default.Settings,
-//        onClick = { _, _, navController, _, _ ->
-//            navController.navigate(Screen.Settings.route)
-//        }
-//    )
+
 
     data object DeletedItems : GenericRows(
         itemTitle = "Deleted notes",
@@ -57,10 +51,11 @@ sealed class GenericRows(
     data object LogOut : GenericRows(
         itemTitle = "Log out",
         itemIcon = Icons.Default.PowerSettingsNew,
-        onClick = { _, coroutineScope, navController, userViewModel, user ->
+        onClick = { noteViewModel, coroutineScope, navController, userViewModel, user ->
             coroutineScope.launch {
                 user.isLoggedIn = false
                 userViewModel.updateIsLoggedIn(user)
+                noteViewModel.clearAllNoteList()
                 navController.navigate(Screen.Login.route)
             }
         }
@@ -69,7 +64,7 @@ sealed class GenericRows(
     data object RetrieveNote : GenericRows(
         itemTitle = "Retrieve note",
         itemIcon = Icons.Default.RestoreFromTrash,
-        onClick = { noteViewModel, coroutineScope, _, _, _ ->
+        onClick = { _, coroutineScope, _, _, _ ->
             coroutineScope.launch {
 
             }
@@ -79,7 +74,7 @@ sealed class GenericRows(
     data object DeleteNote : GenericRows(
         itemTitle = "Delete note forever",
         itemIcon = Icons.Default.DeleteForever,
-        onClick = { noteViewModel, coroutineScope, _, _, _ ->
+        onClick = { _, coroutineScope, _, _, _ ->
             coroutineScope.launch {
 
             }
