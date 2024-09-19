@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                     noteViewModel = noteViewModel,
                     userViewModel = userViewModel,
                     coroutineScope = coroutineScope,
-                    navController = navController,
+                    rootnNavController = navController,
                 )
             }
         }

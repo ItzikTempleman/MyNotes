@@ -40,6 +40,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -116,14 +118,14 @@ fun RegistrationScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        val (backgroundBox, cardContainer, signUpBtn) = createRefs()
+        val (backgroundBox, title, cardContainer, signUpBtn) = createRefs()
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .constrainAs(backgroundBox) {
                     top.linkTo(parent.top)
-                    height = Dimension.percent(0.45f)
+                    height = Dimension.percent(0.7f)
                 }
                 .background(
                     brush = Brush.verticalGradient(
@@ -134,7 +136,20 @@ fun RegistrationScreen(
                     )
                 )
         ) {}
-
+        Text(
+            modifier = Modifier
+                .constrainAs(title) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .padding(top = 30.dp),
+            fontSize = 36.sp,
+            fontFamily = FontFamily.SansSerif,
+            fontStyle = FontStyle.Italic,
+            color = Color.White,
+            text = stringResource(id = R.string.register)
+        )
 
         Card(
             elevation = CardDefaults.cardElevation(8.dp),
@@ -142,7 +157,7 @@ fun RegistrationScreen(
             colors = CardDefaults.cardColors(Color.White),
             modifier = Modifier
                 .constrainAs(cardContainer) {
-                    top.linkTo(parent.top)
+                    top.linkTo(title.bottom)
                 }
                 .fillMaxWidth()
                 .padding(30.dp)

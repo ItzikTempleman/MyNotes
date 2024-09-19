@@ -17,13 +17,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Female
+import androidx.compose.material.icons.filled.Male
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Transgender
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.PermContactCalendar
-import androidx.compose.material.icons.outlined.Transgender
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,6 +46,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.itzik.mynotes.project.main.NoteApp
+import com.itzik.mynotes.project.model.Gender
 import com.itzik.mynotes.project.ui.composable_elements.GenericItem
 import com.itzik.mynotes.project.ui.composable_elements.GenericRows
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
@@ -236,7 +239,12 @@ fun ProfileScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Outlined.Transgender,
+                imageVector = when(user?.gender){
+                    Gender.MALE ->{ Icons.Default.Male}
+                    Gender.FEMALE -> { Icons.Default.Female}
+                    Gender.OTHER -> { Icons.Default.Transgender}
+                    null -> { Icons.Default.Person}
+                },
                 contentDescription = null,
                 tint = Color.DarkGray
             )

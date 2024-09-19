@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.itzik.mynotes.project.ui.navigation.Graph.AUTHENTICATION
 import com.itzik.mynotes.project.ui.navigation.Graph.HOME
@@ -29,14 +30,14 @@ import kotlinx.coroutines.CoroutineScope
 fun RootNavHost(
     userId: String,
     noteViewModel: NoteViewModel,
-    navController: NavHostController,
+    rootnNavController: NavHostController,
     userViewModel: UserViewModel,
     coroutineScope: CoroutineScope,
 ) {
 
     NavHost(
         startDestination = ROOT,
-        navController = navController
+        navController = rootnNavController
     ) {
         navigation(
             startDestination = Screen.Splash.route,
@@ -44,7 +45,7 @@ fun RootNavHost(
         ) {
             composable(route = Screen.Splash.route) {
                 SplashScreen(
-                    navController = navController,
+                    navController = rootnNavController,
                     userViewModel = userViewModel,
                     coroutineScope = coroutineScope
                 )
@@ -57,7 +58,7 @@ fun RootNavHost(
         ) {
             composable(route = Screen.Login.route) {
                 LoginScreen(
-                    navController = navController,
+                    navController = rootnNavController,
                     userViewModel = userViewModel,
                     coroutineScope = coroutineScope,
 
@@ -66,7 +67,7 @@ fun RootNavHost(
 
             composable(route = Screen.Registration.route) {
                 RegistrationScreen(
-                    navController = navController,
+                    navController = rootnNavController,
                     userViewModel = userViewModel,
                     coroutineScope = coroutineScope,
 
@@ -79,9 +80,11 @@ fun RootNavHost(
             route = HOME
         ) {
             composable(route = Screen.Home.route) {
+                val bottomBarNavController = rememberNavController()
                 BottomBarNavHost(
+                    bottomBarNavController=bottomBarNavController,
                     noteViewModel = noteViewModel,
-                    paramNavController = navController,
+                    paramNavController = rootnNavController,
                     userViewModel = userViewModel,
                     coroutineScope = coroutineScope,
                     userId = userId,
@@ -95,7 +98,7 @@ fun RootNavHost(
                     userViewModel = userViewModel,
                     noteViewModel = noteViewModel,
                     coroutineScope = coroutineScope,
-                    navController = navController,
+                    rootNavController = rootnNavController,
                 )
             }
         }

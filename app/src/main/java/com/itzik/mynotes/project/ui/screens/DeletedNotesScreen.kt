@@ -66,7 +66,7 @@ fun DeletedNotesScreen(
     modifier: Modifier,
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
-    navController: NavHostController = rememberNavController(),
+    rootNavController: NavHostController = rememberNavController(),
     userViewModel: UserViewModel,
     userId:String
 
@@ -118,7 +118,7 @@ fun DeletedNotesScreen(
                     }
                     .padding(8.dp),
                 onClick = {
-                    navController.navigate(Screen.Home.route)
+                    rootNavController.navigate(Screen.Home.route)
                 }
 
             ) {
@@ -265,15 +265,15 @@ fun DeletedNotesScreen(
                         modifier = modifier
                     ) {
                         items(deleteNoteDialogItems) {
-                            user?.let { it1 ->
+                            user?.let { user ->
                                 GenericItem(
                                     modifier = modifier,
                                     item = it,
                                     noteViewModel = noteViewModel,
                                     coroutineScope = coroutineScope,
-                                    navController = navController,
+                                    navController = rootNavController,
                                     userViewModel = userViewModel,
-                                    user = it1
+                                    user = user
                                 )
                             }
                         }

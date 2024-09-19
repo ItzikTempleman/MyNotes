@@ -30,6 +30,7 @@ import kotlinx.coroutines.CoroutineScope
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun BottomBarNavHost(
+    bottomBarNavController:NavHostController,
     userId: String,
     noteViewModel: NoteViewModel,
     newNavController: NavHostController = rememberNavController(),
