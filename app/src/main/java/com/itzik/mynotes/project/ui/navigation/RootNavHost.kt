@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,7 +16,6 @@ import com.itzik.mynotes.project.ui.navigation.Graph.ROOT
 import com.itzik.mynotes.project.ui.registrations.LoginScreen
 import com.itzik.mynotes.project.ui.registrations.RegistrationScreen
 import com.itzik.mynotes.project.ui.registrations.SplashScreen
-import com.itzik.mynotes.project.ui.screens.DeletedNotesScreen
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -30,14 +28,14 @@ import kotlinx.coroutines.CoroutineScope
 fun RootNavHost(
     userId: String,
     noteViewModel: NoteViewModel,
-    rootnNavController: NavHostController,
+    rootNavController: NavHostController,
     userViewModel: UserViewModel,
     coroutineScope: CoroutineScope,
 ) {
 
     NavHost(
         startDestination = ROOT,
-        navController = rootnNavController
+        navController = rootNavController
     ) {
         navigation(
             startDestination = Screen.Splash.route,
@@ -45,9 +43,8 @@ fun RootNavHost(
         ) {
             composable(route = Screen.Splash.route) {
                 SplashScreen(
-                    navController = rootnNavController,
+                    rootNavController = rootNavController,
                     userViewModel = userViewModel,
-                    coroutineScope = coroutineScope
                 )
             }
         }
@@ -58,7 +55,7 @@ fun RootNavHost(
         ) {
             composable(route = Screen.Login.route) {
                 LoginScreen(
-                    navController = rootnNavController,
+                    rootNavController = rootNavController,
                     userViewModel = userViewModel,
                     coroutineScope = coroutineScope,
 
@@ -67,10 +64,9 @@ fun RootNavHost(
 
             composable(route = Screen.Registration.route) {
                 RegistrationScreen(
-                    navController = rootnNavController,
+                    rootNavController = rootNavController,
                     userViewModel = userViewModel,
-                    coroutineScope = coroutineScope,
-
+                    coroutineScope = coroutineScope
                     )
             }
         }
@@ -80,25 +76,14 @@ fun RootNavHost(
             route = HOME
         ) {
             composable(route = Screen.Home.route) {
-                val bottomBarNavController = rememberNavController()
+               val  bottomBarNavController = rememberNavController()
                 BottomBarNavHost(
                     bottomBarNavController=bottomBarNavController,
                     noteViewModel = noteViewModel,
-                    paramNavController = rootnNavController,
+                    rootNavController = rootNavController,
                     userViewModel = userViewModel,
                     coroutineScope = coroutineScope,
                     userId = userId,
-                )
-            }
-
-            composable(route = Screen.DeletedNotesScreen.route) {
-                DeletedNotesScreen(
-                    modifier = Modifier,
-                    userId=userId,
-                    userViewModel = userViewModel,
-                    noteViewModel = noteViewModel,
-                    coroutineScope = coroutineScope,
-                    rootNavController = rootnNavController,
                 )
             }
         }

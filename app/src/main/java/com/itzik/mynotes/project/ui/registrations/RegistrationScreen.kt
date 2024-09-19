@@ -66,7 +66,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun RegistrationScreen(
     coroutineScope: CoroutineScope,
-    navController: NavHostController,
+    rootNavController: NavHostController,
     userViewModel: UserViewModel? = null
 ) {
     val nameText = stringResource(id = R.string.full_name)
@@ -404,7 +404,7 @@ fun RegistrationScreen(
                         coroutineScope.launch {
                             try {
                                 userViewModel.registerUser(user)
-                                navController.navigate(Screen.Home.route)
+                                rootNavController.navigate(Screen.Home.route)
                             } catch (e: Exception) {
                                 Log.e(
                                     "RegistrationScreen",
@@ -436,6 +436,6 @@ fun RegistrationScreen(
 fun RegistrationScreenPreview() {
     RegistrationScreen(
         coroutineScope = rememberCoroutineScope(),
-        navController = rememberNavController()
+        rootNavController = rememberNavController()
     )
 }

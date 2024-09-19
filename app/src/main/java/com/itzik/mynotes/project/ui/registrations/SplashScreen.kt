@@ -18,14 +18,12 @@ import androidx.navigation.NavHostController
 import com.itzik.mynotes.project.ui.navigation.Graph.AUTHENTICATION
 import com.itzik.mynotes.project.ui.navigation.Graph.HOME
 import com.itzik.mynotes.project.viewmodels.UserViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
 fun SplashScreen(
-    navController: NavHostController,
-    coroutineScope: CoroutineScope,
+    rootNavController: NavHostController,
     userViewModel: UserViewModel
 ) {
     val loggedInUsers by userViewModel.publicLoggedInUsersList.collectAsState()
@@ -34,11 +32,11 @@ fun SplashScreen(
     LaunchedEffect(loggedInUsers) {
         delay(1500)
         if (loggedInUsers.isNotEmpty() && loggedInUsers.first().isLoggedIn) {
-            navController.popBackStack()
-            navController.navigate(HOME)
+            rootNavController.popBackStack()
+            rootNavController.navigate(HOME)
         } else {
-            navController.popBackStack()
-            navController.navigate(AUTHENTICATION)
+            rootNavController.popBackStack()
+            rootNavController.navigate(AUTHENTICATION)
         }
     }
 

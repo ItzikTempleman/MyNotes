@@ -29,34 +29,26 @@ import kotlinx.coroutines.launch
 sealed class GenericRows(
     var itemTitle: String,
     var itemIcon: ImageVector,
-    var onClick: ((
-        noteViewModel: NoteViewModel,
-        coroutineScope: CoroutineScope,
-        navController: NavHostController,
-        userViewModel: UserViewModel,
-        user: User,
-    )
-    -> Unit)? = null
+    var onClick: ((noteViewModel: NoteViewModel, coroutineScope: CoroutineScope, rootNvController: NavHostController, userViewModel: UserViewModel, user: User) -> Unit)? = null
 ) {
-
 
     data object DeletedItems : GenericRows(
         itemTitle = "Deleted notes",
         itemIcon = Icons.Default.DeleteForever,
-        onClick = { _, _, navController, _, _ ->
-            navController.navigate(Screen.DeletedNotesScreen.route)
+        onClick = { _, _,rootNvController, _, _ ->
+            rootNvController.navigate(Screen.DeletedNotesScreen.route)
         }
     )
 
     data object LogOut : GenericRows(
         itemTitle = "Log out",
         itemIcon = Icons.Default.PowerSettingsNew,
-        onClick = { noteViewModel, coroutineScope, navController, userViewModel, user ->
+        onClick = { noteViewModel, coroutineScope, rootNvController, userViewModel, user ->
             coroutineScope.launch {
                 user.isLoggedIn = false
                 userViewModel.updateIsLoggedIn(user)
                 noteViewModel.clearAllNoteList()
-                navController.navigate(Screen.Login.route)
+                rootNvController.navigate(Screen.Login.route)
             }
         }
     )
@@ -64,23 +56,22 @@ sealed class GenericRows(
     data object RetrieveNote : GenericRows(
         itemTitle = "Retrieve note",
         itemIcon = Icons.Default.RestoreFromTrash,
-        onClick = { _, coroutineScope, _, _, _ ->
-            coroutineScope.launch {
-
-            }
-        }
+        onClick = { _, _,_, _, _ -> }
     )
 
     data object DeleteNote : GenericRows(
         itemTitle = "Delete note forever",
         itemIcon = Icons.Default.DeleteForever,
-        onClick = { _, coroutineScope, _, _, _ ->
-            coroutineScope.launch {
-
-            }
-        }
+        onClick = { _, _,_, _, _ -> }
     )
 }
+
+
+
+
+
+
+
 
 @Composable
 fun GenericItem(
@@ -88,11 +79,10 @@ fun GenericItem(
     item: GenericRows,
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
-    navController: NavHostController,
+    rootNavController: NavHostController,
     userViewModel: UserViewModel,
-    user: User,
+    user: User
 ) {
-
     ConstraintLayout(
         modifier = modifier
             .clickable {
@@ -100,11 +90,10 @@ fun GenericItem(
                     it(
                         noteViewModel,
                         coroutineScope,
-                        navController,
+                        rootNavController,
                         userViewModel,
                         user
                     )
-
                 }
             }
             .fillMaxWidth()
@@ -143,8 +132,7 @@ fun GenericItem(
                 modifier = Modifier
                     .constrainAs(divider) {
                         bottom.linkTo(parent.bottom)
-                    }
-                    .padding(horizontal = 8.dp)
+                    }.padding(horizontal = 8.dp)
             )
         }
     }

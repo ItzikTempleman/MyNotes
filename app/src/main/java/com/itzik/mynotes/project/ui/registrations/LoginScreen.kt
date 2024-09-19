@@ -63,7 +63,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     coroutineScope: CoroutineScope,
-    navController: NavHostController,
+    rootNavController: NavHostController,
     userViewModel: UserViewModel?=null
 ) {
     var email by remember { mutableStateOf("") }
@@ -290,8 +290,8 @@ fun LoginScreen(
                                                 if (user != null) {
                                                     user.isLoggedIn = true
                                                     userViewModel.updateIsLoggedIn(user)
-                                                    navController.popBackStack()
-                                                    navController.navigate(Screen.Home.route)
+                                                    rootNavController.popBackStack()
+                                                    rootNavController.navigate(Screen.Home.route)
                                                 } else {
                                                     Log.e(
                                                         "LoginScreen",
@@ -387,7 +387,7 @@ fun LoginScreen(
 
             TextButton(
                 onClick = {
-                    navController.navigate(Screen.Registration.route)
+                    rootNavController.navigate(Screen.Registration.route)
                 },
                 modifier = Modifier
                     .constrainAs(signUpBtn) {
@@ -411,6 +411,6 @@ fun LoginScreen(
 fun LoginScreenPreview() {
     LoginScreen(
         coroutineScope = rememberCoroutineScope(),
-        navController = rememberNavController()
+        rootNavController = rememberNavController()
     )
 }

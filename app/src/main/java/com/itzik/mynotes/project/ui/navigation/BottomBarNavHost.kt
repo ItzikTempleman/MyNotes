@@ -14,10 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.itzik.mynotes.project.ui.navigation.Graph.HOME
 import com.itzik.mynotes.project.ui.screen_sections.BottomBarScreen
+import com.itzik.mynotes.project.ui.screens.DeletedNotesScreen
 import com.itzik.mynotes.project.ui.screens.HomeScreen
 import com.itzik.mynotes.project.ui.screens.LikedNotesScreen
 import com.itzik.mynotes.project.ui.screens.NoteScreen
@@ -33,8 +33,7 @@ fun BottomBarNavHost(
     bottomBarNavController:NavHostController,
     userId: String,
     noteViewModel: NoteViewModel,
-    newNavController: NavHostController = rememberNavController(),
-    paramNavController: NavHostController = rememberNavController(),
+    rootNavController: NavHostController,
     userViewModel: UserViewModel,
     coroutineScope: CoroutineScope,
 ) {
@@ -46,14 +45,14 @@ fun BottomBarNavHost(
         bottomBar = {
             if (isNoteScreenVisible) {
                 BottomBarScreen(
-                    navController = newNavController
+                    navController = bottomBarNavController
                 )
             }
         }
     ) {
         NavHost(
             modifier = Modifier.padding(it),
-            navController = newNavController,
+            navController = bottomBarNavController,
             startDestination = HOME
         ) {
             navigation(
@@ -67,7 +66,7 @@ fun BottomBarNavHost(
                         userId=userId,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
-                        navController = newNavController,
+                        bottomBarNavController = bottomBarNavController,
                     )
                 }
 
@@ -77,7 +76,7 @@ fun BottomBarNavHost(
                         userId=userId,
                         noteViewModel=noteViewModel,
                         coroutineScope = coroutineScope,
-                        navController = newNavController,
+                        navController = bottomBarNavController,
                     )
                 }
 
@@ -85,8 +84,9 @@ fun BottomBarNavHost(
                     isNoteScreenVisible = true
                     ProfileScreen(
                         modifier = Modifier,
-                        navController = paramNavController,
+                        rootNavController = rootNavController,
                         userViewModel = userViewModel,
+                        bottomBarNavController = bottomBarNavController,
                         coroutineScope = coroutineScope,
                         noteViewModel = noteViewModel
                     )
@@ -95,12 +95,23 @@ fun BottomBarNavHost(
 
                 composable(route = Screen.NoteScreen.route){
                     isNoteScreenVisible = false
-                    val noteId = newNavController.previousBackStackEntry?.savedStateHandle?.get<Int>("noteId")
+                    val noteId = bottomBarNavController.previousBackStackEntry?.savedStateHandle?.get<Int>("noteId")
                     NoteScreen(
                         noteId = noteId,
-                        paramNavController = paramNavController,
+                        paramNavController = rootNavController,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
+                    )
+                }
+
+                composable(route = Screen.DeletedNotesScreen.route) {
+                    DeletedNotesScreen(
+                        modifier = Modifier,
+                        userId=userId,
+                        userViewModel = userViewModel,
+                        noteViewModel = noteViewModel,
+                        coroutineScope = coroutineScope,
+                        rootNavController = rootNavController,
                     )
                 }
             }

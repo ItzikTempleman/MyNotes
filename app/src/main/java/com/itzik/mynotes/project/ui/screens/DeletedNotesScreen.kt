@@ -46,7 +46,6 @@ import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
@@ -66,7 +65,7 @@ fun DeletedNotesScreen(
     modifier: Modifier,
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
-    rootNavController: NavHostController = rememberNavController(),
+    rootNavController: NavHostController,
     userViewModel: UserViewModel,
     userId:String
 
@@ -118,9 +117,8 @@ fun DeletedNotesScreen(
                     }
                     .padding(8.dp),
                 onClick = {
-                    rootNavController.navigate(Screen.Home.route)
+                    rootNavController.navigate(Screen.Profile.route)
                 }
-
             ) {
                 Icon(
                     modifier = Modifier.size(24.dp),
@@ -271,7 +269,7 @@ fun DeletedNotesScreen(
                                     item = it,
                                     noteViewModel = noteViewModel,
                                     coroutineScope = coroutineScope,
-                                    navController = rootNavController,
+                                    rootNavController = rootNavController,
                                     userViewModel = userViewModel,
                                     user = user
                                 )

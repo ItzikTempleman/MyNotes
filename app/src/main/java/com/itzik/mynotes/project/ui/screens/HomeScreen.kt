@@ -56,7 +56,7 @@ fun HomeScreen(
     userViewModel: UserViewModel,
     userId: String,
     coroutineScope: CoroutineScope,
-    navController: NavHostController,
+    bottomBarNavController: NavHostController,
     noteViewModel: NoteViewModel
 ) {
     var sortType by remember { mutableStateOf("") }
@@ -166,7 +166,7 @@ fun HomeScreen(
                         fontSize = 20, fontColor = Color.Black.toArgb(), userId = userId
                     )
                 }
-                navController.navigate(Screen.NoteScreen.route)
+                bottomBarNavController.navigate(Screen.NoteScreen.route)
             }, imageVector = Icons.Outlined.Add,
             colorNumber = 4
         )
@@ -222,7 +222,7 @@ fun HomeScreen(
                                 .clickable {
                                     coroutineScope.launch {
                                         val noteId = noteItem.noteId
-                                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                                        bottomBarNavController.currentBackStackEntry?.savedStateHandle?.set(
                                             key = "noteId", value = noteId
                                         )
                                         noteViewModel.updateSelectedNoteContent(
@@ -235,7 +235,7 @@ fun HomeScreen(
                                             fontColor = noteItem.fontColor
                                         )
                                     }
-                                    navController.navigate(Screen.NoteScreen.route)
+                                    bottomBarNavController.navigate(Screen.NoteScreen.route)
                                 }
                                 .animateItemPlacement(),
                             updatedList = { updatedNotes ->

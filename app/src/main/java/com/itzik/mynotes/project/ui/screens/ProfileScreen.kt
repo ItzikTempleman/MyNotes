@@ -62,7 +62,8 @@ import kotlinx.coroutines.launch
 fun ProfileScreen(
     modifier: Modifier,
     coroutineScope: CoroutineScope,
-    navController: NavHostController,
+    bottomBarNavController: NavHostController,
+    rootNavController:NavHostController,
     userViewModel: UserViewModel,
     noteViewModel: NoteViewModel,
 ) {
@@ -294,7 +295,7 @@ fun ProfileScreen(
                         item = it,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
-                        navController = navController,
+                        rootNavController = bottomBarNavController,
                         userViewModel = userViewModel
                     )
                 }
