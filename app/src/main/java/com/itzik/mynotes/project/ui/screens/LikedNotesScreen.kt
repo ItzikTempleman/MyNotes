@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 fun LikedNotesScreen(
     userId:String,
     coroutineScope: CoroutineScope,
-    navController: NavHostController,
+    bottomBarNavController: NavHostController,
     noteViewModel: NoteViewModel
 ) {
 
@@ -117,7 +117,7 @@ fun LikedNotesScreen(
                             modifier = Modifier.clickable {
                                 coroutineScope.launch {
                                     val noteId = noteItem.noteId
-                                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                                    bottomBarNavController.currentBackStackEntry?.savedStateHandle?.set(
                                         key = "noteId",
                                         value = noteId
                                     )
@@ -131,7 +131,7 @@ fun LikedNotesScreen(
                                         userId = noteItem.userId
                                     )
                                 }
-                                navController.navigate(Screen.NoteScreen.route)
+                                bottomBarNavController.navigate(Screen.NoteScreen.route)
                             },
                             updatedList = { updatedNotes ->
                                 noteViewModel.setNoteList(updatedNotes)

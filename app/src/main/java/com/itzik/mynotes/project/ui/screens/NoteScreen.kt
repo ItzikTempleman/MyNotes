@@ -55,7 +55,7 @@ fun NoteScreen(
     noteId: Int?,
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
-    paramNavController: NavHostController
+    bottomBarNavController: NavHostController
 ) {
     val note by noteViewModel.publicNote.collectAsState()
     var text by remember { mutableStateOf(note.content) }
@@ -84,7 +84,7 @@ fun NoteScreen(
                         noteViewModel.saveNote(note)
                     }
                 }
-                paramNavController.navigate(Screen.Home.route) {
+                bottomBarNavController.navigate(Screen.Home.route) {
                     popUpTo(Screen.Home.route) { inclusive = true }
                 }
             },

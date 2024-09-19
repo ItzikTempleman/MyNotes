@@ -65,34 +65,24 @@ fun DeletedNotesScreen(
     modifier: Modifier,
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
-    rootNavController: NavHostController,
     userViewModel: UserViewModel,
-    userId:String
-
+    userId:String,
+    bottomBarNavController:NavHostController
 ) {
+
+
+    val user by userViewModel.publicUser.collectAsState()
+    val deleteNoteDialogItems = listOf(GenericRows.RetrieveNote, GenericRows.DeleteNote)
+    val deletedNotes by noteViewModel.publicDeletedNoteList.collectAsState()
+    var isDialogOpen by remember { mutableStateOf(false) }
+    var isDeleteAllDialogOpen by remember { mutableStateOf(false) }
+    val selectedNote by remember { mutableStateOf<Note?>(null) }
+    var noteList by remember { mutableStateOf(deletedNotes) }
 
     LaunchedEffect(Unit) {
         userViewModel.fetchUserById(userId)
         noteViewModel.fetchDeletedNotes()
     }
-    val user by userViewModel.publicUser.collectAsState()
-
-    val deleteNoteDialogItems = listOf(GenericRows.RetrieveNote, GenericRows.DeleteNote)
-
-    val deletedNotes by noteViewModel.publicDeletedNoteList.collectAsState()
-
-    var isDialogOpen by remember {
-        mutableStateOf(false)
-    }
-
-    var isDeleteAllDialogOpen by remember {
-        mutableStateOf(false)
-    }
-
-    val selectedNote by remember { mutableStateOf<Note?>(null) }
-    var noteList by remember { mutableStateOf(deletedNotes) }
-
-
 
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -117,7 +107,7 @@ fun DeletedNotesScreen(
                     }
                     .padding(8.dp),
                 onClick = {
-                    rootNavController.navigate(Screen.Profile.route)
+                    bottomBarNavController.navigate(Screen.Profile.route)
                 }
             ) {
                 Icon(
@@ -269,7 +259,6 @@ fun DeletedNotesScreen(
                                     item = it,
                                     noteViewModel = noteViewModel,
                                     coroutineScope = coroutineScope,
-                                    rootNavController = rootNavController,
                                     userViewModel = userViewModel,
                                     user = user
                                 )

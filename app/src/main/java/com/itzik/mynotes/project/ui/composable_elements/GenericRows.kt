@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeleteForever
-import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.RestoreFromTrash
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -18,58 +17,28 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.navigation.NavHostController
 import com.itzik.mynotes.project.model.User
-import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 sealed class GenericRows(
     var itemTitle: String,
     var itemIcon: ImageVector,
-    var onClick: ((noteViewModel: NoteViewModel, coroutineScope: CoroutineScope, rootNvController: NavHostController, userViewModel: UserViewModel, user: User) -> Unit)? = null
+    var onClick: ((noteViewModel: NoteViewModel, coroutineScope: CoroutineScope, userViewModel: UserViewModel, user: User) -> Unit)? = null
 ) {
-
-    data object DeletedItems : GenericRows(
-        itemTitle = "Deleted notes",
-        itemIcon = Icons.Default.DeleteForever,
-        onClick = { _, _,rootNvController, _, _ ->
-            rootNvController.navigate(Screen.DeletedNotesScreen.route)
-        }
-    )
-
-    data object LogOut : GenericRows(
-        itemTitle = "Log out",
-        itemIcon = Icons.Default.PowerSettingsNew,
-        onClick = { noteViewModel, coroutineScope, rootNvController, userViewModel, user ->
-            coroutineScope.launch {
-                user.isLoggedIn = false
-                userViewModel.updateIsLoggedIn(user)
-                noteViewModel.clearAllNoteList()
-                rootNvController.navigate(Screen.Login.route)
-            }
-        }
-    )
 
     data object RetrieveNote : GenericRows(
         itemTitle = "Retrieve note",
         itemIcon = Icons.Default.RestoreFromTrash,
-        onClick = { _, _,_, _, _ -> }
+
     )
 
     data object DeleteNote : GenericRows(
         itemTitle = "Delete note forever",
         itemIcon = Icons.Default.DeleteForever,
-        onClick = { _, _,_, _, _ -> }
     )
 }
-
-
-
-
-
 
 
 
@@ -79,7 +48,6 @@ fun GenericItem(
     item: GenericRows,
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
-    rootNavController: NavHostController,
     userViewModel: UserViewModel,
     user: User
 ) {
@@ -90,7 +58,6 @@ fun GenericItem(
                     it(
                         noteViewModel,
                         coroutineScope,
-                        rootNavController,
                         userViewModel,
                         user
                     )
@@ -111,7 +78,7 @@ fun GenericItem(
                 },
             imageVector = item.itemIcon,
             contentDescription = null,
-            tint = if (item.itemTitle == "Log out") Color.Red else if(item.itemTitle == "Retrieve note") Color.Blue else Color.Black
+            tint =  Color.Blue
         )
 
         Text(
@@ -124,7 +91,7 @@ fun GenericItem(
                 },
             text = item.itemTitle,
             fontSize = 16.sp,
-            color = if (item.itemTitle == "Log out") Color.Red else Color.Black
+            color =  Color.Black
         )
 
         if (item.itemTitle != "Log out") {

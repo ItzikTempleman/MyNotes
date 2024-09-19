@@ -37,13 +37,13 @@ fun BottomBarNavHost(
     userViewModel: UserViewModel,
     coroutineScope: CoroutineScope,
 ) {
-    var isNoteScreenVisible by remember {
+    var isBottomBarVisible by remember {
         mutableStateOf(false)
     }
 
     Scaffold(
         bottomBar = {
-            if (isNoteScreenVisible) {
+            if (isBottomBarVisible) {
                 BottomBarScreen(
                     navController = bottomBarNavController
                 )
@@ -60,7 +60,7 @@ fun BottomBarNavHost(
                 startDestination = Screen.Home.route
             ) {
                 composable(route = Screen.Home.route) {
-                    isNoteScreenVisible = true
+                    isBottomBarVisible = true
                     HomeScreen(
                         userViewModel=userViewModel,
                         userId=userId,
@@ -71,19 +71,18 @@ fun BottomBarNavHost(
                 }
 
                 composable(route = Screen.LikedNotes.route) {
-                    isNoteScreenVisible = true
+                    isBottomBarVisible = true
                     LikedNotesScreen(
                         userId=userId,
                         noteViewModel=noteViewModel,
                         coroutineScope = coroutineScope,
-                        navController = bottomBarNavController,
+                        bottomBarNavController = bottomBarNavController,
                     )
                 }
 
                 composable(route = Screen.Profile.route) {
-                    isNoteScreenVisible = true
+                    isBottomBarVisible = true
                     ProfileScreen(
-                        modifier = Modifier,
                         rootNavController = rootNavController,
                         userViewModel = userViewModel,
                         bottomBarNavController = bottomBarNavController,
@@ -94,24 +93,26 @@ fun BottomBarNavHost(
 
 
                 composable(route = Screen.NoteScreen.route){
-                    isNoteScreenVisible = false
+                    isBottomBarVisible = false
                     val noteId = bottomBarNavController.previousBackStackEntry?.savedStateHandle?.get<Int>("noteId")
                     NoteScreen(
                         noteId = noteId,
-                        paramNavController = rootNavController,
+                        bottomBarNavController = bottomBarNavController,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
                     )
                 }
 
                 composable(route = Screen.DeletedNotesScreen.route) {
+                    isBottomBarVisible = true
                     DeletedNotesScreen(
                         modifier = Modifier,
                         userId=userId,
                         userViewModel = userViewModel,
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
-                        rootNavController = rootNavController,
+                        bottomBarNavController=bottomBarNavController
+
                     )
                 }
             }
