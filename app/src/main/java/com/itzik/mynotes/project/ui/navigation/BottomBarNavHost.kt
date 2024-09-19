@@ -84,7 +84,6 @@ fun BottomBarNavHost(
                 composable(route = Screen.Profile.route) {
                     isNoteScreenVisible = true
                     ProfileScreen(
-                        userId=userId,
                         modifier = Modifier,
                         navController = paramNavController,
                         userViewModel = userViewModel,

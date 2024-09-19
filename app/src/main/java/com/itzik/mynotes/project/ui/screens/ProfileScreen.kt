@@ -60,7 +60,6 @@ import kotlinx.coroutines.launch
 )
 @Composable
 fun ProfileScreen(
-    userId: String,
     modifier: Modifier,
     coroutineScope: CoroutineScope,
     navController: NavHostController,
@@ -288,9 +287,9 @@ fun ProfileScreen(
                 .fillMaxWidth()
         ) {
             items(profileItems) {
-                user?.let { it1 ->
+                user?.let { user->
                     GenericItem(
-                        user = it1,
+                        user = user,
                         modifier = modifier,
                         item = it,
                         noteViewModel = noteViewModel,
