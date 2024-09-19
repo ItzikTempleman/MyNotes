@@ -216,7 +216,6 @@ fun HomeScreen(
                         NoteListItem(
                             isInHomeScreen = true,
                             noteViewModel = noteViewModel,
-                            coroutineScope = coroutineScope,
                             note = noteItem,
                             modifier = Modifier
                                 .clickable {
@@ -242,7 +241,6 @@ fun HomeScreen(
                                 noteViewModel.setNoteList(updatedNotes)
                             },
                             isSelected = selectedNote == noteItem,
-                            isDeletedScreen = false,
                             isInLikedScreen = false
                         )
                     }

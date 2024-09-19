@@ -32,7 +32,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
-import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun NoteListItem(
@@ -41,10 +40,8 @@ fun NoteListItem(
     modifier: Modifier,
     note: Note,
     noteViewModel: NoteViewModel,
-    coroutineScope: CoroutineScope,
     updatedList: (MutableList<Note>) -> Unit,
     isSelected: Boolean,
-    isDeletedScreen: Boolean
 ) {
 
     var isOptionVisible by remember {

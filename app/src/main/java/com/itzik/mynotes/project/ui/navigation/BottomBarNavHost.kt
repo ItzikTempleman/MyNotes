@@ -73,7 +73,6 @@ fun BottomBarNavHost(
                 composable(route = Screen.LikedNotes.route) {
                     isBottomBarVisible = true
                     LikedNotesScreen(
-                        userId=userId,
                         noteViewModel=noteViewModel,
                         coroutineScope = coroutineScope,
                         bottomBarNavController = bottomBarNavController,
@@ -91,17 +90,16 @@ fun BottomBarNavHost(
                     )
                 }
 
-
                 composable(route = Screen.NoteScreen.route){
                     isBottomBarVisible = false
                     val noteId = bottomBarNavController.previousBackStackEntry?.savedStateHandle?.get<Int>("noteId")
-                    NoteScreen(
-                        noteId = noteId,
-                        bottomBarNavController = bottomBarNavController,
-                        noteViewModel = noteViewModel,
-                        coroutineScope = coroutineScope,
-                    )
-                }
+                        NoteScreen(
+                            noteId = noteId,
+                            bottomBarNavController = bottomBarNavController,
+                            noteViewModel = noteViewModel,
+                            coroutineScope = coroutineScope,
+                        )
+                    }
 
                 composable(route = Screen.DeletedNotesScreen.route) {
                     isBottomBarVisible = true
@@ -112,7 +110,6 @@ fun BottomBarNavHost(
                         noteViewModel = noteViewModel,
                         coroutineScope = coroutineScope,
                         bottomBarNavController=bottomBarNavController
-
                     )
                 }
             }

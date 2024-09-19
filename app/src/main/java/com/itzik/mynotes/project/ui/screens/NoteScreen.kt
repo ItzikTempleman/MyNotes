@@ -43,7 +43,6 @@ import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.ui.composable_elements.ColorPickerDialog
 import com.itzik.mynotes.project.ui.composable_elements.GenericIconButton
-import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -55,13 +54,14 @@ fun NoteScreen(
     noteId: Int?,
     noteViewModel: NoteViewModel,
     coroutineScope: CoroutineScope,
-    bottomBarNavController: NavHostController
+    bottomBarNavController: NavHostController,
 ) {
     val note by noteViewModel.publicNote.collectAsState()
     var text by remember { mutableStateOf(note.content) }
     var isColorPickerOpen by remember { mutableStateOf(false) }
     var fontSize by remember { mutableIntStateOf(note.fontSize) }
     var selectedColor by remember { mutableIntStateOf(note.fontColor) }
+
 
     ConstraintLayout(
         modifier = Modifier
@@ -84,9 +84,7 @@ fun NoteScreen(
                         noteViewModel.saveNote(note)
                     }
                 }
-                bottomBarNavController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.Home.route) { inclusive = true }
-                }
+                bottomBarNavController.popBackStack()
             },
             imageVector = Icons.Default.ArrowBackIosNew,
             colorNumber = 4
@@ -135,11 +133,11 @@ fun NoteScreen(
                             fontSize += 2
                             noteViewModel.updateSelectedNoteContent(
                                 text,
-                              noteId=  noteId,
-                              isPinned =   note.isPinned,
-                                isStarred= note.isStarred,
+                                noteId = noteId,
+                                isPinned = note.isPinned,
+                                isStarred = note.isStarred,
                                 fontSize = fontSize,
-                               fontColor =  note.fontColor,
+                                fontColor = note.fontColor,
                                 userId = note.userId
                             )
                         }

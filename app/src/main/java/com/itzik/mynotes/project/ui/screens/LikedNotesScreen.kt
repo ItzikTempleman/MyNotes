@@ -2,7 +2,6 @@ package com.itzik.mynotes.project.ui.screens
 
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,13 +38,11 @@ import kotlinx.coroutines.launch
 @SuppressLint("SuspiciousIndentation", "MutableCollectionMutableState")
 @Composable
 fun LikedNotesScreen(
-    userId:String,
     coroutineScope: CoroutineScope,
     bottomBarNavController: NavHostController,
     noteViewModel: NoteViewModel
 ) {
 
-    Log.d("TAG","User id from user id string: $userId ")
     LaunchedEffect(Unit) {
         noteViewModel.fetchStarredNotes()
     }
@@ -112,7 +109,6 @@ fun LikedNotesScreen(
                         NoteListItem(
                             isInHomeScreen = false,
                             noteViewModel = noteViewModel,
-                            coroutineScope = coroutineScope,
                             note = noteItem,
                             modifier = Modifier.clickable {
                                 coroutineScope.launch {
@@ -120,6 +116,9 @@ fun LikedNotesScreen(
                                     bottomBarNavController.currentBackStackEntry?.savedStateHandle?.set(
                                         key = "noteId",
                                         value = noteId
+                                    )
+                                    bottomBarNavController.currentBackStackEntry?.savedStateHandle?.set(
+                                        key = "isFromLikedNotesScreen", value = true
                                     )
                                     noteViewModel.updateSelectedNoteContent(
                                         newChar = noteItem.content,
@@ -137,7 +136,6 @@ fun LikedNotesScreen(
                                 noteViewModel.setNoteList(updatedNotes)
                             },
                             isSelected = false,
-                            isDeletedScreen = false,
                             isInLikedScreen = true
                         )
                     }

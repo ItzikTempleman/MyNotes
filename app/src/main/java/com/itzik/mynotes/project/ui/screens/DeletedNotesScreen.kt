@@ -220,13 +220,11 @@ fun DeletedNotesScreen(
                         NoteListItem(
                             isInHomeScreen = false,
                             noteViewModel = noteViewModel,
-                            coroutineScope = coroutineScope,
                             note = noteItem,
                             modifier = Modifier, updatedList = {
                                 noteList = it
                             },
                             isSelected = false,
-                            isDeletedScreen = true,
                             isInLikedScreen = false
                         )
                     }
