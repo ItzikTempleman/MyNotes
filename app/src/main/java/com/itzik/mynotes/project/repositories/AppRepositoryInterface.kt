@@ -25,3 +25,4 @@ interface AppRepositoryInterface {
     suspend fun getSortedNotes(sortType: String, userId: String): MutableList<Note>
     suspend fun deleteNote(note: Note)
 }
+    
