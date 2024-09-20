@@ -121,7 +121,7 @@ fun NoteScreen(
                                 isPinned = note.isStarred,
                                 fontSize = fontSize,
                                 fontColor = note.fontColor,
-                                userId = note.userId
+                                userId = note.userId,
                             )
                         }
                     }
@@ -150,7 +150,8 @@ fun NoteScreen(
                                 isStarred = note.isStarred,
                                 fontSize = fontSize,
                                 fontColor = note.fontColor,
-                                userId = note.userId
+                                userId = note.userId,
+
                             )
                         }
                     }
@@ -234,7 +235,8 @@ fun NoteScreen(
                         isStarred = note.isStarred,
                         fontSize = fontSize,
                         fontColor = note.fontColor,
-                        userId = note.userId
+                        userId = note.userId,
+
                     )
                 }
             },
@@ -291,7 +293,8 @@ fun NoteScreen(
                             isPinned = note.isStarred,
                             fontSize = fontSize,
                             fontColor = selectedColor,
-                            userId = note.userId
+                            userId = note.userId,
+
                         )
                     }
                     isColorPickerOpen = false

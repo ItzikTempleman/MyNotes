@@ -20,7 +20,6 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -84,7 +82,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color.White),
     ) {
-        val (title, temperature, sortOptionIcon, locationCity, newNoteBtn, viewBtn, noteLazyColumn, emptyStateMessage) = createRefs()
+        val (title, sortOptionIcon, newNoteBtn, viewTypeBtn, noteLazyColumn, emptyStateMessage) = createRefs()
 
         Icon(
             imageVector = Icons.Default.Home,
@@ -99,17 +97,6 @@ fun HomeScreen(
                 }
         )
 
-        Text(
-            modifier = Modifier
-                .padding(4.dp)
-                .constrainAs(locationCity) {
-                    start.linkTo(temperature.end)
-                    top.linkTo(parent.top, margin = 6.dp)
-                }
-                .padding(12.dp),
-            text = "",
-            fontSize = 18.sp
-        )
 
         Box(
             modifier = Modifier
@@ -163,7 +150,7 @@ fun HomeScreen(
                 coroutineScope.launch {
                     noteViewModel.updateSelectedNoteContent(
                         "", isPinned = false, isStarred = false,
-                        fontSize = 20, fontColor = Color.Black.toArgb(), userId = userId
+                        fontSize = 20, fontColor = Color.Black.toArgb(), userId = userId,
                     )
                 }
                 bottomBarNavController.navigate(Screen.NoteScreen.route)
@@ -173,7 +160,7 @@ fun HomeScreen(
 
         GenericIconButton(
             modifier = Modifier
-                .constrainAs(viewBtn) {
+                .constrainAs(viewTypeBtn) {
                     end.linkTo(sortOptionIcon.start)
                     top.linkTo(parent.top)
                 }
@@ -188,7 +175,7 @@ fun HomeScreen(
         if (!isViewGrid) {
             LazyColumn(
                 modifier = Modifier.constrainAs(noteLazyColumn) {
-                    top.linkTo(viewBtn.bottom)
+                    top.linkTo(viewTypeBtn.bottom)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 }
@@ -231,7 +218,8 @@ fun HomeScreen(
                                             isPinned = noteItem.isPinned,
                                             isStarred = noteItem.isStarred,
                                             fontSize = noteItem.fontSize,
-                                            fontColor = noteItem.fontColor
+                                            fontColor = noteItem.fontColor,
+
                                         )
                                     }
                                     bottomBarNavController.navigate(Screen.NoteScreen.route)
@@ -249,7 +237,7 @@ fun HomeScreen(
         } else {
             LazyVerticalGrid(
                 modifier = Modifier.constrainAs(noteLazyColumn) {
-                    top.linkTo(viewBtn.bottom)
+                    top.linkTo(viewTypeBtn.bottom)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 },

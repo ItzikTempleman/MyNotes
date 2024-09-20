@@ -62,10 +62,12 @@ class NoteViewModel @Inject constructor(
         isPinned: Boolean,
         isStarred: Boolean,
         fontSize: Int,
-        fontColor: Int
+        fontColor: Int,
+
     ) {
 
         privateNote.value = privateNote.value.copy(
+
             fontSize = fontSize,
             userId=userId,
             fontColor = fontColor,
@@ -109,7 +111,8 @@ class NoteViewModel @Inject constructor(
                 isPinned = note.isPinned,
                 isStarred = note.isStarred,
                 fontSize = note.fontSize,
-                fontColor = note.fontColor
+                fontColor = note.fontColor,
+
             )
         }
         fetchNotesForUser(userId)
@@ -233,5 +236,6 @@ class NoteViewModel @Inject constructor(
         privateDeletedNoteList.value= emptyList<Note>().toMutableList()
         privatePinnedNoteList.value= emptyList<Note>().toMutableList()
     }
+
 }
 

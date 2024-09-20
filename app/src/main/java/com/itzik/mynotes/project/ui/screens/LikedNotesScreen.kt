@@ -127,7 +127,8 @@ fun LikedNotesScreen(
                                         isStarred = noteItem.isStarred,
                                         fontSize = noteItem.fontSize,
                                         fontColor = noteItem.fontColor,
-                                        userId = noteItem.userId
+                                        userId = noteItem.userId,
+
                                     )
                                 }
                                 bottomBarNavController.navigate(Screen.NoteScreen.route)

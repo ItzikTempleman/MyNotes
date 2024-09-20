@@ -34,7 +34,7 @@ data class Note(
     var isPinned: Boolean = false,
     var fontColor: Int = Color.Black.toArgb(),
     var fontSize: Int = 20,
-    var userId: String
+    var userId: String,
 ) : Parcelable {
 
     companion object {
