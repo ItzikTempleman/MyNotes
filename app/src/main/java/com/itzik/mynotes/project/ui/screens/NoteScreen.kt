@@ -1,6 +1,7 @@
 package com.itzik.mynotes.project.ui.screens
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,7 +63,17 @@ fun NoteScreen(
     var isColorPickerOpen by remember { mutableStateOf(false) }
     var fontSize by remember { mutableIntStateOf(note.fontSize) }
     var selectedColor by remember { mutableIntStateOf(note.fontColor) }
+    val focusManager = LocalFocusManager.current
 
+    BackHandler {
+        if (text.isNotEmpty()) {
+            coroutineScope.launch {
+                note.content = text
+                noteViewModel.saveNote(note)
+            }
+        }
+        bottomBarNavController.popBackStack()
+    }
 
     ConstraintLayout(
         modifier = Modifier
@@ -170,6 +182,7 @@ fun NoteScreen(
                 .padding(4.dp),
             onClick = {
                 isColorPickerOpen = !isColorPickerOpen
+                focusManager.clearFocus()
             }) {
             Icon(
                 modifier = Modifier.size(30.dp),
