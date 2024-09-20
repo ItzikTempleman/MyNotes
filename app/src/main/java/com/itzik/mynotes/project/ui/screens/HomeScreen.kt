@@ -63,6 +63,7 @@ fun HomeScreen(
     val pinnedNoteList by noteViewModel.publicPinnedNoteList.collectAsState()
     val selectedNote by remember { mutableStateOf<Note?>(null) }
     var isViewGrid by remember { mutableStateOf(false) }
+    val user by userViewModel.publicUser.collectAsState()
 
     val combinedList by remember(pinnedNoteList, noteList) {
         mutableStateOf(
@@ -75,8 +76,11 @@ fun HomeScreen(
     LaunchedEffect(userId) {
         userViewModel.fetchUserById(userId)
         noteViewModel.updateUserIdForNewLogin()
+        userViewModel.fetchViewType(userId)
     }
-
+    LaunchedEffect(user) {
+        isViewGrid = user?.isViewGrid ?: false
+    }
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -167,6 +171,7 @@ fun HomeScreen(
                 .padding(8.dp),
             onClick = {
                 isViewGrid = !isViewGrid
+                userViewModel.updateViewType(isViewGrid)
             },
             imageVector = if (!isViewGrid) Icons.Default.GridView else Icons.Default.List,
             colorNumber = 4
@@ -220,7 +225,7 @@ fun HomeScreen(
                                             fontSize = noteItem.fontSize,
                                             fontColor = noteItem.fontColor,
 
-                                        )
+                                            )
                                     }
                                     bottomBarNavController.navigate(Screen.NoteScreen.route)
                                 }

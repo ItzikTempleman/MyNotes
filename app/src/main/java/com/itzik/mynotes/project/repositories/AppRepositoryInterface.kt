@@ -11,7 +11,8 @@ interface AppRepositoryInterface {
     suspend fun updateIsLoggedIn(user: User)
     suspend fun updateProfileImage(user: User)
     suspend fun getUserById(userId: String): User
-
+    suspend fun updateViewType(userId: String, isViewGrid: Boolean)
+    suspend fun fetchViewType(userId: String): Boolean
 
     suspend fun saveNote(note: Note)
     suspend fun fetchNotes(userId: String): MutableList<Note>
@@ -21,8 +22,9 @@ interface AppRepositoryInterface {
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)
     suspend fun fetchTrashedNotes(userId: String): MutableList<Note>
     suspend fun emptyTrashBin()
-    suspend fun fetchStarredNotes(userId:String): MutableList<Note>
+    suspend fun fetchStarredNotes(userId: String): MutableList<Note>
     suspend fun getSortedNotes(sortType: String, userId: String): MutableList<Note>
     suspend fun deleteNote(note: Note)
+
 }
     

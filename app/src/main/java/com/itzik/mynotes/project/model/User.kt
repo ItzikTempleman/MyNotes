@@ -19,7 +19,8 @@ data class User(
     var phoneNumber: Long,
     var profileImage: String = "",
     var gender:Gender,
-    var dateOfBirth:String
+    var dateOfBirth:String,
+    var isViewGrid: Boolean = false
 ) : Parcelable
 
 

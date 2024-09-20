@@ -67,6 +67,23 @@ class UserViewModel @Inject constructor(
         return user
     }
 
+    fun fetchViewType(userId: String) {
+        viewModelScope.launch {
+            val isViewGrid = repo.fetchViewType(userId)
+            privateUser.value = privateUser.value?.copy(isViewGrid = isViewGrid)
+        }
+    }
+
+    fun updateViewType(isViewGrid: Boolean) {
+        viewModelScope.launch {
+            privateUser.value?.let {
+                repo.updateViewType(it.userId, isViewGrid)
+                privateUser.value = it.copy(isViewGrid = isViewGrid)
+            }
+        }
+    }
+
+
     suspend fun updateIsLoggedIn(user: User) {
         try {
             repo.updateIsLoggedIn(user)
@@ -122,7 +139,7 @@ class UserViewModel @Inject constructor(
         val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         val birthDate = LocalDate.parse(date, dateFormatter)
         val currentDate = LocalDate.now()
-        val age= Period.between(birthDate, currentDate).years
+        val age = Period.between(birthDate, currentDate).years
         return age.toString()
     }
 

@@ -8,6 +8,7 @@ import androidx.room.TypeConverters
 import androidx.room.Update
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.utils.Constants
+import com.itzik.mynotes.project.utils.Constants.USER_TABLE
 import com.itzik.mynotes.project.utils.Converters
 
 @Dao
@@ -31,4 +32,11 @@ interface UserDao {
 
     @Update
     suspend fun updateProfileImage(user: User)
+
+    @Query("UPDATE $USER_TABLE SET isViewGrid = :isViewGrid WHERE userId=:userId")
+    suspend fun updateViewType(userId:String, isViewGrid:Boolean)
+
+    @Query("SELECT isViewGrid FROM $USER_TABLE WHERE userId=:userId")
+    suspend fun fetchViewType(userId:String):Boolean
+
 }
