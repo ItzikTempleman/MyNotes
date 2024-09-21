@@ -30,7 +30,6 @@ sealed class Screen(
 
 
     data object NoteScreen : Screen(route = "note_screen", title = "Note Screen")
-
     data object DeletedNotesScreen : Screen(route = "deleted_notes", title = "Deleted notes", icon = Icons.Default.DeleteForever)
 }
 

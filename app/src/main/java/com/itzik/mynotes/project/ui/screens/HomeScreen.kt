@@ -1,6 +1,5 @@
 package com.itzik.mynotes.project.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -55,7 +54,6 @@ import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
 import com.itzik.mynotes.project.ui.composable_elements.GenericIconButton
-import com.itzik.mynotes.project.ui.composable_elements.ImagesScreen
 import com.itzik.mynotes.project.ui.composable_elements.SortDropDownMenu
 import com.itzik.mynotes.project.ui.composable_elements.swipe_to_action.SwipeToOptions
 import com.itzik.mynotes.project.ui.navigation.Screen
@@ -313,9 +311,8 @@ fun HomeScreen(
             }
         }
         if(isImagePickerOpen){
-            Log.d("TAG", "isImagePickerOpen:  $isImagePickerOpen")
             ImagesScreen(
-                modifier=Modifier.fillMaxSize().padding(40.dp),
+                modifier=Modifier.fillMaxSize(),
                 userViewModel=userViewModel,
                 coroutineScope=coroutineScope,
                 onImageSelected = {

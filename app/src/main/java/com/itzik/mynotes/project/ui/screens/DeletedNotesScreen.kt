@@ -150,6 +150,18 @@ fun DeletedNotesScreen(
                 }
             }
 
+            if (deletedNotes.isEmpty()) {
+                EmptyStateMessage(
+                    screenDescription = "Deleted",
+                    modifier = Modifier.constrainAs(emptyStateMessage) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                        top.linkTo(parent.top)
+                    }
+                )
+            }
+
             if (isDeleteAllDialogOpen) {
                 Button(
                     elevation = ButtonDefaults.buttonElevation(30.dp),
@@ -178,17 +190,6 @@ fun DeletedNotesScreen(
                 }
             }
 
-            if (deletedNotes.isEmpty()) {
-                EmptyStateMessage(
-                    screenDescription = "Deleted",
-                    modifier = Modifier.constrainAs(emptyStateMessage) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                        top.linkTo(parent.top)
-                    }
-                )
-            }
 
             LazyColumn(
                 modifier = Modifier
