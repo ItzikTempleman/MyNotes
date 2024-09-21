@@ -50,6 +50,6 @@ class AppRepository @Inject constructor(
     }
     override suspend fun deleteNote(note: Note) = noteDao.deleteNote(note)
 
-    override suspend fun getWallpaperListByQuery(query: String, apiKey: String): Response<WallpaperResponse> = wallpaperService.getWallpaperListBySearchQuery(query,apiKey)
+    override suspend fun getWallpaperListByQuery(query: String): Response<WallpaperResponse> = wallpaperService.getWallpaperListBySearchQuery(searchQuery = query)
 
 }

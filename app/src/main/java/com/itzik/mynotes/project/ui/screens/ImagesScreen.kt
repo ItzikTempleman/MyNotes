@@ -1,9 +1,10 @@
 package com.itzik.mynotes.project.ui.screens
 
 import android.annotation.SuppressLint
-import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,12 +27,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.WallpaperResponse
 import com.itzik.mynotes.project.viewmodels.UserViewModel
@@ -120,13 +122,35 @@ fun ImagesScreen(
                 },
             columns = GridCells.Fixed(3),
         ) {
+
             items(imagesList.hits) {
-                Log.d("TAG", "$it")
-                Image(
-                    rememberAsyncImagePainter(model = it.largeImageURL),
-                    contentDescription = null
+                ImageItem(
+                    it.largeImageURL,
+                    modifier=Modifier.clickable {
+                        onImageSelected(
+                            it.largeImageURL
+                        )
+                    }
                 )
             }
         }
+    }
+}
+
+@Composable
+fun ImageItem(imageUrl: String, modifier: Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(4.dp)
+    ) {
+        AsyncImage(
+            model = imageUrl,
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
+        )
     }
 }

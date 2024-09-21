@@ -8,7 +8,7 @@ object Constants {
     const val USER_TABLE = "userTable"
     const val NOTE_TABLE = "noteTable"
 
-    const val BASE_URL = "https://pixabay.com/api/"
+    const val BASE_URL = "https://pixabay.com/"
     const val API_KEY_VALUE = "46102404-ad517a06d05ad3776aea392e3"
 
 }

@@ -7,7 +7,7 @@ data class WallpaperResponse(
 
 data class Hits(
     val id:Int,
-    val tags:List<String>,
+    val tags:String,
     val previewURL: String,
     val webFormatURL:String,
     val largeImageURL:String,

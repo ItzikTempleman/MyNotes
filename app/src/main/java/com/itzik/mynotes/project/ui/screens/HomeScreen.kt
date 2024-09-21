@@ -1,6 +1,7 @@
 package com.itzik.mynotes.project.ui.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -50,6 +51,7 @@ import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
@@ -85,6 +87,11 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
+    var imageSelected by remember {
+        mutableStateOf("")
+    }
+
+
     val combinedList by remember(pinnedNoteList, noteList) {
         mutableStateOf(
             (pinnedNoteList + noteList.filter { note ->
@@ -92,6 +99,7 @@ fun HomeScreen(
             }).distinctBy { it.noteId }
         )
     }
+
 
     LaunchedEffect(userId) {
         userViewModel.fetchUserById(userId)
@@ -107,6 +115,12 @@ fun HomeScreen(
             .background(Color.White),
     ) {
         val (titleIcon, selectImageWallpaperIcon, topRow, noteLazyColumn, emptyStateMessage) = createRefs()
+
+        Image(
+            painter = rememberAsyncImagePainter(imageSelected),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize()
+        )
 
         Icon(
             imageVector = Icons.Default.Home,
@@ -316,7 +330,7 @@ fun HomeScreen(
                 userViewModel=userViewModel,
                 coroutineScope=coroutineScope,
                 onImageSelected = {
-
+                    imageSelected=it
                 },
                 onScreenExit = {
                     isImagePickerOpen=false

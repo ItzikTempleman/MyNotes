@@ -7,7 +7,6 @@ import com.itzik.mynotes.project.model.Gender
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.model.WallpaperResponse
 import com.itzik.mynotes.project.repositories.AppRepositoryInterface
-import com.itzik.mynotes.project.utils.Constants.API_KEY_VALUE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -153,7 +152,6 @@ class UserViewModel @Inject constructor(
                 val updatedUser = user.copy(profileImage = imageUri)
                 repo.updateProfileImage(updatedUser)
                 privateUser.value = updatedUser
-                Log.d("UserViewModel", "Updating profile image: $imageUri")
                 privateLoggedInUsersList.value = privateLoggedInUsersList.value.map {
                     if (it.userId == user.userId) updatedUser else it
                 }
@@ -163,7 +161,9 @@ class UserViewModel @Inject constructor(
 
     fun getWallpaperList(searchQuery: String): Flow<WallpaperResponse> {
         val imagesFlow = flow {
-            val response = repo.getWallpaperListByQuery(searchQuery, API_KEY_VALUE)
+            val response = repo.getWallpaperListByQuery(searchQuery)
+
+
             if (response.isSuccessful) {
                 val responseBody = response.body()
                 if (responseBody != null) {
