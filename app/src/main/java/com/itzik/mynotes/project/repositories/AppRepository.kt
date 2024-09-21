@@ -28,6 +28,8 @@ class AppRepository @Inject constructor(
     override suspend fun getUserFromEmailAndPassword(email: String, password: String) = userDao.getUserFromEmailAndPassword(email, password)
     override suspend fun updateIsLoggedIn(user: User) = userDao.updateIsLoggedIn(user)
     override suspend fun updateProfileImage(user: User) = userDao.updateProfileImage(user)
+    override suspend fun updateWallpaper(user: User) = userDao.updateWallpaper(user)
+
     override suspend fun getUserById(userId: String): User = userDao.getUserById(userId)
     override suspend fun updateViewType(userId: String, isViewGrid: Boolean) = userDao.updateViewType(userId, isViewGrid)
     override suspend fun fetchViewType(userId: String): Boolean = userDao.fetchViewType(userId)

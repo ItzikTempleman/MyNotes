@@ -128,7 +128,7 @@ fun ImagesScreen(
                     it.largeImageURL,
                     modifier=Modifier.clickable {
                         onImageSelected(
-                            it.largeImageURL
+                            it.webFormatURL
                         )
                     }
                 )
@@ -142,7 +142,6 @@ fun ImageItem(imageUrl: String, modifier: Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(4.dp)
     ) {
         AsyncImage(
             model = imageUrl,

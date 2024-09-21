@@ -33,6 +33,9 @@ interface UserDao {
     @Update
     suspend fun updateProfileImage(user: User)
 
+    @Update
+    suspend fun updateWallpaper(user: User)
+
     @Query("UPDATE $USER_TABLE SET isViewGrid = :isViewGrid WHERE userId=:userId")
     suspend fun updateViewType(userId:String, isViewGrid:Boolean)
 

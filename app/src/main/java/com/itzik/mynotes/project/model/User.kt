@@ -20,7 +20,8 @@ data class User(
     var profileImage: String = "",
     var gender:Gender,
     var dateOfBirth:String,
-    var isViewGrid: Boolean = false
+    var isViewGrid: Boolean = false,
+    val selectedWallpaper:String = ""
 ) : Parcelable
 
 

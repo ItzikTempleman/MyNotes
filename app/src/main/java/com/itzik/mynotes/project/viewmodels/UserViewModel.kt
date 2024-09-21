@@ -112,9 +112,10 @@ class UserViewModel @Inject constructor(
             phoneNumber = phoneNumber,
             profileImage = profileImage,
             gender = gender,
-            dateOfBirth = dateOfBirth
+            dateOfBirth = dateOfBirth,
         )
     }
+
 
 
     fun validateName(name: String) = name.length > 4
@@ -151,6 +152,21 @@ class UserViewModel @Inject constructor(
             if (user != null) {
                 val updatedUser = user.copy(profileImage = imageUri)
                 repo.updateProfileImage(updatedUser)
+                privateUser.value = updatedUser
+                privateLoggedInUsersList.value = privateLoggedInUsersList.value.map {
+                    if (it.userId == user.userId) updatedUser else it
+                }
+            }
+        }
+    }
+
+
+    suspend fun updateWallpaper(imageUri: String) {
+        viewModelScope.launch {
+            val user = privateLoggedInUsersList.value.firstOrNull()
+            if (user != null) {
+                val updatedUser = user.copy( selectedWallpaper= imageUri)
+                repo.updateWallpaper(updatedUser)
                 privateUser.value = updatedUser
                 privateLoggedInUsersList.value = privateLoggedInUsersList.value.map {
                     if (it.userId == user.userId) updatedUser else it

@@ -44,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -105,6 +106,7 @@ fun HomeScreen(
         userViewModel.fetchUserById(userId)
         noteViewModel.updateUserIdForNewLogin()
         userViewModel.fetchViewType(userId)
+
     }
     LaunchedEffect(user) {
         isViewGrid = user?.isViewGrid ?: false
@@ -117,9 +119,12 @@ fun HomeScreen(
         val (titleIcon, selectImageWallpaperIcon, topRow, noteLazyColumn, emptyStateMessage) = createRefs()
 
         Image(
-            painter = rememberAsyncImagePainter(imageSelected),
+            painter = if(imageSelected!="") rememberAsyncImagePainter(imageSelected) else rememberAsyncImagePainter(
+                user?.selectedWallpaper
+            ),//TODO BUG APP CRASHES HERE WHEN UPDATING IMAGE
             contentDescription = null,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.None
         )
 
         Icon(
@@ -153,7 +158,7 @@ fun HomeScreen(
                 .padding(12.dp),
 
             onClick = {
-                isImagePickerOpen=!isImagePickerOpen
+                isImagePickerOpen = !isImagePickerOpen
             }
         ) {
             Icon(
@@ -324,16 +329,19 @@ fun HomeScreen(
                 }
             }
         }
-        if(isImagePickerOpen){
+        if (isImagePickerOpen) {
             ImagesScreen(
-                modifier=Modifier.fillMaxSize(),
-                userViewModel=userViewModel,
-                coroutineScope=coroutineScope,
+                modifier = Modifier.fillMaxSize(),
+                userViewModel = userViewModel,
+                coroutineScope = coroutineScope,
                 onImageSelected = {
-                    imageSelected=it
+                    coroutineScope.launch {
+                        imageSelected = it
+                        userViewModel.updateWallpaper(imageSelected)
+                    }
                 },
                 onScreenExit = {
-                    isImagePickerOpen=false
+                    isImagePickerOpen = false
                 }
             )
         }

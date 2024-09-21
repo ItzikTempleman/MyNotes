@@ -43,7 +43,7 @@ fun NoteListItemForGrid(
     modifier: Modifier,
     cornerRadius: Dp = 10.dp,
     cutCornerSize: Dp = 30.dp,
-    noteColor: Int = colorResource(id = R.color.gray).toArgb(),
+    noteColor: Int = colorResource(id = R.color.intermediate_gray_4).toArgb(),
     noteViewModel: NoteViewModel,
     isSelected: Boolean,
 ) {
