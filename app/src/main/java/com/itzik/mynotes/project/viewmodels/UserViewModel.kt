@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itzik.mynotes.project.model.Gender
 import com.itzik.mynotes.project.model.User
+import com.itzik.mynotes.project.model.WallpaperResponse
 import com.itzik.mynotes.project.repositories.AppRepositoryInterface
+import com.itzik.mynotes.project.utils.Constants.API_KEY_VALUE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -157,6 +159,22 @@ class UserViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun getWallpaperList(searchQuery: String): Flow<WallpaperResponse> {
+        val imagesFlow = flow {
+            val response = repo.getWallpaperListByQuery(searchQuery, API_KEY_VALUE)
+            if (response.isSuccessful) {
+                val responseBody = response.body()
+                if (responseBody != null) {
+                    emit(responseBody)
+                } else Log.d("TAG", "first failure message: " + response.message())
+                return@flow
+            } else Log.d("TAG", "second failure message: " + response.message())
+            return@flow
+        }
+        return imagesFlow
+
     }
 }
 

@@ -4,6 +4,9 @@ import com.itzik.mynotes.project.data.NoteDao
 import com.itzik.mynotes.project.data.UserDao
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.model.User
+import com.itzik.mynotes.project.model.WallpaperResponse
+import com.itzik.mynotes.project.requests.WallpaperService
+import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -14,7 +17,10 @@ class AppRepository @Inject constructor(
     private val userDao: UserDao,
     @Named("note_dao")
     @Singleton
-    private val noteDao: NoteDao
+    private val noteDao: NoteDao,
+    @Named("wallpaper_service")
+    @Singleton
+    private val wallpaperService: WallpaperService,
 ) : AppRepositoryInterface {
 
     override suspend fun insertUser(user: User) = userDao.insertUser(user)
@@ -44,5 +50,6 @@ class AppRepository @Inject constructor(
     }
     override suspend fun deleteNote(note: Note) = noteDao.deleteNote(note)
 
+    override suspend fun getWallpaperListByQuery(query: String, apiKey: String): Response<WallpaperResponse> = wallpaperService.getWallpaperListBySearchQuery(query,apiKey)
 
 }

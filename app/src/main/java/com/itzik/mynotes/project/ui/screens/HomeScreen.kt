@@ -1,25 +1,38 @@
 package com.itzik.mynotes.project.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -27,17 +40,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
+import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Note
 import com.itzik.mynotes.project.ui.composable_elements.EmptyStateMessage
 import com.itzik.mynotes.project.ui.composable_elements.GenericIconButton
+import com.itzik.mynotes.project.ui.composable_elements.ImagesScreen
 import com.itzik.mynotes.project.ui.composable_elements.SortDropDownMenu
 import com.itzik.mynotes.project.ui.composable_elements.swipe_to_action.SwipeToOptions
 import com.itzik.mynotes.project.ui.navigation.Screen
@@ -47,6 +65,7 @@ import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -64,6 +83,9 @@ fun HomeScreen(
     val selectedNote by remember { mutableStateOf<Note?>(null) }
     var isViewGrid by remember { mutableStateOf(false) }
     val user by userViewModel.publicUser.collectAsState()
+    var isImagePickerOpen by remember {
+        mutableStateOf(false)
+    }
 
     val combinedList by remember(pinnedNoteList, noteList) {
         mutableStateOf(
@@ -86,7 +108,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color.White),
     ) {
-        val (title, sortOptionIcon, newNoteBtn, viewTypeBtn, noteLazyColumn, emptyStateMessage) = createRefs()
+        val (titleIcon, selectImageWallpaperIcon, topRow, noteLazyColumn, emptyStateMessage) = createRefs()
 
         Icon(
             imageVector = Icons.Default.Home,
@@ -95,92 +117,124 @@ fun HomeScreen(
             modifier = Modifier
                 .padding(8.dp)
                 .size(32.dp)
-                .constrainAs(title) {
+                .constrainAs(titleIcon) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 }
         )
 
 
-        Box(
+        Button(
+            shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.darker_blue)
+            ),
+            contentPadding = PaddingValues(
+                horizontal = 4.dp
+            ),
+
             modifier = Modifier
-                .constrainAs(sortOptionIcon) {
+                .constrainAs(selectImageWallpaperIcon) {
                     top.linkTo(parent.top)
-                    end.linkTo(newNoteBtn.start)
+                    start.linkTo(titleIcon.end)
                 }
-                .padding(8.dp)
-        ) {
-            GenericIconButton(
-                onClick = {
-                    isExpanded = !isExpanded
-                },
-                colorNumber = 4,
-                imageVector = Icons.AutoMirrored.Filled.Sort
-            )
+                .height(50.dp)
+                .padding(12.dp),
 
-            SortDropDownMenu(
-                isExpanded = isExpanded,
-                modifier = Modifier.wrapContentSize(),
-                coroutineScope = coroutineScope,
-                noteViewModel = noteViewModel,
-                onDismissRequest = {
-                    isExpanded = false
-                },
-                updatedSortedList = {
-                    sortType = it
-                }
-            )
-        }
-
-        if (noteList.isEmpty()) {
-            EmptyStateMessage(modifier = Modifier
-                .zIndex(4f)
-                .constrainAs(emptyStateMessage) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                    top.linkTo(parent.top)
-                })
-        }
-
-        GenericIconButton(
-            modifier = Modifier
-                .padding(8.dp)
-                .constrainAs(newNoteBtn) {
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                },
             onClick = {
-                coroutineScope.launch {
-                    noteViewModel.updateSelectedNoteContent(
-                        "", isPinned = false, isStarred = false,
-                        fontSize = 20, fontColor = Color.Black.toArgb(), userId = userId,
+                isImagePickerOpen=!isImagePickerOpen
+            }
+        ) {
+            Icon(
+                tint = Color.White,
+                imageVector = Icons.Default.Photo,
+                contentDescription = null
+            )
+            Text(
+                color = Color.White,
+                fontSize = 8.sp,
+                text = "Select wallpaper"
+            )
+        }
+
+
+
+        Card(
+            modifier = Modifier
+                .constrainAs(topRow) {
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
+                }
+                .padding(8.dp)
+                .wrapContentWidth()
+                .height(50.dp),
+            colors = CardDefaults.cardColors(colorResource(R.color.very_light_gray))
+        ) {
+            Row(
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Box(
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    GenericIconButton(
+                        onClick = {
+                            isExpanded = !isExpanded
+                        },
+                        colorNumber = 4,
+                        imageVector = Icons.AutoMirrored.Filled.Sort
+                    )
+                    SortDropDownMenu(
+                        isExpanded = isExpanded,
+                        modifier = Modifier.wrapContentSize(),
+                        coroutineScope = coroutineScope,
+                        noteViewModel = noteViewModel,
+                        onDismissRequest = {
+                            isExpanded = false
+                        },
+                        updatedSortedList = {
+                            sortType = it
+                        }
                     )
                 }
-                bottomBarNavController.navigate(Screen.NoteScreen.route)
-            }, imageVector = Icons.Outlined.Add,
-            colorNumber = 4
-        )
 
-        GenericIconButton(
-            modifier = Modifier
-                .constrainAs(viewTypeBtn) {
-                    end.linkTo(sortOptionIcon.start)
-                    top.linkTo(parent.top)
-                }
-                .padding(8.dp),
-            onClick = {
-                isViewGrid = !isViewGrid
-                userViewModel.updateViewType(isViewGrid)
-            },
-            imageVector = if (!isViewGrid) Icons.Default.GridView else Icons.Default.List,
-            colorNumber = 4
-        )
+
+                GenericIconButton(
+                    modifier = Modifier
+                        .padding(8.dp),
+                    onClick = {
+                        isViewGrid = !isViewGrid
+                        userViewModel.updateViewType(isViewGrid)
+                    },
+                    imageVector = if (!isViewGrid) Icons.Default.GridView else Icons.Default.List,
+                    colorNumber = 4
+                )
+
+
+
+                GenericIconButton(
+                    modifier = Modifier
+                        .padding(8.dp),
+                    onClick = {
+                        coroutineScope.launch {
+                            noteViewModel.updateSelectedNoteContent(
+                                "", isPinned = false, isStarred = false,
+                                fontSize = 20, fontColor = Color.Black.toArgb(), userId = userId,
+                            )
+                        }
+                        bottomBarNavController.navigate(Screen.NoteScreen.route)
+                    }, imageVector = Icons.Outlined.Add,
+                    colorNumber = 4
+                )
+            }
+        }
+
 
         if (!isViewGrid) {
             LazyColumn(
                 modifier = Modifier.constrainAs(noteLazyColumn) {
-                    top.linkTo(viewTypeBtn.bottom)
+                    top.linkTo(topRow.bottom)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 }
@@ -242,7 +296,7 @@ fun HomeScreen(
         } else {
             LazyVerticalGrid(
                 modifier = Modifier.constrainAs(noteLazyColumn) {
-                    top.linkTo(viewTypeBtn.bottom)
+                    top.linkTo(topRow.bottom)
                     bottom.linkTo(parent.bottom)
                     height = Dimension.fillToConstraints
                 },
@@ -257,6 +311,32 @@ fun HomeScreen(
                     )
                 }
             }
+        }
+        if(isImagePickerOpen){
+            Log.d("TAG", "isImagePickerOpen:  $isImagePickerOpen")
+            ImagesScreen(
+                modifier=Modifier.fillMaxSize().padding(40.dp),
+                userViewModel=userViewModel,
+                coroutineScope=coroutineScope,
+                onImageSelected = {
+
+                },
+                onScreenExit = {
+                    isImagePickerOpen=false
+                }
+            )
+        }
+
+
+        if (combinedList.isEmpty()) {
+            EmptyStateMessage(modifier = Modifier
+                .zIndex(4f)
+                .constrainAs(emptyStateMessage) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    top.linkTo(topRow.bottom)
+                })
         }
     }
 }

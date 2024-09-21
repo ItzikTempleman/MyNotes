@@ -39,4 +39,5 @@
     <string name="Y">Y</string>
     <string name="enter_birthdate">Date of birth</string>
     <string name="trash_bin">Trash bin</string>
+    <string name="search_images">Search images</string>
 </resources>
