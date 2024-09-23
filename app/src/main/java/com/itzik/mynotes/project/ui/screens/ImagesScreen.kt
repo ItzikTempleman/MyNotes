@@ -62,7 +62,6 @@ fun ImagesScreen(
     ) {
         val (searchBar, exitIcon, imageGallery) = createRefs()
 
-
         TextField(
             modifier = Modifier
                 .constrainAs(searchBar) {
@@ -112,8 +111,6 @@ fun ImagesScreen(
             Icon(imageVector = Icons.Default.Cancel, contentDescription = null)
         }
 
-
-
         LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxWidth()
@@ -122,7 +119,6 @@ fun ImagesScreen(
                 },
             columns = GridCells.Fixed(3),
         ) {
-
             items(imagesList.hits) {
                 ImageItem(
                     it.largeImageURL,

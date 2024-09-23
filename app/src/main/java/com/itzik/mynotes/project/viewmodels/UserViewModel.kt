@@ -162,16 +162,18 @@ class UserViewModel @Inject constructor(
 
 
     suspend fun updateWallpaper(imageUri: String) {
-        viewModelScope.launch {
+        if (imageUri.isNotEmpty()) {
             val user = privateLoggedInUsersList.value.firstOrNull()
-            if (user != null) {
-                val updatedUser = user.copy( selectedWallpaper= imageUri)
+            user?.let {
+                val updatedUser = it.copy(selectedWallpaper = imageUri)
                 repo.updateWallpaper(updatedUser)
                 privateUser.value = updatedUser
-                privateLoggedInUsersList.value = privateLoggedInUsersList.value.map {
-                    if (it.userId == user.userId) updatedUser else it
+                privateLoggedInUsersList.value = privateLoggedInUsersList.value.map { currentUser ->
+                    if (currentUser.userId == it.userId) updatedUser else currentUser
                 }
             }
+        } else {
+            Log.e("TAG", "Attempted to update wallpaper with an empty URI.")
         }
     }
 

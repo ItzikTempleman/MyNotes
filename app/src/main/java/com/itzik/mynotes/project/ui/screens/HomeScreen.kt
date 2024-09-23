@@ -1,5 +1,6 @@
 package com.itzik.mynotes.project.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -46,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -111,6 +113,13 @@ fun HomeScreen(
     LaunchedEffect(user) {
         isViewGrid = user?.isViewGrid ?: false
     }
+
+    LaunchedEffect(user?.selectedWallpaper) {
+        Log.d("TAG", "Selected wallpaper URL: ${user?.selectedWallpaper}")
+    }
+
+
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -118,13 +127,16 @@ fun HomeScreen(
     ) {
         val (titleIcon, selectImageWallpaperIcon, topRow, noteLazyColumn, emptyStateMessage) = createRefs()
 
+
         Image(
-            painter = if(imageSelected!="") rememberAsyncImagePainter(imageSelected) else rememberAsyncImagePainter(
-                user?.selectedWallpaper
-            ),//TODO BUG APP CRASHES HERE WHEN UPDATING IMAGE
+            painter = rememberAsyncImagePainter(
+                model = user?.selectedWallpaper,
+                error = painterResource(R.drawable.ic_launcher_foreground),
+                placeholder = painterResource(R.drawable.ic_launcher_background)
+            ),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.None
+            contentScale = ContentScale.Crop
         )
 
         Icon(
@@ -337,7 +349,9 @@ fun HomeScreen(
                 onImageSelected = {
                     coroutineScope.launch {
                         imageSelected = it
-                        userViewModel.updateWallpaper(imageSelected)
+                        if (imageSelected.isNotEmpty()) {
+                            userViewModel.updateWallpaper(imageSelected)
+                        }
                     }
                 },
                 onScreenExit = {

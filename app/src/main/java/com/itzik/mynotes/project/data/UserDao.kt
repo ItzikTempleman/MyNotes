@@ -7,7 +7,6 @@ import androidx.room.Query
 import androidx.room.TypeConverters
 import androidx.room.Update
 import com.itzik.mynotes.project.model.User
-import com.itzik.mynotes.project.utils.Constants
 import com.itzik.mynotes.project.utils.Constants.USER_TABLE
 import com.itzik.mynotes.project.utils.Converters
 
@@ -18,13 +17,13 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: User)
 
-    @Query("SELECT*FROM ${Constants.USER_TABLE} WHERE isLoggedIn=1")
+    @Query("SELECT*FROM $USER_TABLE WHERE isLoggedIn=1")
     suspend fun fetchLoggedInUsers(): MutableList<User>
 
-    @Query("SELECT*FROM ${Constants.USER_TABLE} WHERE email = :email AND password = :password")
+    @Query("SELECT*FROM $USER_TABLE WHERE email = :email AND password = :password")
     suspend fun getUserFromEmailAndPassword(email: String, password: String): User
 
-    @Query("SELECT * FROM ${Constants.USER_TABLE} WHERE userId = :userId")
+    @Query("SELECT * FROM $USER_TABLE WHERE userId = :userId")
     suspend fun getUserById(userId: String): User
 
     @Update
