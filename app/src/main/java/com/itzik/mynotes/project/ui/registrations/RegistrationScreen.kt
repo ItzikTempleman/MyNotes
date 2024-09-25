@@ -399,7 +399,8 @@ fun RegistrationScreen(
                             phoneNumber = createPhoneNumber.toLong(),
                             profileImage = "",
                             gender = selectedGender,
-                            dateOfBirth = dateSelected
+                            dateOfBirth = dateSelected,
+                            selectedWallpaper=""
                         )
                         coroutineScope.launch {
                             try {

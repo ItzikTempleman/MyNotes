@@ -47,7 +47,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -90,6 +89,7 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
+
     var imageSelected by remember {
         mutableStateOf("")
     }
@@ -110,12 +110,10 @@ fun HomeScreen(
         userViewModel.fetchViewType(userId)
 
     }
+
     LaunchedEffect(user) {
         isViewGrid = user?.isViewGrid ?: false
-    }
-
-    LaunchedEffect(user?.selectedWallpaper) {
-        Log.d("TAG", "Selected wallpaper URL: ${user?.selectedWallpaper}")
+        imageSelected = user?.selectedWallpaper ?: ""
     }
 
 
@@ -130,9 +128,7 @@ fun HomeScreen(
 
         Image(
             painter = rememberAsyncImagePainter(
-                model = user?.selectedWallpaper,
-                error = painterResource(R.drawable.ic_launcher_foreground),
-                placeholder = painterResource(R.drawable.ic_launcher_background)
+                user?.selectedWallpaper,
             ),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
@@ -346,11 +342,14 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxSize(),
                 userViewModel = userViewModel,
                 coroutineScope = coroutineScope,
-                onImageSelected = {
+                onImageSelected = { selectedImageUri ->
                     coroutineScope.launch {
-                        imageSelected = it
-                        if (imageSelected.isNotEmpty()) {
-                            userViewModel.updateWallpaper(imageSelected)
+                        Log.d("TAG", "imageItem.largeImageURL: $selectedImageUri")
+                        if (selectedImageUri.isNotEmpty()) {
+                            userViewModel.updateWallpaper(selectedImageUri)
+                            isImagePickerOpen = false
+                        } else {
+                            Log.d("TAG", "Image URI is empty")
                         }
                     }
                 },
@@ -360,6 +359,7 @@ fun HomeScreen(
             )
         }
 
+        Log.d("TAG", "selectedWallpaper:  ${user?.selectedWallpaper}")
 
         if (combinedList.isEmpty()) {
             EmptyStateMessage(modifier = Modifier

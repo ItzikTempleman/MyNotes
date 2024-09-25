@@ -101,8 +101,8 @@ class UserViewModel @Inject constructor(
         phoneNumber: Long,
         profileImage: String,
         gender: Gender,
-        dateOfBirth: String
-
+        dateOfBirth: String,
+        selectedWallpaper: String
     ): User {
         return User(
             userName = name,
@@ -113,9 +113,9 @@ class UserViewModel @Inject constructor(
             profileImage = profileImage,
             gender = gender,
             dateOfBirth = dateOfBirth,
+            selectedWallpaper = selectedWallpaper
         )
     }
-
 
 
     fun validateName(name: String) = name.length > 4
@@ -163,17 +163,13 @@ class UserViewModel @Inject constructor(
 
     suspend fun updateWallpaper(imageUri: String) {
         if (imageUri.isNotEmpty()) {
-            val user = privateLoggedInUsersList.value.firstOrNull()
-            user?.let {
-                val updatedUser = it.copy(selectedWallpaper = imageUri)
+            val updatedUser = privateUser.value?.copy(selectedWallpaper = imageUri)
+            if (updatedUser != null) {
                 repo.updateWallpaper(updatedUser)
                 privateUser.value = updatedUser
-                privateLoggedInUsersList.value = privateLoggedInUsersList.value.map { currentUser ->
-                    if (currentUser.userId == it.userId) updatedUser else currentUser
-                }
             }
         } else {
-            Log.e("TAG", "Attempted to update wallpaper with an empty URI.")
+            Log.d("TAG", "Empty String in updateWallpaper")
         }
     }
 

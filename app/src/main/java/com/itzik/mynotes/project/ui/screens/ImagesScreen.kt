@@ -49,7 +49,6 @@ fun ImagesScreen(
     coroutineScope: CoroutineScope,
     onScreenExit: (isScreenClosed: Boolean) -> Unit
 ) {
-
     var imagesList by remember {
         mutableStateOf(WallpaperResponse(emptyList()))
     }
@@ -119,13 +118,11 @@ fun ImagesScreen(
                 },
             columns = GridCells.Fixed(3),
         ) {
-            items(imagesList.hits) {
+            items(imagesList.hits) {imageItem ->
                 ImageItem(
-                    it.largeImageURL,
+                    imageItem.largeImageURL,
                     modifier=Modifier.clickable {
-                        onImageSelected(
-                            it.webFormatURL
-                        )
+                       onImageSelected(imageItem.largeImageURL)
                     }
                 )
             }
