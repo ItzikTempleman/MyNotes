@@ -344,12 +344,11 @@ fun HomeScreen(
                 coroutineScope = coroutineScope,
                 onImageSelected = { selectedImageUri ->
                     coroutineScope.launch {
-                        Log.d("TAG", "imageItem.largeImageURL: $selectedImageUri")
                         if (selectedImageUri.isNotEmpty()) {
                             userViewModel.updateWallpaper(selectedImageUri)
                             isImagePickerOpen = false
                         } else {
-                            Log.d("TAG", "Image URI is empty")
+                           return@launch
                         }
                     }
                 },
