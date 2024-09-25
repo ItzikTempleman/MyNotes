@@ -8,6 +8,7 @@
 
     <color name="white">#FFFFFFFF</color>
     <color name="very_light_gray">#E3E3E3</color>
+    <color name="almost_transparent">#43E3E3E3</color>
     <color name="transparent">#00B0ACAC</color>
 
 

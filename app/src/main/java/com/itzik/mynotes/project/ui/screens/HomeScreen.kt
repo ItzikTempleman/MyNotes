@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -20,7 +19,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.GridView
@@ -28,12 +26,10 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -48,7 +44,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -149,13 +144,7 @@ fun HomeScreen(
         )
 
 
-        Button(
-            shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(R.color.darker_blue)
-            ),
-            contentPadding = PaddingValues(
-                horizontal = 4.dp
-            ),
+        IconButton(
 
             modifier = Modifier
                 .constrainAs(selectImageWallpaperIcon) {
@@ -170,15 +159,10 @@ fun HomeScreen(
             }
         ) {
             Icon(
-                tint = Color.White,
                 imageVector = Icons.Default.Photo,
                 contentDescription = null
             )
-            Text(
-                color = Color.White,
-                fontSize = 8.sp,
-                text = "Select wallpaper"
-            )
+
         }
 
 
@@ -258,11 +242,12 @@ fun HomeScreen(
 
         if (!isViewGrid) {
             LazyColumn(
-                modifier = Modifier.constrainAs(noteLazyColumn) {
-                    top.linkTo(topRow.bottom)
-                    bottom.linkTo(parent.bottom)
-                    height = Dimension.fillToConstraints
-                }
+                modifier = Modifier
+                    .constrainAs(noteLazyColumn) {
+                        top.linkTo(topRow.bottom)
+                        bottom.linkTo(parent.bottom)
+                        height = Dimension.fillToConstraints
+                    }
             ) {
                 items(combinedList, key = { it.noteId }) { noteItem ->
 
@@ -282,40 +267,40 @@ fun HomeScreen(
                             coroutineScope.launch {
                                 noteViewModel.setTrash(noteItem)
                             }
-                        }
-                    ) {
-                        NoteListItem(
-                            isInHomeScreen = true,
-                            noteViewModel = noteViewModel,
-                            note = noteItem,
-                            modifier = Modifier
-                                .clickable {
-                                    coroutineScope.launch {
-                                        val noteId = noteItem.noteId
-                                        bottomBarNavController.currentBackStackEntry?.savedStateHandle?.set(
-                                            key = "noteId", value = noteId
-                                        )
-                                        noteViewModel.updateSelectedNoteContent(
-                                            newChar = noteItem.content,
-                                            noteId = noteItem.noteId,
-                                            userId = noteItem.userId,
-                                            isPinned = noteItem.isPinned,
-                                            isStarred = noteItem.isStarred,
-                                            fontSize = noteItem.fontSize,
-                                            fontColor = noteItem.fontColor,
-
+                        }, content = {
+                            NoteListItem(
+                                isInHomeScreen = true,
+                                noteViewModel = noteViewModel,
+                                note = noteItem,
+                                modifier = Modifier             .background(colorResource(R.color.almost_transparent))
+                                    .padding(horizontal = 8.dp)
+                                    .clickable {
+                                        coroutineScope.launch {
+                                            val noteId = noteItem.noteId
+                                            bottomBarNavController.currentBackStackEntry?.savedStateHandle?.set(
+                                                key = "noteId", value = noteId
                                             )
+                                            noteViewModel.updateSelectedNoteContent(
+                                                newChar = noteItem.content,
+                                                noteId = noteItem.noteId,
+                                                userId = noteItem.userId,
+                                                isPinned = noteItem.isPinned,
+                                                isStarred = noteItem.isStarred,
+                                                fontSize = noteItem.fontSize,
+                                                fontColor = noteItem.fontColor,
+
+                                                )
+                                        }
+                                        bottomBarNavController.navigate(Screen.NoteScreen.route)
                                     }
-                                    bottomBarNavController.navigate(Screen.NoteScreen.route)
-                                }
-                                .animateItemPlacement(),
-                            updatedList = { updatedNotes ->
-                                noteViewModel.setNoteList(updatedNotes)
-                            },
-                            isSelected = selectedNote == noteItem,
-                            isInLikedScreen = false
-                        )
-                    }
+                                    .animateItemPlacement(),
+                                updatedList = { updatedNotes ->
+                                    noteViewModel.setNoteList(updatedNotes)
+                                },
+                                isSelected = selectedNote == noteItem,
+                                isInLikedScreen = false
+                            )
+                        })
                 }
             }
         } else {
@@ -348,7 +333,7 @@ fun HomeScreen(
                             userViewModel.updateWallpaper(selectedImageUri)
                             isImagePickerOpen = false
                         } else {
-                           return@launch
+                            return@launch
                         }
                     }
                 },

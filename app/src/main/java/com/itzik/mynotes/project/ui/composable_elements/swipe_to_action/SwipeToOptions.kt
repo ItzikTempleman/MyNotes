@@ -44,9 +44,9 @@ import kotlin.math.roundToInt
 fun  SwipeToOptions(
     note: Note,
     onPin: (Note) -> Unit,
-    onStar: (Note) ->Unit,
+    onStar: (Note) -> Unit,
     onDelete: (Note) -> Unit,
-    content: @Composable (Note) -> Unit
+    content: @Composable (Note) -> Unit,
 ) {
     val boxSizeDp = 50.dp
     val boxSizePx = with(LocalDensity.current) { boxSizeDp.toPx() }
@@ -92,7 +92,6 @@ fun  SwipeToOptions(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
                 .offset { IntOffset(swipeState.value.roundToInt(), 0) }
         ) {
             content(note)
