@@ -52,6 +52,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -150,7 +151,7 @@ fun ProfileScreen(
                 .size(36.dp)
                 .clip(CircleShape)
                 .background(Color.Transparent)
-                .border(BorderStroke(3.dp, Color.Red), CircleShape),
+                .border(BorderStroke(3.dp, colorResource(R.color.yellow_green)), CircleShape),
             contentAlignment = Alignment.Center
         ) {
             IconButton(
@@ -158,7 +159,7 @@ fun ProfileScreen(
                     isImageOptionDialogOpen = !isImageOptionDialogOpen
                 }
             ) {
-                Icon(tint = Color.Red, imageVector = Icons.Outlined.Edit, contentDescription = null)
+                Icon(tint = colorResource(R.color.yellow_green), imageVector = Icons.Outlined.Edit, contentDescription = null)
             }
         }
         if (isImageOptionDialogOpen) {
@@ -200,7 +201,7 @@ fun ProfileScreen(
                                 imagePickerLauncher.launch("image/*")
                             }
                         ) {
-                            Text(stringResource(R.string.edit_profile_image), color = Color.Red, fontSize = 12.sp)
+                                Text(stringResource(R.string.edit_profile_image), color = Color.Red, fontSize = 12.sp)
                         }
                         Button(
                             modifier = Modifier.padding(4.dp).weight(1f),
