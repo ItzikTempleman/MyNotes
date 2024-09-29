@@ -42,4 +42,6 @@
     <string name="search_images">Search images</string>
     <string name="edit_profile_image">Edit profile image</string>
     <string name="remove_profile_image">Remove profile image</string>
+    <string name="edit">Edit</string>
+    <string name="done">Done</string>
 </resources>

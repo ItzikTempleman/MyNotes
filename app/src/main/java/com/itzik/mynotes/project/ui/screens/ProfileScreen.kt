@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Female
 import androidx.compose.material.icons.filled.Male
@@ -90,6 +91,10 @@ fun ProfileScreen(
         mutableStateOf(false)
     }
 
+    var isEditable by remember {
+        mutableStateOf(false)
+    }
+
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -110,7 +115,7 @@ fun ProfileScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        val (imageContainer, selectImageOptionCard, uploadImageBtn, name, email, phone, gender, age, bottomColumn) = createRefs()
+        val (imageContainer, selectImageOptionCard, uploadImageBtn, editButton, name, email, phone, gender, age, bottomColumn) = createRefs()
 
         Box(
             modifier = Modifier
@@ -159,16 +164,23 @@ fun ProfileScreen(
                     isImageOptionDialogOpen = !isImageOptionDialogOpen
                 }
             ) {
-                Icon(tint = colorResource(R.color.yellow_green), imageVector = Icons.Outlined.Edit, contentDescription = null)
+                Icon(
+                    tint = colorResource(R.color.yellow_green),
+                    imageVector = Icons.Outlined.Edit,
+                    contentDescription = null
+                )
             }
         }
         if (isImageOptionDialogOpen) {
             Card(
-                modifier = Modifier.constrainAs(selectImageOptionCard) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }.padding(50.dp).wrapContentHeight(),
+                modifier = Modifier
+                    .constrainAs(selectImageOptionCard) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(50.dp)
+                    .wrapContentHeight(),
                 colors = CardDefaults.cardColors(Color.LightGray)
 
             ) {
@@ -179,7 +191,7 @@ fun ProfileScreen(
                 ) {
                     IconButton(
                         onClick = {
-                            isImageOptionDialogOpen=false
+                            isImageOptionDialogOpen = false
                         }
                     ) {
                         Icon(
@@ -193,32 +205,64 @@ fun ProfileScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                       Button(
-                           modifier = Modifier.padding(4.dp).weight(1f),
-                           shape= RoundedCornerShape(8.dp),
-                           colors=ButtonDefaults.buttonColors(Color.White),
+                        Button(
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .weight(1f),
+                            shape = RoundedCornerShape(8.dp),
+                            colors = ButtonDefaults.buttonColors(Color.White),
                             onClick = {
                                 imagePickerLauncher.launch("image/*")
                             }
                         ) {
-                                Text(stringResource(R.string.edit_profile_image), color = Color.Red, fontSize = 12.sp)
+                            Text(
+                                stringResource(R.string.edit_profile_image),
+                                color = Color.Red,
+                                fontSize = 12.sp
+                            )
                         }
                         Button(
-                            modifier = Modifier.padding(4.dp).weight(1f),
-                            shape= RoundedCornerShape(8.dp),
-                            colors=ButtonDefaults.buttonColors(Color.White),
+                            modifier = Modifier
+                                .padding(4.dp)
+                                .weight(1f),
+                            shape = RoundedCornerShape(8.dp),
+                            colors = ButtonDefaults.buttonColors(Color.White),
                             onClick = {
                                 coroutineScope.launch {
                                     userViewModel.updateProfileImage("")
                                 }
                             }
                         ) {
-                            Text(stringResource(R.string.remove_profile_image), fontSize = 12.sp, color = Color.Red)
+                            Text(
+                                stringResource(R.string.remove_profile_image),
+                                fontSize = 12.sp,
+                                color = Color.Red
+                            )
                         }
                     }
                 }
             }
         }
+
+        TextButton(
+            modifier = Modifier.constrainAs(editButton) {
+                top.linkTo(parent.top)
+                end.linkTo(parent.end)
+            }.padding(8.dp),
+            onClick = {
+                isEditable = !isEditable
+            }
+        ) {
+            Text(
+                text = if (isEditable) stringResource(R.string.done)
+                else stringResource(R.string.edit),
+                color = Color.Red,
+            )
+        }
+
+
+
+
 
 
         user?.let {
