@@ -3,7 +3,7 @@ package com.itzik.mynotes.project.ui.composable_elements
 sealed class EditProfileOptions(
    val onItemSelected: ()->Unit,
    val itemName:String,
-    
+
 ) {
 
     data object EditEmail:EditProfileOptions(
