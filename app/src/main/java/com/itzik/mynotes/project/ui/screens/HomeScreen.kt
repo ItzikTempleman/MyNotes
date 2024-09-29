@@ -1,6 +1,6 @@
 package com.itzik.mynotes.project.ui.screens
 
-import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -111,7 +111,7 @@ fun HomeScreen(
         imageSelected = user?.selectedWallpaper ?: ""
     }
 
-
+    BackHandler {}
 
     ConstraintLayout(
         modifier = Modifier
@@ -120,10 +120,9 @@ fun HomeScreen(
     ) {
         val (titleIcon, selectImageWallpaperIcon, topRow, noteLazyColumn, emptyStateMessage) = createRefs()
 
-
         Image(
             painter = rememberAsyncImagePainter(
-                user?.selectedWallpaper,
+                imageSelected
             ),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
@@ -164,8 +163,6 @@ fun HomeScreen(
             )
 
         }
-
-
 
         Card(
             modifier = Modifier
@@ -220,8 +217,6 @@ fun HomeScreen(
                     colorNumber = 4
                 )
 
-
-
                 GenericIconButton(
                     modifier = Modifier
                         .padding(8.dp),
@@ -238,7 +233,6 @@ fun HomeScreen(
                 )
             }
         }
-
 
         if (!isViewGrid) {
             LazyColumn(
@@ -272,7 +266,8 @@ fun HomeScreen(
                                 isInHomeScreen = true,
                                 noteViewModel = noteViewModel,
                                 note = noteItem,
-                                modifier = Modifier             .background(colorResource(R.color.almost_transparent))
+                                modifier = Modifier
+                                    .background(colorResource(R.color.almost_transparent))
                                     .padding(horizontal = 8.dp)
                                     .clickable {
                                         coroutineScope.launch {
@@ -342,8 +337,6 @@ fun HomeScreen(
                 }
             )
         }
-
-        Log.d("TAG", "selectedWallpaper:  ${user?.selectedWallpaper}")
 
         if (combinedList.isEmpty()) {
             EmptyStateMessage(modifier = Modifier

@@ -66,7 +66,6 @@ fun NoteListItem(
     ) {
         val (timeStamp, verticalDiv, content, bottomLine, pinnedNoteIcon, likedNoteIcon) = createRefs()
 
-
         BoxWithConstraints(modifier = if (isInHomeScreen) Modifier
             .constrainAs(content) {
                 start.linkTo(verticalDiv.end)
@@ -137,8 +136,6 @@ fun NoteListItem(
                     .padding(vertical = 8.dp)
             )
 
-
-
             if (isStarred) {
                 Icon(
                     modifier = Modifier
@@ -172,7 +169,6 @@ fun NoteListItem(
                     contentDescription = null
                 )
             }
-
         }
     }
 }
