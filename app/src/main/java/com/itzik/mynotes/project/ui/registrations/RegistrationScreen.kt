@@ -396,7 +396,7 @@ fun RegistrationScreen(
                             name = name,
                             email = createEmail,
                             password = createPassword,
-                            phoneNumber = createPhoneNumber.toLong(),
+                            phoneNumber = createPhoneNumber,
                             profileImage = "",
                             gender = selectedGender,
                             dateOfBirth = dateSelected,

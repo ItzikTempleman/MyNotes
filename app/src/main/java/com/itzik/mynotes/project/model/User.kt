@@ -16,7 +16,7 @@ data class User(
     val email: String,
     val password: String,
     var isLoggedIn: Boolean = false,
-    var phoneNumber: Long,
+    var phoneNumber: String,
     var profileImage: String = "",
     var gender:Gender,
     var dateOfBirth:String,

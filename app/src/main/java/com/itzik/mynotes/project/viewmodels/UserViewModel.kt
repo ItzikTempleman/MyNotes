@@ -98,7 +98,7 @@ class UserViewModel @Inject constructor(
         name: String,
         email: String,
         password: String,
-        phoneNumber: Long,
+        phoneNumber: String,
         profileImage: String,
         gender: Gender,
         dateOfBirth: String,
@@ -191,8 +191,30 @@ class UserViewModel @Inject constructor(
 
     }
 
-    suspend fun <T> updateUser(updatedParam:T ) {
+    suspend fun  updateEmail(email:String) {
+        viewModelScope.launch {
+            val user = privateLoggedInUsersList.value.firstOrNull()
+            if (user != null) {
+                val updatedUser = privateUser.value?.copy( email=email)
+                if (updatedUser != null) {
+                    repo.updateProfileImage(updatedUser)
+                }
+                privateUser.value = updatedUser
+            }
+        }
+    }
 
+        suspend fun  updatePhone(phoneNumber:String) {
+        viewModelScope.launch {
+            val user = privateLoggedInUsersList.value.firstOrNull()
+            if (user != null) {
+                val updatedUser = privateUser.value?.copy( phoneNumber=phoneNumber)
+                if (updatedUser != null) {
+                    repo.updateProfileImage(updatedUser)
+                }
+                privateUser.value = updatedUser
+            }
+        }
     }
 }
 

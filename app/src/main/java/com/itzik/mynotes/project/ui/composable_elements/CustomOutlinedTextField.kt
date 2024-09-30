@@ -1,7 +1,6 @@
 package com.itzik.mynotes.project.ui.composable_elements
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -54,7 +53,7 @@ fun CustomOutlinedTextField(
             shape = MaterialTheme.shapes.small,
             value = value,
             onValueChange = { thisValueChange(it) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier,
             label = {
                 Text(
                     text = label,
