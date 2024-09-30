@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.TextButton
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Female
 import androidx.compose.material.icons.filled.Male
@@ -33,6 +34,7 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.PermContactCalendar
 import androidx.compose.material.icons.outlined.PowerSettingsNew
+import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -79,7 +81,7 @@ import kotlinx.coroutines.launch
     "StateFlowValueCalledInComposition"
 )
 enum class SelectedEditOption {
-    NONE, EMAIL, PASSWORD, PHONE_NUMBER
+    NONE, EMAIL, PHONE_NUMBER
 }
 
 @Composable
@@ -99,7 +101,12 @@ fun ProfileScreen(
     var isEditable by remember {
         mutableStateOf(false)
     }
+    var selectedOption by remember {
+        mutableStateOf(SelectedEditOption.NONE)
+    }
 
+    var editedEmail by remember { mutableStateOf(user?.email ?: "") }
+    var editedPhoneNumber by remember { mutableStateOf(user?.phoneNumber.toString()) }
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -266,8 +273,7 @@ fun ProfileScreen(
             )
         }
 
-        if (isEditable)
-
+        if (isEditable) {
             EditProfileOptionsScreen(
                 modifier = Modifier
                     .constrainAs(editProfileOptionsList) {
@@ -275,18 +281,17 @@ fun ProfileScreen(
                         top.linkTo(editButton.bottom)
                     }
                     .padding(end = 8.dp),
-
-                isEditProfileOptionListVisible = {
-                    isEditable = it
-                },
-                onOptionSelected={option->
-
+                onOptionSelected = { option ->
+                    selectedOption = option
+                    isEditable = false
                 }
             )
+        }
 
-        user?.let {
+
+        user?.let { currentUser ->
             Text(
-                text = it.userName,
+                text = currentUser.userName,
                 modifier = Modifier
                     .constrainAs(name) {
                         top.linkTo(parent.top)
@@ -297,131 +302,127 @@ fun ProfileScreen(
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold
             )
-        }
 
-        Row(
-            modifier = Modifier
-                .constrainAs(email) {
-                    top.linkTo(name.bottom)
+            Row(
+                modifier = Modifier
+                    .constrainAs(email) {
+                        top.linkTo(name.bottom)
+                    }
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Email,
+                    contentDescription = null,
+                    tint = Color.DarkGray
+                )
+
+                if (selectedOption == SelectedEditOption.EMAIL) {
+                    TextField(
+                        value = editedEmail,
+                        onValueChange = {
+                            editedEmail = it
+                        },
+                        modifier = Modifier.padding(start = 8.dp),
+                        label = {
+                            Text("Edit user name email")
+                        }
+                    )
+                    IconButton(onClick = { coroutineScope.launch { userViewModel.updateUser(editedEmail) }
+                        selectedOption = SelectedEditOption.NONE}) {Icon(imageVector = Icons.Outlined.Save, contentDescription = null) }
+
+                }else {
+                    Text(
+                        modifier = Modifier.padding(start = 8.dp),
+                        color = Color.DarkGray,
+                        text = currentUser.email
+                    )
                 }
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.Email,
-                contentDescription = null,
-                tint = Color.DarkGray
-            )
-            user?.let {
+            }
+
+            Row(
+                modifier = Modifier
+                    .constrainAs(phone) {
+                        top.linkTo(email.bottom)
+                    }
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Call,
+                    contentDescription = null,
+                    tint = Color.DarkGray
+                )
+
+                if (selectedOption == SelectedEditOption.PHONE_NUMBER) {
+                    TextField(
+                        value = editedPhoneNumber,
+                        onValueChange = {
+                            editedPhoneNumber = it
+                        },
+                        modifier = Modifier.padding(start = 8.dp),
+                        label = {
+                            Text("Edit phone number")
+                        }
+                    )
+                        IconButton(onClick = { coroutineScope.launch { userViewModel.updateUser(editedPhoneNumber) }
+                            selectedOption = SelectedEditOption.NONE}) {Icon(imageVector = Icons.Outlined.Save, contentDescription = null) }
+
+                } else {
+                    Text(
+                        modifier = Modifier.padding(start = 8.dp),
+                        color = Color.DarkGray,
+                        text = user?.phoneNumber.toString()
+                    )
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .constrainAs(gender) {
+                        top.linkTo(phone.bottom)
+                    }
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = when (user?.gender) {
+                        Gender.MALE -> {
+                            Icons.Default.Male
+                        }
+
+                        Gender.FEMALE -> {
+                            Icons.Default.Female
+                        }
+
+                        Gender.OTHER -> {
+                            Icons.Default.Transgender
+                        }
+
+                        null -> {
+                            Icons.Default.Person
+                        }
+                    },
+                    contentDescription = null,
+                    tint = Color.DarkGray
+                )
                 Text(
                     modifier = Modifier.padding(start = 8.dp),
                     color = Color.DarkGray,
-                    text = it.email
+                    text = user?.gender.toString().lowercase()
                 )
             }
-        }
 
-        Row(
-            modifier = Modifier
-                .constrainAs(phone) {
-                    top.linkTo(email.bottom)
-                }
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.Call,
-                contentDescription = null,
-                tint = Color.DarkGray
-            )
-            Text(
-                modifier = Modifier.padding(start = 8.dp),
-                color = Color.DarkGray,
-                text = user?.phoneNumber.toString()
-            )
-        }
-        Row(
-            modifier = Modifier
-                .constrainAs(gender) {
-                    top.linkTo(phone.bottom)
-                }
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = when (user?.gender) {
-                    Gender.MALE -> {
-                        Icons.Default.Male
-                    }
-
-                    Gender.FEMALE -> {
-                        Icons.Default.Female
-                    }
-
-                    Gender.OTHER -> {
-                        Icons.Default.Transgender
-                    }
-
-                    null -> {
-                        Icons.Default.Person
-                    }
-                },
-                contentDescription = null,
-                tint = Color.DarkGray
-            )
-            Text(
-                modifier = Modifier.padding(start = 8.dp),
-                color = Color.DarkGray,
-                text = user?.gender.toString().lowercase()
-            )
-        }
-
-        Row(
-            modifier = Modifier
-                .constrainAs(age) {
-                    top.linkTo(gender.bottom)
-                }
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.PermContactCalendar,
-                contentDescription = null,
-                tint = Color.DarkGray
-            )
-
-            Text(
-                modifier = Modifier.padding(start = 8.dp),
-                color = Color.DarkGray,
-                text = "${user?.dateOfBirth} (age ${
-                    user?.let {
-                        userViewModel.getAgeFromSDateString(
-                            it.dateOfBirth
-                        )
-                    }
-                })"
-            )
-        }
-
-        Column(
-            modifier = Modifier
-                .constrainAs(bottomColumn) {
-                    bottom.linkTo(parent.bottom)
-                }
-                .fillMaxWidth()
-        ) {
             Row(
                 modifier = Modifier
-                    .clickable {
-                        bottomBarNavController.navigate(Screen.DeletedNotesScreen.route)
+                    .constrainAs(age) {
+                        top.linkTo(gender.bottom)
                     }
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 8.dp),
@@ -429,77 +430,113 @@ fun ProfileScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    modifier = Modifier
-                        .padding(4.dp),
-                    imageVector = Icons.Outlined.DeleteOutline,
+                    imageVector = Icons.Outlined.PermContactCalendar,
                     contentDescription = null,
-                    tint = Color.Black
+                    tint = Color.DarkGray
                 )
+
                 Text(
-                    modifier = Modifier
-                        .padding(4.dp),
-                    text = stringResource(R.string.trash_bin),
-                    fontSize = 20.sp
-                )
-            }
-
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 30.dp),
-                thickness = 0.5.dp,
-                color = Color.Black
-            )
-
-            Row(
-                modifier = Modifier
-                    .clickable {
-                        coroutineScope.launch {
-                            user?.isLoggedIn = false
-                            user?.let { userViewModel.updateIsLoggedIn(it) }
-                            noteViewModel.clearAllNoteList()
-                            rootNavController.navigate(Screen.Login.route)
+                    modifier = Modifier.padding(start = 8.dp),
+                    color = Color.DarkGray,
+                    text = "${user?.dateOfBirth} (age ${
+                        user?.let {
+                            userViewModel.getAgeFromSDateString(
+                                it.dateOfBirth
+                            )
                         }
-                    }
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .padding(4.dp),
-                    imageVector = Icons.Outlined.PowerSettingsNew,
-                    contentDescription = null,
-                    tint = Color.Red
-                )
-                Text(
-                    modifier = Modifier
-                        .padding(4.dp),
-                    text = stringResource(R.string.log_out),
-                    color = Color.Red,
-                    fontSize = 20.sp
+                    })"
                 )
             }
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                color = Color.Black,
-                thickness = 0.75.dp
-            )
-        }
 
+            Column(
+                modifier = Modifier
+                    .constrainAs(bottomColumn) {
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier
+                        .clickable {
+                            bottomBarNavController.navigate(Screen.DeletedNotesScreen.route)
+                        }
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .padding(4.dp),
+                        imageVector = Icons.Outlined.DeleteOutline,
+                        contentDescription = null,
+                        tint = Color.Black
+                    )
+                    Text(
+                        modifier = Modifier
+                            .padding(4.dp),
+                        text = stringResource(R.string.trash_bin),
+                        fontSize = 20.sp
+                    )
+                }
+
+                HorizontalDivider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 30.dp),
+                    thickness = 0.5.dp,
+                    color = Color.Black
+                )
+
+                Row(
+                    modifier = Modifier
+                        .clickable {
+                            coroutineScope.launch {
+                                user?.isLoggedIn = false
+                                user?.let { userViewModel.updateIsLoggedIn(it) }
+                                noteViewModel.clearAllNoteList()
+                                rootNavController.navigate(Screen.Login.route)
+                            }
+                        }
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .padding(4.dp),
+                        imageVector = Icons.Outlined.PowerSettingsNew,
+                        contentDescription = null,
+                        tint = Color.Red
+                    )
+                    Text(
+                        modifier = Modifier
+                            .padding(4.dp),
+                        text = stringResource(R.string.log_out),
+                        color = Color.Red,
+                        fontSize = 20.sp
+                    )
+                }
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color.Black,
+                    thickness = 0.75.dp
+                )
+            }
+
+        }
     }
 }
 
-
-@Preview(showBackground = true, device = "spec:width=412dp,height=932dp")
-@Composable
-fun ProfileScreenPreview() {
-    ProfileScreen(
-        coroutineScope = rememberCoroutineScope(),
-        rootNavController = rememberNavController(),
-        bottomBarNavController = rememberNavController(),
-        noteViewModel = viewModel(),
-        userViewModel = viewModel()
-    )
-}
+    @Preview(showBackground = true, device = "spec:width=412dp,height=932dp")
+    @Composable
+    fun ProfileScreenPreview() {
+        ProfileScreen(
+            coroutineScope = rememberCoroutineScope(),
+            rootNavController = rememberNavController(),
+            bottomBarNavController = rememberNavController(),
+            noteViewModel = viewModel(),
+            userViewModel = viewModel()
+        )
+    }

@@ -20,43 +20,18 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.itzik.mynotes.R
-import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.ui.screens.SelectedEditOption
-import com.itzik.mynotes.project.viewmodels.UserViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 sealed class EditProfileOptions(
-    val onItemSelected: (
-        userViewModel: UserViewModel,
-        user: User,
-        coroutineScope: CoroutineScope
-    ) -> Unit,
+
     val itemName: String,
 ) {
     data object EditEmail : EditProfileOptions(
-        itemName = "Email",
-        onItemSelected = { userViewModel, user, coroutineScope ->
-            coroutineScope.launch {
-                userViewModel.updateUser(user.email)
-            }
-        }
-    )
-    data object EditPassword : EditProfileOptions(
-        itemName = "Password",
-        onItemSelected = { userViewModel, user, coroutineScope ->
-            coroutineScope.launch {
-                userViewModel.updateUser(user.password)
-            }
-        }
+        itemName = "Email"
+
     )
     data object EditPhoneNumber : EditProfileOptions(
-        itemName = "Phone number",
-        onItemSelected = { userViewModel, user, coroutineScope ->
-            coroutineScope.launch {
-                userViewModel.updateUser(user.phoneNumber)
-            }
-        }
+        itemName = "Phone number"
     )
 }
 
@@ -97,7 +72,6 @@ fun EditProfileOptionsScreen(
 ) {
     val editOptionsRow = listOf(
         EditProfileOptions.EditEmail,
-        EditProfileOptions.EditPassword,
         EditProfileOptions.EditPhoneNumber
     )
 
@@ -111,7 +85,6 @@ fun EditProfileOptionsScreen(
                 onItemSelected = {
                     when(editOption){
                         is EditProfileOptions.EditEmail->onOptionSelected(SelectedEditOption.EMAIL)
-                        is EditProfileOptions.EditPassword-> onOptionSelected(SelectedEditOption.PASSWORD)
                         is EditProfileOptions.EditPhoneNumber-> onOptionSelected(SelectedEditOption.PHONE_NUMBER)
                     }
                 }
