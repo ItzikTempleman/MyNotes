@@ -78,6 +78,10 @@ import kotlinx.coroutines.launch
     "CoroutineCreationDuringComposition", "MutableCollectionMutableState",
     "StateFlowValueCalledInComposition"
 )
+enum class SelectedEditOption {
+    NONE, EMAIL, PASSWORD, PHONE_NUMBER
+}
+
 @Composable
 fun ProfileScreen(
     coroutineScope: CoroutineScope,
@@ -131,7 +135,6 @@ fun ProfileScreen(
             contentAlignment = Alignment.Center
         ) {
             if (!user?.profileImage.isNullOrEmpty()) {
-
                 Image(
                     contentScale = ContentScale.Crop,
                     painter = rememberAsyncImagePainter(user?.profileImage),
@@ -274,10 +277,12 @@ fun ProfileScreen(
                     .padding(end = 8.dp),
 
                 isEditProfileOptionListVisible = {
+                    isEditable = it
+                },
+                onOptionSelected={option->
 
                 }
             )
-
 
         user?.let {
             Text(
