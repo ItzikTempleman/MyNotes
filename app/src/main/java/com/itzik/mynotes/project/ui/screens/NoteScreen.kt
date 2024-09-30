@@ -14,6 +14,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -35,8 +37,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -59,16 +63,27 @@ fun NoteScreen(
     bottomBarNavController: NavHostController,
 ) {
     val note by noteViewModel.publicNote.collectAsState()
-    var text by remember { mutableStateOf(note.content) }
+    var textFieldValue by remember {
+        mutableStateOf(
+            TextFieldValue(
+                text = note.content,
+                selection = TextRange.Zero
+            )
+        )
+    }
+
+
+    var isBoldDialogOpen by remember { mutableStateOf(false) }
+    //var text by remember { mutableStateOf(note.content) }
     var isColorPickerOpen by remember { mutableStateOf(false) }
     var fontSize by remember { mutableIntStateOf(note.fontSize) }
     var selectedColor by remember { mutableIntStateOf(note.fontColor) }
     val focusManager = LocalFocusManager.current
 
     BackHandler {
-        if (text.isNotEmpty()) {
+        if (textFieldValue.text.isNotEmpty()) {
             coroutineScope.launch {
-                note.content = text
+                note.content = textFieldValue.text
                 noteViewModel.saveNote(note)
             }
         }
@@ -90,9 +105,9 @@ fun NoteScreen(
                 .padding(8.dp)
                 .size(32.dp),
             onClick = {
-                if (text.isNotEmpty()) {
+                if (textFieldValue.text.isNotEmpty()) {
                     coroutineScope.launch {
-                        note.content = text
+                        note.content = textFieldValue.text
                         noteViewModel.saveNote(note)
                     }
                 }
@@ -115,7 +130,7 @@ fun NoteScreen(
                         coroutineScope.launch {
                             fontSize -= 2
                             noteViewModel.updateSelectedNoteContent(
-                                text,
+                                textFieldValue.text,
                                 noteId = noteId,
                                 isStarred = note.isPinned,
                                 isPinned = note.isStarred,
@@ -144,7 +159,7 @@ fun NoteScreen(
                         coroutineScope.launch {
                             fontSize += 2
                             noteViewModel.updateSelectedNoteContent(
-                                text,
+                                textFieldValue.text,
                                 noteId = noteId,
                                 isPinned = note.isPinned,
                                 isStarred = note.isStarred,
@@ -152,7 +167,7 @@ fun NoteScreen(
                                 fontColor = note.fontColor,
                                 userId = note.userId,
 
-                            )
+                                )
                         }
                     }
                 },
@@ -224,12 +239,12 @@ fun NoteScreen(
         }
 
         TextField(
-            value = text,
-            onValueChange = {
-                text = it
+            value = textFieldValue,
+            onValueChange = { newValue ->
+                textFieldValue = newValue
                 coroutineScope.launch {
                     noteViewModel.updateSelectedNoteContent(
-                        it,
+                        textFieldValue.text,
                         noteId = noteId,
                         isPinned = note.isPinned,
                         isStarred = note.isStarred,
@@ -237,7 +252,10 @@ fun NoteScreen(
                         fontColor = note.fontColor,
                         userId = note.userId,
 
-                    )
+                        )
+                }
+                if (!newValue.selection.collapsed) {
+                    isBoldDialogOpen = true
                 }
             },
             colors = TextFieldDefaults.colors(
@@ -272,6 +290,41 @@ fun NoteScreen(
             }
         )
 
+
+        if (isBoldDialogOpen) {
+            AlertDialog(
+                onDismissRequest = {
+                    isBoldDialogOpen = false
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            val selectedText = textFieldValue.text.substring(
+                                textFieldValue.selection.start,
+                                textFieldValue.selection.end
+                            )
+                            val updatedText =
+                                textFieldValue.text.substring(0, textFieldValue.selection.start) +
+                                        selectedText +
+                                        textFieldValue.text.substring(textFieldValue.selection.end)
+
+                            textFieldValue =
+                                textFieldValue.copy(text = updatedText, selection = TextRange.Zero)
+
+                            coroutineScope.launch {
+                                    note.content = textFieldValue.text
+                                    noteViewModel.saveNote(note)
+                                }
+                            isBoldDialogOpen = false
+                        }
+                    ) {
+                        Text(text = "BOLD", fontWeight = FontWeight.Bold)
+                    }
+                }, dismissButton = {}
+
+            )
+        }
+
         if (isColorPickerOpen) {
             ColorPickerDialog(
                 modifier = Modifier
@@ -287,7 +340,7 @@ fun NoteScreen(
                     coroutineScope.launch {
                         selectedColor = color.toArgb()
                         noteViewModel.updateSelectedNoteContent(
-                            text,
+                            textFieldValue.text,
                             noteId = noteId,
                             isStarred = note.isPinned,
                             isPinned = note.isStarred,
@@ -295,7 +348,7 @@ fun NoteScreen(
                             fontColor = selectedColor,
                             userId = note.userId,
 
-                        )
+                            )
                     }
                     isColorPickerOpen = false
                 },
