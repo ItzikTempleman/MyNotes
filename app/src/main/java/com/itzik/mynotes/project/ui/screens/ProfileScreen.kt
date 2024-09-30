@@ -116,7 +116,7 @@ fun ProfileScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        val (imageContainer, selectImageOptionCard, uploadImageBtn, editButton,editProfileOptionsList, name, email, phone, gender, age, bottomColumn) = createRefs()
+        val (imageContainer, selectImageOptionCard, uploadImageBtn, editButton, editProfileOptionsList, name, email, phone, gender, age, bottomColumn) = createRefs()
 
         Box(
             modifier = Modifier
@@ -264,20 +264,20 @@ fun ProfileScreen(
         }
 
         if (isEditable)
-            user?.let {
-                EditProfileOptionsScreen(
-                    modifier = Modifier.constrainAs(editProfileOptionsList){
+
+            EditProfileOptionsScreen(
+                modifier = Modifier
+                    .constrainAs(editProfileOptionsList) {
                         end.linkTo(parent.end)
                         top.linkTo(editButton.bottom)
-                    }.padding(8.dp),
-                    userViewModel = userViewModel,
-                    coroutineScope = coroutineScope,
-                    user = it,
-                    isEditProfileOptionListVisible={
-
                     }
-                )
-            }
+                    .padding(end = 8.dp),
+
+                isEditProfileOptionListVisible = {
+
+                }
+            )
+
 
         user?.let {
             Text(
