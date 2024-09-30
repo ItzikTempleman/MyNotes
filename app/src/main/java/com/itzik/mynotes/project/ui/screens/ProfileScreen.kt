@@ -67,6 +67,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.main.NoteApp
 import com.itzik.mynotes.project.model.Gender
+import com.itzik.mynotes.project.ui.composable_elements.EditProfileOptionsScreen
 import com.itzik.mynotes.project.ui.navigation.Screen
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
@@ -115,7 +116,7 @@ fun ProfileScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        val (imageContainer, selectImageOptionCard, uploadImageBtn, editButton, name, email, phone, gender, age, bottomColumn) = createRefs()
+        val (imageContainer, selectImageOptionCard, uploadImageBtn, editButton,editProfileOptionsList, name, email, phone, gender, age, bottomColumn) = createRefs()
 
         Box(
             modifier = Modifier
@@ -245,10 +246,12 @@ fun ProfileScreen(
         }
 
         TextButton(
-            modifier = Modifier.constrainAs(editButton) {
-                top.linkTo(parent.top)
-                end.linkTo(parent.end)
-            }.padding(8.dp),
+            modifier = Modifier
+                .constrainAs(editButton) {
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
+                }
+                .padding(8.dp),
             onClick = {
                 isEditable = !isEditable
             }
@@ -260,10 +263,21 @@ fun ProfileScreen(
             )
         }
 
+        if (isEditable)
+            user?.let {
+                EditProfileOptionsScreen(
+                    modifier = Modifier.constrainAs(editProfileOptionsList){
+                        end.linkTo(parent.end)
+                        top.linkTo(editButton.bottom)
+                    }.padding(8.dp),
+                    userViewModel = userViewModel,
+                    coroutineScope = coroutineScope,
+                    user = it,
+                    isEditProfileOptionListVisible={
 
-
-
-
+                    }
+                )
+            }
 
         user?.let {
             Text(
@@ -471,6 +485,7 @@ fun ProfileScreen(
 
     }
 }
+
 
 @Preview(showBackground = true, device = "spec:width=412dp,height=932dp")
 @Composable

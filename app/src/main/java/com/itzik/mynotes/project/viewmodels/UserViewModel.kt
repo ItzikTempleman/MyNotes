@@ -190,5 +190,9 @@ class UserViewModel @Inject constructor(
         return imagesFlow
 
     }
+
+    suspend fun <T> updateUser(updatedParam:T ) {
+
+    }
 }
 
