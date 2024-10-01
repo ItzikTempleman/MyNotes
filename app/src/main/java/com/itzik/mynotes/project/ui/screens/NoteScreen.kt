@@ -345,10 +345,10 @@ fun NoteScreen(
                     }
                 }, dismissButton = {
                     Button(onClick = {
-                        //textFieldValue = removeBoldFromSelection(textFieldValue) // Remove bold from the selected text
+                        //TODO APPLY UN BOLD TEXT SELECTED
                         isBoldDialogOpen = false
                     }) {
-                        Text("UNBOLD")
+                        Text("UN-BOLD")
                     }
                 }
 
