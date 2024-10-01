@@ -37,10 +37,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -64,7 +67,14 @@ fun NoteScreen(
 ) {
     val note by noteViewModel.publicNote.collectAsState()
 
-    var textFieldValue by remember { mutableStateOf(TextFieldValue(text = note.content, selection = TextRange.Zero)) }
+    var textFieldValue by remember {
+        mutableStateOf(
+            TextFieldValue(
+                text = note.content,
+                selection = TextRange.Zero
+            )
+        )
+    }
 
     var isBoldDialogOpen by remember { mutableStateOf(false) }
     var isColorPickerOpen by remember { mutableStateOf(false) }
@@ -270,13 +280,11 @@ fun NoteScreen(
             textStyle = TextStyle.Default.copy(
                 fontSize = fontSize.sp,
                 color = Color(selectedColor),
-                fontWeight = FontWeight.Bold
             ),
             placeholder = {
                 Text(
                     fontSize = fontSize.sp,
                     color = Color(selectedColor),
-                    fontWeight = FontWeight.Bold,
                     text = note.content.ifEmpty { stringResource(id = R.string.new_note) }
                 )
             }
@@ -291,15 +299,46 @@ fun NoteScreen(
                 confirmButton = {
                     Button(
                         onClick = {
-                            val selectedText = textFieldValue.text.substring(textFieldValue.selection.start, textFieldValue.selection.end)
-                            val updatedText = textFieldValue.text.substring(0, textFieldValue.selection.start) + selectedText + textFieldValue.text.substring(textFieldValue.selection.end)
-                            textFieldValue = textFieldValue.copy(text = updatedText, selection = TextRange.Zero)
+                            if (textFieldValue.selection.start != textFieldValue.selection.end) {
 
-                            coroutineScope.launch {
-                                    note.content = textFieldValue.text
-                                    noteViewModel.saveNote(note)
+                                val selectedTextRange = textFieldValue.selection
+                                val selectedText = textFieldValue.text.substring(
+                                    textFieldValue.selection.start,
+                                    textFieldValue.selection.end
+                                )
+
+                                val annotatedString = buildAnnotatedString {
+                                    append(
+                                        textFieldValue.text.substring(
+                                            0,
+                                            selectedTextRange.start
+                                        )
+                                    )
+                                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                        append(selectedText)
+                                    }
+                                    append(textFieldValue.text.substring(selectedTextRange.end))
                                 }
-                            isBoldDialogOpen = false
+
+                                textFieldValue = textFieldValue.copy(
+                                    annotatedString = annotatedString,
+                                    selection = TextRange.Zero
+                                )
+
+                                coroutineScope.launch {
+                                    note.content = textFieldValue.text
+                                    noteViewModel.updateSelectedNoteContent(
+                                        newChar = note.content,
+                                        userId = note.userId,
+                                        noteId = note.noteId,
+                                        isPinned = note.isPinned,
+                                        isStarred = note.isStarred,
+                                        fontSize = note.fontSize,
+                                        fontColor = note.fontColor
+                                    )
+                                }
+                                isBoldDialogOpen = false
+                            }
                         }
                     ) {
                         Text(text = "BOLD", fontWeight = FontWeight.Bold)

@@ -224,7 +224,7 @@ fun HomeScreen(
                         coroutineScope.launch {
                             noteViewModel.updateSelectedNoteContent(
                                 "", isPinned = false, isStarred = false,
-                                fontSize = 20, fontColor = Color.Black.toArgb(), userId = userId,
+                                fontSize = 20, fontColor = Color.Black.toArgb(), userId = userId
                             )
                         }
                         bottomBarNavController.navigate(Screen.NoteScreen.route)
