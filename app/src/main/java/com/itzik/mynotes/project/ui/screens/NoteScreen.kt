@@ -85,7 +85,7 @@ fun NoteScreen(
     BackHandler {
         if (textFieldValue.text.isNotEmpty()) {
             coroutineScope.launch {
-                note.content = textFieldValue.text
+                note.content = textFieldValue.annotatedString.text
                 noteViewModel.saveNote(note)
             }
         }
@@ -246,7 +246,7 @@ fun NoteScreen(
                 textFieldValue = newValue
                 coroutineScope.launch {
                     noteViewModel.updateSelectedNoteContent(
-                        textFieldValue.text,
+                        newValue.annotatedString.text,
                         noteId = noteId,
                         isPinned = note.isPinned,
                         isStarred = note.isStarred,
@@ -343,7 +343,14 @@ fun NoteScreen(
                     ) {
                         Text(text = "BOLD", fontWeight = FontWeight.Bold)
                     }
-                }, dismissButton = {}
+                }, dismissButton = {
+                    Button(onClick = {
+                        //textFieldValue = removeBoldFromSelection(textFieldValue) // Remove bold from the selected text
+                        isBoldDialogOpen = false
+                    }) {
+                        Text("UNBOLD")
+                    }
+                }
 
             )
         }
