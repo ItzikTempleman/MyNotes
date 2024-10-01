@@ -63,18 +63,10 @@ fun NoteScreen(
     bottomBarNavController: NavHostController,
 ) {
     val note by noteViewModel.publicNote.collectAsState()
-    var textFieldValue by remember {
-        mutableStateOf(
-            TextFieldValue(
-                text = note.content,
-                selection = TextRange.Zero
-            )
-        )
-    }
 
+    var textFieldValue by remember { mutableStateOf(TextFieldValue(text = note.content, selection = TextRange.Zero)) }
 
     var isBoldDialogOpen by remember { mutableStateOf(false) }
-    //var text by remember { mutableStateOf(note.content) }
     var isColorPickerOpen by remember { mutableStateOf(false) }
     var fontSize by remember { mutableIntStateOf(note.fontSize) }
     var selectedColor by remember { mutableIntStateOf(note.fontColor) }
@@ -299,17 +291,9 @@ fun NoteScreen(
                 confirmButton = {
                     Button(
                         onClick = {
-                            val selectedText = textFieldValue.text.substring(
-                                textFieldValue.selection.start,
-                                textFieldValue.selection.end
-                            )
-                            val updatedText =
-                                textFieldValue.text.substring(0, textFieldValue.selection.start) +
-                                        selectedText +
-                                        textFieldValue.text.substring(textFieldValue.selection.end)
-
-                            textFieldValue =
-                                textFieldValue.copy(text = updatedText, selection = TextRange.Zero)
+                            val selectedText = textFieldValue.text.substring(textFieldValue.selection.start, textFieldValue.selection.end)
+                            val updatedText = textFieldValue.text.substring(0, textFieldValue.selection.start) + selectedText + textFieldValue.text.substring(textFieldValue.selection.end)
+                            textFieldValue = textFieldValue.copy(text = updatedText, selection = TextRange.Zero)
 
                             coroutineScope.launch {
                                     note.content = textFieldValue.text
