@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -89,7 +88,6 @@ fun NoteListItem(
                 text = note.content,
                 fontSize = 20.sp,
                 color = Color(note.fontColor),
-                fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
             )
         }
