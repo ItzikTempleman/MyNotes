@@ -6,14 +6,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -30,6 +29,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -129,51 +129,17 @@ fun HomeScreen(
             contentScale = ContentScale.Crop
         )
 
-        Icon(
-            imageVector = Icons.Default.Home,
-            contentDescription = null,
-            tint = Color.DarkGray,
-            modifier = Modifier
-                .padding(8.dp)
-                .size(32.dp)
-                .constrainAs(titleIcon) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                }
-        )
-
-
-        IconButton(
-
-            modifier = Modifier
-                .constrainAs(selectImageWallpaperIcon) {
-                    top.linkTo(parent.top)
-                    start.linkTo(titleIcon.end)
-                }
-                .height(50.dp)
-                .padding(12.dp),
-
-            onClick = {
-                isImagePickerOpen = !isImagePickerOpen
-            }
-        ) {
-            Icon(
-                imageVector = Icons.Default.Photo,
-                contentDescription = null
-            )
-
-        }
 
         Card(
             modifier = Modifier
                 .constrainAs(topRow) {
                     top.linkTo(parent.top)
-                    end.linkTo(parent.end)
                 }
                 .padding(8.dp)
-                .wrapContentWidth()
-                .height(50.dp),
-            colors = CardDefaults.cardColors(colorResource(R.color.very_light_gray))
+                .fillMaxWidth()
+                .height(45.dp),
+            colors = CardDefaults.cardColors(Color.White),
+            elevation = CardDefaults.cardElevation(12.dp),
         ) {
             Row(
                 modifier = Modifier,
@@ -181,30 +147,53 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                Box(
-                    modifier = Modifier.padding(8.dp)
+                Icon(
+                    imageVector = Icons.Default.Home,
+                    contentDescription = null,
+                    tint = Color.DarkGray,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .size(32.dp)
+                )
+
+
+                IconButton(
+                    modifier = Modifier
+                        .height(50.dp)
+                        .padding(12.dp),
+
+                    onClick = {
+                        isImagePickerOpen = !isImagePickerOpen
+                    }
                 ) {
-                    GenericIconButton(
-                        onClick = {
-                            isExpanded = !isExpanded
-                        },
-                        colorNumber = 4,
-                        imageVector = Icons.AutoMirrored.Filled.Sort
+                    Icon(
+                        imageVector = Icons.Default.Photo,
+                        contentDescription = null
                     )
-                    SortDropDownMenu(
-                        isExpanded = isExpanded,
-                        modifier = Modifier.wrapContentSize(),
-                        coroutineScope = coroutineScope,
-                        noteViewModel = noteViewModel,
-                        onDismissRequest = {
-                            isExpanded = false
-                        },
-                        updatedSortedList = {
-                            sortType = it
-                        }
-                    )
+
                 }
 
+                VerticalDivider(modifier = Modifier.padding(12.dp))
+
+                GenericIconButton(
+                    onClick = {
+                        isExpanded = !isExpanded
+                    },
+                    colorNumber = 4,
+                    imageVector = Icons.AutoMirrored.Filled.Sort
+                )
+                SortDropDownMenu(
+                    isExpanded = isExpanded,
+                    modifier = Modifier.wrapContentSize(),
+                    coroutineScope = coroutineScope,
+                    noteViewModel = noteViewModel,
+                    onDismissRequest = {
+                        isExpanded = false
+                    },
+                    updatedSortedList = {
+                        sortType = it
+                    }
+                )
 
                 GenericIconButton(
                     modifier = Modifier
@@ -216,6 +205,8 @@ fun HomeScreen(
                     imageVector = if (!isViewGrid) Icons.Default.GridView else Icons.Default.List,
                     colorNumber = 4
                 )
+
+                VerticalDivider(modifier = Modifier.padding(12.dp))
 
                 GenericIconButton(
                     modifier = Modifier
@@ -233,7 +224,6 @@ fun HomeScreen(
                 )
             }
         }
-
         if (!isViewGrid) {
             LazyColumn(
                 modifier = Modifier
