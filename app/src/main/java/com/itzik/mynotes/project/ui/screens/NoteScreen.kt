@@ -97,8 +97,6 @@ fun NoteScreen(
     ) {
         val (topRow, colorPickerScreen, contentTF) = createRefs()
 
-
-
         Card(
             modifier = Modifier
                 .padding(8.dp)
@@ -220,7 +218,7 @@ fun NoteScreen(
                 if (note.isPinned) {
                     Icon(
                         modifier = Modifier
-                            .padding(8.dp)
+                            .padding(horizontal =8.dp)
                             .rotate(45f),
                         imageVector = Icons.Outlined.PushPin,
                         contentDescription = null,
@@ -244,14 +242,13 @@ fun NoteScreen(
                 textFieldValue = newValue
                 coroutineScope.launch {
                     noteViewModel.updateSelectedNoteContent(
-                        newChar = newValue.annotatedString.text,
+                        newChar = textFieldValue.annotatedString.text,
                         noteId = noteId,
                         isPinned = note.isPinned,
                         isStarred = note.isStarred,
                         fontSize = fontSize,
                         fontColor = note.fontColor,
-                        userId = note.userId,
-                        )
+                        userId = note.userId)
                 }
             },
             colors = TextFieldDefaults.colors(
@@ -305,9 +302,7 @@ fun NoteScreen(
                             isPinned = note.isStarred,
                             fontSize = fontSize,
                             fontColor = selectedColor,
-                            userId = note.userId,
-
-                            )
+                            userId = note.userId)
                     }
                     isColorPickerOpen = false
                 },
