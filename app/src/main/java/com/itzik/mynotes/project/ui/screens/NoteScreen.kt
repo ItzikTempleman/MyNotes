@@ -36,11 +36,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -69,7 +66,6 @@ fun NoteScreen(
     bottomBarNavController: NavHostController,
 ) {
     val note by noteViewModel.publicNote.collectAsState()
-    val focusRequester = remember { FocusRequester() }
 
     var textFieldValue by remember {
         mutableStateOf(
@@ -78,7 +74,6 @@ fun NoteScreen(
             )
         )
     }
-
 
     var isColorPickerOpen by remember { mutableStateOf(false) }
     var fontSize by remember { mutableIntStateOf(note.fontSize) }
@@ -187,20 +182,20 @@ fun NoteScreen(
 
                 BoldedTextSelectionButtons(
                     modifier = Modifier.padding(8.dp),
-                    noteViewModel = noteViewModel,
-                    coroutineScope = coroutineScope,
                     isBolded = false,
-                    textFieldValue = remember { mutableStateOf(textFieldValue) },
-                    note = note
+                    textFieldValue =textFieldValue,
+                    onValueChange = {
+                        textFieldValue=it
+                    }
                 )
 
                 BoldedTextSelectionButtons(
                     modifier = Modifier.padding(8.dp),
-                    noteViewModel = noteViewModel,
-                    coroutineScope = coroutineScope,
                     isBolded = true,
-                    textFieldValue = remember { mutableStateOf(textFieldValue) },
-                    note = note
+                    textFieldValue =textFieldValue,
+                    onValueChange = {
+                        textFieldValue=it
+                    }
                 )
 
 
@@ -249,7 +244,7 @@ fun NoteScreen(
                 textFieldValue = newValue
                 coroutineScope.launch {
                     noteViewModel.updateSelectedNoteContent(
-                        newValue.annotatedString.text,
+                        newChar = newValue.annotatedString.text,
                         noteId = noteId,
                         isPinned = note.isPinned,
                         isStarred = note.isStarred,
@@ -265,10 +260,7 @@ fun NoteScreen(
                 focusedIndicatorColor = Color.White,
                 unfocusedIndicatorColor = Color.White
             ),
-            modifier = Modifier.focusRequester(focusRequester)
-                .onGloballyPositioned {
-                    focusRequester.requestFocus()
-                }
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
                 .clip(RoundedCornerShape(0.dp))

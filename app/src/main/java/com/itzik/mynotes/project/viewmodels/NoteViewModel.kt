@@ -62,12 +62,9 @@ class NoteViewModel @Inject constructor(
         isPinned: Boolean,
         isStarred: Boolean,
         fontSize: Int,
-        fontColor: Int,
-
+        fontColor: Int
     ) {
-
         privateNote.value = privateNote.value.copy(
-
             fontSize = fontSize,
             userId=userId,
             fontColor = fontColor,

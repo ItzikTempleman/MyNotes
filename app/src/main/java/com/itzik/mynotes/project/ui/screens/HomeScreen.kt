@@ -156,7 +156,6 @@ fun HomeScreen(
                         .size(32.dp)
                 )
 
-
                 IconButton(
                     modifier = Modifier
                         .height(50.dp)
@@ -170,7 +169,6 @@ fun HomeScreen(
                         imageVector = Icons.Default.Photo,
                         contentDescription = null
                     )
-
                 }
 
                 VerticalDivider(modifier = Modifier.padding(12.dp))
@@ -182,6 +180,7 @@ fun HomeScreen(
                     colorNumber = 4,
                     imageVector = Icons.AutoMirrored.Filled.Sort
                 )
+
                 SortDropDownMenu(
                     isExpanded = isExpanded,
                     modifier = Modifier.wrapContentSize(),
