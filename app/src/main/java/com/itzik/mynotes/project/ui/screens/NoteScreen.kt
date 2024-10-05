@@ -137,9 +137,8 @@ fun NoteScreen(
                             if (fontSize > 10) {
                                 coroutineScope.launch {
                                     fontSize -= 2
-
                                     noteViewModel.updateSelectedNoteContent(
-                                        content = textFieldValue.text,
+                                        textFieldValue.text,
                                         noteId = noteId,
                                         isStarred = note.isPinned,
                                         isPinned = note.isStarred,
@@ -161,9 +160,8 @@ fun NoteScreen(
                             if (fontSize < 40) {
                                 coroutineScope.launch {
                                     fontSize += 2
-
                                     noteViewModel.updateSelectedNoteContent(
-                                        content = textFieldValue.text,
+                                        textFieldValue.text,
                                         noteId = noteId,
                                         isPinned = note.isPinned,
                                         isStarred = note.isStarred,
@@ -243,9 +241,8 @@ fun NoteScreen(
             onValueChange = { newValue ->
                 textFieldValue = newValue
                 coroutineScope.launch {
-
                     noteViewModel.updateSelectedNoteContent(
-                        content = textFieldValue.annotatedString.text,
+                        newChar = newValue.annotatedString.text,
                         noteId = noteId,
                         isPinned = note.isPinned,
                         isStarred = note.isStarred,
@@ -298,9 +295,8 @@ fun NoteScreen(
                 onColorSelected = { color ->
                     coroutineScope.launch {
                         selectedColor = color.toArgb()
-
                         noteViewModel.updateSelectedNoteContent(
-                            content  =textFieldValue.text,
+                            textFieldValue.text,
                             noteId = noteId,
                             isStarred = note.isPinned,
                             isPinned = note.isStarred,

@@ -118,7 +118,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color.White),
     ) {
-        val (titleIcon, selectImageWallpaperIcon, topRow, noteLazyColumn, emptyStateMessage) = createRefs()
+        val ( topRow, noteLazyColumn, emptyStateMessage) = createRefs()
 
         Image(
             painter = rememberAsyncImagePainter(
@@ -212,9 +212,8 @@ fun HomeScreen(
                         .padding(8.dp),
                     onClick = {
                         coroutineScope.launch {
-
                             noteViewModel.updateSelectedNoteContent(
-                                content = "", isPinned = false, isStarred = false,
+                                "", isPinned = false, isStarred = false,
                                 fontSize = 20, fontColor = Color.Black.toArgb(), userId = userId
                             )
                         }
@@ -265,9 +264,8 @@ fun HomeScreen(
                                             bottomBarNavController.currentBackStackEntry?.savedStateHandle?.set(
                                                 key = "noteId", value = noteId
                                             )
-
                                             noteViewModel.updateSelectedNoteContent(
-                                                content = noteItem.content,
+                                                newChar = noteItem.content,
                                                 noteId = noteItem.noteId,
                                                 userId = noteItem.userId,
                                                 isPinned = noteItem.isPinned,

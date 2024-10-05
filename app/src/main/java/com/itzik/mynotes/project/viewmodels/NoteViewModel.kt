@@ -55,13 +55,8 @@ class NoteViewModel @Inject constructor(
 
     }
 
-
-
-
-
-
     suspend fun updateSelectedNoteContent(
-        content: String,
+        newChar: String,
         userId: String,
         noteId: Int? = 0,
         isPinned: Boolean,
@@ -75,7 +70,7 @@ class NoteViewModel @Inject constructor(
             fontColor = fontColor,
             isPinned = isPinned,
             isStarred = isStarred,
-            content = content,
+            content = newChar,
             time = getCurrentTime(),
         )
 
@@ -107,10 +102,9 @@ class NoteViewModel @Inject constructor(
         if (matchingNoteToPreviousVersion == null) {
             repo.saveNote(noteToSave)
         } else {
-
             updateSelectedNoteContent(
                 userId=note.userId,
-                content = note.content,
+                newChar = note.content,
                 isPinned = note.isPinned,
                 isStarred = note.isStarred,
                 fontSize = note.fontSize,
