@@ -64,6 +64,7 @@ class NoteViewModel @Inject constructor(
         fontSize: Int,
         fontColor: Int
     ) {
+
         privateNote.value = privateNote.value.copy(
             fontSize = fontSize,
             userId=userId,

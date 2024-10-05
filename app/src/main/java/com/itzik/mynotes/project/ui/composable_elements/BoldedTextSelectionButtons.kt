@@ -18,14 +18,11 @@ fun BoldedTextSelectionButtons(
     modifier: Modifier,
     isBolded: Boolean,
     textFieldValue: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
-
+    onValueChange: (TextFieldValue) -> Unit
 ) {
     val start = textFieldValue.selection.start
     val end = textFieldValue.selection.end
     val originalText = textFieldValue.annotatedString
-
-
 
     val updatedAnnotatedString = buildAnnotatedString {
         if (start != end) {
