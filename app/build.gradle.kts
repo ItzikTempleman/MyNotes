@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.itzik.mynotes"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.itzik.mynotes"
         minSdk = 29
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 

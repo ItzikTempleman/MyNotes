@@ -25,8 +25,6 @@ fun BoldedTextSelectionButtons(
     val end = textFieldValue.selection.end
     val originalText = textFieldValue.annotatedString
 
-
-
     val updatedAnnotatedString = buildAnnotatedString {
         if (start != end) {
             append(originalText.substring(0, start))
@@ -37,7 +35,6 @@ fun BoldedTextSelectionButtons(
         } else {
             pushStyle(SpanStyle(fontWeight = if (isBolded) FontWeight.Bold else FontWeight.Normal))
             append(originalText.text)
-            pop()
         }
     }
 

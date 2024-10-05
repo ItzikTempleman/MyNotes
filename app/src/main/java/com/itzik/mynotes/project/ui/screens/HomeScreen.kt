@@ -212,8 +212,9 @@ fun HomeScreen(
                         .padding(8.dp),
                     onClick = {
                         coroutineScope.launch {
+
                             noteViewModel.updateSelectedNoteContent(
-                                "", isPinned = false, isStarred = false,
+                                content = "", isPinned = false, isStarred = false,
                                 fontSize = 20, fontColor = Color.Black.toArgb(), userId = userId
                             )
                         }
@@ -264,8 +265,9 @@ fun HomeScreen(
                                             bottomBarNavController.currentBackStackEntry?.savedStateHandle?.set(
                                                 key = "noteId", value = noteId
                                             )
+
                                             noteViewModel.updateSelectedNoteContent(
-                                                newChar = noteItem.content,
+                                                content = noteItem.content,
                                                 noteId = noteItem.noteId,
                                                 userId = noteItem.userId,
                                                 isPinned = noteItem.isPinned,

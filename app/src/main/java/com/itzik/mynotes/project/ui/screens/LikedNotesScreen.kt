@@ -120,8 +120,9 @@ fun LikedNotesScreen(
                                     bottomBarNavController.currentBackStackEntry?.savedStateHandle?.set(
                                         key = "isFromLikedNotesScreen", value = true
                                     )
+
                                     noteViewModel.updateSelectedNoteContent(
-                                        newChar = noteItem.content,
+                                        content = noteItem.content,
                                         noteId = noteId,
                                         isPinned = noteItem.isPinned,
                                         isStarred = noteItem.isStarred,
