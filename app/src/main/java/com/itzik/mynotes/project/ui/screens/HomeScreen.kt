@@ -118,7 +118,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color.White),
     ) {
-        val ( topRow, noteLazyColumn, emptyStateMessage) = createRefs()
+        val (topRow, noteLazyColumn, emptyStateMessage) = createRefs()
 
         Image(
             painter = rememberAsyncImagePainter(
@@ -213,8 +213,13 @@ fun HomeScreen(
                     onClick = {
                         coroutineScope.launch {
                             noteViewModel.updateSelectedNoteContent(
-                                "", isPinned = false, isStarred = false,
-                                fontSize = 20, fontColor = Color.Black.toArgb(), userId = userId
+                                "",
+                                isPinned = false,
+                                isStarred = false,
+                                fontSize = 20,
+                                fontColor = Color.Black.toArgb(),
+                                userId = userId,
+                                fontWeight = 400
                             )
                         }
                         bottomBarNavController.navigate(Screen.NoteScreen.route)
@@ -272,8 +277,8 @@ fun HomeScreen(
                                                 isStarred = noteItem.isStarred,
                                                 fontSize = noteItem.fontSize,
                                                 fontColor = noteItem.fontColor,
-
-                                                )
+                                                fontWeight = noteItem.fontWeight
+                                            )
                                         }
                                         bottomBarNavController.navigate(Screen.NoteScreen.route)
                                     }

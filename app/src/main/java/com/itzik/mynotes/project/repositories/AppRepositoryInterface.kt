@@ -16,7 +16,7 @@ interface AppRepositoryInterface {
     suspend fun getUserById(userId: String): User
     suspend fun updateViewType(userId: String, isViewGrid: Boolean)
     suspend fun fetchViewType(userId: String): Boolean
-    suspend fun getWallpaperListByQuery(query:String): Response<WallpaperResponse>
+    suspend fun getWallpaperListByQuery(query: String): Response<WallpaperResponse>
 
     suspend fun saveNote(note: Note)
     suspend fun fetchNotes(userId: String): MutableList<Note>
@@ -29,7 +29,7 @@ interface AppRepositoryInterface {
     suspend fun fetchStarredNotes(userId: String): MutableList<Note>
     suspend fun getSortedNotes(sortType: String, userId: String): MutableList<Note>
     suspend fun deleteNote(note: Note)
-
+    suspend fun updateFontWeight(noteId: Int, fontWeight: Int)
 
 }
     

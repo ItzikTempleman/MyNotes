@@ -12,13 +12,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.itzik.mynotes.project.model.Note
+import com.itzik.mynotes.project.viewmodels.NoteViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun BoldedTextSelectionButtons(
     modifier: Modifier,
     isBolded: Boolean,
     textFieldValue: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit
+    onValueChange: (TextFieldValue) -> Unit,
+    note: Note,
+    noteViewModel: NoteViewModel,
+    coroutineScope: CoroutineScope
 ) {
     val start = textFieldValue.selection.start
     val end = textFieldValue.selection.end
@@ -34,7 +41,6 @@ fun BoldedTextSelectionButtons(
         } else {
             pushStyle(SpanStyle(fontWeight = if (isBolded) FontWeight.Bold else FontWeight.Normal))
             append(originalText.text)
-            pop()
         }
     }
 
@@ -47,6 +53,19 @@ fun BoldedTextSelectionButtons(
         modifier = modifier
             .clickable {
                 onValueChange(newTextFieldValue)
+                coroutineScope.launch {
+
+                    noteViewModel.updateSelectedNoteContent(
+                        newChar = newTextFieldValue.text,
+                        noteId = note.noteId,
+                        isPinned = note.isPinned,
+                        isStarred = note.isStarred,
+                        fontSize = note.fontSize,
+                        fontColor = note.fontColor,
+                        userId = note.userId,
+                        fontWeight = noteViewModel.fontWeightToInt(if (isBolded) FontWeight.Bold else FontWeight.Normal)
+                    )
+                }
             }
             .padding(4.dp),
         text = "B",

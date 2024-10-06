@@ -18,13 +18,13 @@ interface NoteDao {
     @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrash = 0 AND userId = :userId")
     suspend fun fetchNotes(userId: String): MutableList<Note>
 
-    @Insert (onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSingleNoteIntoRecycleBin(note: Note)
 
     @Update
     suspend fun setTrash(note: Note)
 
-    @Insert (onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNoteListIntoRecycleBin(notes: MutableList<Note>)
 
     @Query("SELECT * FROM $NOTE_TABLE WHERE isInTrash = 1 AND userId = :userId")
@@ -47,5 +47,8 @@ interface NoteDao {
 
     @Delete
     suspend fun deleteNote(note: Note)
+
+    @Query("UPDATE $NOTE_TABLE SET fontWeight = :fontWeight WHERE noteId = :noteId")
+    suspend fun updateFontWeight(noteId: Int, fontWeight: Int)
 }
 

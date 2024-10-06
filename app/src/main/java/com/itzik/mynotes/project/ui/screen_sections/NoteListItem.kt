@@ -89,6 +89,7 @@ fun NoteListItem(
                 fontSize = 20.sp,
                 color = Color(note.fontColor),
                 overflow = TextOverflow.Ellipsis,
+                fontWeight = noteViewModel.intToFontWeight(note.fontWeight)
             )
         }
 

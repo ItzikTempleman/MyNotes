@@ -13,7 +13,8 @@ class Converters {
     fun fromUser(user: User): String = Gson().toJson(user)
 
     @TypeConverter
-    fun toUser(userString: String): User = Gson().fromJson(userString, object : TypeToken<User>() {}.type)
+    fun toUser(userString: String): User =
+        Gson().fromJson(userString, object : TypeToken<User>() {}.type)
 
     @TypeConverter
     fun fromStringToListOfImages(value: String): List<String> {
@@ -25,4 +26,5 @@ class Converters {
     fun fromListOfImagesToString(list: List<String>): String {
         return Gson().toJson(list)
     }
+
 }

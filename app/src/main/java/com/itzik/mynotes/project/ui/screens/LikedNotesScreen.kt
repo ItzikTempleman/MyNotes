@@ -99,8 +99,8 @@ fun LikedNotesScreen(
             ) {
                 items(noteList) { noteItem ->
                     SwipeToUnlike(
-                        note =noteItem,
-                        onRemoveStar ={
+                        note = noteItem,
+                        onRemoveStar = {
                             coroutineScope.launch {
                                 noteViewModel.unLikeNote(noteItem)
                             }
@@ -128,7 +128,7 @@ fun LikedNotesScreen(
                                         fontSize = noteItem.fontSize,
                                         fontColor = noteItem.fontColor,
                                         userId = noteItem.userId,
-
+                                        fontWeight = noteItem.fontWeight
                                     )
                                 }
                                 bottomBarNavController.navigate(Screen.NoteScreen.route)

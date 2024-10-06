@@ -67,6 +67,7 @@ fun NoteScreen(
 ) {
     val note by noteViewModel.publicNote.collectAsState()
 
+
     var textFieldValue by remember {
         mutableStateOf(
             TextFieldValue(
@@ -145,6 +146,7 @@ fun NoteScreen(
                                         fontSize = fontSize,
                                         fontColor = note.fontColor,
                                         userId = note.userId,
+                                        fontWeight = note.fontWeight
                                     )
                                 }
                             }
@@ -167,7 +169,8 @@ fun NoteScreen(
                                         isStarred = note.isStarred,
                                         fontSize = fontSize,
                                         fontColor = note.fontColor,
-                                        userId = note.userId
+                                        userId = note.userId,
+                                        fontWeight = note.fontWeight
                                     )
                                 }
                             }
@@ -184,7 +187,10 @@ fun NoteScreen(
                     textFieldValue =textFieldValue,
                     onValueChange = {
                         textFieldValue=it
-                    }
+                    },
+                    note = note,
+                    noteViewModel=noteViewModel,
+                    coroutineScope=coroutineScope
                 )
 
                 BoldedTextSelectionButtons(
@@ -193,7 +199,10 @@ fun NoteScreen(
                     textFieldValue =textFieldValue,
                     onValueChange = {
                         textFieldValue=it
-                    }
+                    },
+                    note = note,
+                    noteViewModel=noteViewModel,
+                    coroutineScope=coroutineScope
                 )
 
 
@@ -248,7 +257,7 @@ fun NoteScreen(
                         isStarred = note.isStarred,
                         fontSize = fontSize,
                         fontColor = note.fontColor,
-                        userId = note.userId)
+                        userId = note.userId,fontWeight = note.fontWeight)
                 }
             },
             colors = TextFieldDefaults.colors(
@@ -271,6 +280,7 @@ fun NoteScreen(
             textStyle = TextStyle.Default.copy(
                 fontSize = fontSize.sp,
                 color = Color(selectedColor),
+                fontWeight = noteViewModel.intToFontWeight(note.fontWeight)
             ),
             placeholder = {
                 Text(
@@ -302,7 +312,7 @@ fun NoteScreen(
                             isPinned = note.isStarred,
                             fontSize = fontSize,
                             fontColor = selectedColor,
-                            userId = note.userId)
+                            userId = note.userId,fontWeight = note.fontWeight)
                     }
                     isColorPickerOpen = false
                 },

@@ -1,5 +1,6 @@
 package com.itzik.mynotes.project.viewmodels
 
+import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itzik.mynotes.project.model.Note
@@ -39,13 +40,13 @@ class NoteViewModel @Inject constructor(
     private val privateDeletedNoteList = MutableStateFlow<MutableList<Note>>(mutableListOf())
     val publicDeletedNoteList: StateFlow<MutableList<Note>> get() = privateDeletedNoteList
 
-    var userId=""
+    var userId = ""
 
-        init {
-            viewModelScope.launch {
-                fetchCurrentLoggedInUserId()
-            }
+    init {
+        viewModelScope.launch {
+            fetchCurrentLoggedInUserId()
         }
+    }
 
 
     private suspend fun fetchCurrentLoggedInUserId() {
@@ -62,17 +63,19 @@ class NoteViewModel @Inject constructor(
         isPinned: Boolean,
         isStarred: Boolean,
         fontSize: Int,
-        fontColor: Int
+        fontColor: Int,
+        fontWeight: Int
     ) {
 
         privateNote.value = privateNote.value.copy(
             fontSize = fontSize,
-            userId=userId,
+            userId = userId,
             fontColor = fontColor,
             isPinned = isPinned,
             isStarred = isStarred,
             content = newChar,
             time = getCurrentTime(),
+            fontWeight = fontWeight
         )
 
         if (noteId != null) {
@@ -81,6 +84,15 @@ class NoteViewModel @Inject constructor(
         repo.updateNote(privateNote.value)
     }
 
+    fun fontWeightToInt(fontWeight: FontWeight): Int {
+        return fontWeight.weight
+    }
+    fun intToFontWeight(fontWeightInt: Int): FontWeight {
+        return when (fontWeightInt) {
+            700 -> FontWeight.Bold
+            else -> FontWeight.Normal
+        }
+    }
 
     fun updateUserIdForNewLogin() {
         viewModelScope.launch {
@@ -104,13 +116,13 @@ class NoteViewModel @Inject constructor(
             repo.saveNote(noteToSave)
         } else {
             updateSelectedNoteContent(
-                userId=note.userId,
+                userId = note.userId,
                 newChar = note.content,
                 isPinned = note.isPinned,
                 isStarred = note.isStarred,
                 fontSize = note.fontSize,
                 fontColor = note.fontColor,
-
+                fontWeight = note.fontWeight
             )
         }
         fetchNotesForUser(userId)
@@ -128,7 +140,7 @@ class NoteViewModel @Inject constructor(
             val starMap = activeNotes.associate { it.noteId to it.isStarred }
             privatePinStateMap.value = pinMap
             privateStarStateMap.value = starMap
-        }else {
+        } else {
             privateNoteList.value = mutableListOf()
         }
     }
@@ -229,10 +241,10 @@ class NoteViewModel @Inject constructor(
     }
 
     fun clearAllNoteList() {
-        privateNoteList.value= emptyList<Note>().toMutableList()
-        privateStarredNoteList.value= emptyList<Note>().toMutableList()
-        privateDeletedNoteList.value= emptyList<Note>().toMutableList()
-        privatePinnedNoteList.value= emptyList<Note>().toMutableList()
+        privateNoteList.value = emptyList<Note>().toMutableList()
+        privateStarredNoteList.value = emptyList<Note>().toMutableList()
+        privateDeletedNoteList.value = emptyList<Note>().toMutableList()
+        privatePinnedNoteList.value = emptyList<Note>().toMutableList()
     }
 
 }

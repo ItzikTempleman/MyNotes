@@ -23,7 +23,6 @@ import java.time.format.DateTimeFormatter
     )],
     indices = [Index(value = ["userId"])]
 )
-
 data class Note(
     @PrimaryKey(autoGenerate = true)
     var noteId: Int = 0,
@@ -35,6 +34,7 @@ data class Note(
     var fontColor: Int = Color.Black.toArgb(),
     var fontSize: Int = 20,
     var userId: String,
+    var fontWeight:Int=400
 ) : Parcelable {
 
     companion object {
