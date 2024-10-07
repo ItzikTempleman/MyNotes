@@ -233,7 +233,6 @@ fun RegistrationScreen(
                     visualTransformation = if (isCreatedPasswordVisible) VisualTransformation.None
                     else PasswordVisualTransformation(),
                     tint = Color.Black,
-
                     )
 
                 CustomOutlinedTextField(

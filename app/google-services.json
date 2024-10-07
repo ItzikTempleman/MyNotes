@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "933725058237",
+    "project_id": "mynotes-753d3",
+    "storage_bucket": "mynotes-753d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933725058237:android:8c2fd288c5db766eecb3d4",
+        "android_client_info": {
+          "package_name": "com.itzik.mynotes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC6o6FgGE4c_84V1fjEbLVYuqevMlBJsQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

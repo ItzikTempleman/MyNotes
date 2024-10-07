@@ -5,6 +5,7 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -33,6 +34,7 @@ android {
             )
         }
     }
+
     kapt {
         correctErrorTypes = true
     }
@@ -108,6 +110,10 @@ dependencies {
     implementation(libs.androidx.appcompat.v161)
     implementation(libs.androidx.core.ktx)
     implementation(libs.play.services.location.v2120)
+
+    implementation (platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+
 
 
     testImplementation(libs.androidx.core.testing)

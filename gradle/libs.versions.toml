@@ -17,6 +17,7 @@ coreKtxVersion = "1.13.0"
 coreTesting = "2.2.0"
 datetime = "0.9.0"
 espressoCoreVersion = "3.6.1"
+firebaseBom = "33.4.0"
 googleMaterial = "1.11.0"
 gradle = "8.5.2"
 gson = "2.10.1"
@@ -141,6 +142,8 @@ byte-buddy = { module = "net.bytebuddy:byte-buddy", version.ref = "byteBuddy" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 datetime = { module = "io.github.vanpra.compose-material-dialogs:datetime", version.ref = "datetime" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }

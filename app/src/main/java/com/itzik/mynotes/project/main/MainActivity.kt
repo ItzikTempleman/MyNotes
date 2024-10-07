@@ -24,6 +24,9 @@ class MainActivity : ComponentActivity() {
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var userViewModel: UserViewModel
 
+
+
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
