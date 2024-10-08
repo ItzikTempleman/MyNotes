@@ -305,7 +305,6 @@ fun RegistrationScreen(
                                 else -> Gender.MALE
                             }
                             isGenderSelected = true
-                            Log.d("TAGA", "isGenderSelected: $isGenderSelected")
                             dropDownMenuPlaceHolder = it
                         }
                     )

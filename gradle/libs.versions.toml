@@ -2,6 +2,7 @@
 activityComposeVersion = "1.9.1"
 agp = "8.4.1"
 androidxComposeBom = "2024.08.00"
+androidxComposeBomVersion = "2024.09.03"
 androidxJunit = "1.2.1"
 androidxLifecycleRuntimeKtx = "2.8.4"
 androidxMaterial = "1.6.6"
@@ -94,11 +95,14 @@ androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "a
 androidx-appcompat-v161 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
 androidx-compose-bom-v20240401 = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
 androidx-compose-bom-v20240800 = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
+androidx-compose-bom-v20240903 = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBomVersion" }
 androidx-compose-material3-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-ui-ui = { module = "androidx.compose.ui:ui" }
 androidx-compose-ui-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 androidx-compose-ui-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-compose-ui-ui-test-junit42 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-compose-ui-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+androidx-compose-ui-ui-test-manifest2 = { module = "androidx.compose.ui:ui-test-manifest" }
 androidx-compose-ui-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-ui-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx-compose-ui-ui-tooling-preview2 = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }

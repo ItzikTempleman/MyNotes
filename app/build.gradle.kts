@@ -115,15 +115,19 @@ dependencies {
     implementation(libs.firebase.analytics)
 
 
+    androidTestImplementation(platform(libs.androidx.compose.bom.v20240903))
 
+    androidTestImplementation(libs.androidx.compose.ui.ui.test.junit42)
+
+    debugImplementation(libs.androidx.compose.ui.ui.test.manifest2)
     testImplementation(libs.androidx.core.testing)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit.v121)
     androidTestImplementation(libs.androidx.espresso.core.v361)
-    androidTestImplementation(libs.androidx.compose.ui.ui.test.junit4)
+
     debugImplementation(libs.androidx.compose.ui.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.ui.test.manifest)
+
     testImplementation (libs.kotlinx.coroutines.test)
     testImplementation (libs.mockito.core)
     testImplementation (libs.byte.buddy)
