@@ -23,6 +23,7 @@ import java.time.format.DateTimeFormatter
     )],
     indices = [Index(value = ["userId"])]
 )
+
 data class Note(
     @PrimaryKey(autoGenerate = true)
     var noteId: Int = 0,

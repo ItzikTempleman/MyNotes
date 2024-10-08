@@ -3,9 +3,14 @@ activityComposeVersion = "1.9.1"
 agp = "8.4.1"
 androidxComposeBom = "2024.08.00"
 androidxComposeBomVersion = "2024.09.03"
+androidGradlePlugin = "8.7.0"
 androidxJunit = "1.2.1"
 androidxLifecycleRuntimeKtx = "2.8.4"
 androidxMaterial = "1.6.6"
+androidxMaterialIconsCore = "1.7.3"
+androidxMaterialIconsExtended = "1.7.3"
+androidxMaterialVersion = "1.7.3"
+androidxRoomCompiler = "<version>"
 appcompat = "1.7.0"
 appcompatVersion = "1.6.1"
 byteBuddy = "1.14.9"
@@ -20,14 +25,17 @@ datetime = "0.9.0"
 espressoCoreVersion = "3.6.1"
 firebaseBom = "33.4.0"
 googleMaterial = "1.11.0"
+googleServices = "4.4.2"
 gradle = "8.5.2"
 gson = "2.10.1"
 hiltAndroid = "2.50"
 hiltAndroidCompiler = "2.44"
+hiltAndroidCompilerVersion = "2.50"
 hiltAndroidGradlePlugin = "2.50"
 hiltAndroidGradlePluginVersion = "2.44"
 hiltAndroidVersion = "2.44"
 hiltCompiler = "2.50"
+hiltCompilerVersion = "<version>"
 hiltNavigationCompose = "1.2.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -35,6 +43,8 @@ junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 kotlinGradlePlugin = "1.9.0"
+kotlinGradlePluginVersion = "<latest_version>"
+kotlinParcelizeRuntime = "1.9.0"
 kotlinxCoroutinesAndroid = "1.8.0"
 kotlinxCoroutinesCore = "1.9.0-RC"
 kotlinxCoroutinesCoreVersion = "1.8.0"
@@ -90,6 +100,7 @@ junitJupiter = "5.8.1"
 xorgMockitoCore = "3.5.13"
 
 [libraries]
+
 androidx-activity-compose-v191 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-appcompat-v161 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
@@ -131,11 +142,15 @@ androidx-lifecycle-viewmodel-savedstate-v270 = { module = "androidx.lifecycle:li
 androidx-material = { module = "androidx.compose.material:material", version.ref = "materialVersion" }
 androidx-material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "materialIconsCore" }
 androidx-material-icons-core-v166 = { module = "androidx.compose.material:material-icons-core", version.ref = "materialIconsCoreVersion" }
+androidx-material-icons-core-v173 = { module = "androidx.compose.material:material-icons-core", version.ref = "androidxMaterialIconsCore" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-material-icons-extended-v166 = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtendedVersion" }
+androidx-material-icons-extended-v173 = { module = "androidx.compose.material:material-icons-extended", version.ref = "androidxMaterialIconsExtended" }
 androidx-material-v166 = { module = "androidx.compose.material:material", version.ref = "androidxMaterial" }
+androidx-material-v173 = { module = "androidx.compose.material:material", version.ref = "androidxMaterialVersion" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-room-compiler-v251 = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+androidx-room-compiler-vversion = { module = "androidx.room:room-compiler", version.ref = "androidxRoomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-room-runtime-v251 = { module = "androidx.room:room-runtime", version.ref = "roomRuntimeVersion" }
@@ -148,14 +163,17 @@ converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref
 datetime = { module = "io.github.vanpra.compose-material-dialogs:datetime", version.ref = "datetime" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
+hilt-android-compiler-v250 = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompilerVersion" }
 hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltAndroidGradlePlugin" }
 hilt-android-gradle-plugin-v244 = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltAndroidGradlePluginVersion" }
 hilt-android-v244 = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltCompiler" }
+hilt-compiler-vversion = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltCompilerVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -170,6 +188,8 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinGradlePlugin" }
+kotlin-gradle-plugin-vlatestversion = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinGradlePluginVersion" }
+kotlin-parcelize-runtime = { module = "org.jetbrains.kotlin:kotlin-parcelize-runtime", version.ref = "kotlinParcelizeRuntime" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-coroutines-core-v180 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCoreVersion" }
