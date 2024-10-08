@@ -31,8 +31,7 @@ class AppRepository @Inject constructor(
     override suspend fun updateIsLoggedIn(user: User) = userDao.updateIsLoggedIn(user)
     override suspend fun updateProfileImage(user: User) = userDao.updateProfileImage(user)
     override suspend fun updateWallpaper(user: User) = userDao.updateWallpaper(user)
-    override suspend fun getWallpaperListByQuery(query: String): Response<WallpaperResponse> =
-        wallpaperService.getWallpaperListBySearchQuery(searchQuery = query)
+    override suspend fun getWallpaperListByQuery(query: String): Response<WallpaperResponse> = wallpaperService.getWallpaperListBySearchQuery(searchQuery = query)
 
 
     override suspend fun getUserById(userId: String): User = userDao.getUserById(userId)

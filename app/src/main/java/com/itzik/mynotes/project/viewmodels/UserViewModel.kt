@@ -177,9 +177,9 @@ class UserViewModel @Inject constructor(
         val imagesFlow = flow {
             val response = repo.getWallpaperListByQuery(searchQuery)
 
-
             if (response.isSuccessful) {
                 val responseBody = response.body()
+                Log.d("TAGS","responseBody: $responseBody")
                 if (responseBody != null) {
                     emit(responseBody)
                 } else Log.d("TAG", "first failure message: " + response.message())

@@ -93,6 +93,13 @@ dependencies {
 
     implementation(libs.kotlin.parcelize.runtime)
 
+
+    implementation(libs.material.v1110)
+    implementation(libs.androidx.material.v166)
+    implementation(libs.androidx.material.icons.core.v166)
+    implementation(libs.androidx.material.icons.extended.v166)
+    implementation(libs.androidx.compose.material3.material3)
+
     implementation(libs.material)
     implementation(libs.androidx.material.v173)
     implementation(libs.androidx.material.icons.core.v173)
