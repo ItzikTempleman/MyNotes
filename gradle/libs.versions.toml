@@ -4,6 +4,7 @@ agp = "8.4.1"
 androidxComposeBom = "2024.08.00"
 androidxComposeBomVersion = "2024.09.03"
 androidGradlePlugin = "8.7.0"
+androidxComposeComposeBom = "2024.10.00"
 androidxJunit = "1.2.1"
 androidxLifecycleRuntimeKtx = "2.8.4"
 androidxMaterial = "1.6.6"
@@ -11,6 +12,8 @@ androidxMaterialIconsCore = "1.7.3"
 androidxMaterialIconsExtended = "1.7.3"
 androidxMaterialVersion = "1.7.3"
 androidxRoomCompiler = "<version>"
+androidxRoomCompilerVersion = "2.6.0"
+androidxUi = "1.5.1"
 appcompat = "1.7.0"
 appcompatVersion = "1.6.1"
 byteBuddy = "1.14.9"
@@ -21,6 +24,8 @@ converterGson = "2.9.0"
 core = "1.6.1"
 coreKtxVersion = "1.13.0"
 coreTesting = "2.2.0"
+countrycodepickercompose = "0.1"
+countryPicker = "1.0.0"
 datetime = "0.9.0"
 espressoCoreVersion = "3.6.1"
 firebaseBom = "33.4.0"
@@ -69,6 +74,7 @@ lifecycleViewmodelSavedstate = "2.8.3"
 lifecycleViewmodelSavedstateVersion = "2.7.0"
 loggingInterceptor = "4.2.1"
 material = "1.12.0"
+material3 = "1.3.0"
 materialIconsCore = "1.6.8"
 materialIconsCoreVersion = "1.6.6"
 materialIconsExtended = "1.6.8"
@@ -108,7 +114,9 @@ androidx-appcompat-v161 = { module = "androidx.appcompat:appcompat", version.ref
 androidx-compose-bom-v20240401 = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
 androidx-compose-bom-v20240800 = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-bom-v20240903 = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBomVersion" }
+androidx-compose-bom-v20241000 = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeComposeBom" }
 androidx-compose-material3-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-material3-material32 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 androidx-compose-ui-ui = { module = "androidx.compose.ui:ui" }
 androidx-compose-ui-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 androidx-compose-ui-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
@@ -151,16 +159,20 @@ androidx-material-v166 = { module = "androidx.compose.material:material", versio
 androidx-material-v173 = { module = "androidx.compose.material:material", version.ref = "androidxMaterialVersion" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-room-compiler-v251 = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+androidx-room-compiler-v260 = { module = "androidx.room:room-compiler", version.ref = "androidxRoomCompilerVersion" }
 androidx-room-compiler-vversion = { module = "androidx.room:room-compiler", version.ref = "androidxRoomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-room-runtime-v251 = { module = "androidx.room:room-runtime", version.ref = "roomRuntimeVersion" }
 androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedata" }
 androidx-runtime-livedata-v166 = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedataVersion" }
+androidx-ui-v151 = { module = "androidx.compose.ui:ui", version.ref = "androidxUi" }
 androidx-ui-v166 = { module = "androidx.compose.ui:ui", version.ref = "uiVersion" }
 byte-buddy = { module = "net.bytebuddy:byte-buddy", version.ref = "byteBuddy" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+country-picker = { module = "com.mrmans0n.compose:country-picker", version.ref = "countryPicker" }
+countrycodepickercompose = { module = "com.github.ahmmedrejowan:CountryCodePickerCompose", version.ref = "countrycodepickercompose" }
 datetime = { module = "io.github.vanpra.compose-material-dialogs:datetime", version.ref = "datetime" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }

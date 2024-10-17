@@ -1,5 +1,3 @@
-
-
 plugins {
     kotlin("kapt")
     id("com.android.application")
@@ -73,83 +71,60 @@ android {
 
 
 tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.addAll(listOf(
-        "--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED"
-    ))
+    options.compilerArgs.addAll(
+        listOf(
+            "--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED"
+        )
+    )
 }
 
-// Dependencies
+
 dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.firebase.auth.ktx) // Google Play Services Maps
-
-    // Kapt and KSP for annotation processors
-    ksp("androidx.room:room-compiler:2.6.0")
-    ksp("com.google.dagger:hilt-compiler:2.50")
-
+    implementation(libs.firebase.auth.ktx)
+    ksp(libs.androidx.room.compiler.v260)
+    ksp(libs.hilt.compiler)
     implementation(libs.hilt.android)
     annotationProcessor(libs.room.compiler)
     implementation(libs.coil.compose)
-
     implementation(libs.kotlin.parcelize.runtime)
-
-
     implementation(libs.material.v1110)
     implementation(libs.androidx.material.v166)
     implementation(libs.androidx.material.icons.core.v166)
     implementation(libs.androidx.material.icons.extended.v166)
-    implementation(libs.androidx.compose.material3.material3)
-
-    implementation(libs.material)
     implementation(libs.androidx.material.v173)
     implementation(libs.androidx.material.icons.core.v173)
     implementation(libs.androidx.material.icons.extended.v173)
-
-    // Jetpack Compose and Material dependencies
     implementation(libs.androidx.compose.ui.ui.tooling.preview2)
-    implementation(platform(libs.androidx.compose.bom.v20240903))
-
-
-    implementation(libs.androidx.compose.material3.material3)
+    implementation(platform(libs.androidx.compose.bom.v20241000))
+    implementation(libs.androidx.compose.material3.material32)
     implementation(libs.androidx.navigation.compose)
-
-    // Kotlin Coroutines and Serialization
     implementation(libs.kotlinx.coroutines.core.v180)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
-
-    // Retrofit and Gson for API calls
     implementation(libs.gson)
     implementation(libs.converter.gson)
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
-
-    // AndroidX Lifecycle and ViewModel
+    implementation(libs.countrycodepickercompose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx.v270)
     implementation(libs.androidx.lifecycle.viewmodel.compose.v270)
     implementation(libs.androidx.lifecycle.livedata.ktx.v270)
     implementation(libs.androidx.lifecycle.runtime.ktx.v284)
     implementation(libs.androidx.lifecycle.runtime.compose.v270)
     implementation(libs.androidx.lifecycle.viewmodel.savedstate.v270)
-
-    // Jetpack Compose UI dependencies
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.activity.compose.v191)
-    implementation(libs.androidx.compose.ui.ui2)
+    implementation(libs.androidx.compose.ui.ui)
+    implementation(libs.androidx.ui.v151)
     implementation(libs.androidx.compose.ui.ui.graphics)
     implementation(libs.androidx.compose.ui.ui.tooling.preview)
-
-    // AppCompat and Core KTX
     implementation(libs.androidx.appcompat.v161)
     implementation(libs.androidx.core.ktx)
-
-    // Google Play Services and Firebase
     implementation(libs.play.services.location.v2120)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
-
-    // Testing dependencies
     androidTestImplementation(platform(libs.androidx.compose.bom.v20240903))
     androidTestImplementation(libs.androidx.compose.ui.ui.test.junit42)
     debugImplementation(libs.androidx.compose.ui.ui.test.manifest2)
