@@ -21,8 +21,10 @@ sealed class Screen(
     val icon: ImageVector? = null,
 ) {
     data object Splash : Screen(route = "splash")
+
     data object Login : Screen(route = "login")
     data object Registration : Screen(route = "registration")
+    data object ResetPassword : Screen(route = "resetPassword")
 
     data object Home : Screen(route = "home", title = "Home", icon = Icons.Default.Home)
     data object LikedNotes : Screen(route = "liked_notes", title = "liked notes", icon = Icons.Default.Star)

@@ -25,34 +25,36 @@ class MainActivity : ComponentActivity() {
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var userViewModel: UserViewModel
     private val mAuth = FirebaseAuth.getInstance()
+    private val verificationOtp = ""
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            val coroutineScope: CoroutineScope = rememberCoroutineScope()
-            val navController: NavHostController = rememberNavController()
-            userViewModel = viewModel()
-            noteViewModel = viewModel()
 
-            val user by userViewModel.publicLoggedInUsersList.collectAsState()
-            val userId = user.firstOrNull()?.userId ?: ""
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContent {
+                val coroutineScope: CoroutineScope = rememberCoroutineScope()
+                val navController: NavHostController = rememberNavController()
+                userViewModel = viewModel()
+                noteViewModel = viewModel()
 
-            LaunchedEffect(userId) {
-                if (userId.isNotEmpty()) {
-                    noteViewModel.fetchNotesForUser(userId)
+                val user by userViewModel.publicLoggedInUsersList.collectAsState()
+                val userId = user.firstOrNull()?.userId ?: ""
+
+                LaunchedEffect(userId) {
+                    if (userId.isNotEmpty()) {
+                        noteViewModel.fetchNotesForUser(userId)
+                    }
+                }
+                MyNotesTheme {
+                    RootNavHost(
+                        userId = userId,
+                        noteViewModel = noteViewModel,
+                        userViewModel = userViewModel,
+                        coroutineScope = coroutineScope,
+                        rootNavController = navController,
+
+                        )
                 }
             }
-            MyNotesTheme {
-                RootNavHost(
-                    userId = userId,
-                    noteViewModel = noteViewModel,
-                    userViewModel = userViewModel,
-                    coroutineScope = coroutineScope,
-                    rootNavController = navController,
-
-                    )
-            }
         }
-    }
 }

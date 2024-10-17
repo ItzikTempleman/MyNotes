@@ -64,7 +64,7 @@ import kotlinx.coroutines.launch
 fun LoginScreen(
     coroutineScope: CoroutineScope,
     rootNavController: NavHostController,
-    userViewModel: UserViewModel?=null
+    userViewModel: UserViewModel? = null,
 ) {
     var email by remember { mutableStateOf("") }
     val emailText = stringResource(id = R.string.email)
@@ -230,13 +230,14 @@ fun LoginScreen(
 
                     TextButton(
                         onClick = {
-
+                            rootNavController.navigate(Screen.ResetPassword.route)
                         },
                         modifier = Modifier
                             .constrainAs(forgotPassword) {
                                 top.linkTo(passwordTF.bottom)
                                 start.linkTo(parent.start)
-                            }.padding(start = 20.dp),
+                            }
+                            .padding(start = 20.dp),
 
                         ) {
                         Text(

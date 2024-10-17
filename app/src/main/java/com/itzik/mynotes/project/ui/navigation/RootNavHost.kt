@@ -15,6 +15,7 @@ import com.itzik.mynotes.project.ui.navigation.Graph.HOME
 import com.itzik.mynotes.project.ui.navigation.Graph.ROOT
 import com.itzik.mynotes.project.ui.registrations.LoginScreen
 import com.itzik.mynotes.project.ui.registrations.RegistrationScreen
+import com.itzik.mynotes.project.ui.registrations.ResetPasswordScreen
 import com.itzik.mynotes.project.ui.registrations.SplashScreen
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
@@ -68,6 +69,14 @@ fun RootNavHost(
                     userViewModel = userViewModel,
                     coroutineScope = coroutineScope
                     )
+            }
+
+            composable(route = Screen.ResetPassword.route) {
+                ResetPasswordScreen(
+                    rootNavController = rootNavController,
+                    userViewModel = userViewModel,
+                    coroutineScope = coroutineScope
+                )
             }
         }
 
