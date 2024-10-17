@@ -44,4 +44,6 @@
     <string name="remove_profile_image">Remove profile image</string>
     <string name="edit">Edit</string>
     <string name="done">Done</string>
+    <string name="reset_screen">Reset Password\n</string>
+    <string name="enter_phone_number_to_reset_with">What phone number are you registered with?</string>
 </resources>
