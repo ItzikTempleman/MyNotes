@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val repo: AppRepositoryInterface
+    private val repo: AppRepositoryInterface,
 ) : ViewModel() {
 
     private val privateLoggedInUsersList = MutableStateFlow<List<User>>(emptyList())
@@ -102,7 +102,7 @@ class UserViewModel @Inject constructor(
         profileImage: String,
         gender: Gender,
         dateOfBirth: String,
-        selectedWallpaper: String
+        selectedWallpaper: String,
     ): User {
         return User(
             userName = name,
@@ -179,7 +179,7 @@ class UserViewModel @Inject constructor(
 
             if (response.isSuccessful) {
                 val responseBody = response.body()
-                Log.d("TAGS","responseBody: $responseBody")
+                Log.d("TAGS", "responseBody: $responseBody")
                 if (responseBody != null) {
                     emit(responseBody)
                 } else Log.d("TAG", "first failure message: " + response.message())
@@ -191,11 +191,11 @@ class UserViewModel @Inject constructor(
 
     }
 
-    suspend fun  updateEmail(email:String) {
+    suspend fun updateEmail(email: String) {
         viewModelScope.launch {
             val user = privateLoggedInUsersList.value.firstOrNull()
             if (user != null) {
-                val updatedUser = privateUser.value?.copy( email=email)
+                val updatedUser = privateUser.value?.copy(email = email)
                 if (updatedUser != null) {
                     repo.updateProfileImage(updatedUser)
                 }
@@ -204,16 +204,30 @@ class UserViewModel @Inject constructor(
         }
     }
 
-        suspend fun  updatePhone(phoneNumber:String) {
+    suspend fun updatePhone(phoneNumber: String) {
         viewModelScope.launch {
             val user = privateLoggedInUsersList.value.firstOrNull()
             if (user != null) {
-                val updatedUser = privateUser.value?.copy( phoneNumber=phoneNumber)
+                val updatedUser = privateUser.value?.copy(phoneNumber = phoneNumber)
                 if (updatedUser != null) {
                     repo.updateProfileImage(updatedUser)
                 }
                 privateUser.value = updatedUser
             }
+        }
+    }
+
+    private fun doesPhoneNumberMatchEmailsPhoneNumber(): Boolean {
+        val phone = privateUser.value?.phoneNumber
+        if (phone != null) {
+            Log.d("TAGG",phone )
+        }
+        return true
+    }
+
+    fun sendMessage(fullPhoneNumber: Int) {
+        if (doesPhoneNumberMatchEmailsPhoneNumber()) {
+            //TODO send sms
         }
     }
 }
