@@ -81,7 +81,8 @@ tasks.withType<JavaCompile>().configureEach {
 // Dependencies
 dependencies {
     implementation(libs.play.services.maps)
-    implementation(libs.androidx.room.ktx) // Google Play Services Maps
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.firebase.auth.ktx) // Google Play Services Maps
 
     // Kapt and KSP for annotation processors
     ksp("androidx.room:room-compiler:2.6.0")

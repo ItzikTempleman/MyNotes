@@ -12,6 +12,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.itzik.mynotes.project.ui.navigation.RootNavHost
 import com.itzik.mynotes.project.viewmodels.NoteViewModel
 import com.itzik.mynotes.project.viewmodels.UserViewModel
@@ -23,8 +24,8 @@ import kotlinx.coroutines.CoroutineScope
 class MainActivity : ComponentActivity() {
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var userViewModel: UserViewModel
+    private val mAuth = FirebaseAuth.getInstance()
 
-    
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +51,7 @@ class MainActivity : ComponentActivity() {
                     coroutineScope = coroutineScope,
                     rootNavController = navController,
 
-                )
+                    )
             }
         }
     }
