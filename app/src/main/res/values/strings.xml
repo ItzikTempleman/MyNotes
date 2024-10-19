@@ -45,5 +45,7 @@
     <string name="edit">Edit</string>
     <string name="done">Done</string>
     <string name="reset_screen">Reset Password\n</string>
-    <string name="enter_phone_number_to_reset_with">What phone number are you registered with?</string>
+    <string name="enter_code_sent_to_you">Enter SMS code received </string>
+    <string name="your_email">Enter account email </string>
+    <string name="enter_new_password">Enter new password</string>
 </resources>

@@ -1,17 +1,22 @@
 package com.itzik.mynotes.project.ui.registrations
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowDownward
+import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material.icons.rounded.RemoveRedEye
 import androidx.compose.material.icons.rounded.Send
+import androidx.compose.material.icons.rounded.Textsms
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,10 +33,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.viewmodels.UserViewModel
-import com.rejowan.ccpc.Country
-import com.rejowan.ccpc.CountryCodePicker
-import com.rejowan.ccpc.PickerCustomization
-import com.rejowan.ccpc.ViewCustomization
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -40,22 +41,35 @@ fun ResetPasswordScreen(
     rootNavController: NavHostController,
     userViewModel: UserViewModel?,
 ) {
-    var country by remember {
-        mutableStateOf(Country.Israel)
-    }
 
-    var restOfPhoneNumber by remember {
+    var associatedEmail by remember {
         mutableStateOf("")
     }
 
+    var receivedCode by remember {
+        mutableStateOf("")
+    }
+
+    var newPassword by remember {
+        mutableStateOf("")
+    }
+
+    var wasEmailSent by remember {
+        mutableStateOf(false)
+    }
+    var wasCodeCorrect by remember {
+        mutableStateOf(false)
+    }
 
     ConstraintLayout(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
-        val (screenTitle, enterPhoneNumberText, phoneNumber) = createRefs()
+
+        val (title, content) = createRefs()
+
         Text(
             modifier = Modifier
-                .constrainAs(screenTitle) {
+                .constrainAs(title) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 }
@@ -65,64 +79,111 @@ fun ResetPasswordScreen(
             text = stringResource(R.string.reset_screen)
         )
 
-        Text(
+        Column(
             modifier = Modifier
-                .constrainAs(enterPhoneNumberText) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-                .padding(8.dp),
-            fontSize = 16.sp,
-            text = stringResource(R.string.enter_phone_number_to_reset_with)
-        )
-
-        Row(
-            modifier = Modifier
-                .constrainAs(phoneNumber) {
-                    top.linkTo(enterPhoneNumberText.bottom)
-                }
                 .fillMaxWidth()
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            CountryCodePicker(
-                modifier = Modifier,
-                selectedCountry = country,
-                onCountrySelected = {
-                    country = it
+                .padding(16.dp)
+                .constrainAs(content) {
+                    top.linkTo(title.bottom)
                 },
-                viewCustomization = ViewCustomization(
-                    showFlag = true,
-                    showCountryIso = false,
-                    showCountryName = false,
-                    showCountryCode = true,
-                    clipToFull = false
-                ),
-                pickerCustomization = PickerCustomization(
-                    showFlag = false,
-                ),
-                showSheet = true,
-            )
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            if (!wasEmailSent) {
+                TextField(
+                    leadingIcon = {
+                        Icon(
+                            contentDescription = null,
+                            imageVector = Icons.Rounded.Email
+                        )
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    trailingIcon = {
+                        IconButton(
+                            onClick = {
+                                wasEmailSent = true
+                            }
+                        ) {
+                            Icon(
+                                contentDescription = null,
+                                imageVector = Icons.Rounded.Send
+                            )
+                        }
+                    }, label = {
+                        Text(text = stringResource(R.string.your_email))
+                    },
+                    value = associatedEmail,
+                    onValueChange = {
+                        associatedEmail = it
+                    }
+                )
+            } else {
+                TextField(
+                    leadingIcon = {
+                        Icon(
+                            contentDescription = null,
+                            imageVector = Icons.Rounded.Textsms
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    trailingIcon = {
+                        IconButton(
+                            onClick = {
+                                wasCodeCorrect = true
+                            }
+                        ) {
+                            Icon(
+                                contentDescription = null,
+                                imageVector = Icons.Rounded.ArrowDownward
+                            )
+                        }
+                    },
+                    label = {
+                        Text(text = stringResource(R.string.enter_code_sent_to_you))
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    value = receivedCode,
+                    onValueChange = {
+                        receivedCode = it
+                    }
+                )
 
-            OutlinedTextField(
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number) ,
-                value=restOfPhoneNumber,
-                onValueChange={
-                    restOfPhoneNumber=it
-                }
-            )
-            IconButton(
-                onClick = {
-                    val fullPhoneNumber = country.countryCode.toInt() + restOfPhoneNumber.toInt()
-                    userViewModel?.sendMessage(fullPhoneNumber)
-                }
-            ) {
-                Icon(
-                    contentDescription = null,
-                    imageVector = Icons.Rounded.Send
+                TextField(
+                    leadingIcon = {
+                        Icon(
+                            contentDescription = null,
+                            imageVector = Icons.Rounded.RemoveRedEye
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    trailingIcon = {
+                        IconButton(
+                            onClick = {
+                                wasCodeCorrect = true
+                                //TODO LOGIN WITH NEW PASSWORD
+                            }
+                        ) {
+                            Icon(
+                                contentDescription = null,
+                                imageVector = Icons.Rounded.ArrowForward
+                            )
+                        }
+                    },
+                    label = {
+                        Text(text = stringResource(R.string.enter_new_password))
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    value = newPassword,
+                    onValueChange = {
+                        newPassword = it
+                    }
                 )
             }
         }
