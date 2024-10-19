@@ -175,6 +175,8 @@ country-picker = { module = "com.mrmans0n.compose:country-picker", version.ref =
 countrycodepickercompose = { module = "com.github.ahmmedrejowan:CountryCodePickerCompose", version.ref = "countrycodepickercompose" }
 datetime = { module = "io.github.vanpra.compose-material-dialogs:datetime", version.ref = "datetime" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
+firebase-auth-emulator = { module = "com.google.firebase:firebase-auth-emulator" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }

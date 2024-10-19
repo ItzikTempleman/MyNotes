@@ -23,6 +23,9 @@ interface UserDao {
     @Query("SELECT*FROM $USER_TABLE WHERE email = :email AND password = :password")
     suspend fun getUserFromEmailAndPassword(email: String, password: String): User
 
+    @Query("SELECT*FROM $USER_TABLE WHERE email = :email")
+    suspend fun getTempUserForVerification(email: String): User
+
     @Query("SELECT * FROM $USER_TABLE WHERE userId = :userId")
     suspend fun getUserById(userId: String): User
 
@@ -40,5 +43,7 @@ interface UserDao {
 
     @Query("SELECT isViewGrid FROM $USER_TABLE WHERE userId=:userId")
     suspend fun fetchViewType(userId:String):Boolean
+
+
 
 }

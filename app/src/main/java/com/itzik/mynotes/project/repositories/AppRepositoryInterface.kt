@@ -10,6 +10,8 @@ interface AppRepositoryInterface {
     suspend fun insertUser(user: User)
     suspend fun fetchLoggedInUsers(): MutableList<User>
     suspend fun getUserFromEmailAndPassword(email: String, password: String): User
+    suspend fun getTempUserForVerification(email: String): User
+
     suspend fun updateIsLoggedIn(user: User)
     suspend fun updateProfileImage(user: User)
     suspend fun updateWallpaper(user: User)

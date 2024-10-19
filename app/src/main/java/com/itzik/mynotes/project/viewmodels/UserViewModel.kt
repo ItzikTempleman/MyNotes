@@ -68,6 +68,15 @@ class UserViewModel @Inject constructor(
         return user
     }
 
+    suspend fun getTempUserForVerification(userName: String): Flow<User> {
+        val user = flow {
+            val updatedUser = repo.getTempUserForVerification(userName)
+            emit(updatedUser)
+        }
+        return user
+    }
+
+
     fun fetchViewType(userId: String) {
         viewModelScope.launch {
             val isViewGrid = repo.fetchViewType(userId)
@@ -214,20 +223,6 @@ class UserViewModel @Inject constructor(
                 }
                 privateUser.value = updatedUser
             }
-        }
-    }
-
-    private fun doesPhoneNumberMatchEmailsPhoneNumber(): Boolean {
-        val phone = privateUser.value?.phoneNumber
-        if (phone != null) {
-            Log.d("TAGG",phone )
-        }
-        return true
-    }
-
-    fun sendMessage(fullPhoneNumber: Int) {
-        if (doesPhoneNumberMatchEmailsPhoneNumber()) {
-            //TODO send sms
         }
     }
 }
