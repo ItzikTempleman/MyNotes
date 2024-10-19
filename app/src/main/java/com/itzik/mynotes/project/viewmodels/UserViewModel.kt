@@ -141,7 +141,7 @@ class UserViewModel @Inject constructor(
     }
 
     fun validatePhoneNumber(phoneNumber: String): Boolean {
-        val regex = Regex("^\\d{9,11}$")
+        val regex = Regex("^(\\+\\d{1,3})?(0\\d{9}|\\d{9,11})$")
         return regex.matches(phoneNumber)
     }
 
