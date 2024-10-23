@@ -28,19 +28,19 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun CustomOutlinedTextField(
     invokedFunction: (() -> Unit)? = null,
-    tint: Color,
+    tint: Color = Color.White,
     isTrailingIconExist: Boolean = false,
     value: String,
-    thisValueChange: (String) -> Unit,
+    thisValueChange: ((String) -> Unit)? = null,
     label: String,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     imageVector: ImageVector,
     trailingImage: ImageVector? = null,
     isError: Boolean = false,
     isKeyboardPasswordType: Boolean = false,
     isKeyboardNumberType: Boolean = false,
     isIconClickableParam: Boolean = false,
-    visualTransformation: VisualTransformation,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     isPasswordIconShowing: ((Boolean) -> Unit)? = null,
     isPasswordToggleClicked: Boolean? = null,
 ) {
@@ -52,7 +52,7 @@ fun CustomOutlinedTextField(
         androidx.compose.material.OutlinedTextField(
             shape = MaterialTheme.shapes.small,
             value = value,
-            onValueChange = { thisValueChange(it) },
+            onValueChange = { thisValueChange?.invoke(it) },
             modifier = Modifier,
             label = {
                 Text(

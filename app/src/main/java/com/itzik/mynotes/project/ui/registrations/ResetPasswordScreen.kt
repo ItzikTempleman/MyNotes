@@ -13,7 +13,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Email
-import androidx.compose.material.icons.rounded.RemoveRedEye
 import androidx.compose.material.icons.rounded.Send
 import androidx.compose.material.icons.rounded.Textsms
 import androidx.compose.material3.Icon
@@ -45,6 +44,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.itzik.mynotes.R
 import com.itzik.mynotes.project.model.Gender
 import com.itzik.mynotes.project.model.User
+import com.itzik.mynotes.project.ui.composable_elements.CustomOutlinedTextField
 import com.itzik.mynotes.project.viewmodels.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -149,17 +149,19 @@ fun ResetPasswordScreen(
                                         Log.d("TAG", "phone number sent: ${fetchedTempUser.phoneNumber}")
                                         val options = PhoneAuthOptions.newBuilder(mAuth).setPhoneNumber(fetchedTempUser.phoneNumber).setTimeout(60L, TimeUnit.SECONDS).setActivity(activity).setCallbacks(object :
                                                 PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                                                override fun onVerificationCompleted(p0: PhoneAuthCredential) {
+                                                override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
+                                                    Log.i("TAG", "Verification Completed")
                                                     Toast.makeText(activity, "Verification Completed", Toast.LENGTH_SHORT).show()
                                                 }
                                                 override fun onVerificationFailed(p0: FirebaseException) {
-                                                    Toast.makeText(activity, "Verification Failed", Toast.LENGTH_SHORT).show()
                                                     Log.e("TAG", "Verification failed", p0)
+                                                    Toast.makeText(activity, "Verification Failed", Toast.LENGTH_SHORT).show()
                                                 }
                                                 override fun onCodeSent(
-                                                    p0: String, p1: PhoneAuthProvider.ForceResendingToken) {
-                                                    super.onCodeSent(p0, p1)
-                                                    receivedCode = p0
+                                                    verificationCode: String, p1: PhoneAuthProvider.ForceResendingToken) {
+                                                    super.onCodeSent(verificationCode, p1)
+                                                    Log.i("TAG", "Otp Send Successfully")
+                                                    receivedCode = verificationCode
                                                     Toast.makeText(activity, "Otp Send Successfully", Toast.LENGTH_SHORT).show()
                                                 }
                                               }
@@ -214,7 +216,8 @@ fun ResetPasswordScreen(
                     }
                 )
 
-                TextField(
+                // Enter new password button
+                /*TextField(
                     leadingIcon = {
                         Icon(
                             contentDescription = null,
@@ -246,7 +249,22 @@ fun ResetPasswordScreen(
                         newPassword = it
                     }
                 )
+*/
 
+                // Enter new password button - new version
+                CustomOutlinedTextField(
+                    invokedFunction = {
+                        wasCodeCorrect = true
+                        //TODO UPDATE NEW PASSWORD
+                    },
+                    isTrailingIconExist = true,
+                    value = newPassword,
+                    label = stringResource(R.string.enter_new_password),
+                    imageVector =  Icons.Rounded.ArrowForward,
+                    thisValueChange = {
+                        newPassword = it
+                    }
+                )
             }
         }
     }

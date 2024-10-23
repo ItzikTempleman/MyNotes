@@ -17,8 +17,8 @@ android {
         applicationId = "com.itzik.mynotes"
         minSdk = 29
         targetSdk = 34
-        versionCode = 3
-        versionName = "3.0"
+        versionCode = 4
+        versionName = "4.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -81,54 +81,83 @@ tasks.withType<JavaCompile>().configureEach {
 
 dependencies {
 
+    //Material
     implementation(libs.material.v1110)
     implementation(libs.androidx.material.v166)
-    implementation(libs.androidx.material.icons.core.v166)
-    implementation(libs.androidx.material.icons.extended.v166)
     implementation(libs.androidx.material.v173)
-    implementation(libs.androidx.material.icons.core.v173)
-    implementation(libs.androidx.material.icons.extended.v173)
-    implementation(libs.androidx.compose.ui.ui.tooling.preview2)
-    implementation(platform(libs.androidx.compose.bom.v20241000))
     implementation(libs.androidx.compose.material3.material32)
-    implementation(libs.androidx.constraintlayout.compose)
+
+    //Compose
+    implementation(libs.androidx.compose.ui.ui.tooling.preview2)
     implementation(libs.androidx.activity.compose.v191)
     implementation(libs.androidx.compose.ui.ui)
     implementation(libs.androidx.ui.v151)
     implementation(libs.androidx.compose.ui.ui.graphics)
     implementation(libs.androidx.compose.ui.ui.tooling.preview)
+    implementation(platform(libs.androidx.compose.bom.v20241000))
+    androidTestImplementation(platform(libs.androidx.compose.bom.v20241000))
+
+    //Constraint layout
+    implementation(libs.androidx.constraintlayout.compose)
+
+    //Android core
     implementation(libs.androidx.appcompat.v161)
     implementation(libs.androidx.core.ktx)
 
+    //icons
+    implementation(libs.androidx.material.icons.core.v173)
+    implementation(libs.androidx.material.icons.extended.v173)
+    implementation(libs.androidx.material.icons.core.v166)
+    implementation(libs.androidx.material.icons.extended.v166)
 
-    implementation(libs.play.services.maps)
-    implementation(libs.androidx.room.ktx)
+    //Firebase
     implementation(libs.firebase.auth.ktx)
-    ksp(libs.androidx.room.compiler.v260)
-    ksp(libs.hilt.compiler)
-    implementation(libs.hilt.android)
+    implementation(libs.play.services.maps)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(platform(libs.firebase.bom.v3350))
+    implementation(libs.google.firebase.analytics)
+
+    //Room
+    implementation(libs.androidx.room.ktx)
     annotationProcessor(libs.room.compiler)
-    implementation(libs.coil.compose)
+    ksp(libs.androidx.room.compiler.v260)
+
+    //Parcel, Serialize, Json, Gson
     implementation(libs.kotlin.parcelize.runtime)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.kotlinx.coroutines.core.v180)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.serialization.json)
     implementation(libs.gson)
     implementation(libs.converter.gson)
+    implementation(libs.kotlinx.serialization.json)
+
+    //Hilt
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.android)
+
+    //Coil
+    implementation(libs.coil.compose)
+
+    //Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    //Coroutines
+    implementation(libs.kotlinx.coroutines.core.v180)
+    implementation(libs.kotlinx.coroutines.android)
+
+    //Retrofit and interceptor
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
-    implementation(libs.countrycodepickercompose)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx.v270)
-    implementation(libs.androidx.lifecycle.viewmodel.compose.v270)
+
+    //LifeCycle and live data
     implementation(libs.androidx.lifecycle.livedata.ktx.v270)
     implementation(libs.androidx.lifecycle.runtime.ktx.v284)
     implementation(libs.androidx.lifecycle.runtime.compose.v270)
+
+    //Viewmodel
     implementation(libs.androidx.lifecycle.viewmodel.savedstate.v270)
-    implementation(libs.play.services.location.v2120)
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    androidTestImplementation(platform(libs.androidx.compose.bom.v20241000))
+    implementation(libs.androidx.lifecycle.viewmodel.ktx.v270)
+    implementation(libs.androidx.lifecycle.viewmodel.compose.v270)
+
+    //Testing
     androidTestImplementation(libs.androidx.compose.ui.ui.test.junit42)
     debugImplementation(libs.androidx.compose.ui.ui.test.manifest2)
     testImplementation(libs.junit.jupiter)

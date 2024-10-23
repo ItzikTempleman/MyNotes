@@ -29,6 +29,7 @@ countryPicker = "1.0.0"
 datetime = "0.9.0"
 espressoCoreVersion = "3.6.1"
 firebaseBom = "33.4.0"
+firebaseBomVersion = "33.5.0"
 googleMaterial = "1.11.0"
 googleServices = "4.4.2"
 gradle = "8.5.2"
@@ -178,6 +179,8 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-auth-emulator = { module = "com.google.firebase:firebase-auth-emulator" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-bom-v3350 = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
+google-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }

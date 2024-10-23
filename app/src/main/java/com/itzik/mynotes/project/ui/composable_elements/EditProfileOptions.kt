@@ -28,7 +28,6 @@ sealed class EditProfileOptions(
 ) {
     data object EditEmail : EditProfileOptions(
         itemName = "Email"
-
     )
     data object EditPhoneNumber : EditProfileOptions(
         itemName = "Phone number"

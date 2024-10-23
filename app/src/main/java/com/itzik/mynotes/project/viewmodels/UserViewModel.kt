@@ -42,7 +42,7 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchLoggedInUsers() {
+    private fun fetchLoggedInUsers() {
         viewModelScope.launch {
             val users = repo.fetchLoggedInUsers()
             privateLoggedInUsersList.value = users
@@ -60,7 +60,7 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    suspend fun getUserFromUserNameAndPassword(userName: String, password: String): Flow<User?> {
+    fun getUserFromUserNameAndPassword(userName: String, password: String): Flow<User?> {
         val user = flow {
             val updatedUser = repo.getUserFromEmailAndPassword(userName, password)
             emit(updatedUser)
@@ -68,7 +68,7 @@ class UserViewModel @Inject constructor(
         return user
     }
 
-    suspend fun getTempUserForVerification(userName: String): Flow<User> {
+    fun getTempUserForVerification(userName: String): Flow<User> {
         val user = flow {
             val updatedUser = repo.getTempUserForVerification(userName)
             emit(updatedUser)
@@ -155,7 +155,7 @@ class UserViewModel @Inject constructor(
     }
 
 
-    suspend fun updateProfileImage(imageUri: String) {
+    fun updateProfileImage(imageUri: String) {
         viewModelScope.launch {
             val user = privateLoggedInUsersList.value.firstOrNull()
             if (user != null) {
@@ -200,7 +200,7 @@ class UserViewModel @Inject constructor(
 
     }
 
-    suspend fun updateEmail(email: String) {
+    fun updateEmail(email: String) {
         viewModelScope.launch {
             val user = privateLoggedInUsersList.value.firstOrNull()
             if (user != null) {
@@ -213,7 +213,7 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    suspend fun updatePhone(phoneNumber: String) {
+    fun updatePhone(phoneNumber: String) {
         viewModelScope.launch {
             val user = privateLoggedInUsersList.value.firstOrNull()
             if (user != null) {
