@@ -216,42 +216,7 @@ fun ResetPasswordScreen(
                     }
                 )
 
-                // Enter new password button
-                /*TextField(
-                    leadingIcon = {
-                        Icon(
-                            contentDescription = null,
-                            imageVector = Icons.Rounded.RemoveRedEye
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    trailingIcon = {
-                        IconButton(
-                            onClick = {
-                                wasCodeCorrect = true
-                                //TODO UPDATE NEW PASSWORD
-                            }
-                        ) {
-                            Icon(
-                                contentDescription = null,
-                                imageVector = Icons.Rounded.ArrowForward
-                            )
-                        }
-                    },
-                    label = {
-                        Text(text = stringResource(R.string.enter_new_password))
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    value = newPassword,
-                    onValueChange = {
-                        newPassword = it
-                    }
-                )
-*/
-
-                // Enter new password button - new version
+                
                 CustomOutlinedTextField(
                     invokedFunction = {
                         wasCodeCorrect = true
