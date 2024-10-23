@@ -196,7 +196,7 @@ fun LoginScreen(
                             }
                             .fillMaxWidth()
                             .padding(8.dp),
-                        imageVector = Icons.Default.Email,
+                        leftImageVector = Icons.Default.Email,
                         isError = isEmailError,
                         visualTransformation = VisualTransformation.None,
                         tint = Color.Black,
@@ -215,7 +215,7 @@ fun LoginScreen(
                             }
                             .fillMaxWidth()
                             .padding(8.dp),
-                        imageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                        leftImageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                         isError = isPasswordError,
                         isKeyboardPasswordType = true,
                         isIconClickableParam = true,

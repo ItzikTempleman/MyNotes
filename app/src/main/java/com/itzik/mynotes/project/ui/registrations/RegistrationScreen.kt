@@ -77,8 +77,8 @@ fun RegistrationScreen(
     var createEmail by remember { mutableStateOf("") }
     val createEmailText = stringResource(id = R.string.create_email)
     var createEmailLabelMessage by remember { mutableStateOf(createEmailText) }
-
     var isNewEmailError by remember { mutableStateOf(false) }
+
     val createdPasswordText = stringResource(id = R.string.create_password)
     var createPassword by remember { mutableStateOf("") }
     var createPasswordLabelMessage by remember { mutableStateOf(createdPasswordText) }
@@ -182,7 +182,7 @@ fun RegistrationScreen(
                         }
                         .fillMaxWidth()
                         .padding(8.dp),
-                    imageVector = Icons.Default.Person,
+                    leftImageVector = Icons.Default.Person,
                     isError = nameError,
                     visualTransformation = VisualTransformation.None,
                     tint = Color.Black,
@@ -202,7 +202,7 @@ fun RegistrationScreen(
                         }
                         .fillMaxWidth()
                         .padding(8.dp),
-                    imageVector = Icons.Default.Email,
+                    leftImageVector = Icons.Default.Email,
                     isError = isNewEmailError,
                     visualTransformation = VisualTransformation.None,
                     tint = Color.Black,
@@ -222,7 +222,7 @@ fun RegistrationScreen(
                         }
                         .fillMaxWidth()
                         .padding(8.dp),
-                    imageVector = if (isCreatedPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                    leftImageVector = if (isCreatedPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                     isError = isCreatePasswordError,
                     isKeyboardPasswordType = true,
                     isIconClickableParam = true,
@@ -248,7 +248,7 @@ fun RegistrationScreen(
                         }
                         .fillMaxWidth()
                         .padding(8.dp),
-                    imageVector = Icons.Filled.Phone,
+                    leftImageVector = Icons.Filled.Phone,
                     isError = phoneNumberError,
                     visualTransformation = VisualTransformation.None,
                     tint = Color.Black,

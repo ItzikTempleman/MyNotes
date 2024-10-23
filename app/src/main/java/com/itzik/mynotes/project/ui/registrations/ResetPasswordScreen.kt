@@ -3,35 +3,30 @@ package com.itzik.mynotes.project.ui.registrations
 import android.app.Activity
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowCircleRight
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Sms
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.ArrowDownward
-import androidx.compose.material.icons.rounded.ArrowForward
-import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Send
-import androidx.compose.material.icons.rounded.Textsms
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -42,6 +37,7 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.itzik.mynotes.R
+import com.itzik.mynotes.project.main.NoteApp
 import com.itzik.mynotes.project.model.Gender
 import com.itzik.mynotes.project.model.User
 import com.itzik.mynotes.project.ui.composable_elements.CustomOutlinedTextField
@@ -66,15 +62,15 @@ fun ResetPasswordScreen(
     val mAuth = FirebaseAuth.getInstance()
 
 
-    var associatedEmail by remember {
-        mutableStateOf("")
-    }
+    var associatedEmail by remember { mutableStateOf("") }
+    val createEmailText = stringResource(id = R.string.your_email)
+    var createEmailLabelMessage by remember { mutableStateOf(createEmailText) }
+    var isNewEmailError by remember { mutableStateOf(false) }
 
+    val createPhoneNumberText = stringResource(id = R.string.enter_code_sent_to_you)
+    val createPhoneNumberLabelMessage by remember { mutableStateOf(createPhoneNumberText) }
+    val phoneNumberError by remember { mutableStateOf(false) }
     var receivedCode by remember {
-        mutableStateOf("")
-    }
-
-    var newPassword by remember {
         mutableStateOf("")
     }
 
@@ -85,11 +81,17 @@ fun ResetPasswordScreen(
         mutableStateOf(false)
     }
 
+    val createdPasswordText = stringResource(id = R.string.create_password)
+    var createPassword by remember { mutableStateOf("") }
+    var createPasswordLabelMessage by remember { mutableStateOf(createdPasswordText) }
+    var isCreatePasswordError by remember { mutableStateOf(false) }
+    var isCreatedPasswordVisible by remember { mutableStateOf(false) }
+
     ConstraintLayout(
         modifier = Modifier.fillMaxSize(),
     ) {
 
-        val (title, content) = createRefs()
+        val (title, enterEmail, enterCode, newPasswordTF) = createRefs()
 
         Text(
             modifier = Modifier
@@ -97,140 +99,138 @@ fun ResetPasswordScreen(
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                 }
-                .padding(8.dp),
+                .padding(16.dp),
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
             text = stringResource(R.string.reset_screen)
         )
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .constrainAs(content) {
-                    top.linkTo(title.bottom)
+
+        
+        if (!wasSMSSent) {
+            CustomOutlinedTextField(
+                isIconClickableParam = true,
+                value = associatedEmail,
+                thisValueChange = {
+                    associatedEmail = it
                 },
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            if (!wasSMSSent) {
-                TextField(
-                    value = associatedEmail,
-                    onValueChange = {
-                        associatedEmail = it
-                    },
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Gray,
-                        focusedIndicatorColor = Color.Gray,
-                        disabledIndicatorColor = Color.Gray
-                    ),
-                    leadingIcon = {
-                        Icon(
-                            contentDescription = null,
-                            imageVector = Icons.Rounded.Email
-                        )
-                    },
-
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    trailingIcon = {
-                        IconButton(
-                            onClick = {
-                                if (associatedEmail.isNotBlank()) {
-                                    coroutineScope.launch {
-                                        userViewModel?.getTempUserForVerification(associatedEmail)?.collect {
-                                                fetchedTempUser = it
-                                            }
-                                        Log.d("TAG", "phone number sent: ${fetchedTempUser.phoneNumber}")
-                                        val options = PhoneAuthOptions.newBuilder(mAuth).setPhoneNumber(fetchedTempUser.phoneNumber).setTimeout(60L, TimeUnit.SECONDS).setActivity(activity).setCallbacks(object :
-                                                PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                                                override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
-                                                    Log.i("TAG", "Verification Completed")
-                                                    Toast.makeText(activity, "Verification Completed", Toast.LENGTH_SHORT).show()
-                                                }
-                                                override fun onVerificationFailed(p0: FirebaseException) {
-                                                    Log.e("TAG", "Verification failed", p0)
-                                                    Toast.makeText(activity, "Verification Failed", Toast.LENGTH_SHORT).show()
-                                                }
-                                                override fun onCodeSent(
-                                                    verificationCode: String, p1: PhoneAuthProvider.ForceResendingToken) {
-                                                    super.onCodeSent(verificationCode, p1)
-                                                    Log.i("TAG", "Otp Send Successfully")
-                                                    receivedCode = verificationCode
-                                                    Toast.makeText(activity, "Otp Send Successfully", Toast.LENGTH_SHORT).show()
-                                                }
-                                              }
-                                            ).build()
-                                        PhoneAuthProvider.verifyPhoneNumber(options)
-                                    }
-                                    wasSMSSent = true
+                label = createEmailLabelMessage,
+                modifier = Modifier
+                    .constrainAs(enterEmail) {
+                        top.linkTo(title.bottom)
+                    }
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                rightImageVector = Icons.Rounded.Send,
+                leftImageVector = Icons.Default.Email,
+                isError = isNewEmailError,
+                visualTransformation = VisualTransformation.None,
+                tint = Color.Black,
+                isTrailingIconExist = true,
+                invokedFunction = {
+                    if (associatedEmail.isNotBlank()) {
+                        coroutineScope.launch {
+                            userViewModel?.getTempUserForVerification(associatedEmail)
+                                ?.collect {
+                                    fetchedTempUser = it
                                 }
-                            }
-                        ) {
-                            Icon(
-                                contentDescription = null,
-                                imageVector = Icons.Rounded.Send
-                            )
-                        }
-                    }, label = {
-                        Text(text = stringResource(R.string.your_email))
-                    }
-                )
+                            Log.d("TAG", "phone number sent: ${fetchedTempUser.phoneNumber}")
+                            val options = PhoneAuthOptions.newBuilder(mAuth)
+                                .setPhoneNumber(fetchedTempUser.phoneNumber)
+                                .setTimeout(60L, TimeUnit.SECONDS).setActivity(activity)
+                                .setCallbacks(object :
+                                    PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                                    override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
+                                        makeToast("Verification completed")
+                                    }
 
-            } else {
-                TextField(
-                    leadingIcon = {
-                        Icon(
-                            contentDescription = null,
-                            imageVector = Icons.Rounded.Textsms
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    trailingIcon = {
-                        IconButton(
-                            onClick = {
-                                wasCodeCorrect = true
-                                //TODO ENTER THE CODE SENT BY SMS
-                            }
-                        ) {
-                            Icon(
-                                contentDescription = null,
-                                imageVector = Icons.Rounded.ArrowDownward
-                            )
-                        }
-                    },
-                    label = {
-                        Text(text = stringResource(R.string.enter_code_sent_to_you))
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    value = receivedCode,
-                    onValueChange = {
-                        receivedCode = it
-                    }
-                )
+                                    override fun onVerificationFailed(p0: FirebaseException) {
+                                        makeToast("Verification failed")
+                                    }
 
-                
-                CustomOutlinedTextField(
-                    invokedFunction = {
-                        wasCodeCorrect = true
-                        //TODO UPDATE NEW PASSWORD
-                    },
-                    isTrailingIconExist = true,
-                    value = newPassword,
-                    label = stringResource(R.string.enter_new_password),
-                    imageVector =  Icons.Rounded.ArrowForward,
-                    thisValueChange = {
-                        newPassword = it
+                                    override fun onCodeSent(
+                                        verificationCode: String,
+                                        p1: PhoneAuthProvider.ForceResendingToken,
+                                    ) {
+                                        super.onCodeSent(verificationCode, p1)
+                                        receivedCode = verificationCode
+                                        makeToast("Otp Send Successfully")
+                                    }
+                                }
+                                ).build()
+                            PhoneAuthProvider.verifyPhoneNumber(options)
+                        }
+                        wasSMSSent = true
                     }
-                )
-            }
+                }
+            )
+
+        } else {
+            CustomOutlinedTextField(
+                isIconClickableParam = true,
+                value = receivedCode,
+                thisValueChange = {
+                    receivedCode = it
+                },
+                rightImageVector = Icons.Rounded.ArrowDownward,
+                label = createPhoneNumberLabelMessage,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .constrainAs(enterCode) {
+                        top.linkTo(title.bottom)
+                    }
+                    .padding(8.dp),
+                leftImageVector = Icons.Default.Sms,
+                isError = phoneNumberError,
+                visualTransformation = VisualTransformation.None,
+                isTrailingIconExist = true,
+                invokedFunction = {
+                    //TODO ENTER THE CODE SENT BY SMS
+                },tint = Color.Black,
+            )
+
+
+
+            CustomOutlinedTextField(
+                isIconClickableParam = true,
+                value = createPassword,
+                thisValueChange = {
+                    createPassword = it
+
+                },
+                rightImageVector = Icons.Default.ArrowCircleRight,
+                invokedFunction = {
+                    wasCodeCorrect = true
+                    //TODO UPDATE NEW PASSWORD
+                },
+                label = createPasswordLabelMessage,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .constrainAs(newPasswordTF) {
+                        top.linkTo(enterCode.bottom)
+                    }
+                    .padding(8.dp),tint = Color.Black,
+                leftImageVector = if (isCreatedPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                isError = isCreatePasswordError,
+                isKeyboardPasswordType = true,
+                isTrailingIconExist = true,
+                isPasswordToggleClicked = isCreatedPasswordVisible,
+                isPasswordIconShowing = {
+                    isCreatedPasswordVisible = !isCreatedPasswordVisible
+                },
+                visualTransformation = if (isCreatedPasswordVisible) VisualTransformation.None
+                else PasswordVisualTransformation(),
+            )
         }
     }
 }
+
+
+fun makeToast(str: String, e: FirebaseException? = null) {
+    Log.e("TAG", str, e)
+    Toast.makeText(NoteApp.instance, str, Toast.LENGTH_SHORT).show()
+}
+
+
+
+

@@ -320,7 +320,7 @@ fun ProfileScreen(
                     if (selectedOption == SelectedEditOption.EMAIL) {
 
                         CustomOutlinedTextField(
-                            imageVector = Icons.Outlined.Email,
+                            leftImageVector = Icons.Outlined.Email,
                             label = "Edit user name email",
                             modifier = Modifier.width(300.dp),
                             thisValueChange = {
@@ -365,7 +365,7 @@ fun ProfileScreen(
 
                     if (selectedOption == SelectedEditOption.PHONE_NUMBER) {
                         CustomOutlinedTextField(
-                            imageVector = Icons.Outlined.Phone,
+                            leftImageVector = Icons.Outlined.Phone,
                             label = "Edit phone number",
                             modifier = Modifier.width(300.dp),
                             thisValueChange = {

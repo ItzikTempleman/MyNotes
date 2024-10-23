@@ -1,11 +1,12 @@
 package com.itzik.mynotes.project.ui.composable_elements
 
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -33,26 +35,30 @@ fun CustomOutlinedTextField(
     thisValueChange: ((String) -> Unit)? = null,
     label: String,
     modifier: Modifier = Modifier,
-    imageVector: ImageVector,
-    trailingImage: ImageVector? = null,
+    leftImageVector: ImageVector,
+    rightImageVector: ImageVector? = null,
     isError: Boolean = false,
+    isKeyboardEmailType:Boolean=false,
     isKeyboardPasswordType: Boolean = false,
     isKeyboardNumberType: Boolean = false,
+    isKeyboardPhoneNumberType:Boolean=false,
     isIconClickableParam: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     isPasswordIconShowing: ((Boolean) -> Unit)? = null,
     isPasswordToggleClicked: Boolean? = null,
+    isSingleLine:Boolean=true
 ) {
     val isIconClickableValue by remember {
         mutableStateOf(isIconClickableParam)
     }
 
     Column(modifier = modifier) {
-        androidx.compose.material.OutlinedTextField(
+       OutlinedTextField(
             shape = MaterialTheme.shapes.small,
             value = value,
             onValueChange = { thisValueChange?.invoke(it) },
-            modifier = Modifier,
+           modifier = Modifier
+               .fillMaxWidth(),
             label = {
                 Text(
                     text = label,
@@ -63,7 +69,7 @@ fun CustomOutlinedTextField(
             leadingIcon = {
                 if (!isIconClickableValue) {
                     Icon(
-                        imageVector = imageVector,
+                        imageVector = leftImageVector,
                         contentDescription = null,
                         tint = tint
                     )
@@ -77,7 +83,7 @@ fun CustomOutlinedTextField(
                             }
                         }) {
                         Icon(
-                            imageVector = imageVector,
+                            imageVector = leftImageVector,
                             contentDescription = null,
                             tint = tint
                         )
@@ -89,8 +95,10 @@ fun CustomOutlinedTextField(
                     IconButton(
                         onClick = {
                             invokedFunction?.invoke()
-                        }) {
-                        trailingImage?.let {
+                        },
+                        modifier = Modifier.align(Alignment.End)
+                    ) {
+                        rightImageVector?.let {
                             Icon(
                                 imageVector = it,
                                 contentDescription = null,
@@ -100,7 +108,7 @@ fun CustomOutlinedTextField(
                     }
                 }
             },
-            singleLine = true,
+            singleLine = isSingleLine,
             visualTransformation = visualTransformation,
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 unfocusedBorderColor = Color.Transparent,
@@ -112,6 +120,8 @@ fun CustomOutlinedTextField(
             ),
             isError = isError,
             keyboardOptions = when {
+                isKeyboardEmailType-> KeyboardOptions(keyboardType = KeyboardType.Email)
+                isKeyboardPhoneNumberType->KeyboardOptions(keyboardType = KeyboardType.Phone)
                 isKeyboardPasswordType -> KeyboardOptions(keyboardType = KeyboardType.Password)
                 isKeyboardNumberType -> KeyboardOptions(keyboardType = KeyboardType.Number)
                 else -> KeyboardOptions(keyboardType = KeyboardType.Text)
