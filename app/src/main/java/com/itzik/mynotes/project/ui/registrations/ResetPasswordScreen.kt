@@ -185,7 +185,7 @@ fun ResetPasswordScreen(
                 visualTransformation = VisualTransformation.None,
                 isTrailingIconExist = true,
                 invokedFunction = {
-                    wasCodeCorrect = receivedCode == "1"  //TODO change the value of 1 to the vlaue that was actually received
+                    wasCodeCorrect = receivedCode == "1"  //TODO change the value of 1 to the value that was actually received
                 },
                 tint = Color.Black,
             )
