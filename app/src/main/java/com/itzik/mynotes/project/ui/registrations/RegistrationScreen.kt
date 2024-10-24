@@ -42,6 +42,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -171,7 +172,7 @@ fun RegistrationScreen(
 
                 CustomOutlinedTextField(
                     value = name,
-                    thisValueChange = {
+                    onValueChange = {
                         name = it
                         updateButtonState(name, createEmail, createPassword, createPhoneNumber)
                     },
@@ -191,7 +192,7 @@ fun RegistrationScreen(
 
                 CustomOutlinedTextField(
                     value = createEmail,
-                    thisValueChange = {
+                    onValueChange = {
                         createEmail = it
                         updateButtonState(name, createEmail, createPassword, createPhoneNumber)
                     },
@@ -211,7 +212,7 @@ fun RegistrationScreen(
 
                 CustomOutlinedTextField(
                     value = createPassword,
-                    thisValueChange = {
+                    onValueChange = {
                         createPassword = it
                         updateButtonState(name, createEmail, createPassword, createPhoneNumber)
                     },
@@ -224,7 +225,7 @@ fun RegistrationScreen(
                         .padding(8.dp),
                     leftImageVector = if (isCreatedPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                     isError = isCreatePasswordError,
-                    isKeyboardPasswordType = true,
+                    keyboardType = KeyboardType.Password,
                     isIconClickableParam = true,
                     isPasswordToggleClicked = isCreatedPasswordVisible,
                     isPasswordIconShowing = {
@@ -237,7 +238,7 @@ fun RegistrationScreen(
 
                 CustomOutlinedTextField(
                     value = createPhoneNumber,
-                    thisValueChange = {
+                    onValueChange = {
                         createPhoneNumber = it
                         updateButtonState(name, createEmail, createPassword, createPhoneNumber)
                     },
@@ -252,7 +253,7 @@ fun RegistrationScreen(
                     isError = phoneNumberError,
                     visualTransformation = VisualTransformation.None,
                     tint = Color.Black,
-                    isKeyboardNumberType = true
+                    keyboardType = KeyboardType.Phone,
                 )
 
                 Icon(

@@ -225,5 +225,18 @@ class UserViewModel @Inject constructor(
             }
         }
     }
+
+    fun updatePassword(newPassword: String) {
+        viewModelScope.launch {
+            val user = privateLoggedInUsersList.value.firstOrNull()
+            if (user != null) {
+                val updatedUser = privateUser.value?.copy(password = newPassword)
+                if (updatedUser != null) {
+                    repo.updatePassword(updatedUser)
+                }
+                privateUser.value = updatedUser
+            }
+        }
+    }
 }
 

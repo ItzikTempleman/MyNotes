@@ -14,6 +14,7 @@ interface AppRepositoryInterface {
 
     suspend fun updateIsLoggedIn(user: User)
     suspend fun updateProfileImage(user: User)
+    suspend fun updatePassword(user: User)
     suspend fun updateWallpaper(user: User)
     suspend fun getUserById(userId: String): User
     suspend fun updateViewType(userId: String, isViewGrid: Boolean)

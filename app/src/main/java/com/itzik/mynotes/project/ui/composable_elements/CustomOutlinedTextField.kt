@@ -30,18 +30,14 @@ import androidx.compose.ui.unit.sp
 fun CustomOutlinedTextField(
     invokedFunction: (() -> Unit)? = null,
     tint: Color = Color.White,
-    isTrailingIconExist: Boolean = false,
     value: String,
-    thisValueChange: ((String) -> Unit)? = null,
+    onValueChange: ((String) -> Unit)? = null,
     label: String,
     modifier: Modifier = Modifier,
     leftImageVector: ImageVector,
     rightImageVector: ImageVector? = null,
     isError: Boolean = false,
-    isKeyboardEmailType:Boolean=false,
-    isKeyboardPasswordType: Boolean = false,
-    isKeyboardNumberType: Boolean = false,
-    isKeyboardPhoneNumberType:Boolean=false,
+    keyboardType: KeyboardType = KeyboardType.Text,
     isIconClickableParam: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     isPasswordIconShowing: ((Boolean) -> Unit)? = null,
@@ -56,9 +52,8 @@ fun CustomOutlinedTextField(
        OutlinedTextField(
             shape = MaterialTheme.shapes.small,
             value = value,
-            onValueChange = { thisValueChange?.invoke(it) },
-           modifier = Modifier
-               .fillMaxWidth(),
+            onValueChange = { onValueChange?.invoke(it) },
+           modifier = Modifier.fillMaxWidth(),
             label = {
                 Text(
                     text = label,
@@ -91,7 +86,7 @@ fun CustomOutlinedTextField(
                 }
             },
             trailingIcon = {
-                if (isTrailingIconExist) {
+                if (rightImageVector!=null) {
                     IconButton(
                         onClick = {
                             invokedFunction?.invoke()
@@ -119,13 +114,7 @@ fun CustomOutlinedTextField(
                 errorLabelColor = MaterialTheme.colorScheme.error
             ),
             isError = isError,
-            keyboardOptions = when {
-                isKeyboardEmailType-> KeyboardOptions(keyboardType = KeyboardType.Email)
-                isKeyboardPhoneNumberType->KeyboardOptions(keyboardType = KeyboardType.Phone)
-                isKeyboardPasswordType -> KeyboardOptions(keyboardType = KeyboardType.Password)
-                isKeyboardNumberType -> KeyboardOptions(keyboardType = KeyboardType.Number)
-                else -> KeyboardOptions(keyboardType = KeyboardType.Text)
-            }
+           keyboardOptions= KeyboardOptions(keyboardType = keyboardType)
         )
 
         HorizontalDivider(

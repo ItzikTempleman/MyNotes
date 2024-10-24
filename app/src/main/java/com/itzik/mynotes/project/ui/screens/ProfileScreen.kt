@@ -323,7 +323,7 @@ fun ProfileScreen(
                             leftImageVector = Icons.Outlined.Email,
                             label = "Edit user name email",
                             modifier = Modifier.width(300.dp),
-                            thisValueChange = {
+                            onValueChange = {
                                 editedEmail = it
                             },
                             tint = Color.Gray,
@@ -368,7 +368,7 @@ fun ProfileScreen(
                             leftImageVector = Icons.Outlined.Phone,
                             label = "Edit phone number",
                             modifier = Modifier.width(300.dp),
-                            thisValueChange = {
+                            onValueChange = {
                                 editedPhoneNumber = it
                             },
                             tint = Color.Gray,

@@ -42,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -185,7 +186,7 @@ fun LoginScreen(
 
                     CustomOutlinedTextField(
                         value = email,
-                        thisValueChange = {
+                        onValueChange = {
                             email = it
                             updateButtonState(email, password)
                         },
@@ -204,7 +205,7 @@ fun LoginScreen(
 
                     CustomOutlinedTextField(
                         value = password,
-                        thisValueChange = {
+                        onValueChange = {
                             password = it
                             updateButtonState(email, password)
                         },
@@ -217,7 +218,7 @@ fun LoginScreen(
                             .padding(8.dp),
                         leftImageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                         isError = isPasswordError,
-                        isKeyboardPasswordType = true,
+                        keyboardType = KeyboardType.Password,
                         isIconClickableParam = true,
                         isPasswordToggleClicked = isPasswordVisible,
                         isPasswordIconShowing = {
