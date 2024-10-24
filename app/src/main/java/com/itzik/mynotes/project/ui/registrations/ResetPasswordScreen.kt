@@ -12,7 +12,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Sms
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.rounded.ArrowDownward
+import androidx.compose.material.icons.rounded.NavigateNext
 import androidx.compose.material.icons.rounded.Send
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -81,7 +81,7 @@ fun ResetPasswordScreen(
         mutableStateOf(false)
     }
 
-    val createdPasswordText = stringResource(id = R.string.create_password)
+    val createdPasswordText = stringResource(id = R.string.enter_new_password)
     var createPassword by remember { mutableStateOf("") }
     var createPasswordLabelMessage by remember { mutableStateOf(createdPasswordText) }
     var isCreatePasswordError by remember { mutableStateOf(false) }
@@ -106,7 +106,7 @@ fun ResetPasswordScreen(
         )
 
 
-        
+
         if (!wasSMSSent) {
             CustomOutlinedTextField(
                 isIconClickableParam = true,
@@ -165,14 +165,14 @@ fun ResetPasswordScreen(
                 }
             )
 
-        } else {
+        } else if (!wasCodeCorrect) {
             CustomOutlinedTextField(
                 isIconClickableParam = true,
                 value = receivedCode,
                 thisValueChange = {
                     receivedCode = it
                 },
-                rightImageVector = Icons.Rounded.ArrowDownward,
+                rightImageVector = Icons.Rounded.NavigateNext,
                 label = createPhoneNumberLabelMessage,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -185,12 +185,11 @@ fun ResetPasswordScreen(
                 visualTransformation = VisualTransformation.None,
                 isTrailingIconExist = true,
                 invokedFunction = {
-                    //TODO ENTER THE CODE SENT BY SMS
-                },tint = Color.Black,
+                    wasCodeCorrect = receivedCode == "1"  //TODO change the value of 1 to the vlaue that was actually received
+                },
+                tint = Color.Black,
             )
-
-
-
+        } else {
             CustomOutlinedTextField(
                 isIconClickableParam = true,
                 value = createPassword,
@@ -207,9 +206,10 @@ fun ResetPasswordScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .constrainAs(newPasswordTF) {
-                        top.linkTo(enterCode.bottom)
+                        top.linkTo(title.bottom)
                     }
-                    .padding(8.dp),tint = Color.Black,
+                    .padding(8.dp),
+                tint = Color.Black,
                 leftImageVector = if (isCreatedPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                 isError = isCreatePasswordError,
                 isKeyboardPasswordType = true,
@@ -230,7 +230,3 @@ fun makeToast(str: String, e: FirebaseException? = null) {
     Log.e("TAG", str, e)
     Toast.makeText(NoteApp.instance, str, Toast.LENGTH_SHORT).show()
 }
-
-
-
-
