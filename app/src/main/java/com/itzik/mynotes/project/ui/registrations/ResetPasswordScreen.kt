@@ -70,7 +70,7 @@ fun ResetPasswordScreen(
 
     Column(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.Start
     ) {
         Text(
             modifier = Modifier
@@ -115,7 +115,7 @@ fun ResetPasswordScreen(
                                                 ) {
                                                     super.onCodeSent(verificationCode, p1)
                                                     receivedCode = verificationCode
-                                                    makeToast("Otp Send Successfully")
+                                                    makeToast("Code Sent")
                                                 }
                                             }
                                             ).build()
@@ -136,7 +136,7 @@ fun ResetPasswordScreen(
                     code = receivedCode,
                     onCodeFilled = {
                         receivedCode = it
-                        //wasCodeCorrect = receivedCode == "1"  //TODO change the value of 1 to the value that was actually received
+
                     },
                     onSubmitCodeClick = {
                         resetState = ResetPasswordState.EnterNewPassword
@@ -150,25 +150,19 @@ fun ResetPasswordScreen(
                     onPasswordUpdated = {
                         createPassword = it
                     },
-                    isPasswordVisible = isCreatedPasswordVisible,
-                    onToggleVisibility = {
-                        isCreatedPasswordVisible = !isCreatedPasswordVisible
-                    },
+                    isPasswordVisibleParam =isCreatedPasswordVisible ,
                     onConfirmPasswordClick = {
                         coroutineScope.launch {
-                            userViewModel?.updatePassword(createPassword)
+                            userViewModel?.updatePassword(newPassword = createPassword)
                             fetchedTempUser.isLoggedIn = true
                             userViewModel?.updateIsLoggedIn(fetchedTempUser)
                             rootNavController.popBackStack()
                             rootNavController.navigate(Screen.Home.route)
                         }
                     }
-
                 )
-
             }
         }
-
     }
 }
 

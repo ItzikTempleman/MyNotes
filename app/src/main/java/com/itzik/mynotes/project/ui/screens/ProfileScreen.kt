@@ -326,7 +326,6 @@ fun ProfileScreen(
                             onValueChange = {
                                 editedEmail = it
                             },
-                            tint = Color.Gray,
                             value = editedEmail,
                             visualTransformation = VisualTransformation.None
                         )
@@ -371,7 +370,6 @@ fun ProfileScreen(
                             onValueChange = {
                                 editedPhoneNumber = it
                             },
-                            tint = Color.Gray,
                             value = editedPhoneNumber,
                             visualTransformation = VisualTransformation.None
                         )

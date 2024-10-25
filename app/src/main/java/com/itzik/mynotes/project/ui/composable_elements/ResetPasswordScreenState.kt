@@ -11,6 +11,10 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.rounded.NavigateNext
 import androidx.compose.material.icons.rounded.Send
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -64,17 +68,19 @@ fun SmsInputField(
 @Composable
 fun NewPasswordInputField(
     modifier: Modifier= Modifier.fillMaxWidth().padding(8.dp),
-    onToggleVisibility: () -> Unit,
-    isPasswordVisible: Boolean,
+    isPasswordVisibleParam: Boolean,
     newPassword: String,
     onPasswordUpdated: (String) -> Unit,
     onConfirmPasswordClick: () -> Unit,
     isError: Boolean = false,
 ) {
+    var isPasswordVisible by remember { mutableStateOf(isPasswordVisibleParam) }
     CustomOutlinedTextField(
         modifier = modifier,
         value = newPassword,
-        isPasswordIconShowing = { onToggleVisibility() },
+        isPasswordToggleClicked = isPasswordVisible,
+        isPasswordIconShowing = {
+            isPasswordVisible = !isPasswordVisible },
         onValueChange = onPasswordUpdated,
         label = stringResource(R.string.enter_new_password),
         rightImageVector = Icons.Default.ArrowCircleRight,

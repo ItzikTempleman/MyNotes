@@ -186,7 +186,7 @@ fun RegistrationScreen(
                     leftImageVector = Icons.Default.Person,
                     isError = nameError,
                     visualTransformation = VisualTransformation.None,
-                    tint = Color.Black,
+
 
                     )
 
@@ -206,7 +206,7 @@ fun RegistrationScreen(
                     leftImageVector = Icons.Default.Email,
                     isError = isNewEmailError,
                     visualTransformation = VisualTransformation.None,
-                    tint = Color.Black,
+
 
                     )
 
@@ -226,14 +226,12 @@ fun RegistrationScreen(
                     leftImageVector = if (isCreatedPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                     isError = isCreatePasswordError,
                     keyboardType = KeyboardType.Password,
-                    isIconClickableParam = true,
                     isPasswordToggleClicked = isCreatedPasswordVisible,
                     isPasswordIconShowing = {
                         isCreatedPasswordVisible = !isCreatedPasswordVisible
                     },
                     visualTransformation = if (isCreatedPasswordVisible) VisualTransformation.None
                     else PasswordVisualTransformation(),
-                    tint = Color.Black,
                     )
 
                 CustomOutlinedTextField(
@@ -252,7 +250,6 @@ fun RegistrationScreen(
                     leftImageVector = Icons.Filled.Phone,
                     isError = phoneNumberError,
                     visualTransformation = VisualTransformation.None,
-                    tint = Color.Black,
                     keyboardType = KeyboardType.Phone,
                 )
 
